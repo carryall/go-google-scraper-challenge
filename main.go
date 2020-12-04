@@ -5,14 +5,14 @@ import (
 	"github.com/kataras/iris/v12/mvc"
 
 	"github.com/carryall/go-google-scraper-challenge/controller"
-	api "github.com/carryall/go-google-scraper-challenge/api/controller"
+	api "github.com/carryall/go-google-scraper-challenge/controller/api"
 )
 
 func main() {
 	app := iris.New()
 
 	mvc.Configure(app.Party("/"), appHandler)
-	mvc.Configure(app.Party("/api"), appHandler)
+	mvc.Configure(app.Party("/api"), apiHandler)
 
 	app.Listen(":8080", iris.WithLogLevel("debug"))
 }
