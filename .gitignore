@@ -16,3 +16,15 @@
 
 # Binary file
 go-google-scraper-challenge
+
+# Node modules
+/node_modules
+
+# ENV file
+.env
+
+# System Files
+.DS_Store
+
+# SASS Cache
+.sass-cache
