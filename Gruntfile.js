@@ -11,10 +11,25 @@ module.exports = function(grunt) {
         },
       },
     },
+    // PostCSS - Tailwindcss and Autoprefixer
+    postcss: {
+      options: {
+        map: true, // inline sourcemaps
+        processors: [
+          require('tailwindcss')(),
+          require('autoprefixer')({overrideBrowserslist: ['last 2 versions']}) // add vendor prefixes
+        ]
+      },
+      dist: {
+        files: {
+          'static/css/tailwind.css': 'assets/stylesheets/vendors/tailwind.css'
+        }
+      }
+    },
     watch: {
       scripts: {
         files: ['assets/stylesheets/**/**.scss'],
-        tasks: ['sass'],
+        tasks: ['sass', 'postcss'],
         options: {
           interrupt: true,
         },
@@ -23,8 +38,8 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-postcss');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['sass']);
-
+  grunt.registerTask('default', ['sass', 'postcss']);
 };
