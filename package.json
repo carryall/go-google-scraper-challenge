@@ -10,14 +10,12 @@
     "defaults"
   ],
   "dependencies": {
-    "autoprefixer": "9.8.6",
     "tailwindcss": "1.9.6"
   },
   "devDependencies": {
-    "grunt": "1.3.0",
-    "grunt-contrib-sass": "2.0.0",
-    "grunt-contrib-watch": "1.1.0",
-    "grunt-postcss": "0.9.0",
+    "autoprefixer": "9.8.6",
+    "node-sass": "5.0.0",
+    "postcss-cli-simple": "3.1.0",
     "sass": "1.30.0"
   },
   "scripts": {
