@@ -1,3 +1,4 @@
+// TODO: remove this file when work on real model
 package models
 
 var (

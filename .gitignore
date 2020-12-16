@@ -28,3 +28,6 @@ go-google-scraper-challenge
 
 # SASS Cache
 .sass-cache
+
+# Temp file
+*.tmp
