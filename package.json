@@ -13,9 +13,9 @@
     "tailwindcss": "1.9.6"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-env": "7.12.11",
     "autoprefixer": "9.8.6",
-    "babel-minify": "^0.5.1",
+    "babel-minify": "0.5.1",
     "node-sass": "5.0.0",
     "sass": "1.30.0"
   },
