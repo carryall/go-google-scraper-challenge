@@ -26,5 +26,5 @@ A project for Nimble Internal Certification on Web: Go
 ### Run test
 
   ```sh
-  make tset
+  make test
   ```
