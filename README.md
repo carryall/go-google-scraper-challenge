@@ -1,5 +1,5 @@
 # go-google-scraper-challenge
-A project for Nimble Internal Certification on Web: Go
+A project for Nimble Go Internal Certification on Web
 
 ## Development
 
