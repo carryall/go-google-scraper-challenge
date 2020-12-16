@@ -1,8 +1,12 @@
 # Variables
 AUTOPREFIXER_BROWSERS="> 2%"
-ASSETS_DIR=assets/stylesheets
 BIN=node_modules/.bin
-DIST_DIR=static/css
+ASSETS_DIR=assets
+SCSS_DIR=$(ASSETS_DIR)/stylesheets
+JS_DIR=$(ASSETS_DIR)/javascripts
+DIST_DIR=static
+CSS_DIST=$(DIST_DIR)/css
+JS_DIST=$(DIST_DIR)/js
 POSTCSS_FLAGS = --use autoprefixer --autoprefixer.overrideBrowserslist "> 2%"
 
 .PHONY: dev assets test
@@ -16,8 +20,9 @@ dev:
 	bee run
 
 assets:
-	$(BIN)/node-sass $(ASSETS_DIR)/index.scss $(DIST_DIR)/application.css
-	$(BIN)/postcss $(POSTCSS_FLAGS) -o $(DIST_DIR)/tailwind.css $(ASSETS_DIR)/vendors/tailwind.css
+	$(BIN)/node-sass $(SCSS_DIR)/index.scss $(CSS_DIST)/application.css
+	$(BIN)/postcss $(POSTCSS_FLAGS) -o $(CSS_DIST)/tailwind.css $(SCSS_DIR)/vendors/tailwind.css
+	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
 
 test:
 	go test -v -p 1 ./...
