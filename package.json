@@ -21,8 +21,6 @@
     "sass": "1.30.0"
   },
   "scripts": {
-    "build": "grunt",
-    "dev": "grunt watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
