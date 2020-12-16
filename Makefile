@@ -21,7 +21,7 @@ dev:
 
 assets:
 	$(BIN)/node-sass $(SCSS_DIR)/index.scss $(CSS_DIST)/application.css
-	$(BIN)/postcss $(POSTCSS_FLAGS) -o $(CSS_DIST)/tailwind.css $(SCSS_DIR)/vendors/tailwind.css
+	npx tailwindcss build $(SCSS_DIR)/vendors/tailwind.css -o $(CSS_DIST)/tailwind.css
 	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
 
 test:
