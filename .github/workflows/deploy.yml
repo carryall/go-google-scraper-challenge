@@ -7,6 +7,7 @@ on:
     branches:
       - main
       - develop
+      - chore/chore-2-setup-ci-cd
     types:
       - completed
   workflow_dispatch:
@@ -33,7 +34,7 @@ jobs:
           git push -f production origin/main:refs/heads/master
 
       - name: Deploy Staging
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
         run: |
           git remote add staging https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_STAGING_APP.git
-          git push -f staging origin/develop:refs/heads/master
+          git push -f staging origin/chore/chore-2-setup-ci-cd:refs/heads/master
