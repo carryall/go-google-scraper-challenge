@@ -31,3 +31,6 @@ go-google-scraper-challenge
 
 # Temp file
 *.tmp
+
+# Generated files
+/static/*
