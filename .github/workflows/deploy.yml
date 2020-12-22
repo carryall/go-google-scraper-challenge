@@ -30,16 +30,16 @@ jobs:
 
       - name: Deploy Production
         if: github.ref == 'refs/heads/main'
-        uses: akhileshns/heroku-deploy@v3.7.8
+        uses: akhileshns/heroku-deploy@v3.6.8
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
-          heroku_app_name: ${{ secrets.HEROKU_PRODUCTION_APP }}
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_ACCOUNT_EMAIL}}
+          heroku_app_name: ${{secrets.HEROKU_PRODUCTION_APP}}
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
-        uses: akhileshns/heroku-deploy@v3.7.8
+        uses: akhileshns/heroku-deploy@v3.6.8
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
-          heroku_app_name: ${{ secrets.HEROKU_STAGING_APP }}
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_email: ${{secrets.HEROKU_ACCOUNT_EMAIL}}
+          heroku_app_name: ${{secrets.HEROKU_STAGING_APP}}
