@@ -34,14 +34,14 @@ jobs:
         with:
           heroku_api_key: $HEROKU_API_KEY
           heroku_app_name: $HEROKU_PRODUCTION_APP
-          heroku_email: $HEROKU_ACCOUNT_EMAIL
+          heroku_email: "carryall369@gmail.com"
           usedocker: true
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
         uses: akhileshns/heroku-deploy@v3.6.8
         with:
-          heroku_api_key: $HEROKU_API_KEY
-          heroku_app_name: $HEROKU_STAGING_APP
-          heroku_email: $HEROKU_ACCOUNT_EMAIL
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "google-scraper-staging"
+          heroku_email: "carryall369@gmail.com"
           usedocker: true
