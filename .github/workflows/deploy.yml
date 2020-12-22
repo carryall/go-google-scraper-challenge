@@ -41,7 +41,10 @@ jobs:
         if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
         uses: akhileshns/heroku-deploy@v3.6.8
         with:
-          heroku_api_key: "0c251426-8353-442a-a17b-aff8f67cd3bb"
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "google-scraper-staging"
           heroku_email: "carryall369@gmail.com"
-          usedocker: true
+          justlogin: true
+
+      - name: Print
+        run: heroku auth:whoami
