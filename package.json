@@ -1,7 +1,7 @@
 {
   "name": "go-google-scraper-challenge",
   "version": "1.0.0",
-  "description": "A project for Nimble Internal Certification on Web: Go",
+  "description": "A project for Nimble Go Internal Certification on Web",
   "private": true,
   "directories": {
     "test": "tests"
