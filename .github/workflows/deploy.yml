@@ -28,6 +28,7 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_PRODUCTION_APP }}
           heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           usedocker: true
+          dontuseforce: false
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
@@ -37,3 +38,4 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_STAGING_APP }}
           heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           usedocker: true
+          dontuseforce: false
