@@ -24,9 +24,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.7.8
+      - uses: akhileshns/heroku-deploy@v3.8.8
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "google-scraper-staging"
           heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           justlogin: true
@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy Production
         if: github.ref == 'refs/heads/main'
-        uses: akhileshns/heroku-deploy@v3.7.8
+        uses: akhileshns/heroku-deploy@v3.8.8
         with:
           heroku_api_key: $HEROKU_API_KEY
           heroku_app_name: $HEROKU_PRODUCTION_APP
@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
-        uses: akhileshns/heroku-deploy@v3.7.8
+        uses: akhileshns/heroku-deploy@v3.8.8
         with:
           heroku_api_key: $HEROKU_API_KEY
           heroku_app_name: $HEROKU_STAGING_APP
