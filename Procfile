@@ -1,1 +1,1 @@
-web: bin/go-google-scraper-development
+web: bin/go-google-scraper-challenge
