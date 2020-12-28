@@ -17,18 +17,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug
-        run: echo "::debug::${{ secrets.HEROKU_API_KEY }}"
-
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.8.8
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "google-scraper-staging"
-          heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
-          justlogin: true
-      - run: heroku auth:whoami
-
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
