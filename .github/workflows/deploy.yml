@@ -12,19 +12,19 @@ on:
       - completed
   workflow_dispatch:
 
+env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  HEROKU_STAGING_APP: ${{ secrets.HEROKU_STAGING_APP }}
+  HEROKU_PRODUCTION_APP: ${{ secrets.HEROKU_PRODUCTION_APP }}
+  HEROKU_ACCOUNT_EMAIL: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      HEROKU_STAGING_APP: ${{ secrets.HEROKU_STAGING_APP }}
-      HEROKU_PRODUCTION_APP: ${{ secrets.HEROKU_PRODUCTION_APP }}
-      HEROKU_ACCOUNT_EMAIL: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
-
     steps:
       - name: Debug
-        run: echo "${{ $HEROKU_API_KEY }} ${{ secrets.HEROKU_API_KEY }}"
+        run: echo "::debug::$HEROKU_API_KEY ${{ secrets.HEROKU_API_KEY }}"
 
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.8.8
