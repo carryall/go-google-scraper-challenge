@@ -12,19 +12,13 @@ on:
       - completed
   workflow_dispatch:
 
-env:
-  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  HEROKU_STAGING_APP: ${{ secrets.HEROKU_STAGING_APP }}
-  HEROKU_PRODUCTION_APP: ${{ secrets.HEROKU_PRODUCTION_APP }}
-  HEROKU_ACCOUNT_EMAIL: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Debug
-        run: echo "::debug::$HEROKU_API_KEY ${{ secrets.HEROKU_API_KEY }}"
+        run: echo "::debug::${{ secrets.HEROKU_API_KEY }}"
 
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.8.8
@@ -42,16 +36,16 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: akhileshns/heroku-deploy@v3.8.8
         with:
-          heroku_api_key: $HEROKU_API_KEY
-          heroku_app_name: $HEROKU_PRODUCTION_APP
-          heroku_email: $HEROKU_ACCOUNT_EMAIL
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_PRODUCTION_APP }}
+          heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           usedocker: true
 
       - name: Deploy Staging
         if: github.ref == 'refs/heads/chore/chore-2-setup-ci-cd'
         uses: akhileshns/heroku-deploy@v3.8.8
         with:
-          heroku_api_key: $HEROKU_API_KEY
-          heroku_app_name: $HEROKU_STAGING_APP
-          heroku_email: $HEROKU_ACCOUNT_EMAIL
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_STAGING_APP }}
+          heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           usedocker: true
