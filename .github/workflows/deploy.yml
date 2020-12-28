@@ -23,6 +23,9 @@ jobs:
       HEROKU_ACCOUNT_EMAIL: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
 
     steps:
+      - name: Debug
+        run: echo "${{ $HEROKU_API_KEY }} ${{ secrets.HEROKU_API_KEY }}"
+
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.8.8
         with:
