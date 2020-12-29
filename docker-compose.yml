@@ -5,6 +5,6 @@ services:
     build: .
     container_name: google-scraper-challenge
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
     environment:
       - APP_RUN_MODE=prod

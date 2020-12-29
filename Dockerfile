@@ -14,7 +14,8 @@ COPY go.mod go.sum ./
 # Download all dependancies
 RUN go mod download
 
-COPY .env.example .env
+# Copy ENV file
+ADD .env.example ./.env
 
 # Copy the code into the container
 COPY . .
