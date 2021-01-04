@@ -1,0 +1,35 @@
+{
+  "name": "go-google-scraper-challenge",
+  "version": "1.0.0",
+  "description": "A project for Nimble Go Internal Certification on Web",
+  "private": true,
+  "directories": {
+    "test": "tests"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "dependencies": {
+    "tailwindcss": "1.9.6"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "7.12.11",
+    "autoprefixer": "9.8.6",
+    "babel-minify": "0.5.1",
+    "node-sass": "5.0.0",
+    "sass": "1.30.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carryall/go-google-scraper-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carryall/go-google-scraper-challenge/issues"
+  },
+  "homepage": "https://github.com/carryall/go-google-scraper-challenge#readme"
+}

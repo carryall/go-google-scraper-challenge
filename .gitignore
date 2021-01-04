@@ -13,3 +13,24 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Binary file
+go-google-scraper-challenge
+
+# Node modules
+/node_modules
+
+# ENV file
+.env
+
+# System Files
+.DS_Store
+
+# SASS Cache
+.sass-cache
+
+# Temp file
+*.tmp
+
+# Generated files
+/static/*
