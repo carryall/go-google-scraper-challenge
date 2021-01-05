@@ -19,6 +19,7 @@ assets:
 	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
 
 dev:
+	docker-compose -f docker-compose.dev.yml up -d
 	bee run
 
 test:

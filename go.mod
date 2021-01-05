@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/beego/beego/v2 v2.0.1
+	github.com/lib/pq v1.9.0
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/prometheus/common v0.15.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
