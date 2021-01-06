@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	_ "go-google-scraper-challenge/routers"
 	"log"
 
-	_ "github.com/lib/pq"
+	_ "go-google-scraper-challenge/routers"
 
 	"github.com/beego/beego/v2/client/orm"
 	beego "github.com/beego/beego/v2/server/web"
+	_ "github.com/lib/pq"
 )
 
 func init() {
