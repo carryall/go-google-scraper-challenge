@@ -15,7 +15,17 @@ type UserController struct {
 
 // URLMapping ...
 func (c *UserController) URLMapping() {
+	c.Mapping("New", c.New)
 	c.Mapping("Post", c.Post)
+}
+
+// New ...
+// @Title New
+// @Description new User
+// @Success 200
+// @router / [get]
+func (c *UserController) New() {
+	c.TplName = "users/new.tpl"
 }
 
 // Post ...
