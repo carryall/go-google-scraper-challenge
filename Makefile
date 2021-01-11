@@ -12,6 +12,7 @@ DATABASE_URL=postgres://postgres@127.0.0.1:5432/google_scraper_development?sslmo
 
 build-dependencies:
 	go get github.com/beego/bee/v2
+	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.35.2
 	npm install
 
 assets:
@@ -31,6 +32,9 @@ db/migrate:
 
 db/rollback:
 	bee migrate rollback -driver=postgres -conn="$(DATABASE_URL)"
+
+lint:
+	golangci-lint run
 
 test:
 	go test -v -p 1 ./...

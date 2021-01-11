@@ -3,7 +3,9 @@ module go-google-scraper-challenge
 go 1.15
 
 require (
+	github.com/beego/bee/v2 v2.0.2 // indirect
 	github.com/beego/beego/v2 v2.0.1
+	github.com/golangci/golangci-lint v1.35.2 // indirect
 	github.com/lib/pq v1.9.0
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/prometheus/common v0.15.0 // indirect
