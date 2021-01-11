@@ -6,6 +6,7 @@ JS_DIR=$(ASSETS_DIR)/javascripts
 DIST_DIR=static
 CSS_DIST=$(DIST_DIR)/css
 JS_DIST=$(DIST_DIR)/js
+DATABASE_URL=postgres://postgres@127.0.0.1:5432/google_scraper_development?sslmode=disable
 
 .PHONY: build-dependencies assets dev test
 
@@ -24,7 +25,7 @@ dev:
 	bee run
 
 db-migrate:
-	bee migrate -driver=postgres -conn="postgres://postgres@127.0.0.1:5432/google_scraper_development?sslmode=disable"
+	bee migrate -driver=postgres -conn="$(DATABASE_URL)"
 
 test:
 	go test -v -p 1 ./...
