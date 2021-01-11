@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"go-google-scraper-challenge/models"
+	"log"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
@@ -26,12 +27,19 @@ func (c *UserController) URLMapping() {
 // @router / [post]
 func (c *UserController) Post() {
 	var v models.User
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
+		c.Data["json"] = err.Error()
+	}
+
 	if _, err := models.AddUser(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
 	} else {
 		c.Data["json"] = err.Error()
 	}
-	c.ServeJSON()
+
+	if err := c.ServeJSON(); err != nil {
+		log.Fatal(err)
+	}
 }

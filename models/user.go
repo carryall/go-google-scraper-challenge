@@ -13,7 +13,7 @@ type User struct {
 	Default
 
 	Id    int64  `orm:"auto"`
-	Email string `orm:"size(128)";orm:"unique"`
+	Email string `orm:"unique;size(128)"`
 }
 
 func init() {
