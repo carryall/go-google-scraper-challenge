@@ -8,7 +8,7 @@ CSS_DIST=$(DIST_DIR)/css
 JS_DIST=$(DIST_DIR)/js
 DATABASE_URL=postgres://postgres@127.0.0.1:5432/google_scraper_development?sslmode=disable
 
-.PHONY: build-dependencies assets dev test
+.PHONY: build-dependencies assets dev db/setup db/migrate db/rollback test
 
 build-dependencies:
 	go get github.com/beego/bee/v2
@@ -20,12 +20,17 @@ assets:
 	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
 
 dev:
-	docker-compose -f docker-compose.dev.yml up -d
-	make db-migrate
+	make db/migrate
 	bee run
 
-db-migrate:
+db/setup:
+	docker-compose -f docker-compose.dev.yml up -d
+
+db/migrate:
 	bee migrate -driver=postgres -conn="$(DATABASE_URL)"
+
+db/rollback:
+	bee migrate rollback -driver=postgres -conn="$(DATABASE_URL)"
 
 test:
 	go test -v -p 1 ./...
