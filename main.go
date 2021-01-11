@@ -29,7 +29,7 @@ func init() {
 
 	err = orm.RunSyncdb("default", false, true)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Database Sync failed: ", err)
 	}
 }
 
