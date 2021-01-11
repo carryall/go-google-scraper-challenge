@@ -20,7 +20,11 @@ assets:
 
 dev:
 	docker-compose -f docker-compose.dev.yml up -d
+	make db-migrate
 	bee run
+
+db-migrate:
+	bee migrate -driver=postgres -conn="postgres://postgres@127.0.0.1:5432/google_scraper_development?sslmode=disable"
 
 test:
 	go test -v -p 1 ./...

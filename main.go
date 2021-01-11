@@ -27,7 +27,10 @@ func init() {
 		fmt.Println("Database Registration failed: ", err)
 	}
 
-	// TODO: register models after this
+	err = orm.RunSyncdb("default", false, true)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func main() {
