@@ -1,10 +1,12 @@
 package controllers
 
 import (
-	"encoding/json"
-	"go-google-scraper-challenge/models"
-	"log"
+	"strings"
 
+	"go-google-scraper-challenge/models"
+	"go-google-scraper-challenge/models/forms"
+
+	"github.com/beego/beego/v2/core/validation"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -25,31 +27,76 @@ func (c *UserController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *UserController) New() {
+	c.Data["Form"] = &forms.Registration{}
+	c.Data["Alert"] = ""
 	c.TplName = "users/new.tpl"
+
+	flash := beego.ReadFromRequest(&c.Controller)
+	if n, ok := flash.Data["notice"]; ok {
+		// Display settings successful
+		c.Data["Alert"] = n
+	} else if n, ok = flash.Data["error"]; ok {
+		// Display error messages
+		c.Data["Alert"] = n
+	}
 }
 
 // Post ...
 // @Title Post
 // @Description create User
-// @Param	body		body 	models.User	true		"body for User content"
-// @Success 201 {int} models.User
-// @Failure 403 body is empty
+// @Param	body		body 	forms.Registration	true		"body for Registration form"
+// @Success 302 redirect to signup with success message
+// @Failure 302 redirect to signup with error message
 // @router / [post]
 func (c *UserController) Post() {
-	var v models.User
+	valid := validation.Validation{}
+	var form forms.Registration
 
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err != nil {
-		c.Data["json"] = err.Error()
+	err := c.ParseForm(&form)
+	if err != nil {
+		c.SetFlash("error", err.Error())
+		c.Redirect("/signup", 302)
 	}
 
-	if _, err := models.AddUser(&v); err == nil {
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = v
+	validForm, err := valid.Valid(&form)
+	if err != nil {
+		c.SetFlash("error", err.Error())
+		c.Redirect("/signup", 302)
+	}
+
+	if !validForm {
+		errors := []string{}
+		for _, err := range valid.Errors {
+			errors = append(errors, err.Message)
+		}
+
+		c.SetFlash("error", strings.Join(errors, ","))
+		c.Redirect("/signup", 302)
 	} else {
-		c.Data["json"] = err.Error()
-	}
+		user := models.User{
+			Email: form.Email,
+		}
 
-	if err := c.ServeJSON(); err != nil {
-		log.Fatal(err)
+		if _, err := models.AddUser(&user); err == nil {
+			c.SetFlash("success", "New User created with email "+user.Email)
+			c.Redirect("/signup", 302)
+		} else {
+			c.SetFlash("error", err.Error())
+			c.Redirect("/signup", 302)
+		}
 	}
+}
+
+func (c *UserController) SetFlash(flashType string, message string) {
+	flash := beego.NewFlash()
+
+	switch flashType {
+	case "success":
+		flash.Success(message)
+	case "notice":
+		flash.Notice(message)
+	case "error":
+		flash.Error(message)
+	}
+	flash.Store(&c.Controller)
 }
