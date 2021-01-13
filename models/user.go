@@ -7,8 +7,8 @@ import (
 type User struct {
 	Default
 
-	Id    int64  `orm:"auto"`
-	Email string `orm:"unique;size(128)"`
+	Email             string `orm:"unique;size(128)"`
+	EncryptedPassword string
 }
 
 func init() {

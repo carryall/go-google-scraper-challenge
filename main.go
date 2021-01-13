@@ -7,12 +7,12 @@ import (
 	_ "go-google-scraper-challenge/routers"
 
 	"github.com/beego/beego/v2/client/orm"
-	beego "github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/server/web"
 	_ "github.com/lib/pq"
 )
 
 func init() {
-	dbURL, err := beego.AppConfig.String("db_url")
+	dbURL, err := web.AppConfig.String("db_url")
 	if err != nil {
 		log.Fatal("Database URL not found: ", err)
 	}
@@ -34,5 +34,5 @@ func init() {
 }
 
 func main() {
-	beego.Run()
+	web.Run()
 }

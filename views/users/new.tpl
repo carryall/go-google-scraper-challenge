@@ -1,4 +1,6 @@
-{{ .Alert }}
+{{ if .flash }}
+  {{ .flash }}
+{{ end }}
 <form class="" action="/users" method="post">
   {{ .Form | renderform }}
   <br>
