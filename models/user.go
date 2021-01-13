@@ -22,3 +22,14 @@ func AddUser(m *User) (id int64, err error) {
 	id, err = o.Insert(m)
 	return
 }
+
+// GetUserByEmail retrieves User by Email. Returns error if
+// Email doesn't exist
+func GetUserByEmail(email string) (v *User, err error) {
+	o := orm.NewOrm()
+	v = &User{Email: email}
+	if err = o.QueryTable(new(User)).Filter("Email", email).RelatedSel().One(v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
