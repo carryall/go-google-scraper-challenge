@@ -35,12 +35,12 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 	}
 }
 
-func (registrationForm *RegistrationForm) Save() (id int64, errors []error) {
+func (registrationForm *RegistrationForm) Save() (id *int64, errors []error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(&registrationForm)
 	if err != nil {
-		return -1, []error{err}
+		return nil, []error{err}
 	}
 
 	if !valid {
@@ -49,7 +49,7 @@ func (registrationForm *RegistrationForm) Save() (id int64, errors []error) {
 			errors = append(errors, err)
 		}
 
-		return -1, errors
+		return nil, errors
 	}
 
 	user := models.User{
@@ -58,5 +58,5 @@ func (registrationForm *RegistrationForm) Save() (id int64, errors []error) {
 	}
 
 	userID, err := models.AddUser(&user)
-	return userID, []error{err}
+	return &userID, []error{err}
 }
