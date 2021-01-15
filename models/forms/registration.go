@@ -35,7 +35,7 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 	}
 }
 
-func (registrationForm *RegistrationForm) Save() (id *int64, errors []error) {
+func (registrationForm RegistrationForm) Save() (id *int64, errors []error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(&registrationForm)
@@ -58,5 +58,6 @@ func (registrationForm *RegistrationForm) Save() (id *int64, errors []error) {
 	}
 
 	userID, err := models.AddUser(&user)
+
 	return &userID, []error{err}
 }

@@ -47,7 +47,7 @@ func (c *UserController) Post() {
 	}
 
 	userID, errors := form.Save()
-	if errors != nil {
+	if len(errors) > 0 {
 		for _, err := range errors {
 			flash.Error(err.Error())
 		}
