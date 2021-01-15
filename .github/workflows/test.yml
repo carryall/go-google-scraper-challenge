@@ -16,10 +16,11 @@ jobs:
         with:
           go-version: 1.15.x
 
-      - name: Go Lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.29
+      - name: Copy ENV file
+        run: cp ".env.example" ".env"
+
+      - name: Run Go Lint
+        run: make lint
 
       - name: Run test
         run: make test
