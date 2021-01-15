@@ -5,7 +5,7 @@ services:
     image: postgres:12.3
     container_name: google-scraper_db
     environment:
-      - POSTGRES_DB=google_scraper_development
+      - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "5432:5432"
