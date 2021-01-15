@@ -58,6 +58,9 @@ func (registrationForm RegistrationForm) Save() (id *int64, errors []error) {
 	}
 
 	userID, err := models.AddUser(&user)
+	if err != nil {
+		return nil, []error{err}
+	}
 
-	return &userID, []error{err}
+	return &userID, []error{}
 }
