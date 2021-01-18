@@ -1,5 +1,9 @@
 # Include variables from ENV file
-include .env
+ENV =
+-include .env
+ifdef ENV
+-include .env.$(ENV)
+endif
 export
 
 # Variables
@@ -11,7 +15,7 @@ DIST_DIR=static
 CSS_DIST=$(DIST_DIR)/css
 JS_DIST=$(DIST_DIR)/js
 
-.PHONY: build-dependencies assets dev db/setup db/migrate db/rollback test
+.PHONY: build-dependencies assets dev db/setup db/migrate db/rollback lint test test/run
 
 build-dependencies:
 	go get github.com/beego/bee/v2
@@ -40,4 +44,9 @@ lint:
 	golangci-lint run
 
 test:
-	go test -v -p 1 ./...
+	make test/run ENV=test
+
+test/run:
+	docker-compose -f docker-compose.test.yml up -d
+	APP_RUN_MODE=test go test -v -p 1 ./...
+	docker-compose -f docker-compose.test.yml down
