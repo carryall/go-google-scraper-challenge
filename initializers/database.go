@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// SetUpDatabase setup database for the project
 func SetUpDatabase() {
 	dbURL, err := web.AppConfig.String("db_url")
 	if err != nil {
