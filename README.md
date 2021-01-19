@@ -18,7 +18,13 @@ A project for Nimble Go Internal Certification on Web
   make assets
   ```
 
-### Run the Go application for development
+### Run Database service on Docker
+
+  ```sh
+  make db/setup
+  ```
+
+### Run migrations and the Go application for development
 
   ```sh
   make dev
