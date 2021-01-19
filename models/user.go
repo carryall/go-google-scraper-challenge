@@ -11,21 +11,21 @@ type User struct {
 	EncryptedPassword string
 }
 
-var ormer orm.Ormer
-
 func init() {
 	orm.RegisterModel(new(User))
-	ormer = orm.NewOrm()
+
 }
 
 // AddUser insert a new User into database and returns last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
+	ormer := orm.NewOrm()
 	id, err = ormer.Insert(m)
 	return
 }
 
 // GetUserByEmail retrieves User by Email and returns error if Email doesn't exist.
 func GetUserByEmail(email string) (user *User, err error) {
+	ormer := orm.NewOrm()
 	user = &User{Email: email}
 
 	err = ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().One(user)
