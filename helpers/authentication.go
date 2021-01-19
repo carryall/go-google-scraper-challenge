@@ -6,11 +6,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func EncryptPassword(password string) string {
+// EncryptPassword encrypt given password, returns encrypted password and error
+func EncryptPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
 		log.Println(err)
+
+		return "", err
 	}
 
-	return string(hash)
+	return string(hash), err
 }

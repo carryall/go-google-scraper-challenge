@@ -56,9 +56,14 @@ func (registrationForm RegistrationForm) Save() (id *int64, errors []error) {
 		return nil, errors
 	}
 
+	encryptedPassword, err := helpers.EncryptPassword(registrationForm.Password)
+	if err != nil {
+		return nil, []error{err}
+	}
+
 	user := models.User{
 		Email:             registrationForm.Email,
-		EncryptedPassword: helpers.EncryptPassword(registrationForm.Password),
+		EncryptedPassword: encryptedPassword,
 	}
 
 	userID, err := models.AddUser(&user)
