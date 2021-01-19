@@ -23,15 +23,15 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 	// This will raise an error if user with the given email does not exist.
 	_, err := models.GetUserByEmail(registrationForm.Email)
 	if err == nil {
-		err := v.SetError("Email Already Exist", "User with this email already exist")
-		if err == nil {
+		validationError := v.SetError("Email", "User with this email already exist")
+		if validationError == nil {
 			log.Fatal("Failed to set error on validation")
 		}
 	}
 
 	if registrationForm.Password != registrationForm.PasswordConfirmation {
-		err := v.SetError("Password Mismatch", "Does not match the password confirmation")
-		if err == nil {
+		validationError := v.SetError("PasswordConfirmation", "Password confirmation must match the password")
+		if validationError == nil {
 			log.Fatal("Failed to set error on validation")
 		}
 	}
