@@ -25,14 +25,14 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 	if err == nil {
 		validationError := v.SetError("Email", "User with this email already exist")
 		if validationError == nil {
-			log.Fatal("Failed to set error on validation")
+			log.Print("Failed to set error on validation")
 		}
 	}
 
 	if registrationForm.Password != registrationForm.PasswordConfirmation {
 		validationError := v.SetError("PasswordConfirmation", "Password confirmation must match the password")
 		if validationError == nil {
-			log.Fatal("Failed to set error on validation")
+			log.Print("Failed to set error on validation")
 		}
 	}
 }
