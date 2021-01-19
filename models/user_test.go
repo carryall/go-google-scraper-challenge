@@ -39,13 +39,16 @@ var _ = Describe("User", func() {
 						Email:             "dev@nimblehq.co",
 						EncryptedPassword: "password",
 					}
-					models.AddUser(&user1)
+					_, err := models.AddUser(&user1)
+					if err != nil {
+						Fail("Failed to add user")
+					}
 
 					user2 := models.User{
 						Email:             "dev@nimblehq.co",
 						EncryptedPassword: "password",
 					}
-					_, err := models.AddUser(&user2)
+					_, err = models.AddUser(&user2)
 
 					Expect(err).NotTo(BeNil())
 				})
@@ -68,7 +71,10 @@ var _ = Describe("User", func() {
 					Email:             "dev@nimblehq.co",
 					EncryptedPassword: "password",
 				}
-				models.AddUser(&existingUser)
+				_, err := models.AddUser(&existingUser)
+				if err != nil {
+					Fail("Failed to add user")
+				}
 
 				user, _ := models.GetUserByEmail("dev@nimblehq.co")
 
@@ -80,9 +86,12 @@ var _ = Describe("User", func() {
 					Email:             "dev@nimblehq.co",
 					EncryptedPassword: "password",
 				}
-				models.AddUser(&user)
+				_, err := models.AddUser(&user)
+				if err != nil {
+					Fail("Failed to add user")
+				}
 
-				_, err := models.GetUserByEmail("dev@nimblehq.co")
+				_, err = models.GetUserByEmail("dev@nimblehq.co")
 
 				Expect(err).To(BeNil())
 			})
