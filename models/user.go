@@ -25,10 +25,13 @@ func AddUser(m *User) (id int64, err error) {
 }
 
 // GetUserByEmail retrieves User by Email and returns error if Email doesn't exist.
-func GetUserByEmail(email string) (v *User, err error) {
-	v = &User{Email: email}
-	if err = ormer.QueryTable(new(User)).Filter("Email", email).RelatedSel().One(v); err == nil {
-		return v, nil
+func GetUserByEmail(email string) (user *User, err error) {
+	user = &User{Email: email}
+
+	err = ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().One(user)
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+
+	return user, nil
 }
