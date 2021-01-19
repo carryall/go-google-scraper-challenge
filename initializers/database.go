@@ -11,6 +11,11 @@ import (
 
 // SetUpDatabase setup database for the project
 func SetUpDatabase() {
+	runMode, err := web.AppConfig.String("runmode")
+	if err != nil {
+		log.Fatal("Database URL not found: ", err)
+	}
+
 	dbURL, err := web.AppConfig.String("db_url")
 	if err != nil {
 		log.Fatal("Database URL not found: ", err)
@@ -26,7 +31,8 @@ func SetUpDatabase() {
 		fmt.Println("Database Registration failed: ", err)
 	}
 
-	err = orm.RunSyncdb("default", false, true)
+	verbose := runMode == "dev"
+	err = orm.RunSyncdb("default", false, verbose)
 	if err != nil {
 		fmt.Println("Database Sync failed: ", err)
 	}

@@ -17,7 +17,3 @@ func TestForms(t *testing.T) {
 var _ = BeforeSuite(func() {
 	initializers.SetupTestEnvironment()
 })
-
-var _ = AfterSuite(func() {
-	initializers.CleanupDatabase()
-})

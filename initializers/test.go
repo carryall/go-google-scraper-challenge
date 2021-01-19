@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
 )
@@ -45,6 +46,13 @@ func OverloadTestConfig() {
 }
 
 // CleanupDatabase cleanup database
-func CleanupDatabase() {
-	// TODO: cleanup database
+func CleanupDatabase(tableName string) {
+	o := orm.NewOrm()
+	_, err := o.Raw("TRUNCATE TABLE `?`", tableName).Exec()
+	if err != nil {
+		err := orm.RunSyncdb("default", true, false)
+		if err != nil {
+			log.Fatal("Failed to run sync database", err)
+		}
+	}
 }
