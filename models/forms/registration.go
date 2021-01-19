@@ -18,7 +18,9 @@ type RegistrationForm struct {
 func init() {
 }
 
+// Valid adds custom validation to registration form, sets error when the validation failed.
 func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
+	// This will raise an error if user with the given email does not exist.
 	_, err := models.GetUserByEmail(registrationForm.Email)
 	if err == nil {
 		err := v.SetError("Email Already Exist", "User with this email already exist")
@@ -35,6 +37,8 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 	}
 }
 
+// Save validates registration form and adds a new User with email and password from the form,
+// returns errors if validation failed or cannot add the user to database.
 func (registrationForm RegistrationForm) Save() (id *int64, errors []error) {
 	validation := validation.Validation{}
 

@@ -15,16 +15,14 @@ func init() {
 	orm.RegisterModel(new(User))
 }
 
-// AddUser insert a new User into database and returns
-// last inserted Id on success.
+// AddUser insert a new User into database and returns last inserted Id on success.
 func AddUser(m *User) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetUserByEmail retrieves User by Email. Returns error if
-// Email doesn't exist
+// GetUserByEmail retrieves User by Email and returns error if Email doesn't exist.
 func GetUserByEmail(email string) (v *User, err error) {
 	o := orm.NewOrm()
 	v = &User{Email: email}
