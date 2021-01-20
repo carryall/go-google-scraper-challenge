@@ -5,23 +5,27 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/beego/beego/v2/server/web"
 )
 
 // GetFlashMessage get Beego flash message out of array of http cookie
-func GetFlashMessage(cookies []*http.Cookie) map[string]string {
-	mapCookie := map[string]string{}
+func GetFlashMessage(cookies []*http.Cookie) *web.FlashData {
+	flash := web.NewFlash()
 
 	for _, cookie := range cookies {
 		if cookie.Name == "BEEGO_FLASH" {
 			decodedCookie := DecodeQueryString(cookie.Value)
-			cookiePart := strings.Split(strings.TrimSpace(decodedCookie), "#BEEGOFLASH#")
-			if len(cookiePart) >= 2 {
-				mapCookie[cookiePart[0]] = cookiePart[1]
+			// Trim null character out of the docoded cookie value
+			trimedCookie := strings.Trim(decodedCookie, "\x00")
+			cookieParts := strings.Split(trimedCookie, "#BEEGOFLASH#")
+			if len(cookieParts) == 2 {
+				flash.Data[cookieParts[0]] = cookieParts[1]
 			}
 		}
 	}
 
-	return mapCookie
+	return flash
 }
 
 // DecodeQueryString decode query string to normal string,

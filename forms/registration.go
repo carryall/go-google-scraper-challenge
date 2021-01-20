@@ -11,9 +11,9 @@ import (
 )
 
 type RegistrationForm struct {
-	Email                string `valid:"Email; Required"`
-	Password             string `valid:"Required; MinSize(6)"`
-	PasswordConfirmation string `valid:"Required; MinSize(6)"`
+	Email                string `form:"email" valid:"Email; Required"`
+	Password             string `form:"password" valid:"Required; MinSize(6)"`
+	PasswordConfirmation string `form:"password_confirmation" valid:"Required; MinSize(6)"`
 }
 
 func init() {
