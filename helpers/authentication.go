@@ -15,5 +15,5 @@ func EncryptPassword(password string) (string, error) {
 		return "", err
 	}
 
-	return string(hash), err
+	return string(hash), nil
 }
