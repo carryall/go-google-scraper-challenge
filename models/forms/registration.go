@@ -17,12 +17,12 @@ type RegistrationForm struct {
 }
 
 func init() {
-	customizedValidationMessage := map[string]string{}
+	lowerCaseErrorMessage := map[string]string{}
 	for key, value := range validation.MessageTmpls {
-		customizedValidationMessage[key] = strings.ToLower(value)
+		lowerCaseErrorMessage[key] = strings.ToLower(value)
 	}
 
-	validation.SetDefaultMessage(customizedValidationMessage)
+	validation.SetDefaultMessage(lowerCaseErrorMessage)
 }
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
