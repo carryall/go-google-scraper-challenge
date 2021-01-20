@@ -2,6 +2,7 @@ package forms
 
 import (
 	"log"
+	"strings"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
@@ -16,6 +17,12 @@ type RegistrationForm struct {
 }
 
 func init() {
+	customizedValidationMessage := map[string]string{}
+	for key, value := range validation.MessageTmpls {
+		customizedValidationMessage[key] = strings.ToLower(value)
+	}
+
+	validation.SetDefaultMessage(customizedValidationMessage)
 }
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
