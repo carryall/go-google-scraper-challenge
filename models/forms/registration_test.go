@@ -72,7 +72,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 					_, errors := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Email Must be a valid email address"))
+					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
 				})
 			})
 
@@ -86,7 +86,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 					_, errors := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Email Must be a valid email address"))
+					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
 				})
 			})
 
@@ -100,7 +100,21 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 					_, errors := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Password Can not be empty"))
+					Expect(errors[0].Error()).To(Equal("Password can not be empty"))
+				})
+			})
+
+			Context("given password length is less than 6", func() {
+				It("returns an invalid password error", func() {
+					form := forms.RegistrationForm{
+						Email:                "dev@nimblehq.co",
+						Password:             "1234",
+						PasswordConfirmation: "password",
+					}
+
+					_, errors := form.Save()
+
+					Expect(errors[0].Error()).To(Equal("Password minimum size is 6"))
 				})
 			})
 
@@ -114,7 +128,21 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 					_, errors := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("PasswordConfirmation Can not be empty"))
+					Expect(errors[0].Error()).To(Equal("PasswordConfirmation can not be empty"))
+				})
+			})
+
+			Context("given password confirmation is length less than 6", func() {
+				It("returns an invalid password error", func() {
+					form := forms.RegistrationForm{
+						Email:                "dev@nimblehq.co",
+						Password:             "password",
+						PasswordConfirmation: "1234",
+					}
+
+					_, errors := form.Save()
+
+					Expect(errors[0].Error()).To(Equal("PasswordConfirmation minimum size is 6"))
 				})
 			})
 
