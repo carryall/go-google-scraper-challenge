@@ -9,8 +9,8 @@
   {{ assets_css "static/css/tailwind.css" }}
 </head>
 
-<body>
-  <div class="app-container {{.ControllerName}} {{.ActionName}}">
+<body class="{{.ControllerName}} {{.ActionName}}">
+  <div class="app-container">
     <header class="app-header">
       {{ .Title }}
     </header>
