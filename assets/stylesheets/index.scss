@@ -1,6 +1,11 @@
 // Base
-@import 'base/header';
+@import 'base/form';
 
 // Components
+@import 'components/app-container';
+@import 'components/app-content';
+@import 'components/app-header';
+@import 'components/form-registration';
 
-// Layouts
+// Pages
+@import 'pages/user';

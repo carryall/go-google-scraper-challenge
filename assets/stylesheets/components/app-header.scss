@@ -1,0 +1,7 @@
+.app-header {
+  @apply max-w-md w-full;
+
+  &__title {
+    @apply mt-6 text-center text-3xl font-extrabold text-gray-900;
+  }
+}

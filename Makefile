@@ -25,6 +25,7 @@ build-dependencies:
 assets:
 	$(BIN)/node-sass $(SCSS_DIR)/index.scss $(CSS_DIST)/application.css
 	npx tailwindcss build $(SCSS_DIR)/vendors/tailwind.css -o $(CSS_DIST)/tailwind.css
+	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
 	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
 
 dev:

@@ -11,9 +11,11 @@
 
 <body class="{{.ControllerName}} {{.ActionName}}">
   <div class="app-container">
-    <header class="app-header">
-      {{ .Title }}
-    </header>
+    <div class="app-header">
+      <h2 class="app-header__title">
+        {{ .Title }}
+      </h2>
+    </div>
     <div class="app-content">
       {{ .LayoutContent }}
     </div>
