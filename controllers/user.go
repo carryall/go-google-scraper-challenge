@@ -9,7 +9,7 @@ import (
 
 // UserController operations for User
 type UserController struct {
-	web.Controller
+	BaseController
 }
 
 // URLMapping map user controller actions to functions
@@ -26,6 +26,9 @@ func (c *UserController) URLMapping() {
 func (c *UserController) New() {
 	c.Data["Form"] = &forms.RegistrationForm{}
 	c.Data["Alert"] = ""
+	c.Data["Title"] = "Signup"
+
+	c.Layout = "layouts/default.tpl"
 	c.TplName = "users/new.tpl"
 
 	web.ReadFromRequest(&c.Controller)
