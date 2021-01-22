@@ -18,6 +18,7 @@ func SetupTestEnvironment() {
 
 	SetWorkingDirectory(appRoot)
 	OverloadTestConfig()
+	SetUpTemplateFunction()
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
 }
