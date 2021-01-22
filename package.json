@@ -18,12 +18,14 @@
     "autoprefixer": "10.0.2",
     "babel-minify": "0.5.1",
     "node-sass": "5.0.0",
-    "sass": "1.30.0"
+    "sass": "1.30.0",
+    "svg-sprite": "1.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-scss": "node-sass assets/stylesheets/index.scss static/css/application.css",
-    "minify-js": "minify assets/javascripts --out-dir static/js"
+    "minify-js": "minify assets/javascripts --out-dir static/js",
+    "generate-svg-sprite": "svg-sprite -cD static -cscss assets/images/icons/*.svg"
   },
   "repository": {
     "type": "git",

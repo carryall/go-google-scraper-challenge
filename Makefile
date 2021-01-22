@@ -20,11 +20,6 @@ build-dependencies:
 	go get github.com/beego/bee/v2
 	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.35.2
 	npm install
-	npm install svg-sprite -g
-
-test-dependency:
-	npm install
-	npm install svg-sprite
 
 assets:
 	make assets/css
@@ -40,7 +35,7 @@ assets/js:
 	npm run minify-js
 
 assets/icon-sprite:
-	svg-sprite -cD static -cscss assets/images/icons/*.svg
+	npm run generate-svg-sprite
 
 dev:
 	make db/migrate

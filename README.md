@@ -48,9 +48,9 @@ A project for Nimble Go Internal Certification on Web
 
   #### Add a new SVG file
   - put the new SVG file on `assets/images/icons` directory
-  - install [SVG Sprite](https://github.com/jkphl/svg-sprite) globally
+  - install dependency
   ```sh
-  npm install svg-sprite -g
+  npm install
   ```
   - generate the SVG sprite
   ```sh
