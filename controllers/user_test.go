@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"go-google-scraper-challenge/helpers"
+	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
 
 	"github.com/beego/beego/v2/server/web"
@@ -17,11 +17,8 @@ import (
 var _ = Describe("UserController", func() {
 	Describe("GET /signup", func() {
 		It("renders with status 200", func() {
-			request, err := http.NewRequest("GET", "/signup", nil)
-			if err != nil {
-				Fail("Request failed: " + err.Error())
-			}
 
+			request := HTTPRequest("GET", "/signup", nil)
 			response := httptest.NewRecorder()
 			web.BeeApp.Handlers.ServeHTTP(response, request)
 
@@ -39,19 +36,11 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, err := http.NewRequest("POST", "/users", body)
-				if err != nil {
-					Fail("Request failed: " + err.Error())
-				}
-
+				request := HTTPRequest("POST", "/users", body)
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
-
-				currentPath, err := response.Result().Location()
-				if err != nil {
-					Fail("failed to get current path")
-				}
+				currentPath := GetCurrentPath(response)
 
 				Expect(response.Code).To(Equal(http.StatusFound))
 				Expect(currentPath.Path).To(Equal("/signup"))
@@ -65,16 +54,12 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, err := http.NewRequest("POST", "/users", body)
-				if err != nil {
-					Fail("Request failed: " + err.Error())
-				}
-
+				request := HTTPRequest("POST", "/users", body)
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
 
-				flash := helpers.GetFlashMessage(response.Result().Cookies())
+				flash := GetFlashMessage(response.Result().Cookies())
 
 				Expect(flash.Data["success"]).To(HavePrefix("New User created with ID:"))
 				Expect(flash.Data["error"]).To(BeEmpty())
@@ -90,19 +75,11 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, err := http.NewRequest("POST", "/users", body)
-				if err != nil {
-					Fail("Request failed: " + err.Error())
-				}
-
+				request := HTTPRequest("POST", "/users", body)
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
-
-				currentPath, err := response.Result().Location()
-				if err != nil {
-					Fail("failed to get current path")
-				}
+				currentPath := GetCurrentPath(response)
 
 				Expect(response.Code).To(Equal(http.StatusFound))
 				Expect(currentPath.Path).To(Equal("/signup"))
@@ -116,18 +93,15 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, err := http.NewRequest("POST", "/users", body)
-				if err != nil {
-					Fail("Request failed: " + err.Error())
-				}
-
+				request := HTTPRequest("POST", "/users", body)
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
 
-				flash := helpers.GetFlashMessage(response.Result().Cookies())
+				flash := GetFlashMessage(response.Result().Cookies())
 
 				Expect(flash.Data["error"]).NotTo(BeEmpty())
+				Expect(flash.Data["success"]).To(BeEmpty())
 			})
 		})
 	})

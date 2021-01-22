@@ -1,7 +1,9 @@
 package forms_test
 
 import (
+	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
+	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/models/forms"
 
 	"github.com/beego/beego/v2/core/validation"
@@ -29,21 +31,19 @@ var _ = Describe("Forms/RegistrationForm", func() {
 		Context("given registration form with INVALID params", func() {
 			Context("given email that already registered", func() {
 				It("adds duplicate email error to validation", func() {
-					form1 := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
-						PasswordConfirmation: "password",
-					}
-					form1.Save()
+					FabricateUser(&models.User{
+						Email:             "dev@nimblehq.co",
+						EncryptedPassword: "password",
+					})
 
-					form2 := forms.RegistrationForm{
+					form := forms.RegistrationForm{
 						Email:                "dev@nimblehq.co",
 						Password:             "password",
 						PasswordConfirmation: "password",
 					}
 
 					formValidation := validation.Validation{}
-					form2.Valid(&formValidation)
+					form.Valid(&formValidation)
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
@@ -103,20 +103,18 @@ var _ = Describe("Forms/RegistrationForm", func() {
 		Context("given registration form with INVALID params", func() {
 			Context("given email that already registered", func() {
 				It("returns a duplicate email error", func() {
-					form1 := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
-						PasswordConfirmation: "password",
-					}
-					form1.Save()
+					FabricateUser(&models.User{
+						Email:             "dev@nimblehq.co",
+						EncryptedPassword: "password",
+					})
 
-					form2 := forms.RegistrationForm{
+					form := forms.RegistrationForm{
 						Email:                "dev@nimblehq.co",
 						Password:             "password",
 						PasswordConfirmation: "password",
 					}
 
-					_, errors := form2.Save()
+					_, errors := form.Save()
 
 					Expect(errors[0].Error()).To(Equal("User with this email already exist"))
 				})

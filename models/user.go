@@ -13,7 +13,6 @@ type User struct {
 
 func init() {
 	orm.RegisterModel(new(User))
-
 }
 
 // CreateUser insert a new User into database and returns last inserted Id on success.

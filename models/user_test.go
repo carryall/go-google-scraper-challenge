@@ -1,6 +1,7 @@
 package models_test
 
 import (
+	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
 
@@ -38,20 +39,16 @@ var _ = Describe("User", func() {
 		Context("given user with INVALID params", func() {
 			Context("given email that already exist in database", func() {
 				It("returns an error", func() {
-					user1 := models.User{
+					FabricateUser(&models.User{
 						Email:             "dev@nimblehq.co",
 						EncryptedPassword: "password",
-					}
-					_, err := models.AddUser(&user1)
-					if err != nil {
-						Fail("Failed to add user " + err.Error())
-					}
+					})
 
-					user2 := models.User{
+					user := models.User{
 						Email:             "dev@nimblehq.co",
 						EncryptedPassword: "password",
 					}
-					_, err = models.AddUser(&user2)
+					_, err := models.AddUser(&user)
 
 					Expect(err).NotTo(BeNil())
 				})
@@ -70,31 +67,23 @@ var _ = Describe("User", func() {
 
 		Context("given user email exist in system", func() {
 			It("returns the existing user ID", func() {
-				existingUser := models.User{
+				existingUserID := FabricateUser(&models.User{
 					Email:             "dev@nimblehq.co",
 					EncryptedPassword: "password",
-				}
-				_, err := models.AddUser(&existingUser)
-				if err != nil {
-					Fail("Failed to add user " + err.Error())
-				}
+				})
 
 				user, _ := models.GetUserByEmail("dev@nimblehq.co")
 
-				Expect(user.Id).To(Equal(existingUser.Id))
+				Expect(user.Id).To(Equal(existingUserID))
 			})
 
 			It("does NOT return errors", func() {
-				user := models.User{
+				FabricateUser(&models.User{
 					Email:             "dev@nimblehq.co",
 					EncryptedPassword: "password",
-				}
-				_, err := models.AddUser(&user)
-				if err != nil {
-					Fail("Failed to add user " + err.Error())
-				}
+				})
 
-				_, err = models.GetUserByEmail("dev@nimblehq.co")
+				_, err := models.GetUserByEmail("dev@nimblehq.co")
 
 				Expect(err).To(BeNil())
 			})
