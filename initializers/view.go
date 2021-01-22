@@ -9,12 +9,16 @@ import (
 	"github.com/beego/beego/v2/server/web"
 )
 
+// SetUpTemplateFunction register additional template functions
 func SetUpTemplateFunction() {
-	web.AddFuncMap("titlecase", func(str string) string {
+	err := web.AddFuncMap("titlecase", func(str string) string {
 		return strings.Title(str)
 	})
+	if err != nil {
+		log.Fatal("Failed to add template function", err.Error())
+	}
 
-	web.AddFuncMap("render_file", func(path string) template.HTML {
+	err = web.AddFuncMap("render_file", func(path string) template.HTML {
 		content, err := ioutil.ReadFile(path)
 		if err != nil {
 			log.Fatal(err)
@@ -22,4 +26,7 @@ func SetUpTemplateFunction() {
 
 		return web.Str2html(string(content))
 	})
+	if err != nil {
+		log.Fatal("Failed to add template function", err.Error())
+	}
 }
