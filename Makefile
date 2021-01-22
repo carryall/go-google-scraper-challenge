@@ -1,8 +1,8 @@
 # Include variables from ENV file
 ENV =
--include .env
+include .env
 ifdef ENV
--include .env.$(ENV)
+include .env.$(ENV)
 endif
 export
 
