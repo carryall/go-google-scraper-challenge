@@ -24,7 +24,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 				formValidation := validation.Validation{}
 				form.Valid(&formValidation)
 
-				Expect(len(formValidation.Errors)).To(Equal(0))
+				Expect(len(formValidation.Errors)).To(BeZero())
 			})
 		})
 
@@ -96,7 +96,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 				_, errors := form.Save()
 
-				Expect(len(errors)).To(Equal(0))
+				Expect(len(errors)).To(BeZero())
 			})
 		})
 
@@ -114,8 +114,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "password",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("User with this email already exist"))
 				})
 			})
@@ -128,8 +129,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "password",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
 				})
 			})
@@ -142,8 +144,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "password",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
 				})
 			})
@@ -156,8 +159,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "password",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("Password can not be empty"))
 				})
 			})
@@ -170,8 +174,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "password",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("Password minimum size is 6"))
 				})
 			})
@@ -184,8 +189,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("PasswordConfirmation can not be empty"))
 				})
 			})
@@ -198,8 +204,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "1234",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("PasswordConfirmation minimum size is 6"))
 				})
 			})
@@ -212,8 +219,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "does not match the password",
 					}
 
-					_, errors := form.Save()
+					userID, errors := form.Save()
 
+					Expect(userID).To(BeNil())
 					Expect(errors[0].Error()).To(Equal("Password confirmation must match the password"))
 				})
 			})

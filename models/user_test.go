@@ -22,7 +22,7 @@ var _ = Describe("User", func() {
 					Fail("Failed to add user: " + err.Error())
 				}
 
-				Expect(userID).NotTo(BeNil())
+				Expect(userID).To(BeNumerically(">", 0))
 			})
 
 			It("returns NO error", func() {
@@ -48,23 +48,16 @@ var _ = Describe("User", func() {
 						Email:             "dev@nimblehq.co",
 						EncryptedPassword: "password",
 					}
-					_, err := models.AddUser(&user)
+					userID, err := models.AddUser(&user)
 
-					Expect(err).NotTo(BeNil())
+					Expect(err.Error()).To(Equal(`pq: duplicate key value violates unique constraint "user_email_key"`))
+					Expect(userID).To(Equal(int64(0)))
 				})
 			})
 		})
 	})
 
 	Describe("#GetUserByEmail", func() {
-		Context("given user email does NOT exist in system", func() {
-			It("returns error", func() {
-				_, err := models.GetUserByEmail("dev@nimblehq.co")
-
-				Expect(err).NotTo(BeNil())
-			})
-		})
-
 		Context("given user email exist in system", func() {
 			It("returns the existing user ID", func() {
 				existingUserID := FabricateUser(&models.User{
@@ -72,7 +65,10 @@ var _ = Describe("User", func() {
 					EncryptedPassword: "password",
 				})
 
-				user, _ := models.GetUserByEmail("dev@nimblehq.co")
+				user, err := models.GetUserByEmail("dev@nimblehq.co")
+				if err != nil {
+					Fail("Failed to get user by email: " + err.Error())
+				}
 
 				Expect(user.Id).To(Equal(existingUserID))
 			})
@@ -86,6 +82,15 @@ var _ = Describe("User", func() {
 				_, err := models.GetUserByEmail("dev@nimblehq.co")
 
 				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given user email does NOT exist in system", func() {
+			It("returns error", func() {
+				userID, err := models.GetUserByEmail("dev@nimblehq.co")
+
+				Expect(userID).To(BeNil())
+				Expect(err.Error()).To(ContainSubstring("no row found"))
 			})
 		})
 	})
