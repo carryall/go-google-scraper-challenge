@@ -17,7 +17,11 @@ import (
 var _ = Describe("UserController", func() {
 	Describe("GET /signup", func() {
 		It("renders with status 200", func() {
-			request, _ := http.NewRequest("GET", "/signup", nil)
+			request, err := http.NewRequest("GET", "/signup", nil)
+			if err != nil {
+				Fail("Request failed: " + err.Error())
+			}
+
 			response := httptest.NewRecorder()
 			web.BeeApp.Handlers.ServeHTTP(response, request)
 
@@ -25,7 +29,7 @@ var _ = Describe("UserController", func() {
 		})
 	})
 
-	Describe("Post /users", func() {
+	Describe("POST /users", func() {
 		Context("given valid params", func() {
 			It("redirects to signup page", func() {
 				form := url.Values{
@@ -35,7 +39,11 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, _ := http.NewRequest("POST", "/users", body)
+				request, err := http.NewRequest("POST", "/users", body)
+				if err != nil {
+					Fail("Request failed: " + err.Error())
+				}
+
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
@@ -57,7 +65,11 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, _ := http.NewRequest("POST", "/users", body)
+				request, err := http.NewRequest("POST", "/users", body)
+				if err != nil {
+					Fail("Request failed: " + err.Error())
+				}
+
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
@@ -78,7 +90,11 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, _ := http.NewRequest("POST", "/users", body)
+				request, err := http.NewRequest("POST", "/users", body)
+				if err != nil {
+					Fail("Request failed: " + err.Error())
+				}
+
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)
@@ -100,7 +116,11 @@ var _ = Describe("UserController", func() {
 				}
 				body := strings.NewReader(form.Encode())
 
-				request, _ := http.NewRequest("POST", "/users", body)
+				request, err := http.NewRequest("POST", "/users", body)
+				if err != nil {
+					Fail("Request failed: " + err.Error())
+				}
+
 				request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 				response := httptest.NewRecorder()
 				web.BeeApp.Handlers.ServeHTTP(response, request)

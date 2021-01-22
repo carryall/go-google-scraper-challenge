@@ -4,13 +4,70 @@ import (
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models/forms"
 
+	"github.com/beego/beego/v2/core/validation"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Forms/RegistrationForm", func() {
 	Describe("#Valid", func() {
+		Context("given registration form with valid params", func() {
+			It("does NOT add error to validation", func() {
+				form := forms.RegistrationForm{
+					Email:                "dev@nimblehq.co",
+					Password:             "password",
+					PasswordConfirmation: "password",
+				}
 
+				formValidation := validation.Validation{}
+				form.Valid(&formValidation)
+
+				Expect(len(formValidation.Errors)).To(Equal(0))
+			})
+		})
+
+		Context("given registration form with INVALID params", func() {
+			Context("given email that already registered", func() {
+				It("adds duplicate email error to validation", func() {
+					form1 := forms.RegistrationForm{
+						Email:                "dev@nimblehq.co",
+						Password:             "password",
+						PasswordConfirmation: "password",
+					}
+					form1.Save()
+
+					form2 := forms.RegistrationForm{
+						Email:                "dev@nimblehq.co",
+						Password:             "password",
+						PasswordConfirmation: "password",
+					}
+
+					formValidation := validation.Validation{}
+					form2.Valid(&formValidation)
+
+					Expect(len(formValidation.Errors)).To(Equal(1))
+					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
+					Expect(formValidation.Errors[0].Message).To(Equal("User with this email already exist"))
+				})
+			})
+
+			Context("given password confirmation is NOT match with the password", func() {
+				It("adds a mismatch password confirmation error to validation", func() {
+					form := forms.RegistrationForm{
+						Email:                "dev@nimblehq.co",
+						Password:             "password",
+						PasswordConfirmation: "does not match the password",
+					}
+
+					formValidation := validation.Validation{}
+					form.Valid(&formValidation)
+
+					Expect(len(formValidation.Errors)).To(Equal(1))
+					Expect(formValidation.Errors[0].Key).To(Equal("PasswordConfirmation"))
+					Expect(formValidation.Errors[0].Message).To(Equal("Password confirmation must match the password"))
+				})
+			})
+		})
 	})
 
 	Describe("#Save", func() {
@@ -22,7 +79,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 					PasswordConfirmation: "password",
 				}
 
-				userID, _ := form.Save()
+				userID, errors := form.Save()
+				if len(errors) > 0 {
+					Fail("Failed to save form")
+				}
 
 				Expect(userID).NotTo(BeNil())
 			})
