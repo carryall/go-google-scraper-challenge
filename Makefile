@@ -7,7 +7,6 @@ endif
 export
 
 # Variables
-BIN=node_modules/.bin
 ASSETS_DIR=assets
 SCSS_DIR=$(ASSETS_DIR)/stylesheets
 JS_DIR=$(ASSETS_DIR)/javascripts
@@ -29,12 +28,12 @@ assets:
 	make assets/icon-sprite
 
 assets/css:
-	$(BIN)/node-sass $(SCSS_DIR)/index.scss $(CSS_DIST)/application.css
+	npm run build-scss
 	npx tailwindcss build $(SCSS_DIR)/vendors/tailwind.css -o $(CSS_DIST)/tailwind.css
 	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
 
 assets/js:
-	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
+	npm run minify-js
 
 assets/icon-sprite:
 	svg-sprite -cD static -cscss assets/images/icons/*.svg
