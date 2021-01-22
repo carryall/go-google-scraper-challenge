@@ -1,7 +1,6 @@
 package initializers
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -13,7 +12,7 @@ import (
 func SetUpDatabase() {
 	runMode, err := web.AppConfig.String("runmode")
 	if err != nil {
-		log.Fatal("Database URL not found: ", err)
+		log.Fatal("Run mode not found: ", err)
 	}
 
 	dbURL, err := web.AppConfig.String("db_url")
@@ -23,17 +22,17 @@ func SetUpDatabase() {
 
 	err = orm.RegisterDriver("postgres", orm.DRPostgres)
 	if err != nil {
-		fmt.Println("Postgres Driver registration failed: ", err)
+		log.Fatal("Postgres Driver registration failed: ", err)
 	}
 
 	err = orm.RegisterDataBase("default", "postgres", dbURL)
 	if err != nil {
-		fmt.Println("Database Registration failed: ", err)
+		log.Fatal("Database Registration failed: ", err)
 	}
 
 	verbose := runMode == "dev"
 	err = orm.RunSyncdb("default", false, verbose)
 	if err != nil {
-		fmt.Println("Database Sync failed: ", err)
+		log.Fatal("Database Sync failed: ", err)
 	}
 }
