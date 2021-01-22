@@ -24,5 +24,8 @@ jobs:
       - name: Copy ENV file
         run: cp ".env.test" ".env"
 
+      - name: Prepare assets
+        run: make assets
+
       - name: Run test
         run: make test
