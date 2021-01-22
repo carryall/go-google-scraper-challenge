@@ -1,6 +1,23 @@
-{{ if .flash }}
-  {{ .flash }}
+{{ range $flashType, $flashMessage := .flash }}
+  {{ if $flashMessage }}
+    <div class="alert alert--{{$flashType}}">
+      <div class="alert__icon">
+        <svg class="icon" viewBox="0 0 20 20">
+          <use xlink:href="svg/sprite.symbol.svg#{{$flashType}}" />
+        </svg>
+      </div>
+      <div class="alert__body">
+        <h3 class="alert__title">
+          {{ $flashType | titlecase }}
+        </h3>
+        <p class="alert__message">
+          {{ $flashMessage }}
+        </p>
+      </div>
+    </div>
+  {{ end }}
 {{ end }}
+
 <form class="form form-registration" action="/users" method="post">
   <div>
     <div class="form__input-group">

@@ -2,10 +2,12 @@
 @import 'base/form';
 
 // Components
+@import 'components/alert';
 @import 'components/app-container';
 @import 'components/app-content';
 @import 'components/app-header';
 @import 'components/form-registration';
+@import 'components/icon';
 
 // Pages
 @import 'pages/user';

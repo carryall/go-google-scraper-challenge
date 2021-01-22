@@ -15,18 +15,29 @@ DIST_DIR=static
 CSS_DIST=$(DIST_DIR)/css
 JS_DIST=$(DIST_DIR)/js
 
-.PHONY: build-dependencies assets dev db/setup db/migrate db/rollback lint test test/run
+.PHONY: build-dependencies assets assets/css assets/js assets/icon-sprite dev db/setup db/migrate db/rollback lint test test/run
 
 build-dependencies:
 	go get github.com/beego/bee/v2
 	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.35.2
 	npm install
+	npm install svg-sprite -g
 
 assets:
+	make assets/css
+	make assets/js
+	make assets/icon-sprite
+
+assets/css:
 	$(BIN)/node-sass $(SCSS_DIR)/index.scss $(CSS_DIST)/application.css
 	npx tailwindcss build $(SCSS_DIR)/vendors/tailwind.css -o $(CSS_DIST)/tailwind.css
 	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
+
+assets/js:
 	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
+
+assets/icon-sprite:
+	svg-sprite -cD static -cscss assets/images/icons/*.svg
 
 dev:
 	make db/migrate

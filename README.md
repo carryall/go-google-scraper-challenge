@@ -41,3 +41,25 @@ A project for Nimble Go Internal Certification on Web
   ```sh
   make test
   ```
+
+### SVG Icons
+
+  The [SVG Sprite](https://github.com/jkphl/svg-sprite) is used on this project
+
+  #### Add a new SVG file
+  - put the new SVG file on `assets/images/icons` directory
+  - install [SVG Sprite](https://github.com/jkphl/svg-sprite) globally
+  ```sh
+  npm install svg-sprite -g
+  ```
+  - generate the SVG sprite
+  ```sh
+  make assets/icon-sprite
+  ```
+
+  #### Use SVG inline
+  ```html
+  <svg class="icon" viewBox="0 0 20 20">
+    <use xlink:href="svg/sprite.symbol.svg#{{ $iconName }}" />
+  </svg>
+  ```
