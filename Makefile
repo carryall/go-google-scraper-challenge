@@ -24,7 +24,7 @@ build-dependencies:
 
 test-dependency:
 	npm install
-	npm install svg-sprite -g
+	npm install svg-sprite
 
 assets:
 	make assets/css
