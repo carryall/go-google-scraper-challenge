@@ -24,6 +24,9 @@ jobs:
       - name: Copy ENV file
         run: cp ".env.test" ".env"
 
+      - name: Install dependency
+        run: make test-dependency
+
       - name: Prepare assets
         run: make assets
 
