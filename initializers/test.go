@@ -21,6 +21,7 @@ func SetupTestEnvironment() {
 	SetUpTemplateFunction()
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
+	SetupStaticPaths()
 }
 
 // AppRootDir returns the app root path of the project

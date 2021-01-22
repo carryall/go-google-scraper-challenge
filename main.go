@@ -18,10 +18,7 @@ func init() {
 
 	initializers.SetUpDatabase()
 	initializers.SetUpTemplateFunction()
-
-	web.SetStaticPath("/css", "static/css")
-	web.SetStaticPath("/js", "static/js")
-	web.SetStaticPath("/svg", "static/symbol/svg")
+	initializers.SetupStaticPaths()
 }
 
 func main() {
