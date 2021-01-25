@@ -1,6 +1,7 @@
 package initializers
 
 import (
+	"go-google-scraper-challenge/helpers"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -11,7 +12,12 @@ import (
 
 // SetUpTemplateFunction register additional template functions
 func SetUpTemplateFunction() {
-	err := web.AddFuncMap("titlecase", toTitleCase)
+	err := web.AddFuncMap("titlecase", strings.ToTitle)
+	if err != nil {
+		log.Fatal("Failed to add template function", err.Error())
+	}
+
+	err = web.AddFuncMap("sentencecase", helpers.ToSentenceCase)
 	if err != nil {
 		log.Fatal("Failed to add template function", err.Error())
 	}
@@ -20,10 +26,6 @@ func SetUpTemplateFunction() {
 	if err != nil {
 		log.Fatal("Failed to add template function", err.Error())
 	}
-}
-
-func toTitleCase(str string) string {
-	return strings.Title(str)
 }
 
 func renderFile(path string) template.HTML {
