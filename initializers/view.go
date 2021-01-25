@@ -12,7 +12,7 @@ import (
 
 // SetUpTemplateFunction register additional template functions
 func SetUpTemplateFunction() {
-	err := web.AddFuncMap("titlecase", strings.ToTitle)
+	err := web.AddFuncMap("titlecase", strings.Title)
 	if err != nil {
 		log.Fatal("Failed to add template function", err.Error())
 	}
