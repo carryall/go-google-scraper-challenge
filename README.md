@@ -59,7 +59,5 @@ A project for Nimble Go Internal Certification on Web
 
   #### Use SVG inline
   ```html
-  <svg class="icon" viewBox="0 0 20 20">
-    <use xlink:href="svg/sprite.symbol.svg#{{ $iconName }}" />
-  </svg>
+  {{ render_icon "iconName" }}
   ```

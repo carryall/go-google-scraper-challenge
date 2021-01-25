@@ -2,9 +2,7 @@
   {{ if $flashMessage }}
     <div class="alert alert--{{$flashType}}">
       <div class="alert__icon">
-        <svg class="icon" viewBox="0 0 20 20">
-          <use xlink:href="svg/sprite.symbol.svg#{{$flashType}}" />
-        </svg>
+        {{ render_icon $flashType }}
       </div>
       <div class="alert__body">
         <h3 class="alert__title">
