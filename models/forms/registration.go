@@ -27,7 +27,7 @@ func init() {
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
 func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
-	userExist := models.UserWithEmailExist(registrationForm.Email)
+	userExist := models.UserEmailAlreadyExist(registrationForm.Email)
 	if userExist {
 		validationError := v.SetError("Email", "User with this email already exist")
 		if validationError == nil {
@@ -72,7 +72,7 @@ func (registrationForm RegistrationForm) Save() (id *int64, errors []error) {
 		EncryptedPassword: encryptedPassword,
 	}
 
-	userID, err := models.AddUser(&user)
+	userID, err := models.CreateUser(&user)
 	if err != nil {
 		return nil, []error{err}
 	}
