@@ -9,7 +9,7 @@
           {{ $flashType | titlecase }}
         </h3>
         <p class="alert__message">
-          {{ $flashMessage }}
+          {{ $flashMessage | sentencecase }}
         </p>
       </div>
     </div>
