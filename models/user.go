@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	Default
+	Base
 
 	Email             string `orm:"unique;size(128)"`
 	EncryptedPassword string
