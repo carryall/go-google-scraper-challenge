@@ -27,9 +27,8 @@ func init() {
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
 func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
-	// This will raise an error if user with the given email does not exist.
-	_, err := models.GetUserByEmail(registrationForm.Email)
-	if err == nil {
+	userExist := models.UserWithEmailExist(registrationForm.Email)
+	if userExist {
 		validationError := v.SetError("Email", "User with this email already exist")
 		if validationError == nil {
 			log.Print("Failed to set error on validation")
