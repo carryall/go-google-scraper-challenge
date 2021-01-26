@@ -23,10 +23,11 @@ func init() {
 
 // Run the migrations
 func (m *CreateUser_20210111_162749) Up() {
-	m.SQL(`CREATE TABLE "user"
+	m.SQL(`CREATE EXTENSION citext;
+		CREATE TABLE "user"
 		(
 			id SERIAL,
-			email text UNIQUE,
+			email citext UNIQUE,
 			encrypted_password text,
 			created_at timestamp NOT NULL,
 			updated_at timestamp NOT NULL,
