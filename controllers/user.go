@@ -2,22 +2,23 @@ package controllers
 
 import (
 	"go-google-scraper-challenge/models/forms"
+	"net/http"
 
 	"github.com/beego/beego/v2/server/web"
 )
 
-//  UserController operations for User
+// UserController operations for User
 type UserController struct {
 	web.Controller
 }
 
-// URLMapping ...
+// URLMapping map user controller actions to functions
 func (c *UserController) URLMapping() {
 	c.Mapping("New", c.New)
 	c.Mapping("Post", c.Post)
 }
 
-// New ...
+// New handle new user action
 // @Title New
 // @Description new User
 // @Success 200
@@ -30,7 +31,7 @@ func (c *UserController) New() {
 	web.ReadFromRequest(&c.Controller)
 }
 
-// Post ...
+// Post handle create user action
 // @Title Post
 // @Description create User
 // @Param	body		body 	forms.Registration	true		"body for Registration form"
@@ -56,5 +57,5 @@ func (c *UserController) Post() {
 	}
 
 	flash.Store(&c.Controller)
-	c.Redirect("/signup", 302)
+	c.Redirect("/signup", http.StatusFound)
 }
