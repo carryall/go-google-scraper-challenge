@@ -12,24 +12,18 @@ import (
 
 // SetUpTemplateFunction register additional template functions
 func SetUpTemplateFunction() {
-	err := web.AddFuncMap("titlecase", strings.Title)
-	if err != nil {
-		log.Fatal("Failed to add template function", err.Error())
+	templateFunctions := map[string]interface{}{
+		"title_case":    strings.Title,
+		"sentence_case": helpers.ToSentenceCase,
+		"render_file":   renderFile,
+		"render_icon":   renderIcon,
 	}
 
-	err = web.AddFuncMap("sentencecase", helpers.ToSentenceCase)
-	if err != nil {
-		log.Fatal("Failed to add template function", err.Error())
-	}
-
-	err = web.AddFuncMap("render_file", renderFile)
-	if err != nil {
-		log.Fatal("Failed to add template function", err.Error())
-	}
-
-	err = web.AddFuncMap("render_icon", renderIcon)
-	if err != nil {
-		log.Fatal("Failed to add template function", err.Error())
+	for name, fn := range templateFunctions {
+		err := web.AddFuncMap(name, fn)
+		if err != nil {
+			log.Fatal("Failed to add template function", err.Error())
+		}
 	}
 }
 

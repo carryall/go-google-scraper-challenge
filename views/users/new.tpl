@@ -6,10 +6,10 @@
       </div>
       <div class="alert__body">
         <h3 class="alert__title">
-          {{ $flashType | titlecase }}
+          {{ $flashType | title_case }}
         </h3>
         <p class="alert__message">
-          {{ $flashMessage | sentencecase }}
+          {{ $flashMessage | sentence_case }}
         </p>
       </div>
     </div>
