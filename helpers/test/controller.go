@@ -12,8 +12,18 @@ import (
 	"github.com/onsi/ginkgo"
 )
 
+// MakeRequest make a HTTP request and return response
+func MakeRequest(method string, url string, body io.Reader) *httptest.ResponseRecorder {
+	request := HTTPRequest(method, url, body)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	response := httptest.NewRecorder()
+	web.BeeApp.Handlers.ServeHTTP(response, request)
+
+	return response
+}
+
 // HTTPRequest initiate new HTTP request and handle the error, will fail the test if there is any error
-func HTTPRequest(method, url string, body io.Reader) *http.Request {
+func HTTPRequest(method string, url string, body io.Reader) *http.Request {
 	request, err := http.NewRequest(method, url, body)
 	if err != nil {
 		ginkgo.Fail("Request failed: " + err.Error())
