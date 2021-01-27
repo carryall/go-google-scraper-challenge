@@ -1,13 +1,13 @@
 // Base
-@import 'base/form';
+@import 'base/_form';
 
 // Components
-@import 'components/alert';
-@import 'components/app-container';
-@import 'components/app-content';
-@import 'components/app-header';
-@import 'components/form-registration';
-@import 'components/icon';
+@import 'components/_alert';
+@import 'components/_app-container';
+@import 'components/_app-content';
+@import 'components/_app-header';
+@import 'components/_form-registration';
+@import 'components/_icon';
 
 // Pages
-@import 'pages/user';
+@import 'pages/_user';
