@@ -2,7 +2,6 @@ package forms
 
 import (
 	"log"
-	"strings"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
@@ -14,15 +13,6 @@ type RegistrationForm struct {
 	Email                string `form:"email" valid:"Email; Required"`
 	Password             string `form:"password" valid:"Required; MinSize(6)"`
 	PasswordConfirmation string `form:"password_confirmation" valid:"Required; MinSize(6)"`
-}
-
-func init() {
-	lowerCaseErrorMessage := map[string]string{}
-	for key, value := range validation.MessageTmpls {
-		lowerCaseErrorMessage[key] = strings.ToLower(value)
-	}
-
-	validation.SetDefaultMessage(lowerCaseErrorMessage)
 }
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
