@@ -24,8 +24,6 @@ func (c *UserController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *UserController) New() {
-	c.Data["Form"] = &forms.RegistrationForm{}
-	c.Data["Alert"] = ""
 	c.Data["Title"] = "Signup"
 
 	c.Layout = "layouts/default.tpl"
