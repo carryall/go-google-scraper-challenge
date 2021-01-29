@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"go-google-scraper-challenge/models"
 	oauth_services "go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/server/web"
@@ -78,7 +77,7 @@ func (c *OAuthClientController) Show() {
 
 	clientID := c.Ctx.Input.Param(":id")
 
-	oauthClient, err := models.FindClientByID(clientID)
+	oauthClient, err := oauth_services.GetClientStore().GetByID(clientID)
 	if err != nil {
 		flash.Error("OAuth client not found")
 		flash.Store(&c.Controller)
