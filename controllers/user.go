@@ -15,7 +15,7 @@ type UserController struct {
 // URLMapping map user controller actions to functions
 func (c *UserController) URLMapping() {
 	c.Mapping("New", c.New)
-	c.Mapping("Post", c.Post)
+	c.Mapping("Post", c.Create)
 }
 
 // New handle new user action
@@ -32,14 +32,14 @@ func (c *UserController) New() {
 	web.ReadFromRequest(&c.Controller)
 }
 
-// Post handle create user action
-// @Title Post
+// Create handle create user action
+// @Title Create
 // @Description create User
 // @Param	body		body 	forms.Registration	true		"body for Registration form"
 // @Success 302 redirect to signup with success message
 // @Failure 302 redirect to signup with error message
 // @router / [post]
-func (c *UserController) Post() {
+func (c *UserController) Create() {
 	flash := web.NewFlash()
 	form := forms.RegistrationForm{}
 

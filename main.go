@@ -1,9 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"go-google-scraper-challenge/initializers"
 	_ "go-google-scraper-challenge/routers"
-	"log"
+	oauth_services "go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
@@ -19,6 +21,7 @@ func init() {
 	initializers.SetUpDatabase()
 	initializers.SetUpTemplateFunction()
 	initializers.SetupStaticPaths()
+	oauth_services.SetUpOauth()
 }
 
 func main() {
