@@ -62,7 +62,7 @@ func (registrationForm RegistrationForm) Save() (id *int64, errors []error) {
 		return nil, errors
 	}
 
-	encryptedPassword, err := helpers.EncryptPassword(registrationForm.Password)
+	encryptedPassword, err := helpers.HashPassword(registrationForm.Password)
 	if err != nil {
 		return nil, []error{err}
 	}
