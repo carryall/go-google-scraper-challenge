@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	oauth_services "go-google-scraper-challenge/services/oauth"
@@ -31,18 +30,14 @@ func (c *OAuthClientController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *OAuthClientController) New() {
-	c.Data["Title"] = "New Client"
+	c.Data["Title"] = "New OAuth Client"
 
 	c.Layout = "layouts/default.tpl"
 	c.TplName = "oauth_clients/new.tpl"
-
-	web.ReadFromRequest(&c.Controller)
-
-	fmt.Println(c.Data)
 }
 
-// Post handle create OAuth client action
-// @Title Post
+// Create handle create OAuth client action
+// @Title Create
 // @Description create OAuth client
 // @Param	body		body 	forms.Registration	true		"body for Registration form"
 // @Success 302 redirect to signup with success message
@@ -52,7 +47,6 @@ func (c *OAuthClientController) Create() {
 	flash := web.NewFlash()
 	oauthClient, err := oauth_services.GenerateClient()
 	if err != nil {
-		fmt.Println("Failed to generate new client", err.Error())
 		flash.Error(err.Error())
 
 	} else {
@@ -70,7 +64,6 @@ func (c *OAuthClientController) Create() {
 // @Success 200
 // @router / [get]
 func (c *OAuthClientController) Show() {
-	flash := web.NewFlash()
 	c.Layout = "layouts/default.tpl"
 	c.TplName = "oauth_clients/show.tpl"
 	c.Data["Title"] = "OAuth Client Detail"
@@ -79,13 +72,12 @@ func (c *OAuthClientController) Show() {
 
 	oauthClient, err := oauth_services.GetClientStore().GetByID(clientID)
 	if err != nil {
+		flash := web.NewFlash()
 		flash.Error("OAuth client not found")
 		flash.Store(&c.Controller)
-		web.ReadFromRequest(&c.Controller)
 	}
 
-	c.Data["Client"] = oauthClient
-
-	fmt.Println("Client ID", clientID)
-	fmt.Println(c.Data)
+	web.ReadFromRequest(&c.Controller)
+	c.Data["ClientID"] = oauthClient.GetID()
+	c.Data["ClientSecret"] = oauthClient.GetSecret()
 }
