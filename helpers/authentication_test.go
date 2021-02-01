@@ -9,10 +9,10 @@ import (
 )
 
 var _ = Describe("Authentication", func() {
-	Describe("#EncryptPassword", func() {
+	Describe("#HashPassword", func() {
 		Context("given a valid password", func() {
-			It("returns the encrypted password", func() {
-				encryptedPassword, err := helpers.EncryptPassword("password")
+			It("returns the hashed password", func() {
+				encryptedPassword, err := helpers.HashPassword("password")
 				if err != nil {
 					Fail("Failed to encrypt password")
 				}
