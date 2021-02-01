@@ -1,7 +1,11 @@
 package forms
 
 import (
+	oauth_services "go-google-scraper-challenge/services/oauth"
+
 	"github.com/beego/beego/v2/core/validation"
+	"github.com/beego/beego/v2/server/web/context"
+	"gopkg.in/oauth2.v3/errors"
 )
 
 type LoginForm struct {
@@ -11,15 +15,9 @@ type LoginForm struct {
 	CLientSecret string `valid:"Required;"`
 }
 
-// Valid adds custom validation to registration form, sets error when the validation failed.
-func (loginForm *LoginForm) Valid(v *validation.Validation) {
-	// TODO: validate client id and secret here
-
-}
-
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (loginForm *LoginForm) Save() (accessToken *string, errors []error) {
+func (loginForm *LoginForm) Save(c *context.Context) (accessToken *string, errs []error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(loginForm)
@@ -28,12 +26,17 @@ func (loginForm *LoginForm) Save() (accessToken *string, errors []error) {
 	}
 
 	if !valid {
-		errors := []error{}
+		errs := []error{}
 		for _, err := range validation.Errors {
-			errors = append(errors, err)
+			errs = append(errs, err)
 		}
 
-		return nil, errors
+		return nil, errs
+	}
+
+	err = oauth_services.GenerateToken(c)
+	if err != nil {
+		return nil, []error{errors.ErrInvalidRequest}
 	}
 
 	return nil, nil

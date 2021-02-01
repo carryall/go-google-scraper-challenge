@@ -2,6 +2,9 @@ package oauth
 
 import (
 	"context"
+	"fmt"
+	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/models"
 	"log"
 	"time"
 
@@ -82,6 +85,13 @@ func responseErrorHandler(re *errors.Response) {
 }
 
 func passwordAuthorizationHandler(email string, password string) (userID string, err error) {
-	// TODO: Query user and compare hashed password
-	return "", nil
+	user, err := models.FindUserByEmail(email)
+	if err != nil {
+		return "", errors.ErrUnauthorizedClient
+	}
+
+	if helpers.CompareHashedPasswords(user.HashedPassword, password) {
+		return fmt.Sprint(user.Id), nil
+	}
+	return "", errors.ErrUnauthorizedClient
 }

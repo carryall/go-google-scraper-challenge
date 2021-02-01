@@ -99,6 +99,33 @@ var _ = Describe("User", func() {
 		})
 	})
 
+	Describe("#FindUserByEmail", func() {
+		Context("given user email exist in the system", func() {
+			It("returns the user", func() {
+				userID := FabricateUser(&models.User{
+					Email:             "dev@nimblehq.co",
+					EncryptedPassword: "password",
+				})
+
+				user, err := models.FindUserByEmail("dev@nimblehq.co")
+				if err != nil {
+					Fail("Failed to find user with given email")
+				}
+
+				Expect(user.Id).To(Equal(userID))
+			})
+		})
+
+		Context("given user email does NOT exist in the system", func() {
+			It("returns error", func() {
+				user, err := models.FindUserByEmail("dev@nimblehq.co")
+
+				Expect(err.Error()).To(ContainSubstring("no row found"))
+				Expect(user).To(BeNil())
+			})
+		})
+	})
+
 	AfterEach(func() {
 		initializers.CleanupDatabase("user")
 	})
