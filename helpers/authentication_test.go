@@ -23,4 +23,30 @@ var _ = Describe("Authentication", func() {
 			})
 		})
 	})
+
+	Describe("#CompareHashedPasswords", func() {
+		Context("given a valid hashed password and password", func() {
+			It("returns true", func() {
+				hashedPassword, err := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.MinCost)
+				if err != nil {
+					Fail("Failed to hash password")
+				}
+				result := helpers.CompareHashedPasswords(string(hashedPassword), "password")
+
+				Expect(result).To(BeTrue())
+			})
+		})
+
+		Context("given an INVALID hashed password and password", func() {
+			It("returns false", func() {
+				hashedPassword, err := bcrypt.GenerateFromPassword([]byte("not the password"), bcrypt.MinCost)
+				if err != nil {
+					Fail("Failed to hash password")
+				}
+				result := helpers.CompareHashedPasswords(string(hashedPassword), "password")
+
+				Expect(result).To(BeFalse())
+			})
+		})
+	})
 })

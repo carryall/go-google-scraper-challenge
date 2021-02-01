@@ -45,3 +45,16 @@ func UserEmailAlreadyExist(email string) (userExist bool) {
 
 	return ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().Exist()
 }
+
+// FindUserByEmail retrieves User by Email and returns error if User with given Email doesn't exist.
+func FindUserByEmail(email string) (user *User, err error) {
+	ormer := orm.NewOrm()
+	user = &User{Email: email}
+
+	err = ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().One(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}

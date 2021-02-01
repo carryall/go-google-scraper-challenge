@@ -38,7 +38,7 @@ func (c *AuthController) Login() {
 		fmt.Println(err.Error())
 	}
 
-	accessToken, errors := form.Save()
+	accessToken, errors := form.Save(c.Ctx)
 	if len(errors) > 0 {
 		errorMessages := []string{}
 		for _, err := range errors {
