@@ -12,12 +12,12 @@ var _ = Describe("Authentication", func() {
 	Describe("#HashPassword", func() {
 		Context("given a valid password", func() {
 			It("returns the hashed password", func() {
-				encryptedPassword, err := helpers.HashPassword("password")
+				hashedPassword, err := helpers.HashPassword("password")
 				if err != nil {
-					Fail("Failed to encrypt password")
+					Fail("Failed to hash password")
 				}
 
-				err = bcrypt.CompareHashAndPassword([]byte(encryptedPassword), []byte("password"))
+				err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte("password"))
 
 				Expect(err).To(BeNil())
 			})
