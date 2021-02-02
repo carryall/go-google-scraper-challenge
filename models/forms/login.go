@@ -1,28 +1,26 @@
 package forms
 
 import (
-	oauth_services "go-google-scraper-challenge/services/oauth"
-
 	"github.com/beego/beego/v2/core/validation"
 	"github.com/beego/beego/v2/server/web/context"
-	"gopkg.in/oauth2.v3/errors"
 )
 
 type LoginForm struct {
-	Email        string `valid:"Email; Required"`
-	Password     string `valid:"Required;"`
-	ClientId     string `valid:"Required;"`
-	CLientSecret string `valid:"Required;"`
+	Username     string `form:"username" valid:"Email; Required"`
+	Password     string `form:"password" valid:"Required;"`
+	ClientId     string `form:"client_id" valid:"Required;"`
+	CLientSecret string `form:"client_secret" valid:"Required;"`
+	GrantType    string `form:"grant_type" valid:"Required;"`
 }
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (loginForm *LoginForm) Save(c *context.Context) (accessToken *string, errs []error) {
+func (loginForm *LoginForm) Save(c *context.Context) (errs []error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(loginForm)
 	if err != nil {
-		return nil, []error{err}
+		return []error{err}
 	}
 
 	if !valid {
@@ -31,13 +29,7 @@ func (loginForm *LoginForm) Save(c *context.Context) (accessToken *string, errs 
 			errs = append(errs, err)
 		}
 
-		return nil, errs
+		return errs
 	}
-
-	err = oauth_services.GenerateToken(c)
-	if err != nil {
-		return nil, []error{errors.ErrInvalidRequest}
-	}
-
-	return nil, nil
+	return nil
 }

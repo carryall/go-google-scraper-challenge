@@ -21,7 +21,11 @@ import (
 var oauthServer *server.Server
 var clientStore *pg.ClientStore
 
+<<<<<<< HEAD
 // SetUpOauth setup OAuth server
+=======
+// SetUpOauth setup OAuth
+>>>>>>> finish login api
 func SetUpOauth() {
 	dbURL, err := web.AppConfig.String("db_url")
 	if err != nil {
