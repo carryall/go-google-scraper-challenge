@@ -1,26 +1,20 @@
 FROM  node:14.15-alpine as assets-builder
 
 RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add make
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 COPY assets/. ./assets/
 
+ADD .env.example ./.env
+COPY Makefile ./Makefile
+
 RUN npm install
 
-# Compile SCSS files
-RUN npm run build-scss
-
-# Compile Tailwind CSS files
-RUN npx tailwindcss build ./static/css/application.css -o ./static/css/application.css
-
-# Minify Javascript files
-RUN npm run minify-js
-
-# Generate SVG Sprite
-RUN npm install svg-sprite -g
-RUN svg-sprite -cD static -cscss assets/images/icons/*.svg
+# Prepare all assets
+RUN make assets
 
 FROM golang:1.15-alpine
 
