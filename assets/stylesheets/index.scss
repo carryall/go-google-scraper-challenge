@@ -3,11 +3,14 @@
 
 // Components
 @import 'components/_alert';
-@import 'components/_app-container';
-@import 'components/_app-content';
 @import 'components/_app-header';
 @import 'components/_form-registration';
 @import 'components/_icon';
 
-// Pages
-@import 'pages/_user';
+// Layouts
+@import 'layouts/_app-container';
+@import 'layouts/_app-content';
+@import 'layouts/_app-header';
+
+// Screens
+@import 'screens/_user';
