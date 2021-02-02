@@ -17,7 +17,7 @@ var _ = Describe("UserController", func() {
 		It("renders with status 200", func() {
 			response := MakeRequest("GET", "/signup", nil)
 
-			Expect(response.Code).To(Equal(http.StatusOK))
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
 		})
 	})
 
@@ -34,7 +34,7 @@ var _ = Describe("UserController", func() {
 				response := MakeRequest("POST", "/users", body)
 				currentPath := GetCurrentPath(response)
 
-				Expect(response.Code).To(Equal(http.StatusFound))
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
 				Expect(currentPath.Path).To(Equal("/signup"))
 			})
 
@@ -47,7 +47,7 @@ var _ = Describe("UserController", func() {
 				body := strings.NewReader(form.Encode())
 
 				response := MakeRequest("POST", "/users", body)
-				flash := GetFlashMessage(response.Result().Cookies())
+				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["success"]).To(Equal("The user was successfully created"))
 				Expect(flash.Data["error"]).To(BeEmpty())
@@ -66,7 +66,7 @@ var _ = Describe("UserController", func() {
 				response := MakeRequest("POST", "/users", body)
 				currentPath := GetCurrentPath(response)
 
-				Expect(response.Code).To(Equal(http.StatusFound))
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
 				Expect(currentPath.Path).To(Equal("/signup"))
 			})
 
@@ -79,7 +79,7 @@ var _ = Describe("UserController", func() {
 				body := strings.NewReader(form.Encode())
 
 				response := MakeRequest("POST", "/users", body)
-				flash := GetFlashMessage(response.Result().Cookies())
+				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["error"]).NotTo(BeEmpty())
 				Expect(flash.Data["success"]).To(BeEmpty())

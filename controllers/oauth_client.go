@@ -21,7 +21,8 @@ type OAuthResponse struct {
 // URLMapping map OAuth client controller actions to functions
 func (c *OAuthClientController) URLMapping() {
 	c.Mapping("New", c.New)
-	c.Mapping("Post", c.Create)
+	c.Mapping("Create", c.Create)
+	c.Mapping("Show", c.Show)
 }
 
 // New handle new OAuth client action
@@ -48,14 +49,13 @@ func (c *OAuthClientController) Create() {
 	oauthClient, err := oauth_services.GenerateClient()
 	if err != nil {
 		flash.Error(err.Error())
-
+		flash.Store(&c.Controller)
+		c.Redirect("/oauth_client", http.StatusFound)
 	} else {
-		flash.Success("New Client was successfully created")
+		flash.Success("The Client was successfully created")
+		flash.Store(&c.Controller)
+		c.Redirect("/oauth_client/"+oauthClient.ClientID, http.StatusFound)
 	}
-
-	flash.Store(&c.Controller)
-
-	c.Redirect("/oauth_client/"+oauthClient.ClientID, http.StatusFound)
 }
 
 // Show handle show OAuth client action
