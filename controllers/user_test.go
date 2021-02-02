@@ -49,7 +49,7 @@ var _ = Describe("UserController", func() {
 				response := MakeRequest("POST", "/users", body)
 				flash := GetFlashMessage(response.Result().Cookies())
 
-				Expect(flash.Data["success"]).To(HavePrefix("New User created with ID:"))
+				Expect(flash.Data["success"]).To(Equal("The user was successfully created"))
 				Expect(flash.Data["error"]).To(BeEmpty())
 			})
 		})

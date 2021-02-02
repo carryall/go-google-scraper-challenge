@@ -14,8 +14,8 @@ var _ = Describe("User", func() {
 		Context("given user with valid params", func() {
 			It("returns the user ID", func() {
 				user := models.User{
-					Email:             "dev@nimblehq.co",
-					EncryptedPassword: "password",
+					Email:          "dev@nimblehq.co",
+					HashedPassword: "password",
 				}
 				userID, err := models.CreateUser(&user)
 				if err != nil {
@@ -27,8 +27,8 @@ var _ = Describe("User", func() {
 
 			It("returns NO error", func() {
 				user := models.User{
-					Email:             "dev@nimblehq.co",
-					EncryptedPassword: "password",
+					Email:          "dev@nimblehq.co",
+					HashedPassword: "password",
 				}
 				_, err := models.CreateUser(&user)
 
@@ -39,14 +39,11 @@ var _ = Describe("User", func() {
 		Context("given user with INVALID params", func() {
 			Context("given email that already exist in database", func() {
 				It("returns an error", func() {
-					FabricateUser(&models.User{
-						Email:             "dev@nimblehq.co",
-						EncryptedPassword: "password",
-					})
+					FabricateUser("dev@nimblehq.co", "password")
 
 					user := models.User{
-						Email:             "dev@nimblehq.co",
-						EncryptedPassword: "password",
+						Email:          "dev@nimblehq.co",
+						HashedPassword: "password",
 					}
 					userID, err := models.CreateUser(&user)
 
@@ -57,13 +54,35 @@ var _ = Describe("User", func() {
 		})
 	})
 
+	Describe("#GetUserById", func() {
+		Context("given user id exist in the system", func() {
+			It("returns user with given id", func() {
+				existUser := FabricateUser("dev@nimblehq.co", "password")
+
+				user, err := models.GetUserById(existUser.Id)
+				if err != nil {
+					Fail("Failed to get user with ID")
+				}
+
+				Expect(user.Email).To(Equal(existUser.Email))
+				Expect(user.HashedPassword).To(Equal(existUser.HashedPassword))
+			})
+		})
+
+		Context("given user email does NOT exist in the system", func() {
+			It("returns false", func() {
+				user, err := models.GetUserById(999)
+
+				Expect(err.Error()).To(ContainSubstring("no row found"))
+				Expect(user).To(BeNil())
+			})
+		})
+	})
+
 	Describe("#UserEmailAlreadyExist", func() {
 		Context("given user email exist in the system", func() {
 			It("returns true", func() {
-				FabricateUser(&models.User{
-					Email:             "dev@nimblehq.co",
-					EncryptedPassword: "password",
-				})
+				FabricateUser("dev@nimblehq.co", "password")
 
 				userExist := models.UserEmailAlreadyExist("dev@nimblehq.co")
 
