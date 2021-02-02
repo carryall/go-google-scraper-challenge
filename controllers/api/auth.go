@@ -1,23 +1,16 @@
 package api_controllers
 
 import (
-	"fmt"
-	"go-google-scraper-challenge/models/forms"
 	"net/http"
+	"strings"
+
+	"go-google-scraper-challenge/models/forms"
+	oauth_services "go-google-scraper-challenge/services/oauth"
 )
 
 // AuthController operations for User
 type AuthController struct {
 	BaseController
-}
-
-type Response struct {
-	AccessToken *string `json:"access_token"`
-}
-
-type ErrorResponse struct {
-	ErrorMessages []string `json:"error_messages"`
-	ErrorStatus   int      `json:"error_status"`
 }
 
 // URLMapping map user controller actions to functions
@@ -35,30 +28,22 @@ func (c *AuthController) Login() {
 
 	err := c.ParseForm(&form)
 	if err != nil {
-		fmt.Println(err.Error())
+		c.ResponseWithError(err.Error(), http.StatusBadRequest)
 	}
 
-	accessToken, errors := form.Save(c.Ctx)
-	if len(errors) > 0 {
+	errs := form.Save(c.Ctx)
+	if len(errs) > 0 {
 		errorMessages := []string{}
-		for _, err := range errors {
+		for _, err := range errs {
 			errorMessages = append(errorMessages, err.Error())
 		}
 
-		c.Data["jsonp"] = &ErrorResponse{
-			ErrorMessages: errorMessages,
-			ErrorStatus:   http.StatusBadRequest,
-		}
+		c.ResponseWithError(strings.Join(errorMessages[:], ", "), http.StatusBadRequest)
 	} else {
-		fmt.Println("The account was successfully created")
 
-		c.Data["jsonp"] = &Response{
-			AccessToken: accessToken,
+		err = oauth_services.GenerateToken(c.Ctx)
+		if err != nil {
+			c.ResponseWithError(err.Error(), http.StatusBadRequest)
 		}
-	}
-
-	err = c.ServeJSONP()
-	if err != nil {
-		fmt.Println("Failed to serve JSON response")
 	}
 }

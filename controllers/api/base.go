@@ -2,6 +2,7 @@ package api_controllers
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/beego/beego/v2/server/web"
 )
@@ -10,19 +11,23 @@ type BaseController struct {
 	web.Controller
 }
 
-func (this *BaseController) ResponseWithError(errors []error, status int) {
-	errorMessages := []string{}
-	for _, err := range errors {
-		errorMessages = append(errorMessages, err.Error())
-	}
+type ErrorResponse struct {
+	ErrorType        string `json:"error"`
+	ErrorDescription string `json:"error_description"`
+}
 
-	this.Data["jsonp"] = &ErrorResponse{
-		ErrorMessages: errorMessages,
-		ErrorStatus:   status,
-	}
+// ResponseWithError response with JSON error data
+func (this *BaseController) ResponseWithError(errorMessage string, status int) {
+	controller := &this.Controller
 
-	err := this.ServeJSON()
+	controller.Data["json"] = &ErrorResponse{
+		ErrorType:        http.StatusText(status),
+		ErrorDescription: errorMessage,
+	}
+	controller.Ctx.Output.Status = status
+
+	err := controller.ServeJSON()
 	if err != nil {
-		fmt.Println("Failed to serve JSON response")
+		fmt.Println("Failed to serve JSON response", err.Error())
 	}
 }
