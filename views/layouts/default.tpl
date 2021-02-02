@@ -9,7 +9,7 @@
   {{ assets_css "css/tailwind.css" }}
 </head>
 <body class="{{.ControllerName}} {{.ActionName}}">
-  <div class="icon-sprite">
+  <div class="icon-sprite" hidden="true">
     {{ render_file "static/symbol/svg/sprite.symbol.svg" }}
   </div>
 
