@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"go-google-scraper-challenge/models/forms"
+	"go-google-scraper-challenge/forms"
 	"net/http"
 
 	"github.com/beego/beego/v2/server/web"
@@ -47,13 +47,13 @@ func (c *UserController) Post() {
 		flash.Error(err.Error())
 	}
 
-	userID, errors := form.Save()
+	_, errors := form.Save()
 	if len(errors) > 0 {
 		for _, err := range errors {
 			flash.Error(err.Error())
 		}
 	} else {
-		flash.Success("New User created with ID: %d", userID)
+		flash.Success("The user was successfully created")
 	}
 
 	flash.Store(&c.Controller)
