@@ -61,14 +61,14 @@ func (registrationForm RegistrationForm) Save() (user *models.User, errors []err
 		return nil, errors
 	}
 
-	encryptedPassword, err := helpers.HashPassword(registrationForm.Password)
+	hashedPassword, err := helpers.HashPassword(registrationForm.Password)
 	if err != nil {
 		return nil, []error{err}
 	}
 
 	user = &models.User{
 		Email:             registrationForm.Email,
-		EncryptedPassword: encryptedPassword,
+		HashedPassword: hashedPassword,
 	}
 
 	userID, err := models.CreateUser(user)

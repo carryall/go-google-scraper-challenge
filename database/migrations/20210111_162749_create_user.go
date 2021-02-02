@@ -28,7 +28,7 @@ func (m *CreateUser_20210111_162749) Up() {
 		(
 			id SERIAL,
 			email citext UNIQUE,
-			encrypted_password text,
+			hashed_password text,
 			created_at timestamp NOT NULL,
 			updated_at timestamp NOT NULL,
 			CONSTRAINT user_pkey PRIMARY KEY (id)
