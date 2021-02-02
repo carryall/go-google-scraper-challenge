@@ -13,7 +13,6 @@ RUN npm install
 RUN npm run build-scss
 
 # Compile Tailwind CSS files
-RUN npx tailwindcss build assets/stylesheets/vendors/tailwind.css -o ./static/css/tailwind.css
 RUN npx tailwindcss build ./static/css/application.css -o ./static/css/application.css
 
 # Minify Javascript files

@@ -28,7 +28,6 @@ assets:
 
 assets/css:
 	npm run build-scss
-	npx tailwindcss build $(SCSS_DIR)/vendors/tailwind.css -o $(CSS_DIST)/tailwind.css
 	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
 
 assets/js:
