@@ -1,10 +1,10 @@
 package forms_test
 
 import (
+	"go-google-scraper-challenge/forms"
 	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
-	"go-google-scraper-challenge/models/forms"
 
 	"github.com/beego/beego/v2/core/validation"
 	. "github.com/onsi/ginkgo"
@@ -32,8 +32,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given email that already registered", func() {
 				It("adds duplicate email error to validation", func() {
 					FabricateUser(&models.User{
-						Email:             "dev@nimblehq.co",
-						EncryptedPassword: "password",
+						Email:          "dev@nimblehq.co",
+						HashedPassword: "password",
 					})
 
 					form := forms.RegistrationForm{
@@ -104,8 +104,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given email that already registered", func() {
 				It("returns a duplicate email error", func() {
 					FabricateUser(&models.User{
-						Email:             "dev@nimblehq.co",
-						EncryptedPassword: "password",
+						Email:          "dev@nimblehq.co",
+						HashedPassword: "password",
 					})
 
 					form := forms.RegistrationForm{
