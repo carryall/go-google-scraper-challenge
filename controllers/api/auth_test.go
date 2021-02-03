@@ -60,5 +60,7 @@ var _ = Describe("AuthController", func() {
 
 	AfterEach(func() {
 		initializers.CleanupDatabase("user")
+		initializers.CleanupDatabase("oauth2_clients")
+		initializers.CleanupDatabase("oauth2_tokens")
 	})
 })

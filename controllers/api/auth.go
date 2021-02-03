@@ -31,7 +31,7 @@ func (c *AuthController) Login() {
 		c.ResponseWithError(err.Error(), http.StatusBadRequest)
 	}
 
-	errs := form.Save(c.Ctx)
+	errs := form.Save()
 	if len(errs) > 0 {
 		errorMessages := []string{}
 		for _, err := range errs {
