@@ -1,6 +1,7 @@
 package test_helpers
 
 import (
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"log"
@@ -41,6 +42,18 @@ func GetResponseBody(response *http.Response) string {
 	}
 
 	return string(body)
+}
+
+// GetJSONResponseBody get response body from response recoder, will fail the test if there us any error
+func GetJSONResponseBody(response *http.Response, v interface{}) interface{} {
+	body := GetResponseBody(response)
+
+	err := json.Unmarshal([]byte(body), v)
+	if err != nil {
+		ginkgo.Fail("Failed to unmarshal json response")
+	}
+
+	return v
 }
 
 // GetCurrentPath get current path from HTTP response and return the current url path

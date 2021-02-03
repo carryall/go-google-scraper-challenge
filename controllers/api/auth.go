@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"go-google-scraper-challenge/models/forms"
+	"go-google-scraper-challenge/forms"
 	oauth_services "go-google-scraper-challenge/services/oauth"
 )
 
