@@ -13,11 +13,6 @@ type OAuthClientController struct {
 	BaseController
 }
 
-type OAuthResponse struct {
-	ClientID     *string `json:"client_id"`
-	ClientSecret *string `json:"client_secret"`
-}
-
 // URLMapping map OAuth client controller actions to functions
 func (c *OAuthClientController) URLMapping() {
 	c.Mapping("New", c.New)
@@ -75,9 +70,10 @@ func (c *OAuthClientController) Show() {
 		flash := web.NewFlash()
 		flash.Error("OAuth client not found")
 		flash.Store(&c.Controller)
+		c.Redirect("/oauth_client", http.StatusFound)
+	} else {
+		web.ReadFromRequest(&c.Controller)
+		c.Data["ClientID"] = oauthClient.GetID()
+		c.Data["ClientSecret"] = oauthClient.GetSecret()
 	}
-
-	web.ReadFromRequest(&c.Controller)
-	c.Data["ClientID"] = oauthClient.GetID()
-	c.Data["ClientSecret"] = oauthClient.GetSecret()
 }

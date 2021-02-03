@@ -61,6 +61,22 @@ var _ = Describe("OAuthClientController", func() {
 				Expect(responseBody).To(ContainSubstring(client.ClientSecret))
 			})
 		})
+
+		Context("given INVALID client id", func() {
+			It("redirect to oauth client page", func() {
+				response := MakeRequest("GET", "/oauth_client/invalid_id", nil)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+			})
+
+			It("sets the error message", func() {
+				response := MakeRequest("GET", "/oauth_client/invalid_id", nil)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["error"]).To(Equal("OAuth client not found"))
+				Expect(flash.Data["success"]).To(BeEmpty())
+			})
+		})
 	})
 
 	AfterEach(func() {
