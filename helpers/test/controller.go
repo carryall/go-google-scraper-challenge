@@ -58,7 +58,7 @@ func GetResponseBody(response *http.Response) string {
 func GetJSONResponseBody(response *http.Response, v interface{}) {
 	body := GetResponseBody(response)
 
-	err := json.Unmarshal([]byte(body), &v)
+	err := json.Unmarshal([]byte(body), v)
 	if err != nil {
 		ginkgo.Fail("Failed to unmarshal json response " + err.Error())
 	}

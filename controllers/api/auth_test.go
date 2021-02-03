@@ -4,8 +4,6 @@ import (
 	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
 	"net/http"
-	"net/url"
-	"strings"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -19,8 +17,8 @@ type LoginResponse struct {
 }
 
 type ErrorResponse struct {
-	Error            string `json: "error"`
-	ErrorDescription string `json: "error_description"`
+	Error            string `json:"error"`
+	ErrorDescription string `json:"error_description"`
 }
 
 var _ = Describe("AuthController", func() {
@@ -29,13 +27,13 @@ var _ = Describe("AuthController", func() {
 			It("responses with status ok", func() {
 				FabricateUser("dev@nimblehq.co", "password")
 				oauth_client := FabricateOAuthClient()
-				data := url.Values{}
-				data.Set("client_id", oauth_client.ClientID)
-				data.Set("client_secret", oauth_client.ClientSecret)
-				data.Set("username", "dev@nimblehq.co")
-				data.Set("password", "password")
-				data.Set("grant_type", "password")
-				body := strings.NewReader(data.Encode())
+				body := MakeRequestBody(map[string]string{
+					"client_id":     oauth_client.ClientID,
+					"client_secret": oauth_client.ClientSecret,
+					"username":      "dev@nimblehq.co",
+					"password":      "password",
+					"grant_type":    "password",
+				})
 				response := MakeRequest("POST", "/api/v1/login", body)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -53,7 +51,7 @@ var _ = Describe("AuthController", func() {
 				})
 				response := MakeRequest("POST", "/api/v1/login", body)
 				responseBody := LoginResponse{}
-				GetJSONResponseBody(response, responseBody)
+				GetJSONResponseBody(response, &responseBody)
 
 				Expect(responseBody.AccessToken).NotTo(BeNil())
 				Expect(responseBody.RefreshToken).NotTo(BeNil())
@@ -62,9 +60,116 @@ var _ = Describe("AuthController", func() {
 			})
 		})
 
+		Context("given missing params", func() {
+			Context("given NO client id", func() {
+				It("response with invalid request error", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					oauth_client := FabricateOAuthClient()
+					body := MakeRequestBody(map[string]string{
+						"client_id":     "",
+						"client_secret": oauth_client.ClientSecret,
+						"username":      "dev@nimblehq.co",
+						"password":      "password",
+						"grant_type":    "password",
+					})
+					response := MakeRequest("POST", "/api/v1/login", body)
+					responseBody := ErrorResponse{}
+					GetJSONResponseBody(response, &responseBody)
+
+					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
+					Expect(responseBody.Error).To(Equal("Bad Request"))
+					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+				})
+			})
+
+			Context("given NO client secret", func() {
+				It("response with invalid request error", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					oauth_client := FabricateOAuthClient()
+					body := MakeRequestBody(map[string]string{
+						"client_id":     oauth_client.ClientID,
+						"client_secret": "",
+						"username":      "dev@nimblehq.co",
+						"password":      "password",
+						"grant_type":    "password",
+					})
+					response := MakeRequest("POST", "/api/v1/login", body)
+					responseBody := ErrorResponse{}
+					GetJSONResponseBody(response, &responseBody)
+
+					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
+					Expect(responseBody.Error).To(Equal("Bad Request"))
+					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+				})
+			})
+
+			Context("given NO grant type", func() {
+				It("response with invalid request error", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					oauth_client := FabricateOAuthClient()
+					body := MakeRequestBody(map[string]string{
+						"client_id":     oauth_client.ClientID,
+						"client_secret": oauth_client.ClientSecret,
+						"username":      "dev@nimblehq.co",
+						"password":      "password",
+						"grant_type":    "",
+					})
+					response := MakeRequest("POST", "/api/v1/login", body)
+					responseBody := ErrorResponse{}
+					GetJSONResponseBody(response, &responseBody)
+
+					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
+					Expect(responseBody.Error).To(Equal("Bad Request"))
+					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+				})
+			})
+
+			Context("given NO username", func() {
+				It("response with invalid request error", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					oauth_client := FabricateOAuthClient()
+					body := MakeRequestBody(map[string]string{
+						"client_id":     oauth_client.ClientID,
+						"client_secret": oauth_client.ClientSecret,
+						"username":      "",
+						"password":      "password",
+						"grant_type":    "password",
+					})
+					response := MakeRequest("POST", "/api/v1/login", body)
+					responseBody := ErrorResponse{}
+					GetJSONResponseBody(response, &responseBody)
+
+					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
+					Expect(responseBody.Error).To(Equal("Bad Request"))
+					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+				})
+			})
+
+			Context("given NO password", func() {
+				It("response with invalid request error", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					oauth_client := FabricateOAuthClient()
+					body := MakeRequestBody(map[string]string{
+						"client_id":     oauth_client.ClientID,
+						"client_secret": oauth_client.ClientSecret,
+						"username":      "dev@nimblehq.co",
+						"password":      "",
+						"grant_type":    "password",
+					})
+					response := MakeRequest("POST", "/api/v1/login", body)
+					responseBody := ErrorResponse{}
+					GetJSONResponseBody(response, &responseBody)
+
+					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
+					Expect(responseBody.Error).To(Equal("Bad Request"))
+					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+				})
+			})
+		})
+
 		Context("given INVALID params", func() {
 			Context("given INVALID client id", func() {
-				It("response with error", func() {
+				It("response with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := MakeRequestBody(map[string]string{
@@ -76,16 +181,16 @@ var _ = Describe("AuthController", func() {
 					})
 					response := MakeRequest("POST", "/api/v1/login", body)
 					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, responseBody)
+					GetJSONResponseBody(response, &responseBody)
 
 					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("unauthorized_client"))
-					Expect(responseBody.ErrorDescription).To(Equal("The client is not authorized to request an authorization code using this method"))
+					Expect(responseBody.Error).To(Equal("invalid_client"))
+					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
 				})
 			})
 
 			Context("given INVALID client secret", func() {
-				It("response with error", func() {
+				It("response with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := MakeRequestBody(map[string]string{
@@ -97,16 +202,16 @@ var _ = Describe("AuthController", func() {
 					})
 					response := MakeRequest("POST", "/api/v1/login", body)
 					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, responseBody)
+					GetJSONResponseBody(response, &responseBody)
 
 					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("unauthorized_client"))
-					Expect(responseBody.ErrorDescription).To(Equal("The client is not authorized to request an authorization code using this method"))
+					Expect(responseBody.Error).To(Equal("invalid_client"))
+					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
 				})
 			})
 
 			Context("given INVALID grant type", func() {
-				It("response with error", func() {
+				It("response with unsupport grant type error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := MakeRequestBody(map[string]string{
@@ -118,16 +223,16 @@ var _ = Describe("AuthController", func() {
 					})
 					response := MakeRequest("POST", "/api/v1/login", body)
 					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, responseBody)
+					GetJSONResponseBody(response, &responseBody)
 
 					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("invalid_grant"))
-					Expect(responseBody.ErrorDescription).To(Equal("The provided authorization grant (e.g., authorization code, resource owner credentials) or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client"))
+					Expect(responseBody.Error).To(Equal("unsupported_grant_type"))
+					Expect(responseBody.ErrorDescription).To(Equal("The authorization grant type is not supported by the authorization server"))
 				})
 			})
 
 			Context("given INVALID username", func() {
-				It("response with error", func() {
+				It("response with access denied error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := MakeRequestBody(map[string]string{
@@ -139,16 +244,16 @@ var _ = Describe("AuthController", func() {
 					})
 					response := MakeRequest("POST", "/api/v1/login", body)
 					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, responseBody)
+					GetJSONResponseBody(response, &responseBody)
 
-					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("unauthorized_client"))
-					Expect(responseBody.ErrorDescription).To(Equal("The client is not authorized to request an authorization code using this method"))
+					Expect(response.StatusCode).To(Equal(http.StatusForbidden))
+					Expect(responseBody.Error).To(Equal("access_denied"))
+					Expect(responseBody.ErrorDescription).To(Equal("The resource owner or authorization server denied the request"))
 				})
 			})
 
 			Context("given INVALID password", func() {
-				It("response with error", func() {
+				It("response with access denied error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := MakeRequestBody(map[string]string{
@@ -160,11 +265,11 @@ var _ = Describe("AuthController", func() {
 					})
 					response := MakeRequest("POST", "/api/v1/login", body)
 					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, responseBody)
+					GetJSONResponseBody(response, &responseBody)
 
-					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("unauthorized_client"))
-					Expect(responseBody.ErrorDescription).To(Equal("The client is not authorized to request an authorization code using this method"))
+					Expect(response.StatusCode).To(Equal(http.StatusForbidden))
+					Expect(responseBody.Error).To(Equal("access_denied"))
+					Expect(responseBody.ErrorDescription).To(Equal("The resource owner or authorization server denied the request"))
 				})
 			})
 		})

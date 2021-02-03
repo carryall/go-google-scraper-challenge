@@ -1,11 +1,10 @@
 package api_controllers
 
 import (
-	"net/http"
-	"strings"
-
 	"go-google-scraper-challenge/forms"
 	oauth_services "go-google-scraper-challenge/services/oauth"
+
+	"gopkg.in/oauth2.v3/errors"
 )
 
 // AuthController operations for User
@@ -18,6 +17,11 @@ func (c *AuthController) URLMapping() {
 	c.Mapping("Login", c.Login)
 }
 
+var (
+	ErrInvalidRequestDescription = errors.Descriptions[errors.ErrInvalidRequest]
+	ErrInvalidRequestStatus      = errors.StatusCodes[errors.ErrInvalidRequest]
+)
+
 // Login provide user login API
 // @Title Login
 // @Description User login
@@ -28,22 +32,16 @@ func (c *AuthController) Login() {
 
 	err := c.ParseForm(&form)
 	if err != nil {
-		c.ResponseWithError(err.Error(), http.StatusBadRequest)
+		c.ResponseWithError(ErrInvalidRequestDescription, ErrInvalidRequestStatus)
 	}
 
 	errs := form.Save()
 	if len(errs) > 0 {
-		errorMessages := []string{}
-		for _, err := range errs {
-			errorMessages = append(errorMessages, err.Error())
-		}
-
-		c.ResponseWithError(strings.Join(errorMessages[:], ", "), http.StatusBadRequest)
+		c.ResponseWithError(ErrInvalidRequestDescription, ErrInvalidRequestStatus)
 	} else {
-
 		err = oauth_services.GenerateToken(c.Ctx)
 		if err != nil {
-			c.ResponseWithError(err.Error(), http.StatusBadRequest)
+			c.ResponseWithError(ErrInvalidRequestDescription, ErrInvalidRequestStatus)
 		}
 	}
 }

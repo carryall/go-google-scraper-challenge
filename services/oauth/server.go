@@ -21,11 +21,7 @@ import (
 var oauthServer *server.Server
 var clientStore *pg.ClientStore
 
-<<<<<<< HEAD
 // SetUpOauth setup OAuth server
-=======
-// SetUpOauth setup OAuth
->>>>>>> finish login api
 func SetUpOauth() {
 	dbURL, err := web.AppConfig.String("db_url")
 	if err != nil {
@@ -91,7 +87,7 @@ func responseErrorHandler(re *errors.Response) {
 func passwordAuthorizationHandler(email string, password string) (userID string, err error) {
 	user, err := models.FindUserByEmail(email)
 	if err != nil {
-		return "", errors.ErrUnauthorizedClient
+		return "", errors.ErrAccessDenied
 	}
 
 	if helpers.CompareHashedPasswords(user.HashedPassword, password) {
