@@ -36,8 +36,8 @@ func (c *OAuthClientController) New() {
 // @Title Create
 // @Description create OAuth client
 // @Param	body		body 	forms.Registration	true		"body for Registration form"
-// @Success 302 redirect to signup with success message
-// @Failure 302 redirect to signup with error message
+// @Success 302 redirect to new OAuth client detail with success message
+// @Failure 302 redirect to new OAuth client with error message
 // @router / [post]
 func (c *OAuthClientController) Create() {
 	flash := web.NewFlash()
@@ -57,6 +57,7 @@ func (c *OAuthClientController) Create() {
 // @Title Show
 // @Description show OAuth client
 // @Success 200
+// @Failure 302 redirect to new OAuth client with error message
 // @router / [get]
 func (c *OAuthClientController) Show() {
 	c.Layout = "layouts/default.tpl"
