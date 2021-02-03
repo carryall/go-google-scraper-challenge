@@ -6,6 +6,10 @@ A project for Nimble Go Internal Certification on Web
 
 ## Development
 
+### Create an ENV file
+
+  Copy the `.env.example` file and rename it to `.env`, then set the `APP_RUN_MODE` to `dev`
+
 ### Build development dependencies
 
   ```sh

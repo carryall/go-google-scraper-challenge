@@ -21,5 +21,8 @@ jobs:
         with:
           version: v1.29
 
+      - name: Copy ENV file
+        run: cp ".env.example" ".env"
+
       - name: Run test
         run: make test
