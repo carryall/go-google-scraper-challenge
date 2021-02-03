@@ -102,17 +102,14 @@ var _ = Describe("User", func() {
 	Describe("#FindUserByEmail", func() {
 		Context("given user email exist in the system", func() {
 			It("returns the user", func() {
-				userID := FabricateUser(&models.User{
-					Email:             "dev@nimblehq.co",
-					EncryptedPassword: "password",
-				})
+				existUser := FabricateUser("dev@nimblehq.co", "password")
 
 				user, err := models.FindUserByEmail("dev@nimblehq.co")
 				if err != nil {
 					Fail("Failed to find user with given email")
 				}
 
-				Expect(user.Id).To(Equal(userID))
+				Expect(user.Id).To(Equal(existUser.Id))
 			})
 		})
 
