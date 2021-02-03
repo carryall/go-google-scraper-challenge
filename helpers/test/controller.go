@@ -14,6 +14,16 @@ import (
 	"github.com/onsi/ginkgo"
 )
 
+func MakeRequestBody(data map[string]string) (body io.Reader) {
+	rawData := url.Values{}
+	for k, v := range data {
+		rawData.Set(k, v)
+	}
+	body = strings.NewReader(rawData.Encode())
+
+	return body
+}
+
 // MakeRequest make a HTTP request and return response
 func MakeRequest(method string, url string, body io.Reader) *http.Response {
 	request := HTTPRequest(method, url, body)
@@ -45,15 +55,13 @@ func GetResponseBody(response *http.Response) string {
 }
 
 // GetJSONResponseBody get response body from response recoder, will fail the test if there us any error
-func GetJSONResponseBody(response *http.Response, v interface{}) interface{} {
+func GetJSONResponseBody(response *http.Response, v interface{}) {
 	body := GetResponseBody(response)
 
-	err := json.Unmarshal([]byte(body), v)
+	err := json.Unmarshal([]byte(body), &v)
 	if err != nil {
-		ginkgo.Fail("Failed to unmarshal json response")
+		ginkgo.Fail("Failed to unmarshal json response " + err.Error())
 	}
-
-	return v
 }
 
 // GetCurrentPath get current path from HTTP response and return the current url path
