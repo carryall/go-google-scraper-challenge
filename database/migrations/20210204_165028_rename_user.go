@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/beego/beego/v2/client/orm/migration"
 )
 
@@ -14,7 +16,10 @@ func init() {
 	m := &RenameUser_20210204_165028{}
 	m.Created = "20210204_165028"
 
-	migration.Register("RenameUser_20210204_165028", m)
+	err := migration.Register("RenameUser_20210204_165028", m)
+	if err != nil {
+		log.Fatal("Migration failed:", err)
+	}
 }
 
 // Run the migrations
