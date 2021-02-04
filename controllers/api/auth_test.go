@@ -246,7 +246,7 @@ var _ = Describe("AuthController", func() {
 					responseBody := ErrorResponse{}
 					GetJSONResponseBody(response, &responseBody)
 
-					Expect(response.StatusCode).To(Equal(http.StatusForbidden))
+					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
 					Expect(responseBody.Error).To(Equal("invalid_client"))
 					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
 				})
@@ -267,7 +267,7 @@ var _ = Describe("AuthController", func() {
 					responseBody := ErrorResponse{}
 					GetJSONResponseBody(response, &responseBody)
 
-					Expect(response.StatusCode).To(Equal(http.StatusForbidden))
+					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
 					Expect(responseBody.Error).To(Equal("invalid_client"))
 					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
 				})
