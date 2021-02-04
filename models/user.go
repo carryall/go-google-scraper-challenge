@@ -15,10 +15,15 @@ func init() {
 	orm.RegisterModel(new(User))
 }
 
+// TableName set the custom table name to plural because the default table name is singular
+func (u *User) TableName() string {
+	return "users"
+}
+
 // CreateUser insert a new User into database and returns last inserted Id on success.
-func CreateUser(m *User) (id int64, err error) {
+func CreateUser(u *User) (id int64, err error) {
 	ormer := orm.NewOrm()
-	return ormer.Insert(m)
+	return ormer.Insert(u)
 }
 
 // GetUserById get a user with given id, return error if user with id does not exist
