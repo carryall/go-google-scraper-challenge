@@ -93,5 +93,5 @@ func passwordAuthorizationHandler(email string, password string) (userID string,
 	if helpers.CompareHashedPasswords(user.HashedPassword, password) {
 		return fmt.Sprint(user.Id), nil
 	}
-	return "", errors.ErrUnauthorizedClient
+	return "", errors.ErrAccessDenied
 }
