@@ -14,7 +14,8 @@ import (
 	"github.com/onsi/ginkgo"
 )
 
-func MakeRequestBody(data map[string]string) (body io.Reader) {
+// RequestBody return a
+func RequestBody(data map[string]string) (body io.Reader) {
 	rawData := url.Values{}
 	for k, v := range data {
 		rawData.Set(k, v)

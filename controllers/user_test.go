@@ -22,7 +22,7 @@ var _ = Describe("UserController", func() {
 	Describe("POST /users", func() {
 		Context("given valid params", func() {
 			It("redirects to signup page", func() {
-				body := MakeRequestBody(map[string]string{
+				body := RequestBody(map[string]string{
 					"email":                 "dev@nimblehq.co",
 					"password":              "password",
 					"password_confirmation": "password",
@@ -36,7 +36,7 @@ var _ = Describe("UserController", func() {
 			})
 
 			It("sets the success message", func() {
-				body := MakeRequestBody(map[string]string{
+				body := RequestBody(map[string]string{
 					"email":                 "dev@nimblehq.co",
 					"password":              "password",
 					"password_confirmation": "password",
@@ -52,7 +52,7 @@ var _ = Describe("UserController", func() {
 
 		Context("given INVALID params", func() {
 			It("redirects to signup page", func() {
-				body := MakeRequestBody(map[string]string{
+				body := RequestBody(map[string]string{
 					"email":                 "",
 					"password":              "",
 					"password-confirmation": "",
@@ -66,7 +66,7 @@ var _ = Describe("UserController", func() {
 			})
 
 			It("sets error message", func() {
-				body := MakeRequestBody(map[string]string{
+				body := RequestBody(map[string]string{
 					"email":                 "",
 					"password":              "",
 					"password-confirmation": "",
