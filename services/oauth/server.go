@@ -90,7 +90,7 @@ func passwordAuthorizationHandler(email string, password string) (userID string,
 		return "", errors.ErrAccessDenied
 	}
 
-	if helpers.CompareHashedPasswords(user.HashedPassword, password) {
+	if helpers.CompareHashWithPassword(user.HashedPassword, password) {
 		return fmt.Sprint(user.Id), nil
 	}
 	return "", errors.ErrAccessDenied
