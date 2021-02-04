@@ -87,11 +87,11 @@ func responseErrorHandler(re *errors.Response) {
 func passwordAuthorizationHandler(email string, password string) (userID string, err error) {
 	user, err := models.FindUserByEmail(email)
 	if err != nil {
-		return "", errors.ErrAccessDenied
+		return "", errors.ErrInvalidClient
 	}
 
 	if helpers.CompareHashWithPassword(user.HashedPassword, password) {
 		return fmt.Sprint(user.Id), nil
 	}
-	return "", errors.ErrAccessDenied
+	return "", errors.ErrInvalidClient
 }
