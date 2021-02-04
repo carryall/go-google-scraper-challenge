@@ -88,6 +88,6 @@ var _ = Describe("UserController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("user")
+		initializers.CleanupDatabase("users")
 	})
 })
