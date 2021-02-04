@@ -21,7 +21,7 @@ var _ = Describe("OAuthClientController", func() {
 
 	Describe("POST /oauth_client", func() {
 		It("redirects to oauth client detail page", func() {
-			body := MakeRequestBody(map[string]string{})
+			body := RequestBody(map[string]string{})
 			response := MakeRequest("POST", "/oauth_client", body)
 			currentPath := GetCurrentPath(response)
 
@@ -30,7 +30,7 @@ var _ = Describe("OAuthClientController", func() {
 		})
 
 		It("sets the success message", func() {
-			body := MakeRequestBody(map[string]string{})
+			body := RequestBody(map[string]string{})
 			response := MakeRequest("POST", "/oauth_client", body)
 			flash := GetFlashMessage(response.Cookies())
 
