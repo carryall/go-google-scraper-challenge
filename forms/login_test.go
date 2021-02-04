@@ -2,7 +2,6 @@ package forms_test
 
 import (
 	"go-google-scraper-challenge/forms"
-	. "go-google-scraper-challenge/helpers/test"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
