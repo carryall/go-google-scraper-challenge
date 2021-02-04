@@ -232,7 +232,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given INVALID username", func() {
-				It("response with access denied error", func() {
+				It("response with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -247,13 +247,13 @@ var _ = Describe("AuthController", func() {
 					GetJSONResponseBody(response, &responseBody)
 
 					Expect(response.StatusCode).To(Equal(http.StatusForbidden))
-					Expect(responseBody.Error).To(Equal("access_denied"))
-					Expect(responseBody.ErrorDescription).To(Equal("The resource owner or authorization server denied the request"))
+					Expect(responseBody.Error).To(Equal("invalid_client"))
+					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
 				})
 			})
 
 			Context("given INVALID password", func() {
-				It("response with access denied error", func() {
+				It("response with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -268,8 +268,8 @@ var _ = Describe("AuthController", func() {
 					GetJSONResponseBody(response, &responseBody)
 
 					Expect(response.StatusCode).To(Equal(http.StatusForbidden))
-					Expect(responseBody.Error).To(Equal("access_denied"))
-					Expect(responseBody.ErrorDescription).To(Equal("The resource owner or authorization server denied the request"))
+					Expect(responseBody.Error).To(Equal("invalid_client"))
+					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
 				})
 			})
 		})
