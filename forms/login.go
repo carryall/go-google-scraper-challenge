@@ -12,8 +12,7 @@ type LoginForm struct {
 	GrantType    string `form:"grant_type" valid:"Required;"`
 }
 
-// Save validates registration form and adds a new User with email and password from the form,
-// returns errors if validation failed or cannot add the user to database.
+// Save validates login form, returns errors if validation failed.
 func (loginForm *LoginForm) Save() (errs []error) {
 	validation := validation.Validation{}
 
