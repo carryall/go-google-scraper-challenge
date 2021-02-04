@@ -24,14 +24,14 @@ var _ = Describe("Authentication", func() {
 		})
 	})
 
-	Describe("#CompareHashedPasswords", func() {
+	Describe("#CompareHashWithPassword", func() {
 		Context("given a valid hashed password and password", func() {
 			It("returns true", func() {
 				hashedPassword, err := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.MinCost)
 				if err != nil {
 					Fail("Failed to hash password")
 				}
-				result := helpers.CompareHashedPasswords(string(hashedPassword), "password")
+				result := helpers.CompareHashWithPassword(string(hashedPassword), "password")
 
 				Expect(result).To(BeTrue())
 			})
@@ -43,7 +43,7 @@ var _ = Describe("Authentication", func() {
 				if err != nil {
 					Fail("Failed to hash password")
 				}
-				result := helpers.CompareHashedPasswords(string(hashedPassword), "password")
+				result := helpers.CompareHashWithPassword(string(hashedPassword), "password")
 
 				Expect(result).To(BeFalse())
 			})
