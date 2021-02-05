@@ -8,6 +8,7 @@ import (
 )
 
 func init() {
+	web.Router("/login", &controllers.AuthController{}, "get:New")
 	web.Router("/signup", &controllers.UserController{}, "get:New")
 	web.Router("/users", &controllers.UserController{}, "post:Create")
 	web.Router("/oauth_client", &controllers.OAuthClientController{}, "get:New;post:Create")
