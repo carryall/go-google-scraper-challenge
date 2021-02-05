@@ -14,7 +14,7 @@ import (
 var _ = Describe("AuthController", func() {
 	Describe("POST /login", func() {
 		Context("given valid params", func() {
-			It("responses with status ok", func() {
+			It("returns with status ok", func() {
 				FabricateUser("dev@nimblehq.co", "password")
 				oauth_client := FabricateOAuthClient()
 				body := RequestBody(map[string]string{
@@ -29,7 +29,7 @@ var _ = Describe("AuthController", func() {
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 
-			It("response with token data", func() {
+			It("returns with a valid token", func() {
 				FabricateUser("dev@nimblehq.co", "password")
 				oauth_client := FabricateOAuthClient()
 				body := RequestBody(map[string]string{
@@ -52,7 +52,7 @@ var _ = Describe("AuthController", func() {
 
 		Context("given missing params", func() {
 			Context("given NO client id", func() {
-				It("response with invalid request error", func() {
+				It("returns with invalid request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -73,7 +73,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given NO client secret", func() {
-				It("response with invalid request error", func() {
+				It("returns with invalid request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -94,7 +94,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given NO grant type", func() {
-				It("response with invalid request error", func() {
+				It("returns with invalid request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -115,7 +115,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given NO username", func() {
-				It("response with invalid request error", func() {
+				It("returns with invalid request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -136,7 +136,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given NO password", func() {
-				It("response with invalid request error", func() {
+				It("returns with invalid request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -159,7 +159,7 @@ var _ = Describe("AuthController", func() {
 
 		Context("given INVALID params", func() {
 			Context("given INVALID client id", func() {
-				It("response with invalid client error", func() {
+				It("returns with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -180,7 +180,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given INVALID client secret", func() {
-				It("response with invalid client error", func() {
+				It("returns with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -201,7 +201,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given INVALID grant type", func() {
-				It("response with unsupport grant type error", func() {
+				It("returns with unsupport grant type error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -222,7 +222,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given INVALID username", func() {
-				It("response with invalid client error", func() {
+				It("returns with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
@@ -243,7 +243,7 @@ var _ = Describe("AuthController", func() {
 			})
 
 			Context("given INVALID password", func() {
-				It("response with invalid client error", func() {
+				It("returns with invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					oauth_client := FabricateOAuthClient()
 					body := RequestBody(map[string]string{
