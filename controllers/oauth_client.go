@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	oauth_services "go-google-scraper-challenge/services/oauth"
+	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/server/web"
 )
@@ -41,7 +41,7 @@ func (c *OAuthClientController) New() {
 // @router / [post]
 func (c *OAuthClientController) Create() {
 	flash := web.NewFlash()
-	oauthClient, err := oauth_services.GenerateClient()
+	oauthClient, err := oauth.GenerateClient()
 	if err != nil {
 		flash.Error(err.Error())
 		flash.Store(&c.Controller)
@@ -66,7 +66,7 @@ func (c *OAuthClientController) Show() {
 
 	clientID := c.Ctx.Input.Param(":id")
 
-	oauthClient, err := oauth_services.GetClientStore().GetByID(clientID)
+	oauthClient, err := oauth.GetClientStore().GetByID(clientID)
 	if err != nil {
 		flash := web.NewFlash()
 		flash.Error("OAuth client not found")
