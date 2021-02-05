@@ -3,17 +3,16 @@
 
 // Components
 @import 'components/_alert';
+@import 'components/_app-container';
 @import 'components/_app-header';
 @import 'components/_form-registration';
 @import 'components/_icon';
 
 // Layouts
-@import 'layouts/_app-container';
-@import 'layouts/_app-content';
-@import 'layouts/_app-header';
+@import 'layouts/_authentication';
+@import 'layouts/_default';
 
 // Screens
-@import 'screens/_user';
 
 // Vendor
 @import 'vendors/tailwind';

@@ -1,0 +1,8 @@
+.layout-default {
+  .app-container {
+    .app-content,
+    .app-header {
+      @apply w-full;
+    }
+  }
+}

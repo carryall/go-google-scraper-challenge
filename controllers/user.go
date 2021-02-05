@@ -26,7 +26,7 @@ func (c *UserController) URLMapping() {
 func (c *UserController) New() {
 	c.Data["Title"] = "Signup"
 
-	c.Layout = "layouts/default.tpl"
+	c.Layout = "layouts/authentication.tpl"
 	c.TplName = "users/new.tpl"
 
 	web.ReadFromRequest(&c.Controller)
