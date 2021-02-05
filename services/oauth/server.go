@@ -85,7 +85,7 @@ func responseErrorHandler(re *errors.Response) {
 }
 
 func passwordAuthorizationHandler(email string, password string) (userID string, err error) {
-	user, err := models.FindUserByEmail(email)
+	user, err := models.GetUserByEmail(email)
 	if err != nil {
 		return "", errors.ErrInvalidClient
 	}
