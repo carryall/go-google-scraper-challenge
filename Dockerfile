@@ -1,7 +1,6 @@
 FROM  node:14.15-alpine as assets-builder
 
-RUN apk --no-cache add ca-certificates
-RUN apk --no-cache add make
+RUN apk --no-cache add ca-certificates make
 
 WORKDIR /app
 
