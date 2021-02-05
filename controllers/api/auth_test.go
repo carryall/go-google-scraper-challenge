@@ -1,25 +1,15 @@
 package api_controllers_test
 
 import (
-	. "go-google-scraper-challenge/helpers/test"
-	"go-google-scraper-challenge/initializers"
 	"net/http"
+
+	"go-google-scraper-challenge/initializers"
+	. "go-google-scraper-challenge/test/helpers"
+	. "go-google-scraper-challenge/test/serializers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
-
-type LoginResponse struct {
-	AccessToken  string `json:"access_token"`
-	ExpiresIn    int    `json:"expires_in"`
-	RefreshToken string `json:"refresh_token"`
-	TokenType    string `json:"token_type"`
-}
-
-type ErrorResponse struct {
-	Error            string `json:"error"`
-	ErrorDescription string `json:"error_description"`
-}
 
 var _ = Describe("AuthController", func() {
 	Describe("POST /login", func() {

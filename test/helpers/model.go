@@ -1,4 +1,4 @@
-package test_helpers
+package tests
 
 import (
 	"go-google-scraper-challenge/models"
