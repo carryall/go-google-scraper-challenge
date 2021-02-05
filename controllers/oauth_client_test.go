@@ -63,7 +63,7 @@ var _ = Describe("OAuthClientController", func() {
 		})
 
 		Context("given INVALID client id", func() {
-			It("redirect to oauth client page", func() {
+			It("redirects to oauth client page", func() {
 				response := MakeRequest("GET", "/oauth_client/invalid_id", nil)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
