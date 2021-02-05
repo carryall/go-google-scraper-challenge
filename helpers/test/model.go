@@ -2,7 +2,7 @@ package test_helpers
 
 import (
 	"go-google-scraper-challenge/models"
-	oauth_services "go-google-scraper-challenge/services/oauth"
+	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/onsi/ginkgo"
 	"golang.org/x/crypto/bcrypt"
@@ -34,8 +34,8 @@ func FabricateUser(email string, password string) (user *models.User) {
 }
 
 // FabricateOAuthClient create a OAuth Client, will fail the test when there is any error
-func FabricateOAuthClient() (client oauth_services.OAuthClient) {
-	client, err := oauth_services.GenerateClient()
+func FabricateOAuthClient() (client oauth.OAuthClient) {
+	client, err := oauth.GenerateClient()
 	if err != nil {
 		ginkgo.Fail("Failed to fabricate OAuth Client")
 	}

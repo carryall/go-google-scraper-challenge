@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	oauth_services "go-google-scraper-challenge/services/oauth"
+	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/server/web"
@@ -24,7 +24,7 @@ func SetupTestEnvironment() {
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
 	SetupStaticPaths()
-	oauth_services.SetUpOauth()
+	oauth.SetUpOauth()
 }
 
 // AppRootDir returns the app root path of the project
