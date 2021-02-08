@@ -16,7 +16,8 @@ func init() {
 	m := &CreateUser_20210111_162749{}
 	m.Created = "20210111_162749"
 
-	if err := migration.Register("CreateUser_20210111_162749", m); err != nil {
+	err := migration.Register("CreateUser_20210111_162749", m)
+	if err != nil {
 		log.Fatal("Migration failed:", err)
 	}
 }

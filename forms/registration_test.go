@@ -222,6 +222,6 @@ var _ = Describe("Forms/RegistrationForm", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("user")
+		initializers.CleanupDatabase("users")
 	})
 })
