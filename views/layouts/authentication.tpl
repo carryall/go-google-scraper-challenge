@@ -12,15 +12,13 @@
     {{ render_file "static/symbol/svg/sprite.symbol.svg" }}
   </div>
 
-  <div class="app-container">
-    <div class="app-header">
-      <h2 class="app-header__title">
-        {{ .Title }}
-      </h2>
-    </div>
-    <div class="app-content">
-      {{ .LayoutContent }}
-    </div>
+  <div class="app-header">
+    <h2 class="app-header__title">
+      {{ .Title }}
+    </h2>
+  </div>
+  <div class="app-content">
+    {{ .LayoutContent }}
   </div>
 </body>
 </html>

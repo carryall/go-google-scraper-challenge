@@ -12,10 +12,8 @@
     {{ render_file "static/symbol/svg/sprite.symbol.svg" }}
   </div>
 
-  <div class="app-container">
-    <div class="app-content">
-      {{ .LayoutContent }}
-    </div>
+  <div class="app-content">
+    {{ .LayoutContent }}
   </div>
 </body>
 </html>
