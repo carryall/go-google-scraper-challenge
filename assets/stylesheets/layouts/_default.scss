@@ -1,0 +1,6 @@
+.layout-default {
+  .app-content,
+  .app-header {
+    @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}

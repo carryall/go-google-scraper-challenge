@@ -1,0 +1,5 @@
+.app-header {
+  &__title {
+    @apply text-center text-3xl font-extrabold text-gray-900;
+  }
+}

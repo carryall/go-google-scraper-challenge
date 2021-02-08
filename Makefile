@@ -7,7 +7,6 @@ endif
 export
 
 # Variables
-BIN=node_modules/.bin
 ASSETS_DIR=assets
 SCSS_DIR=$(ASSETS_DIR)/stylesheets
 JS_DIR=$(ASSETS_DIR)/javascripts
@@ -15,7 +14,7 @@ DIST_DIR=static
 CSS_DIST=$(DIST_DIR)/css
 JS_DIST=$(DIST_DIR)/js
 
-.PHONY: build-dependencies assets dev db/setup db/migrate db/rollback lint test test/run
+.PHONY: build-dependencies test-dependency assets assets/css assets/js assets/icon-sprite dev db/setup db/migrate db/rollback lint test test/run
 
 build-dependencies:
 	go get github.com/beego/bee/v2
@@ -23,9 +22,19 @@ build-dependencies:
 	npm install
 
 assets:
-	$(BIN)/node-sass $(SCSS_DIR)/index.scss $(CSS_DIST)/application.css
-	npx tailwindcss build $(SCSS_DIR)/vendors/tailwind.css -o $(CSS_DIST)/tailwind.css
-	$(BIN)/minify $(JS_DIR) --out-dir $(JS_DIST)
+	make assets/css
+	make assets/js
+	make assets/icon-sprite
+
+assets/css:
+	npm run build-scss
+	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
+
+assets/js:
+	npm run minify-js
+
+assets/icon-sprite:
+	npm run generate-svg-sprite
 
 dev:
 	make db/migrate

@@ -1,6 +1,18 @@
 // Base
-@import 'base/header';
+@import 'base/_body';
+@import 'base/_form';
 
 // Components
+@import 'components/_alert';
+@import 'components/_app-header';
+@import 'components/_form-registration';
+@import 'components/_icon';
 
 // Layouts
+@import 'layouts/_authentication';
+@import 'layouts/_default';
+
+// Screens
+
+// Vendor
+@import 'vendors/tailwind';

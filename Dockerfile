@@ -1,22 +1,19 @@
 FROM  node:14.15-alpine as assets-builder
 
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates make
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 COPY assets/. ./assets/
 
+ADD .env.example ./.env
+COPY Makefile ./Makefile
+
 RUN npm install
 
-# Compile SCSS files
-RUN npm run build-scss
-
-# Compile Tailwind CSS files
-RUN npx tailwindcss build assets/stylesheets/vendors/tailwind.css -o ./static/css/tailwind.css
-
-# Minify Javascript files
-RUN npm run minify-js
+# Prepare all assets
+RUN make assets
 
 FROM golang:1.15-alpine
 

@@ -1,0 +1,15 @@
+.form-registration {
+  @apply space-y-6 rounded-md shadow-sm;
+
+  .form__input-group:first-of-type .form__input {
+    @apply rounded-t-md;
+  }
+
+  .form__input-group:last-of-type .form__input {
+    @apply rounded-b-md;
+  }
+
+  .form__submit-button {
+    @apply mt-2;
+  }
+}

@@ -18,8 +18,10 @@ func SetupTestEnvironment() {
 
 	SetWorkingDirectory(appRoot)
 	OverloadTestConfig()
+	SetUpTemplateFunction()
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
+	SetupStaticPaths()
 }
 
 // AppRootDir returns the app root path of the project
