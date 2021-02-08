@@ -67,7 +67,7 @@ func (registrationForm RegistrationForm) Save() (user *models.User, errors []err
 	}
 
 	user = &models.User{
-		Email:             registrationForm.Email,
+		Email:          registrationForm.Email,
 		HashedPassword: hashedPassword,
 	}
 

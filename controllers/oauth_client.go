@@ -60,7 +60,7 @@ func (c *OAuthClientController) Create() {
 // @Failure 302 redirect to new OAuth client with error message
 // @router / [get]
 func (c *OAuthClientController) Show() {
-	c.Layout = "layouts/default.tpl"
+	c.Layout = "layouts/authentication.tpl"
 	c.TplName = "oauth_clients/show.tpl"
 	c.Data["Title"] = "OAuth Client Detail"
 
