@@ -12,7 +12,15 @@ import (
 )
 
 var _ = Describe("SessionController", func() {
-	Describe("POST /login", func() {
+	Describe("GET /login", func() {
+		It("renders with status 200", func() {
+			response := MakeRequest("GET", "/login", nil)
+
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
+		})
+	})
+
+	Describe("POST /sessions", func() {
 		Context("given valid params", func() {
 			It("returns with status ok", func() {
 				FabricateUser("dev@nimblehq.co", "password")
@@ -20,7 +28,7 @@ var _ = Describe("SessionController", func() {
 					"username": "dev@nimblehq.co",
 					"password": "password",
 				})
-				response := MakeRequest("POST", "/login", body)
+				response := MakeRequest("POST", "/sessions", body)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
@@ -31,7 +39,7 @@ var _ = Describe("SessionController", func() {
 					"username": "dev@nimblehq.co",
 					"password": "password",
 				})
-				response := MakeRequest("POST", "/login", body)
+				response := MakeRequest("POST", "/sessions", body)
 				responseBody := LoginResponse{}
 				GetJSONResponseBody(response, &responseBody)
 
@@ -50,7 +58,7 @@ var _ = Describe("SessionController", func() {
 						"username": "",
 						"password": "password",
 					})
-					response := MakeRequest("POST", "/login", body)
+					response := MakeRequest("POST", "/sessions", body)
 					responseBody := ErrorResponse{}
 					GetJSONResponseBody(response, &responseBody)
 
@@ -67,7 +75,7 @@ var _ = Describe("SessionController", func() {
 						"username": "dev@nimblehq.co",
 						"password": "",
 					})
-					response := MakeRequest("POST", "/login", body)
+					response := MakeRequest("POST", "/sessions", body)
 					responseBody := ErrorResponse{}
 					GetJSONResponseBody(response, &responseBody)
 
@@ -84,7 +92,7 @@ var _ = Describe("SessionController", func() {
 						"username": "invalid@email.com",
 						"password": "password",
 					})
-					response := MakeRequest("POST", "/login", body)
+					response := MakeRequest("POST", "/sessions", body)
 					responseBody := ErrorResponse{}
 					GetJSONResponseBody(response, &responseBody)
 
@@ -101,7 +109,7 @@ var _ = Describe("SessionController", func() {
 						"username": "dev@nimblehq.co",
 						"password": "invalid password",
 					})
-					response := MakeRequest("POST", "/login", body)
+					response := MakeRequest("POST", "/sessions", body)
 					responseBody := ErrorResponse{}
 					GetJSONResponseBody(response, &responseBody)
 

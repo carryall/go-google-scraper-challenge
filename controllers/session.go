@@ -18,6 +18,11 @@ func (c *SessionController) URLMapping() {
 	c.Mapping("Create", c.Create)
 }
 
+// New handle new session action
+// @Title New
+// @Description new session
+// @Success 200
+// @router / [get]
 func (c *SessionController) New() {
 	c.Data["Title"] = "Sign In"
 
@@ -27,32 +32,32 @@ func (c *SessionController) New() {
 	web.ReadFromRequest(&c.Controller)
 }
 
-// Login provide user login feature
-// @Title Login
-// @Description User login
-// @Success 302 redirect to home page with success message
-// @Failure 302 redirect to login page with error message
+// Create handle create session action
+// @Title Create
+// @Description create session
+// @Success 302 redirect to root path with success message
+// @Failure 302 redirect to login path with error message
 // @router / [post]
 func (c *SessionController) Create() {
 	flash := web.NewFlash()
 	form := forms.LoginForm{}
+	redirectPath := ""
 
 	err := c.ParseForm(&form)
 	if err != nil {
 		flash.Error(err.Error())
-		flash.Store(&c.Controller)
-		c.Redirect("/login", http.StatusFound)
+		redirectPath = "/login"
 	}
 
 	errs := form.Save()
 	if len(errs) > 0 {
 		flash.Error(err.Error())
-		flash.Store(&c.Controller)
-		c.Redirect("/login", http.StatusFound)
+		redirectPath = "/login"
 	} else {
-		// TODO: generate token and log user in
 		flash.Success("Successfully logged in")
-		flash.Store(&c.Controller)
-		c.Redirect("/login", http.StatusFound)
+		redirectPath = "/"
 	}
+
+	flash.Store(&c.Controller)
+	c.Redirect(redirectPath, http.StatusFound)
 }
