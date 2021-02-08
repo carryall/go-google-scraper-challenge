@@ -25,7 +25,10 @@ func (loginForm *LoginForm) Valid(v *validation.Validation) {
 
 	validPassword := helpers.CompareHashWithPassword(user.HashedPassword, loginForm.Password)
 	if !validPassword {
-		v.SetError("Password", "Incorrect email or password")
+		validationError := v.SetError("Password", "Incorrect email or password")
+		if validationError == nil {
+			log.Print("Failed to set error on validation")
+		}
 	}
 }
 
