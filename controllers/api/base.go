@@ -1,4 +1,4 @@
-package api_controllers
+package apis
 
 import (
 	"log"

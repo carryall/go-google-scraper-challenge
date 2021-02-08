@@ -1,4 +1,4 @@
-package api_controllers_test
+package apis_test
 
 import (
 	"net/http"
