@@ -7,7 +7,7 @@ import (
 
 func init() {
 
-    beego.GlobalControllerRouter["go-google-scraper-challenge/controllers/api:AuthController"] = append(beego.GlobalControllerRouter["go-google-scraper-challenge/controllers/api:AuthController"],
+    beego.GlobalControllerRouter["go-google-scraper-challenge/controllers/apis:AuthController"] = append(beego.GlobalControllerRouter["go-google-scraper-challenge/controllers/apis:AuthController"],
         beego.ControllerComments{
             Method: "Login",
             Router: "/",
