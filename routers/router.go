@@ -12,6 +12,8 @@ func init() {
 	web.Router("/users", &controllers.UserController{}, "post:Create")
 	web.Router("/oauth_client", &controllers.OAuthClientController{}, "get:New;post:Create")
 	web.Router("/oauth_client/:id", &controllers.OAuthClientController{}, "get:Show")
+	web.Router("/login", &controllers.SessionController{}, "get:New")
+	web.Router("/sessions", &controllers.SessionController{}, "post:Create")
 
 	web.Router("/api/v1/login", &apicontrollers.AuthController{}, "post:Login")
 }
