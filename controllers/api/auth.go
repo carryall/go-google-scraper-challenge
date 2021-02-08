@@ -1,7 +1,7 @@
 package api_controllers
 
 import (
-	"go-google-scraper-challenge/forms"
+	apiforms "go-google-scraper-challenge/forms/api"
 	oauth_services "go-google-scraper-challenge/services/oauth"
 
 	"gopkg.in/oauth2.v3/errors"
@@ -28,7 +28,7 @@ var (
 // @Success 200
 // @router / [post]
 func (c *AuthController) Login() {
-	form := forms.LoginForm{}
+	form := apiforms.LoginForm{}
 
 	err := c.ParseForm(&form)
 	if err != nil {

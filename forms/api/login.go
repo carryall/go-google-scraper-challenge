@@ -1,4 +1,4 @@
-package forms
+package apiforms
 
 import (
 	"github.com/beego/beego/v2/core/validation"
