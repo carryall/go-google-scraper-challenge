@@ -15,10 +15,8 @@ func (c *KeywordController) URLMapping() {
 }
 
 func (c *KeywordController) List() {
-	c.Data["Title"] = "Welcome"
-
 	c.Layout = "layouts/default.tpl"
-	c.TplName = "sessions/list.tpl"
+	c.TplName = "keywords/list.tpl"
 
 	web.ReadFromRequest(&c.Controller)
 }
