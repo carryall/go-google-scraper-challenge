@@ -40,7 +40,7 @@ func (c *SessionController) New() {
 // @router / [post]
 func (c *SessionController) Create() {
 	flash := web.NewFlash()
-	form := forms.LoginForm{}
+	form := forms.SessionForm{}
 	redirectPath := ""
 
 	err := c.ParseForm(&form)
@@ -49,13 +49,15 @@ func (c *SessionController) Create() {
 		redirectPath = "/login"
 	}
 
-	errs := form.Save()
+	user, errs := form.Save()
 	if len(errs) > 0 {
 		for _, err := range errs {
 			flash.Error(err.Error())
 		}
 		redirectPath = "/login"
 	} else {
+		c.SetSession("CURRENT_USER", user.Id)
+
 		flash.Success("Successfully logged in")
 		redirectPath = "/"
 	}
