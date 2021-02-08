@@ -1,7 +1,7 @@
 .alert {
   $self: &;
 
-  @apply w-full flex items-start rounded-lg mb-8 p-3 sm:p-5 sm:align-middle sm:max-w-lg;
+  @apply w-full flex items-start rounded-lg mx-auto mb-8 p-3 sm:p-5 sm:align-middle sm:max-w-lg;
 
   &--error {
     @apply bg-red-50;

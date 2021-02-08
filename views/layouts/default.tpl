@@ -12,6 +12,8 @@
     {{ render_file "static/symbol/svg/sprite.symbol.svg" }}
   </div>
 
+  {{ template "shared/_alert.tpl" . }}
+
   <div class="app-content">
     {{ .LayoutContent }}
   </div>

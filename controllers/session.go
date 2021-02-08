@@ -51,7 +51,9 @@ func (c *SessionController) Create() {
 
 	errs := form.Save()
 	if len(errs) > 0 {
-		flash.Error(err.Error())
+		for _, err := range errs {
+			flash.Error(err.Error())
+		}
 		redirectPath = "/login"
 	} else {
 		flash.Success("Successfully logged in")

@@ -21,13 +21,13 @@ func (loginForm *LoginForm) Valid(v *validation.Validation) {
 		if validationError == nil {
 			log.Print("Failed to set error on validation")
 		}
-	}
-
-	validPassword := helpers.CompareHashWithPassword(user.HashedPassword, loginForm.Password)
-	if !validPassword {
-		validationError := v.SetError("Password", "Incorrect email or password")
-		if validationError == nil {
-			log.Print("Failed to set error on validation")
+	} else {
+		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, loginForm.Password)
+		if !validPassword {
+			validationError := v.SetError("Password", "Incorrect email or password")
+			if validationError == nil {
+				log.Print("Failed to set error on validation")
+			}
 		}
 	}
 }
