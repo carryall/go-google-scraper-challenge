@@ -38,7 +38,7 @@ func renderFile(path string) template.HTML {
 
 func renderIcon(iconName string) template.HTML {
 	iconTemplate := `<svg class="icon" viewBox="0 0 20 20">
-		<use xlink:href="svg/sprite.symbol.svg#` + iconName + `" />
+		<use xlink:href="/svg/sprite.symbol.svg#` + iconName + `" />
 	</svg>`
 
 	return web.Str2html(iconTemplate)
