@@ -3,10 +3,11 @@ package oauth
 import (
 	"context"
 	"fmt"
-	"go-google-scraper-challenge/helpers"
-	"go-google-scraper-challenge/models"
 	"log"
 	"time"
+
+	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/models"
 
 	"github.com/beego/beego/v2/server/web"
 	app_context "github.com/beego/beego/v2/server/web/context"
