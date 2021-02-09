@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	currentUserKey = "CURRENT_USER_ID"
+	CurrentUserKey = "CURRENT_USER_ID"
 )
 
 type BaseController struct {
@@ -21,11 +21,11 @@ func (base *BaseController) Prepare() {
 }
 
 func (base *BaseController) SetCurrentUser(user *models.User) {
-	base.Controller.SetSession(currentUserKey, user.Id)
+	base.Controller.SetSession(CurrentUserKey, user.Id)
 }
 
 func (base *BaseController) CurrentUser() (user *models.User) {
-	userId := base.Controller.GetSession(currentUserKey)
+	userId := base.Controller.GetSession(CurrentUserKey)
 	if userId == nil {
 		return nil
 	}
