@@ -12,9 +12,9 @@ import (
 )
 
 var _ = Describe("SessionController", func() {
-	Describe("GET /login", func() {
+	Describe("GET /signin", func() {
 		It("renders with status 200", func() {
-			response := MakeRequest("GET", "/login", nil)
+			response := MakeRequest("GET", "/signin", nil)
 
 			Expect(response.StatusCode).To(Equal(http.StatusOK))
 		})

@@ -24,6 +24,8 @@ func (c *SessionController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *SessionController) New() {
+	c.EnsureGuestUser()
+
 	c.Data["Title"] = "Sign In"
 
 	c.Layout = "layouts/authentication.tpl"
@@ -46,7 +48,6 @@ func (c *SessionController) Create() {
 	err := c.ParseForm(&form)
 	if err != nil {
 		flash.Error(err.Error())
-		redirectPath = "/login"
 	}
 
 	user, errs := form.Save()
@@ -54,9 +55,9 @@ func (c *SessionController) Create() {
 		for _, err := range errs {
 			flash.Error(err.Error())
 		}
-		redirectPath = "/login"
+		redirectPath = "/signin"
 	} else {
-		c.SetSession("CURRENT_USER", user.Id)
+		c.SetCurrentUser(user)
 
 		flash.Success("Successfully logged in")
 		redirectPath = "/"

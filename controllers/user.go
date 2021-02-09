@@ -24,6 +24,8 @@ func (c *UserController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *UserController) New() {
+	c.EnsureGuestUser()
+
 	c.Data["Title"] = "Signup"
 
 	c.Layout = "layouts/authentication.tpl"

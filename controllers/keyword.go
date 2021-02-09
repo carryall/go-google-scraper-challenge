@@ -15,6 +15,8 @@ func (c *KeywordController) URLMapping() {
 }
 
 func (c *KeywordController) List() {
+	c.EnsureAuthenticatedUser()
+
 	c.Layout = "layouts/default.tpl"
 	c.TplName = "keywords/list.tpl"
 
