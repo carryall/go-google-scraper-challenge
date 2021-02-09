@@ -6,7 +6,7 @@ import (
 
 // LoginAs login using given email and password
 func Login(email string, password string) {
-	body := RequestBody(map[string]string{
+	body := GenerateRequestBody(map[string]string{
 		"email":    email,
 		"password": password,
 	})

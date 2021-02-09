@@ -39,7 +39,7 @@ var _ = Describe("SessionController", func() {
 		Context("given valid params", func() {
 			It("redirects to root path", func() {
 				FabricateUser("dev@nimblehq.co", "password")
-				body := RequestBody(map[string]string{
+				body := GenerateRequestBody(map[string]string{
 					"email":    "dev@nimblehq.co",
 					"password": "password",
 				})
@@ -52,7 +52,7 @@ var _ = Describe("SessionController", func() {
 
 			It("sets the success message", func() {
 				FabricateUser("dev@nimblehq.co", "password")
-				body := RequestBody(map[string]string{
+				body := GenerateRequestBody(map[string]string{
 					"email":    "dev@nimblehq.co",
 					"password": "password",
 				})
@@ -65,7 +65,7 @@ var _ = Describe("SessionController", func() {
 
 			It("sets user id to session", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				body := RequestBody(map[string]string{
+				body := GenerateRequestBody(map[string]string{
 					"email":    "dev@nimblehq.co",
 					"password": "password",
 				})
@@ -80,7 +80,7 @@ var _ = Describe("SessionController", func() {
 			Context("given NO email", func() {
 				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "",
 						"password": "password",
 					})
@@ -93,7 +93,7 @@ var _ = Describe("SessionController", func() {
 
 				It("sets the error message", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "",
 						"password": "password",
 					})
@@ -106,7 +106,7 @@ var _ = Describe("SessionController", func() {
 
 				It("does NOT set user id to session", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "",
 						"password": "password",
 					})
@@ -120,7 +120,7 @@ var _ = Describe("SessionController", func() {
 			Context("given NO password", func() {
 				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "dev@nimblehq.cp",
 						"password": "",
 					})
@@ -133,7 +133,7 @@ var _ = Describe("SessionController", func() {
 
 				It("sets the error message", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "dev@nimblehq.co",
 						"password": "",
 					})
@@ -148,7 +148,7 @@ var _ = Describe("SessionController", func() {
 			Context("given INVALID email", func() {
 				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "invalid@email.com",
 						"password": "password",
 					})
@@ -161,7 +161,7 @@ var _ = Describe("SessionController", func() {
 
 				It("sets the error message", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "invalid@email.com",
 						"password": "password",
 					})
@@ -176,7 +176,7 @@ var _ = Describe("SessionController", func() {
 			Context("given INVALID password", func() {
 				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "dev@nimblehq.co",
 						"password": "invalid password",
 					})
@@ -189,7 +189,7 @@ var _ = Describe("SessionController", func() {
 
 				It("sets the error message", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					body := RequestBody(map[string]string{
+					body := GenerateRequestBody(map[string]string{
 						"email":    "dev@nimblehq.co",
 						"password": "invalid password",
 					})
