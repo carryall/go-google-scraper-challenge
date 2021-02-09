@@ -60,5 +60,5 @@ func (c *UserController) Create() {
 	}
 
 	flash.Store(&c.Controller)
-	c.Redirect("/signup", http.StatusFound)
+	c.Redirect("/signin", http.StatusFound)
 }
