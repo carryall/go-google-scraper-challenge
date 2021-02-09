@@ -128,6 +128,18 @@ var _ = Describe("SessionController", func() {
 					Expect(flash.Data["error"]).To(Equal("Password can not be empty"))
 					Expect(flash.Data["success"]).To(BeEmpty())
 				})
+
+				It("does NOT set user id to session", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := GenerateRequestBody(map[string]string{
+						"email":    "dev@nimblehq.co",
+						"password": "",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+					Expect(currentUserId).To(BeNil())
+				})
 			})
 
 			Context("given INVALID email", func() {
@@ -156,6 +168,18 @@ var _ = Describe("SessionController", func() {
 					Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
 					Expect(flash.Data["success"]).To(BeEmpty())
 				})
+
+				It("does NOT set user id to session", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := GenerateRequestBody(map[string]string{
+						"email":    "invalid@email.com",
+						"password": "password",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+					Expect(currentUserId).To(BeNil())
+				})
 			})
 
 			Context("given INVALID password", func() {
@@ -183,6 +207,18 @@ var _ = Describe("SessionController", func() {
 
 					Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
 					Expect(flash.Data["success"]).To(BeEmpty())
+				})
+
+				It("does NOT set user id to session", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := GenerateRequestBody(map[string]string{
+						"email":    "dev@nimblehq.co",
+						"password": "invalid password",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+					Expect(currentUserId).To(BeNil())
 				})
 			})
 		})
