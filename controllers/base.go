@@ -16,6 +16,8 @@ const (
 
 type BaseController struct {
 	web.Controller
+
+	CurrentUser *models.User
 }
 
 func (base *BaseController) Prepare() {
@@ -23,14 +25,14 @@ func (base *BaseController) Prepare() {
 }
 
 func (base *BaseController) SetCurrentUser(user *models.User) {
-	err := base.Controller.SetSession(CurrentUserKey, user.Id)
+	err := base.SetSession(CurrentUserKey, user.Id)
 	if err != nil {
 		log.Fatal("Fail to set current user", err.Error())
 	}
 }
 
-func (base *BaseController) CurrentUser() (user *models.User) {
-	userId := base.Controller.GetSession(CurrentUserKey)
+func (base *BaseController) GetCurrentUser() (user *models.User) {
+	userId := base.GetSession(CurrentUserKey)
 	if userId == nil {
 		return nil
 	}
@@ -43,14 +45,15 @@ func (base *BaseController) CurrentUser() (user *models.User) {
 }
 
 func (base *BaseController) EnsureAuthenticatedUser() {
-	currentUser := base.CurrentUser()
+	currentUser := base.GetCurrentUser()
 	if currentUser == nil {
 		base.Controller.Redirect("/signin", http.StatusFound)
 	}
+	base.Controller.Data["CurrentUser"] = currentUser
 }
 
 func (base *BaseController) EnsureGuestUser() {
-	currentUser := base.CurrentUser()
+	currentUser := base.GetCurrentUser()
 	if currentUser != nil {
 		base.Controller.Redirect("/", http.StatusFound)
 	}

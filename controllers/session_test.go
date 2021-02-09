@@ -13,25 +13,10 @@ import (
 
 var _ = Describe("SessionController", func() {
 	Describe("GET /signin", func() {
-		Context("given no user logged in", func() {
-			It("renders with status 200", func() {
-				response := MakeRequest("GET", "/signin", nil)
+		It("renders with status 200", func() {
+			response := MakeRequest("GET", "/signin", nil)
 
-				Expect(response.StatusCode).To(Equal(http.StatusOK))
-			})
-		})
-
-		Context("given user is already logged in", func() {
-			It("redirects to root path", func() {
-				FabricateUser("dev@nimblehq.co", "password")
-				Login("dev@nimblehq.co", "password")
-
-				response := MakeRequest("GET", "/signin", nil)
-				currentPath := GetCurrentPath(response)
-
-				Expect(response.StatusCode).To(Equal(http.StatusFound))
-				Expect(currentPath).To(Equal("/"))
-			})
+			Expect(response.StatusCode).To(Equal(http.StatusOK))
 		})
 	})
 
