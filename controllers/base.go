@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"log"
+	"net/http"
+
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
-	"net/http"
 
 	"github.com/beego/beego/v2/server/web"
 )
@@ -21,7 +23,10 @@ func (base *BaseController) Prepare() {
 }
 
 func (base *BaseController) SetCurrentUser(user *models.User) {
-	base.Controller.SetSession(CurrentUserKey, user.Id)
+	err := base.Controller.SetSession(CurrentUserKey, user.Id)
+	if err != nil {
+		log.Fatal("Fail to set current user", err.Error())
+	}
 }
 
 func (base *BaseController) CurrentUser() (user *models.User) {
