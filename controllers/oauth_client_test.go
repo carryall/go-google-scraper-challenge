@@ -26,7 +26,7 @@ var _ = Describe("OAuthClientController", func() {
 			currentPath := GetCurrentPath(response)
 
 			Expect(response.StatusCode).To(Equal(http.StatusFound))
-			Expect(currentPath.Path).To(MatchRegexp(`\/oauth_client\/\b`))
+			Expect(currentPath).To(MatchRegexp(`\/oauth_client\/\b`))
 		})
 
 		It("sets the success message", func() {

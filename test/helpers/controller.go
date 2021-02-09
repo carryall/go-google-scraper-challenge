@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -66,12 +67,28 @@ func GetJSONResponseBody(response *http.Response, v interface{}) {
 }
 
 // GetCurrentPath get current path from HTTP response and return the current url path
-func GetCurrentPath(response *http.Response) *url.URL {
-	path, err := response.Location()
+func GetCurrentPath(response *http.Response) string {
+	url, err := response.Location()
 	if err != nil {
 		ginkgo.Fail("Failed to get current path: " + err.Error())
 	}
-	return path
+	return url.Path
+}
+
+// GetSession get session with given key from cookie, will fail the test if cannot get session store
+func GetSession(cookies []*http.Cookie, key string) interface{} {
+	c := context.Background()
+	for _, cookie := range cookies {
+		if cookie.Name == web.BConfig.WebConfig.Session.SessionName {
+			store, err := web.GlobalSessions.GetSessionStore(cookie.Value)
+			if err != nil {
+				ginkgo.Fail("Failed to get store " + err.Error())
+			}
+
+			return store.Get(c, key)
+		}
+	}
+	return nil
 }
 
 // GetFlashMessage get Beego flash message out of array of http cookie

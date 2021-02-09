@@ -32,7 +32,7 @@ var _ = Describe("UserController", func() {
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
-				Expect(currentPath.Path).To(Equal("/signup"))
+				Expect(currentPath).To(Equal("/signup"))
 			})
 
 			It("sets the success message", func() {
@@ -62,7 +62,7 @@ var _ = Describe("UserController", func() {
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
-				Expect(currentPath.Path).To(Equal("/signup"))
+				Expect(currentPath).To(Equal("/signup"))
 			})
 
 			It("sets error message", func() {

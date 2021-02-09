@@ -3,9 +3,9 @@ package controllers_test
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/controllers"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/test/helpers"
-	. "go-google-scraper-challenge/test/serializers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -13,117 +13,197 @@ import (
 
 var _ = Describe("SessionController", func() {
 	Describe("GET /signin", func() {
-		It("renders with status 200", func() {
-			response := MakeRequest("GET", "/signin", nil)
+		Context("given no user logged in", func() {
+			It("renders with status 200", func() {
+				response := MakeRequest("GET", "/signin", nil)
 
-			Expect(response.StatusCode).To(Equal(http.StatusOK))
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+			})
+		})
+
+		Context("given user is already logged in", func() {
+			It("redirects to root path", func() {
+				FabricateUser("dev@nimblehq.co", "password")
+				Login("dev@nimblehq.co", "password")
+
+				response := MakeRequest("GET", "/signin", nil)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
+			})
 		})
 	})
 
 	Describe("POST /sessions", func() {
 		Context("given valid params", func() {
-			It("returns with status ok", func() {
+			It("redirects to root path", func() {
 				FabricateUser("dev@nimblehq.co", "password")
 				body := RequestBody(map[string]string{
-					"username": "dev@nimblehq.co",
+					"email":    "dev@nimblehq.co",
 					"password": "password",
 				})
 				response := MakeRequest("POST", "/sessions", body)
+				currentPath := GetCurrentPath(response)
 
-				Expect(response.StatusCode).To(Equal(http.StatusOK))
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
 			})
 
-			It("returns with a valid token", func() {
+			It("sets the success message", func() {
 				FabricateUser("dev@nimblehq.co", "password")
 				body := RequestBody(map[string]string{
-					"username": "dev@nimblehq.co",
+					"email":    "dev@nimblehq.co",
 					"password": "password",
 				})
 				response := MakeRequest("POST", "/sessions", body)
-				responseBody := LoginResponse{}
-				GetJSONResponseBody(response, &responseBody)
+				flash := GetFlashMessage(response.Cookies())
 
-				Expect(responseBody.AccessToken).NotTo(BeNil())
-				Expect(responseBody.RefreshToken).NotTo(BeNil())
-				Expect(responseBody.ExpiresIn).NotTo(BeNil())
-				Expect(responseBody.TokenType).NotTo(BeNil())
+				Expect(flash.Data["success"]).To(Equal("Successfully logged in"))
+				Expect(flash.Data["error"]).To(BeEmpty())
+			})
+
+			It("sets user id to session", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := RequestBody(map[string]string{
+					"email":    "dev@nimblehq.co",
+					"password": "password",
+				})
+				response := MakeRequest("POST", "/sessions", body)
+				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+				Expect(currentUserId).To(Equal(user.Id))
 			})
 		})
 
 		Context("given INVALID params", func() {
-			Context("given NO username", func() {
-				It("returns with a bad request error", func() {
+			Context("given NO email", func() {
+				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					body := RequestBody(map[string]string{
-						"username": "",
+						"email":    "",
 						"password": "password",
 					})
 					response := MakeRequest("POST", "/sessions", body)
-					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, &responseBody)
+					currentPath := GetCurrentPath(response)
 
-					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
-					Expect(responseBody.Error).To(Equal("Bad Request"))
-					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+					Expect(response.StatusCode).To(Equal(http.StatusFound))
+					Expect(currentPath).To(Equal("/signin"))
+				})
+
+				It("sets the error message", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := RequestBody(map[string]string{
+						"email":    "",
+						"password": "password",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					flash := GetFlashMessage(response.Cookies())
+
+					Expect(flash.Data["error"]).To(Equal("Email can not be empty"))
+					Expect(flash.Data["success"]).To(BeEmpty())
+				})
+
+				It("does NOT set user id to session", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := RequestBody(map[string]string{
+						"email":    "",
+						"password": "password",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+					Expect(currentUserId).To(BeNil())
 				})
 			})
 
 			Context("given NO password", func() {
-				It("returns with a bad request error", func() {
+				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					body := RequestBody(map[string]string{
-						"username": "dev@nimblehq.co",
+						"email":    "dev@nimblehq.cp",
 						"password": "",
 					})
 					response := MakeRequest("POST", "/sessions", body)
-					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, &responseBody)
+					currentPath := GetCurrentPath(response)
 
-					Expect(response.StatusCode).To(Equal(http.StatusBadRequest))
-					Expect(responseBody.Error).To(Equal("Bad Request"))
-					Expect(responseBody.ErrorDescription).To(Equal("The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed"))
+					Expect(response.StatusCode).To(Equal(http.StatusFound))
+					Expect(currentPath).To(Equal("/signin"))
+				})
+
+				It("sets the error message", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := RequestBody(map[string]string{
+						"email":    "dev@nimblehq.co",
+						"password": "",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					flash := GetFlashMessage(response.Cookies())
+
+					Expect(flash.Data["error"]).To(Equal("Password can not be empty"))
+					Expect(flash.Data["success"]).To(BeEmpty())
 				})
 			})
 
-			Context("given INVALID username", func() {
-				It("returns with an invalid client error", func() {
+			Context("given INVALID email", func() {
+				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					body := RequestBody(map[string]string{
-						"username": "invalid@email.com",
+						"email":    "invalid@email.com",
 						"password": "password",
 					})
 					response := MakeRequest("POST", "/sessions", body)
-					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, &responseBody)
+					currentPath := GetCurrentPath(response)
 
-					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("invalid_client"))
-					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
+					Expect(response.StatusCode).To(Equal(http.StatusFound))
+					Expect(currentPath).To(Equal("/signin"))
+				})
+
+				It("sets the error message", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := RequestBody(map[string]string{
+						"email":    "invalid@email.com",
+						"password": "password",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					flash := GetFlashMessage(response.Cookies())
+
+					Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
+					Expect(flash.Data["success"]).To(BeEmpty())
 				})
 			})
 
 			Context("given INVALID password", func() {
-				It("returns with an invalid client error", func() {
+				It("redirects to signin page", func() {
 					FabricateUser("dev@nimblehq.co", "password")
 					body := RequestBody(map[string]string{
-						"username": "dev@nimblehq.co",
+						"email":    "dev@nimblehq.co",
 						"password": "invalid password",
 					})
 					response := MakeRequest("POST", "/sessions", body)
-					responseBody := ErrorResponse{}
-					GetJSONResponseBody(response, &responseBody)
+					currentPath := GetCurrentPath(response)
 
-					Expect(response.StatusCode).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Error).To(Equal("invalid_client"))
-					Expect(responseBody.ErrorDescription).To(Equal("Client authentication failed"))
+					Expect(response.StatusCode).To(Equal(http.StatusFound))
+					Expect(currentPath).To(Equal("/signin"))
+				})
+
+				It("sets the error message", func() {
+					FabricateUser("dev@nimblehq.co", "password")
+					body := RequestBody(map[string]string{
+						"email":    "dev@nimblehq.co",
+						"password": "invalid password",
+					})
+					response := MakeRequest("POST", "/sessions", body)
+					flash := GetFlashMessage(response.Cookies())
+
+					Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
+					Expect(flash.Data["success"]).To(BeEmpty())
 				})
 			})
 		})
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("user")
-		initializers.CleanupDatabase("oauth2_clients")
-		initializers.CleanupDatabase("oauth2_tokens")
+		initializers.CleanupDatabase("users")
 	})
 })

@@ -1,66 +1,77 @@
 package forms_test
 
 import (
-	apiforms "go-google-scraper-challenge/forms/api"
+	"go-google-scraper-challenge/forms"
+	"go-google-scraper-challenge/initializers"
+	. "go-google-scraper-challenge/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Forms/LoginForm", func() {
+var _ = Describe("Forms/SessionForm", func() {
 	Describe("#Save", func() {
-		Context("given login form with valid params", func() {
-			It("returns NO error", func() {
-				form := apiforms.LoginForm{
-					Username: "dev@nimblehq.co",
+		Context("given session form with valid params", func() {
+			It("returns user with NO error", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				form := forms.SessionForm{
+					Email:    "dev@nimblehq.co",
 					Password: "password",
 				}
 
-				errors := form.Save()
+				currentUser, errors := form.Save()
 
 				Expect(len(errors)).To(BeZero())
+				Expect(currentUser.Id).To(Equal(user.Id))
 			})
 		})
 
-		Context("given login form with INVALID params", func() {
+		Context("given session form with INVALID params", func() {
 			Context("given email is not an valid email", func() {
 				It("returns a email is invalid error", func() {
-					form := apiforms.LoginForm{
-						Username: "not an email",
+					form := forms.SessionForm{
+						Email:    "not an email",
 						Password: "password",
 					}
 
-					errors := form.Save()
+					user, errors := form.Save()
 
 					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(user).To(BeNil())
 				})
 			})
 
 			Context("given NO email", func() {
 				It("returns an invalid email or password error", func() {
-					form := apiforms.LoginForm{
-						Username: "",
+					form := forms.SessionForm{
+						Email:    "",
 						Password: "password",
 					}
 
-					errors := form.Save()
+					user, errors := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Incorrect email or password"))
+					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(user).To(BeNil())
 				})
 			})
 
 			Context("given NO password", func() {
 				It("returns an invalid email or password error", func() {
-					form := apiforms.LoginForm{
-						Username: "dev@nimblehq.co",
+					form := forms.SessionForm{
+						Email:    "dev@nimblehq.co",
 						Password: "",
 					}
 
-					errors := form.Save()
+					user, errors := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Incorrect email or password"))
+					Expect(errors[0].Error()).To(Equal("Password can not be empty"))
+					Expect(user).To(BeNil())
 				})
 			})
 		})
+	})
+
+	AfterEach(func() {
+		initializers.CleanupDatabase("users")
 	})
 })
