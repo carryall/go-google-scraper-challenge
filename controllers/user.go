@@ -44,6 +44,7 @@ func (c *UserController) New() {
 func (c *UserController) Create() {
 	flash := web.NewFlash()
 	form := forms.RegistrationForm{}
+	redirectpath := ""
 
 	err := c.ParseForm(&form)
 	if err != nil {
@@ -55,10 +56,12 @@ func (c *UserController) Create() {
 		for _, err := range errors {
 			flash.Error(err.Error())
 		}
+		redirectpath = "/signup"
 	} else {
 		flash.Success("The user was successfully created")
+		redirectpath = "/signin"
 	}
 
 	flash.Store(&c.Controller)
-	c.Redirect("/signin", http.StatusFound)
+	c.Redirect(redirectpath, http.StatusFound)
 }
