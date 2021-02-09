@@ -1,4 +1,4 @@
-package apis
+package apicontrollers
 
 import (
 	apiforms "go-google-scraper-challenge/forms/api"
