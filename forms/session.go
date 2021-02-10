@@ -20,15 +20,15 @@ var currentUser *models.User
 func (sessionForm *SessionForm) Valid(v *validation.Validation) {
 	user, err := models.GetUserByEmail(sessionForm.Email)
 	if err != nil {
-		validationError := v.SetError("Email", "Incorrect email or password")
-		if validationError == nil {
+		err := v.SetError("Email", "Incorrect email or password")
+		if err == nil {
 			log.Print("Failed to set error on validation")
 		}
 	} else {
 		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, sessionForm.Password)
 		if !validPassword {
-			validationError := v.SetError("Password", "Incorrect email or password")
-			if validationError == nil {
+			err := v.SetError("Password", "Incorrect email or password")
+			if err == nil {
 				log.Print("Failed to set error on validation")
 			}
 		} else {
