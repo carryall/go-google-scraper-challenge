@@ -1,6 +1,6 @@
 {{ template "shared/_alert.tpl" . }}
 
-<form class="form form--round-input form-login" action="/sessions" method="post">
+<form class="form form--rounded-input form-login" action="/sessions" method="post">
   <div>
     <div class="form__input-group">
       <label for="email" class="sr-only">Email</label>

@@ -46,7 +46,7 @@
     @apply text-gray-900 sm:text-sm;
   }
 
-  &--round-input {
+  &--rounded-input {
     .form__input-group:first-of-type .form__input {
       @apply rounded-t-md;
     }
