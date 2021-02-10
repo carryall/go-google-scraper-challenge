@@ -2,7 +2,7 @@ package apicontrollers
 
 import (
 	apiforms "go-google-scraper-challenge/forms/api"
-	oauth_services "go-google-scraper-challenge/services/oauth"
+	"go-google-scraper-challenge/services/oauth"
 
 	"gopkg.in/oauth2.v3/errors"
 )
@@ -39,7 +39,7 @@ func (c *AuthController) Login() {
 	if len(errs) > 0 {
 		c.ResponseWithError(ErrInvalidRequestDescription, ErrInvalidRequestStatus)
 	} else {
-		err = oauth_services.GenerateToken(c.Ctx)
+		err = oauth.GenerateToken(c.Ctx)
 		if err != nil {
 			c.ResponseWithError(ErrInvalidRequestDescription, ErrInvalidRequestStatus)
 		}
