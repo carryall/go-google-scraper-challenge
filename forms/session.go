@@ -1,9 +1,10 @@
 package forms
 
 import (
+	"log"
+
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
-	"log"
 
 	"github.com/beego/beego/v2/core/validation"
 )

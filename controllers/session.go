@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"go-google-scraper-challenge/forms"
 	"net/http"
+
+	"go-google-scraper-challenge/forms"
 
 	"github.com/beego/beego/v2/server/web"
 )
