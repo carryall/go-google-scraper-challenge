@@ -16,10 +16,10 @@ var _ = Describe("AuthController", func() {
 		Context("given valid params", func() {
 			It("returns with status ok", func() {
 				FabricateUser("dev@nimblehq.co", "password")
-				oauth_client := FabricateOAuthClient()
+				oauthClient := FabricateOAuthClient()
 				body := GenerateRequestBody(map[string]string{
-					"client_id":     oauth_client.ClientID,
-					"client_secret": oauth_client.ClientSecret,
+					"client_id":     oauthClient.ClientID,
+					"client_secret": oauthClient.ClientSecret,
 					"username":      "dev@nimblehq.co",
 					"password":      "password",
 					"grant_type":    "password",
@@ -31,10 +31,10 @@ var _ = Describe("AuthController", func() {
 
 			It("returns with a valid token", func() {
 				FabricateUser("dev@nimblehq.co", "password")
-				oauth_client := FabricateOAuthClient()
+				oauthClient := FabricateOAuthClient()
 				body := GenerateRequestBody(map[string]string{
-					"client_id":     oauth_client.ClientID,
-					"client_secret": oauth_client.ClientSecret,
+					"client_id":     oauthClient.ClientID,
+					"client_secret": oauthClient.ClientSecret,
 					"username":      "dev@nimblehq.co",
 					"password":      "password",
 					"grant_type":    "password",
@@ -54,10 +54,10 @@ var _ = Describe("AuthController", func() {
 			Context("given NO client id", func() {
 				It("returns with a bad request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
 						"client_id":     "",
-						"client_secret": oauth_client.ClientSecret,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "dev@nimblehq.co",
 						"password":      "password",
 						"grant_type":    "password",
@@ -75,9 +75,9 @@ var _ = Describe("AuthController", func() {
 			Context("given NO client secret", func() {
 				It("returns with a bad request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
+						"client_id":     oauthClient.ClientID,
 						"client_secret": "",
 						"username":      "dev@nimblehq.co",
 						"password":      "password",
@@ -96,10 +96,10 @@ var _ = Describe("AuthController", func() {
 			Context("given NO grant type", func() {
 				It("returns with a bad request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
-						"client_secret": oauth_client.ClientSecret,
+						"client_id":     oauthClient.ClientID,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "dev@nimblehq.co",
 						"password":      "password",
 						"grant_type":    "",
@@ -117,10 +117,10 @@ var _ = Describe("AuthController", func() {
 			Context("given NO username", func() {
 				It("returns with a bad request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
-						"client_secret": oauth_client.ClientSecret,
+						"client_id":     oauthClient.ClientID,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "",
 						"password":      "password",
 						"grant_type":    "password",
@@ -138,10 +138,10 @@ var _ = Describe("AuthController", func() {
 			Context("given NO password", func() {
 				It("returns with a bad request error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
-						"client_secret": oauth_client.ClientSecret,
+						"client_id":     oauthClient.ClientID,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "dev@nimblehq.co",
 						"password":      "",
 						"grant_type":    "password",
@@ -161,10 +161,10 @@ var _ = Describe("AuthController", func() {
 			Context("given INVALID client id", func() {
 				It("returns with an invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
 						"client_id":     "invalid client id",
-						"client_secret": oauth_client.ClientSecret,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "dev@nimblehq.co",
 						"password":      "password",
 						"grant_type":    "password",
@@ -182,9 +182,9 @@ var _ = Describe("AuthController", func() {
 			Context("given INVALID client secret", func() {
 				It("returns with an invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
+						"client_id":     oauthClient.ClientID,
 						"client_secret": "invalid client secret",
 						"username":      "dev@nimblehq.co",
 						"password":      "password",
@@ -203,10 +203,10 @@ var _ = Describe("AuthController", func() {
 			Context("given INVALID grant type", func() {
 				It("returns with an unsupport grant type error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
-						"client_secret": oauth_client.ClientSecret,
+						"client_id":     oauthClient.ClientID,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "dev@nimblehq.co",
 						"password":      "password",
 						"grant_type":    "invalid grant type",
@@ -224,10 +224,10 @@ var _ = Describe("AuthController", func() {
 			Context("given INVALID username", func() {
 				It("returns with an invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
-						"client_secret": oauth_client.ClientSecret,
+						"client_id":     oauthClient.ClientID,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "invalid@email.com",
 						"password":      "password",
 						"grant_type":    "password",
@@ -245,10 +245,10 @@ var _ = Describe("AuthController", func() {
 			Context("given INVALID password", func() {
 				It("returns with an invalid client error", func() {
 					FabricateUser("dev@nimblehq.co", "password")
-					oauth_client := FabricateOAuthClient()
+					oauthClient := FabricateOAuthClient()
 					body := GenerateRequestBody(map[string]string{
-						"client_id":     oauth_client.ClientID,
-						"client_secret": oauth_client.ClientSecret,
+						"client_id":     oauthClient.ClientID,
+						"client_secret": oauthClient.ClientSecret,
 						"username":      "dev@nimblehq.co",
 						"password":      "invalid password",
 						"grant_type":    "password",
