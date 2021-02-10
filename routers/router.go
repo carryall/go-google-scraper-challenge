@@ -2,7 +2,7 @@ package routers
 
 import (
 	"go-google-scraper-challenge/controllers"
-	apis "go-google-scraper-challenge/controllers/apis"
+	apicontrollers "go-google-scraper-challenge/controllers/api"
 
 	"github.com/beego/beego/v2/server/web"
 )
@@ -13,5 +13,5 @@ func init() {
 	web.Router("/oauth_client", &controllers.OAuthClientController{}, "get:New;post:Create")
 	web.Router("/oauth_client/:id", &controllers.OAuthClientController{}, "get:Show")
 
-	web.Router("/api/v1/login", &apis.AuthController{}, "post:Login")
+	web.Router("/api/v1/login", &apicontrollers.AuthController{}, "post:Login")
 }
