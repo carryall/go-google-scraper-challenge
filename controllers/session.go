@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"go-google-scraper-challenge/forms"
@@ -39,9 +40,15 @@ func (c *SessionController) New() {
 // @Title Create
 // @Description create session
 // @Success 302 redirect to root path with success message
+// @Failure 405 response with method not allowed when user already signed in
 // @Failure 302 redirect to login path with error message
 // @router / [post]
 func (c *SessionController) Create() {
+	user := c.GetCurrentUser()
+	if user != nil {
+		c.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
+	}
+
 	flash := web.NewFlash()
 	form := forms.SessionForm{}
 	redirectPath := ""
