@@ -15,7 +15,7 @@ var _ = Describe("SessionController", func() {
 	Describe("GET /signin", func() {
 		Context("given user is not signed in", func() {
 			It("renders with status 200", func() {
-				response := MakeRequest("GET", "/signin", nil, nil)
+				response := MakeRequest("GET", "/signin", nil)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
@@ -42,7 +42,7 @@ var _ = Describe("SessionController", func() {
 						"email":    "dev@nimblehq.co",
 						"password": "password",
 					})
-					response := MakeRequest("POST", "/sessions", nil, body)
+					response := MakeRequest("POST", "/sessions", body)
 					currentPath := GetCurrentPath(response)
 
 					Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -55,7 +55,7 @@ var _ = Describe("SessionController", func() {
 						"email":    "dev@nimblehq.co",
 						"password": "password",
 					})
-					response := MakeRequest("POST", "/sessions", nil, body)
+					response := MakeRequest("POST", "/sessions", body)
 					flash := GetFlashMessage(response.Cookies())
 
 					Expect(flash.Data["success"]).To(Equal("Successfully logged in"))
@@ -68,7 +68,7 @@ var _ = Describe("SessionController", func() {
 						"email":    "dev@nimblehq.co",
 						"password": "password",
 					})
-					response := MakeRequest("POST", "/sessions", nil, body)
+					response := MakeRequest("POST", "/sessions", body)
 					currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 					Expect(currentUserId).To(Equal(user.Id))
@@ -83,7 +83,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "",
 							"password": "password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
 
 						Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -96,7 +96,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "",
 							"password": "password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
 
 						Expect(flash.Data["error"]).To(Equal("Email can not be empty"))
@@ -109,7 +109,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "",
 							"password": "password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 						Expect(currentUserId).To(BeNil())
@@ -123,7 +123,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "dev@nimblehq.cp",
 							"password": "",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
 
 						Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -136,7 +136,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "dev@nimblehq.co",
 							"password": "",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
 
 						Expect(flash.Data["error"]).To(Equal("Password can not be empty"))
@@ -149,7 +149,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "dev@nimblehq.co",
 							"password": "",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 						Expect(currentUserId).To(BeNil())
@@ -163,7 +163,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "invalid@email.com",
 							"password": "password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
 
 						Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -176,7 +176,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "invalid@email.com",
 							"password": "password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
 
 						Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
@@ -189,7 +189,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "invalid@email.com",
 							"password": "password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 						Expect(currentUserId).To(BeNil())
@@ -203,7 +203,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "dev@nimblehq.co",
 							"password": "invalid password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
 
 						Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -216,7 +216,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "dev@nimblehq.co",
 							"password": "invalid password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
 
 						Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
@@ -229,7 +229,7 @@ var _ = Describe("SessionController", func() {
 							"email":    "dev@nimblehq.co",
 							"password": "invalid password",
 						})
-						response := MakeRequest("POST", "/sessions", nil, body)
+						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 						Expect(currentUserId).To(BeNil())

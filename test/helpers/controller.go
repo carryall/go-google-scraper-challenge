@@ -57,7 +57,11 @@ func MakeAuthenticatedRequest(method string, url string, body io.Reader, user *m
 	if err != nil {
 		ginkgo.Fail("Failed to start session" + err.Error())
 	}
-	store.Set(context.Background(), controllers.CurrentUserKey, user.Id)
+
+	err = store.Set(context.Background(), controllers.CurrentUserKey, user.Id)
+	if err != nil {
+		ginkgo.Fail("Failed to set current user" + err.Error())
+	}
 
 	web.BeeApp.Handlers.ServeHTTP(responseRecoder, request)
 
