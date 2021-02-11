@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"go-google-scraper-challenge/forms"
 	"net/http"
 
@@ -42,6 +43,11 @@ func (c *UserController) New() {
 // @Failure 302 redirect to signup with error message
 // @router / [post]
 func (c *UserController) Create() {
+	user := c.GetCurrentUser()
+	if user != nil {
+		c.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
+	}
+
 	flash := web.NewFlash()
 	form := forms.RegistrationForm{}
 	redirectPath := ""

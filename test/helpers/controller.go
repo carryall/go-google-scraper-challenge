@@ -3,6 +3,7 @@ package tests
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -10,6 +11,9 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"strings"
+
+	"go-google-scraper-challenge/controllers"
+	"go-google-scraper-challenge/models"
 
 	"github.com/beego/beego/v2/server/web"
 	"github.com/onsi/ginkgo"
@@ -26,11 +30,35 @@ func GenerateRequestBody(data map[string]string) (body io.Reader) {
 	return body
 }
 
+func GenerateAuthenticatedHeader(user *models.User) map[string]string {
+	header := map[string]string{}
+	header["Cookie"] = controllers.CurrentUserKey+"="+fmt.Sprint(user.Id)
+
+	return header
+}
+
 // MakeRequest make a HTTP request and return response
 func MakeRequest(method string, url string, body io.Reader) *http.Response {
 	request := HTTPRequest(method, url, body)
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
 	responseRecoder := httptest.NewRecorder()
+	web.BeeApp.Handlers.ServeHTTP(responseRecoder, request)
+
+	return responseRecoder.Result()
+}
+
+func MakeAuthenticatedRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
+	request := HTTPRequest(method, url, body)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	responseRecoder := httptest.NewRecorder()
+	store, err := web.GlobalSessions.SessionStart(responseRecoder, request)
+	if err != nil {
+		ginkgo.Fail("Failed to start session" + err.Error())
+	}
+	store.Set(context.Background(), controllers.CurrentUserKey, user.Id)
+
 	web.BeeApp.Handlers.ServeHTTP(responseRecoder, request)
 
 	return responseRecoder.Result()
