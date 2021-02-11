@@ -65,7 +65,7 @@ func init() {
         beego.ControllerComments{
             Method: "Delete",
             Router: "/",
-            AllowHTTPMethods: []string{"delete"},
+            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
