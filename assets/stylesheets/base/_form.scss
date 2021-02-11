@@ -45,4 +45,14 @@
   &__label {
     @apply text-gray-900 sm:text-sm;
   }
+
+  &--rounded-input {
+    .form__input-group:first-of-type .form__input {
+      @apply rounded-t-md;
+    }
+
+    .form__input-group:last-of-type .form__input {
+      @apply rounded-b-md;
+    }
+  }
 }

@@ -24,6 +24,8 @@ func (c *UserController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *UserController) New() {
+	c.EnsureGuestUser(true)
+
 	c.Data["Title"] = "Signup"
 
 	c.Layout = "layouts/authentication.tpl"
@@ -40,8 +42,11 @@ func (c *UserController) New() {
 // @Failure 302 redirect to signup with error message
 // @router / [post]
 func (c *UserController) Create() {
+	c.EnsureGuestUser(false)
+
 	flash := web.NewFlash()
 	form := forms.RegistrationForm{}
+	redirectPath := ""
 
 	err := c.ParseForm(&form)
 	if err != nil {
@@ -53,10 +58,12 @@ func (c *UserController) Create() {
 		for _, err := range errors {
 			flash.Error(err.Error())
 		}
+		redirectPath = "/signup"
 	} else {
 		flash.Success("The user was successfully created")
+		redirectPath = "/signin"
 	}
 
 	flash.Store(&c.Controller)
-	c.Redirect("/signup", http.StatusFound)
+	c.Redirect(redirectPath, http.StatusFound)
 }

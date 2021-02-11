@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
@@ -9,6 +10,9 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"strings"
+
+	"go-google-scraper-challenge/controllers"
+	"go-google-scraper-challenge/models"
 
 	"github.com/beego/beego/v2/server/web"
 	"github.com/onsi/ginkgo"
@@ -29,7 +33,28 @@ func GenerateRequestBody(data map[string]string) (body io.Reader) {
 func MakeRequest(method string, url string, body io.Reader) *http.Response {
 	request := HTTPRequest(method, url, body)
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
 	responseRecoder := httptest.NewRecorder()
+	web.BeeApp.Handlers.ServeHTTP(responseRecoder, request)
+
+	return responseRecoder.Result()
+}
+
+func MakeAuthenticatedRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
+	request := HTTPRequest(method, url, body)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	responseRecoder := httptest.NewRecorder()
+	store, err := web.GlobalSessions.SessionStart(responseRecoder, request)
+	if err != nil {
+		ginkgo.Fail("Failed to start session" + err.Error())
+	}
+
+	err = store.Set(context.Background(), controllers.CurrentUserKey, user.Id)
+	if err != nil {
+		ginkgo.Fail("Failed to set current user" + err.Error())
+	}
+
 	web.BeeApp.Handlers.ServeHTTP(responseRecoder, request)
 
 	return responseRecoder.Result()
@@ -66,12 +91,28 @@ func GetJSONResponseBody(response *http.Response, v interface{}) {
 }
 
 // GetCurrentPath get current path from HTTP response and return the current url path
-func GetCurrentPath(response *http.Response) *url.URL {
-	path, err := response.Location()
+func GetCurrentPath(response *http.Response) string {
+	url, err := response.Location()
 	if err != nil {
 		ginkgo.Fail("Failed to get current path: " + err.Error())
 	}
-	return path
+	return url.Path
+}
+
+// GetSession get session with given key from cookie, will fail the test if cannot get session store
+func GetSession(cookies []*http.Cookie, key string) interface{} {
+	c := context.Background()
+	for _, cookie := range cookies {
+		if cookie.Name == web.BConfig.WebConfig.Session.SessionName {
+			store, err := web.GlobalSessions.GetSessionStore(cookie.Value)
+			if err != nil {
+				ginkgo.Fail("Failed to get store " + err.Error())
+			}
+
+			return store.Get(c, key)
+		}
+	}
+	return nil
 }
 
 // GetFlashMessage get Beego flash message out of array of http cookie
