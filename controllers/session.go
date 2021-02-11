@@ -77,10 +77,9 @@ func (c *SessionController) Create() {
 // @Description delete session
 // @Success 302 redirect to sign in path with success message
 // @Failure 302 redirect to root path with error message
-// @Failure 405 response with method not allowed when user is not signed in
-// @router / [delete]
+// @router / [get]
 func (c *SessionController) Delete() {
-	c.EnsureAuthenticatedUser(false)
+	c.EnsureAuthenticatedUser(true)
 
 	flash := web.NewFlash()
 	redirectPath := ""

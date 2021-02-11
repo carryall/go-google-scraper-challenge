@@ -2,4 +2,8 @@
   &__title {
     @apply text-center text-3xl font-extrabold text-gray-900;
   }
+
+  &__profile {
+    @apply border-r-2 border-gray-100 px-2 mr-2;
+  }
 }

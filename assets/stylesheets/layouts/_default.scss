@@ -3,4 +3,8 @@
   .app-header {
     @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  .app-header {
+    @apply relative bg-gray-300 mb-4 p-4 text-right;
+  }
 }

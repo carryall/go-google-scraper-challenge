@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<div class="app-header">
+    <span class="app-header__profile">
+        Hi, {{ .CurrentUser.Email }}
+    </span>
+    <a href="{{ urlfor `SessionController.Delete` }}" class="app-header__link">
+        Sign out
+    </a>
+</div>

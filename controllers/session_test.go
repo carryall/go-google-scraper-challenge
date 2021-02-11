@@ -252,12 +252,12 @@ var _ = Describe("SessionController", func() {
 		})
 	})
 
-	Describe("DELETE /sessions", func() {
+	Describe("GET /signout", func() {
 		Context("given user is already signed in", func() {
 			It("redirects to sign in path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				body := GenerateRequestBody(map[string]string{})
-				response := MakeAuthenticatedRequest("DELETE", "/sessions", body, user)
+				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -267,7 +267,7 @@ var _ = Describe("SessionController", func() {
 			It("sets the success message", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				body := GenerateRequestBody(map[string]string{})
-				response := MakeAuthenticatedRequest("DELETE", "/sessions", body, user)
+				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
 				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["success"]).To(Equal("Successfully signed out"))
@@ -277,7 +277,7 @@ var _ = Describe("SessionController", func() {
 			It("removes user id from session", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				body := GenerateRequestBody(map[string]string{})
-				response := MakeAuthenticatedRequest("DELETE", "/sessions", body, user)
+				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
 				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 				Expect(currentUserId).To(BeNil())
@@ -285,11 +285,13 @@ var _ = Describe("SessionController", func() {
 		})
 
 		Context("given user is NOT signed in", func() {
-			It("returns error", func() {
+			It("redirects to sign in path", func() {
 				body := GenerateRequestBody(map[string]string{})
-				response := MakeRequest("DELETE", "/sessions", body)
+				response := MakeRequest("GET", "/signout", body)
+				currentPath := GetCurrentPath(response)
 
-				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/signin"))
 			})
 		})
 	})
