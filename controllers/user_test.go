@@ -2,11 +2,9 @@ package controllers_test
 
 import (
 	"net/http"
-	"net/url"
-	"strings"
 
-	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
+	. "go-google-scraper-challenge/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -24,12 +22,11 @@ var _ = Describe("UserController", func() {
 	Describe("POST /users", func() {
 		Context("given valid params", func() {
 			It("redirects to signup page", func() {
-				form := url.Values{
-					"email":                 {"dev@nimblehq.co"},
-					"password":              {"password"},
-					"password_confirmation": {"password"},
-				}
-				body := strings.NewReader(form.Encode())
+				body := GenerateRequestBody(map[string]string{
+					"email":                 "dev@nimblehq.co",
+					"password":              "password",
+					"password_confirmation": "password",
+				})
 
 				response := MakeRequest("POST", "/users", body)
 				currentPath := GetCurrentPath(response)
@@ -39,12 +36,11 @@ var _ = Describe("UserController", func() {
 			})
 
 			It("sets the success message", func() {
-				form := url.Values{
-					"email":                 {"dev@nimblehq.co"},
-					"password":              {"password"},
-					"password_confirmation": {"password"},
-				}
-				body := strings.NewReader(form.Encode())
+				body := GenerateRequestBody(map[string]string{
+					"email":                 "dev@nimblehq.co",
+					"password":              "password",
+					"password_confirmation": "password",
+				})
 
 				response := MakeRequest("POST", "/users", body)
 				flash := GetFlashMessage(response.Cookies())
@@ -56,12 +52,11 @@ var _ = Describe("UserController", func() {
 
 		Context("given INVALID params", func() {
 			It("redirects to signup page", func() {
-				form := url.Values{
-					"email":                 {""},
-					"password":              {""},
-					"password-confirmation": {""},
-				}
-				body := strings.NewReader(form.Encode())
+				body := GenerateRequestBody(map[string]string{
+					"email":                 "",
+					"password":              "",
+					"password-confirmation": "",
+				})
 
 				response := MakeRequest("POST", "/users", body)
 				currentPath := GetCurrentPath(response)
@@ -71,12 +66,11 @@ var _ = Describe("UserController", func() {
 			})
 
 			It("sets error message", func() {
-				form := url.Values{
-					"email":                 {""},
-					"password":              {""},
-					"password-confirmation": {""},
-				}
-				body := strings.NewReader(form.Encode())
+				body := GenerateRequestBody(map[string]string{
+					"email":                 "",
+					"password":              "",
+					"password-confirmation": "",
+				})
 
 				response := MakeRequest("POST", "/users", body)
 				flash := GetFlashMessage(response.Cookies())

@@ -61,3 +61,7 @@ A project for Nimble Go Internal Certification on Web
   ```html
   {{ render_icon "iconName" }}
   ```
+
+## API
+
+  API requests with examples are provided on [this Postman Collection](https://documenter.getpostman.com/view/8783956/TW77fNqE)

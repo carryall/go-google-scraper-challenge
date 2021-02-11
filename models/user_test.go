@@ -1,9 +1,9 @@
 package models_test
 
 import (
-	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
+	. "go-google-scraper-challenge/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -95,6 +95,30 @@ var _ = Describe("User", func() {
 				userExist := models.UserEmailAlreadyExist("dev@nimblehq.co")
 
 				Expect(userExist).To(BeFalse())
+			})
+		})
+	})
+
+	Describe("#GetUserByEmail", func() {
+		Context("given user email exist in the system", func() {
+			It("returns the user", func() {
+				existUser := FabricateUser("dev@nimblehq.co", "password")
+
+				user, err := models.GetUserByEmail("dev@nimblehq.co")
+				if err != nil {
+					Fail("Failed to find user with given email")
+				}
+
+				Expect(user.Id).To(Equal(existUser.Id))
+			})
+		})
+
+		Context("given user email does NOT exist in the system", func() {
+			It("returns error", func() {
+				user, err := models.GetUserByEmail("dev@nimblehq.co")
+
+				Expect(err.Error()).To(ContainSubstring("no row found"))
+				Expect(user).To(BeNil())
 			})
 		})
 	})

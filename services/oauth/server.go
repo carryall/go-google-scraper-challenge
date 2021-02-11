@@ -2,8 +2,12 @@ package oauth
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
+
+	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/models"
 
 	"github.com/beego/beego/v2/server/web"
 	app_context "github.com/beego/beego/v2/server/web/context"
@@ -82,6 +86,13 @@ func responseErrorHandler(re *errors.Response) {
 }
 
 func passwordAuthorizationHandler(email string, password string) (userID string, err error) {
-	// TODO: Query user and compare hashed password
-	return "", nil
+	user, err := models.GetUserByEmail(email)
+	if err != nil {
+		return "", errors.ErrInvalidClient
+	}
+
+	if helpers.CompareHashWithPassword(user.HashedPassword, password) {
+		return fmt.Sprint(user.Id), nil
+	}
+	return "", errors.ErrInvalidClient
 }

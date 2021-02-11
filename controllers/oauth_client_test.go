@@ -2,11 +2,9 @@ package controllers_test
 
 import (
 	"net/http"
-	"net/url"
-	"strings"
 
-	. "go-google-scraper-challenge/helpers/test"
 	"go-google-scraper-challenge/initializers"
+	. "go-google-scraper-challenge/test/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -23,8 +21,7 @@ var _ = Describe("OAuthClientController", func() {
 
 	Describe("POST /oauth_client", func() {
 		It("redirects to oauth client detail page", func() {
-			form := url.Values{}
-			body := strings.NewReader(form.Encode())
+			body := GenerateRequestBody(map[string]string{})
 			response := MakeRequest("POST", "/oauth_client", body)
 			currentPath := GetCurrentPath(response)
 
@@ -33,8 +30,7 @@ var _ = Describe("OAuthClientController", func() {
 		})
 
 		It("sets the success message", func() {
-			form := url.Values{}
-			body := strings.NewReader(form.Encode())
+			body := GenerateRequestBody(map[string]string{})
 			response := MakeRequest("POST", "/oauth_client", body)
 			flash := GetFlashMessage(response.Cookies())
 
