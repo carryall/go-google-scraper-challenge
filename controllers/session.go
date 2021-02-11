@@ -17,6 +17,7 @@ type SessionController struct {
 func (c *SessionController) URLMapping() {
 	c.Mapping("New", c.New)
 	c.Mapping("Create", c.Create)
+	c.Mapping("Delete", c.Delete)
 }
 
 // New handle new session action
@@ -40,7 +41,7 @@ func (c *SessionController) New() {
 // @Description create session
 // @Success 302 redirect to root path with success message
 // @Failure 405 response with method not allowed when user already signed in
-// @Failure 302 redirect to login path with error message
+// @Failure 302 redirect to sign in path with error message
 // @router / [post]
 func (c *SessionController) Create() {
 	c.EnsureGuestUser(false)
@@ -63,8 +64,34 @@ func (c *SessionController) Create() {
 	} else {
 		c.SetCurrentUser(user)
 
-		flash.Success("Successfully logged in")
+		flash.Success("Successfully signed in")
 		redirectPath = "/"
+	}
+
+	flash.Store(&c.Controller)
+	c.Redirect(redirectPath, http.StatusFound)
+}
+
+// Delete handle delete session action
+// @Title Delete
+// @Description delete session
+// @Success 302 redirect to sign in path with success message
+// @Failure 302 redirect to root path with error message
+// @Failure 405 response with method not allowed when user is not signed in
+// @router / [delete]
+func (c *SessionController) Delete() {
+	c.EnsureAuthenticatedUser(false)
+
+	flash := web.NewFlash()
+	redirectPath := ""
+
+	err := c.ClearCurrentUser()
+	if err != nil {
+		flash.Error("Failed to sign out")
+		redirectPath = "/"
+	} else {
+		flash.Success("Successfully signed out")
+		redirectPath = "/signin"
 	}
 
 	flash.Store(&c.Controller)

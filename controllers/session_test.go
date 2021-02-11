@@ -34,7 +34,7 @@ var _ = Describe("SessionController", func() {
 	})
 
 	Describe("POST /sessions", func() {
-		Context("Given user not signed in", func() {
+		Context("given user not signed in", func() {
 			Context("given valid params", func() {
 				It("redirects to root path", func() {
 					FabricateUser("dev@nimblehq.co", "password")
@@ -58,7 +58,7 @@ var _ = Describe("SessionController", func() {
 					response := MakeRequest("POST", "/sessions", body)
 					flash := GetFlashMessage(response.Cookies())
 
-					Expect(flash.Data["success"]).To(Equal("Successfully logged in"))
+					Expect(flash.Data["success"]).To(Equal("Successfully signed in"))
 					Expect(flash.Data["error"]).To(BeEmpty())
 				})
 
@@ -246,6 +246,48 @@ var _ = Describe("SessionController", func() {
 					"password": "password",
 				})
 				response := MakeAuthenticatedRequest("POST", "/sessions", body, user)
+
+				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
+			})
+		})
+	})
+
+	Describe("DELETE /sessions", func() {
+		Context("given user is already signed in", func() {
+			It("redirects to sign in path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(map[string]string{})
+				response := MakeAuthenticatedRequest("DELETE", "/sessions", body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/signin"))
+			})
+
+			It("sets the success message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(map[string]string{})
+				response := MakeAuthenticatedRequest("DELETE", "/sessions", body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(Equal("Successfully signed out"))
+				Expect(flash.Data["error"]).To(BeEmpty())
+			})
+
+			It("removes user id from session", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(map[string]string{})
+				response := MakeAuthenticatedRequest("DELETE", "/sessions", body, user)
+				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+				Expect(currentUserId).To(BeNil())
+			})
+		})
+
+		Context("given user is NOT signed in", func() {
+			It("returns error", func() {
+				body := GenerateRequestBody(map[string]string{})
+				response := MakeRequest("DELETE", "/sessions", body)
 
 				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
 			})

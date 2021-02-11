@@ -45,6 +45,10 @@ func (base *BaseController) GetCurrentUser() (user *models.User) {
 	return user
 }
 
+func (base *BaseController) ClearCurrentUser() error {
+	return base.DelSession(CurrentUserKey)
+}
+
 func (base *BaseController) EnsureAuthenticatedUser(redirect bool) {
 	currentUser := base.GetCurrentUser()
 	if currentUser == nil {

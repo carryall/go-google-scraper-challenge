@@ -70,7 +70,7 @@ func HTTPRequest(method string, url string, body io.Reader) *http.Request {
 	return request
 }
 
-// GetResponseBody get response body from response recoder, will fail the test if there us any error
+// GetResponseBody get response body from response, will fail the test if there is any error
 func GetResponseBody(response *http.Response) string {
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
@@ -80,7 +80,7 @@ func GetResponseBody(response *http.Response) string {
 	return string(body)
 }
 
-// GetJSONResponseBody get response body from response recoder, will fail the test if there us any error
+// GetJSONResponseBody get response body from response, will fail the test if there is any error
 func GetJSONResponseBody(response *http.Response, v interface{}) {
 	body := GetResponseBody(response)
 
