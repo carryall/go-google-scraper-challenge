@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -44,17 +45,25 @@ func (base *BaseController) GetCurrentUser() (user *models.User) {
 	return user
 }
 
-func (base *BaseController) EnsureAuthenticatedUser() {
+func (base *BaseController) EnsureAuthenticatedUser(redirect bool) {
 	currentUser := base.GetCurrentUser()
 	if currentUser == nil {
-		base.Controller.Redirect("/signin", http.StatusFound)
+		if redirect {
+			base.Controller.Redirect("/signin", http.StatusFound)
+		} else {
+			base.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
+		}
 	}
 	base.Controller.Data["CurrentUser"] = currentUser
 }
 
-func (base *BaseController) EnsureGuestUser() {
+func (base *BaseController) EnsureGuestUser(redirect bool) {
 	currentUser := base.GetCurrentUser()
 	if currentUser != nil {
-		base.Controller.Redirect("/", http.StatusFound)
+		if redirect {
+			base.Controller.Redirect("/", http.StatusFound)
+		} else {
+			base.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
+		}
 	}
 }

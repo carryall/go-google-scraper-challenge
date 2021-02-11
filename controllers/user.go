@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"go-google-scraper-challenge/forms"
 	"net/http"
 
@@ -25,7 +24,7 @@ func (c *UserController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *UserController) New() {
-	c.EnsureGuestUser()
+	c.EnsureGuestUser(true)
 
 	c.Data["Title"] = "Signup"
 
@@ -43,10 +42,7 @@ func (c *UserController) New() {
 // @Failure 302 redirect to signup with error message
 // @router / [post]
 func (c *UserController) Create() {
-	user := c.GetCurrentUser()
-	if user != nil {
-		c.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
-	}
+	c.EnsureGuestUser(false)
 
 	flash := web.NewFlash()
 	form := forms.RegistrationForm{}
