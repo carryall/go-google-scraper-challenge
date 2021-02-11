@@ -3,7 +3,6 @@ package tests
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -28,13 +27,6 @@ func GenerateRequestBody(data map[string]string) (body io.Reader) {
 	body = strings.NewReader(rawData.Encode())
 
 	return body
-}
-
-func GenerateAuthenticatedHeader(user *models.User) map[string]string {
-	header := map[string]string{}
-	header["Cookie"] = controllers.CurrentUserKey+"="+fmt.Sprint(user.Id)
-
-	return header
 }
 
 // MakeRequest make a HTTP request and return response
