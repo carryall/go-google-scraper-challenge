@@ -30,8 +30,8 @@ func (c *SessionController) New() {
 
 	c.Data["Title"] = "Sign In"
 
-	c.Layout = "layouts/authentication.tpl"
-	c.TplName = "sessions/new.tpl"
+	c.Layout = "layouts/authentication.html"
+	c.TplName = "sessions/new.html"
 
 	web.ReadFromRequest(&c.Controller)
 }

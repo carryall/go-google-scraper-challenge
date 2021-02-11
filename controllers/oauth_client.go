@@ -28,8 +28,8 @@ func (c *OAuthClientController) URLMapping() {
 func (c *OAuthClientController) New() {
 	c.Data["Title"] = "New OAuth Client"
 
-	c.Layout = "layouts/authentication.tpl"
-	c.TplName = "oauth_clients/new.tpl"
+	c.Layout = "layouts/authentication.html"
+	c.TplName = "oauth_clients/new.html"
 }
 
 // Create handle create OAuth client action
@@ -60,8 +60,8 @@ func (c *OAuthClientController) Create() {
 // @Failure 302 redirect to new OAuth client with error message
 // @router / [get]
 func (c *OAuthClientController) Show() {
-	c.Layout = "layouts/authentication.tpl"
-	c.TplName = "oauth_clients/show.tpl"
+	c.Layout = "layouts/authentication.html"
+	c.TplName = "oauth_clients/show.html"
 	c.Data["Title"] = "OAuth Client Detail"
 
 	clientID := c.Ctx.Input.Param(":id")

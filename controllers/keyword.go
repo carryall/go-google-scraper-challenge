@@ -17,8 +17,8 @@ func (c *KeywordController) URLMapping() {
 func (c *KeywordController) List() {
 	c.EnsureAuthenticatedUser(true)
 
-	c.Layout = "layouts/default.tpl"
-	c.TplName = "keywords/list.tpl"
+	c.Layout = "layouts/default.html"
+	c.TplName = "keywords/list.html"
 
 	web.ReadFromRequest(&c.Controller)
 }
