@@ -28,6 +28,7 @@ go-google-scraper-challenge
 
 # System Files
 .DS_Store
+.idea/*
 
 # SASS Cache
 .sass-cache
