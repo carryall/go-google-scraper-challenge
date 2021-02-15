@@ -6,9 +6,5 @@
 
   .app-header {
     @apply relative bg-gray-300 mb-4 p-4 text-right;
-
-    &__link {
-      @apply text-gray-500;
-    }
   }
 }
