@@ -256,7 +256,7 @@ var _ = Describe("SessionController", func() {
 		Context("given user is already signed in", func() {
 			It("redirects to sign in path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				body := GenerateRequestBody(map[string]string{})
+				body := GenerateRequestBody(nil)
 				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
 				currentPath := GetCurrentPath(response)
 
@@ -266,7 +266,7 @@ var _ = Describe("SessionController", func() {
 
 			It("sets the success message", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				body := GenerateRequestBody(map[string]string{})
+				body := GenerateRequestBody(nil)
 				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
 				flash := GetFlashMessage(response.Cookies())
 
@@ -276,7 +276,7 @@ var _ = Describe("SessionController", func() {
 
 			It("removes user id from session", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				body := GenerateRequestBody(map[string]string{})
+				body := GenerateRequestBody(nil)
 				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
 				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
@@ -286,7 +286,7 @@ var _ = Describe("SessionController", func() {
 
 		Context("given user is NOT signed in", func() {
 			It("redirects to sign in path", func() {
-				body := GenerateRequestBody(map[string]string{})
+				body := GenerateRequestBody(nil)
 				response := MakeRequest("GET", "/signout", body)
 				currentPath := GetCurrentPath(response)
 
