@@ -34,7 +34,7 @@ var _ = Describe("SessionController", func() {
 	})
 
 	Describe("POST /sessions", func() {
-		Context("Given user not signed in", func() {
+		Context("given user not signed in", func() {
 			Context("given valid params", func() {
 				It("redirects to root path", func() {
 					FabricateUser("dev@nimblehq.co", "password")
@@ -58,7 +58,7 @@ var _ = Describe("SessionController", func() {
 					response := MakeRequest("POST", "/sessions", body)
 					flash := GetFlashMessage(response.Cookies())
 
-					Expect(flash.Data["success"]).To(Equal("Successfully logged in"))
+					Expect(flash.Data["success"]).To(Equal("Successfully signed in"))
 					Expect(flash.Data["error"]).To(BeEmpty())
 				})
 
@@ -248,6 +248,50 @@ var _ = Describe("SessionController", func() {
 				response := MakeAuthenticatedRequest("POST", "/sessions", body, user)
 
 				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
+			})
+		})
+	})
+
+	Describe("GET /signout", func() {
+		Context("given user is already signed in", func() {
+			It("redirects to sign in path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(nil)
+				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/signin"))
+			})
+
+			It("sets the success message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(nil)
+				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(Equal("Successfully signed out"))
+				Expect(flash.Data["error"]).To(BeEmpty())
+			})
+
+			It("removes user id from session", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(nil)
+				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
+				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
+
+				Expect(currentUserId).To(BeNil())
+			})
+		})
+
+		Context("given user is NOT signed in", func() {
+			It("redirects to sign in path", func() {
+				body := GenerateRequestBody(nil)
+				response := MakeRequest("GET", "/signout", body)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/signin"))
 			})
 		})
 	})

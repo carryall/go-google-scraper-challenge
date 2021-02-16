@@ -28,8 +28,8 @@ func (c *UserController) New() {
 
 	c.Data["Title"] = "Signup"
 
-	c.Layout = "layouts/authentication.tpl"
-	c.TplName = "users/new.tpl"
+	c.Layout = "layouts/authentication.html"
+	c.TplName = "users/new.html"
 
 	web.ReadFromRequest(&c.Controller)
 }

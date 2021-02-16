@@ -13,6 +13,7 @@ func init() {
 	web.Router("/users", &controllers.UserController{}, "post:Create")
 
 	web.Router("/signin", &controllers.SessionController{}, "get:New")
+	web.Router("/signout", &controllers.SessionController{}, "get:Delete")
 	web.Router("/sessions", &controllers.SessionController{}, "post:Create")
 
 	web.Router("/oauth_client", &controllers.OAuthClientController{}, "get:New;post:Create")

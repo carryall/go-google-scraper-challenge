@@ -1,6 +1,10 @@
+// Vendor
+@import 'vendors/tailwind';
+
 // Base
 @import 'base/_body';
 @import 'base/_form';
+@import 'base/_typography';
 
 // Components
 @import 'components/_alert';
@@ -12,6 +16,3 @@
 @import 'layouts/_default';
 
 // Screens
-
-// Vendor
-@import 'vendors/tailwind';

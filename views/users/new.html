@@ -1,4 +1,4 @@
-{{ template "shared/_alert.tpl" . }}
+{{ template "shared/_alert.html" . }}
 
 <form class="form form--rounded-input form-registration" action="/users" method="post">
   <div>
@@ -17,3 +17,7 @@
   </div>
   <input type="submit" value="Submit" class="form__submit-button"/>
 </form>
+
+<small>
+  Already have an account? <a href="{{ urlfor `SessionController.New` }}">Sign in here</a> :)
+</small>
