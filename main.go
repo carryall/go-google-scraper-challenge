@@ -8,6 +8,7 @@ import (
 	oauth_services "go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/server/web"
+	_ "github.com/beego/beego/v2/server/web/session/postgres"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
