@@ -31,11 +31,4 @@ func SetUpDatabase() {
 	if err != nil {
 		log.Fatal("Database Registration failed: ", err)
 	}
-
-	// TODO: remove this on the chore task to ensure same db structure on every ENV
-	verbose := runMode == "dev"
-	err = orm.RunSyncdb("default", false, verbose)
-	if err != nil {
-		log.Fatal("Database Sync failed: ", err)
-	}
 }
