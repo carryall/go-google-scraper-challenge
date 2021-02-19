@@ -45,9 +45,13 @@ db/setup:
 
 db/migrate:
 	bee migrate -driver=postgres -conn="$(DATABASE_URL)"
+	pg_dump $(DATABASE_URL) --schema-only -f ./database/schema.sql
 
 db/rollback:
 	bee migrate rollback -driver=postgres -conn="$(DATABASE_URL)"
+
+db/tear-down:
+	docker-compose -f docker-compose.dev.yml down
 
 lint:
 	golangci-lint run
@@ -57,5 +61,6 @@ test:
 
 test/run:
 	docker-compose -f docker-compose.test.yml up -d
+	psql $(DATABASE_URL) -f ./database/schema.sql
 	APP_RUN_MODE=test go test -v -p 1 ./...
 	docker-compose -f docker-compose.test.yml down

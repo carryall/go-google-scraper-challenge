@@ -38,3 +38,4 @@ go-google-scraper-challenge
 
 # Generated files
 /static/*
+database/schema.sql
