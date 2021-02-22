@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/beego/beego/v2/server/web"
+	"go-google-scraper-challenge/helpers"
 )
 
 // KeywordController operations for User
@@ -21,4 +22,10 @@ func (c *KeywordController) List() {
 	c.TplName = "keywords/list.html"
 
 	web.ReadFromRequest(&c.Controller)
+
+	var keyword string
+	c.Ctx.Input.Bind(&keyword, "keyword")
+	if len(keyword) > 0 {
+		helpers.Scrape(keyword)
+	}
 }
