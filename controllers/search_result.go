@@ -1,27 +1,35 @@
 package controllers
 
 import (
-	"github.com/beego/beego/v2/server/web"
+	"net/http"
+
 	"go-google-scraper-challenge/helpers"
+
+	"github.com/beego/beego/v2/server/web"
 )
 
-// KeywordController operations for User
-type KeywordController struct {
+// SearchResultController operations for User
+type SearchResultController struct {
 	BaseController
 }
 
 // URLMapping map user controller actions to functions
-func (c *KeywordController) URLMapping() {
+func (c *SearchResultController) URLMapping() {
 	c.Mapping("List", c.List)
+	c.Mapping("Create", c.Create)
 }
 
-func (c *KeywordController) List() {
+func (c *SearchResultController) List() {
 	c.EnsureAuthenticatedUser(true)
 
 	c.Layout = "layouts/default.html"
-	c.TplName = "keywords/list.html"
+	c.TplName = "search_results/list.html"
 
 	web.ReadFromRequest(&c.Controller)
+}
+
+func (c *SearchResultController) Create() {
+	c.EnsureAuthenticatedUser(true)
 
 	//var keyword string
 	//c.Ctx.Input.Bind(&keyword, "keyword")
@@ -35,5 +43,7 @@ func (c *KeywordController) List() {
 		"cloud computing service",
 		"crypto currency",
 	}
-	helpers.Scrape(keywords)
+	helpers.Search(keywords)
+
+	c.Redirect("/", http.StatusFound)
 }

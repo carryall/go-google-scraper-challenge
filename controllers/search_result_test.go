@@ -10,7 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("KeywordController", func() {
+var _ = Describe("SearchResultController", func() {
 	Describe("GET /", func() {
 		Context("given user already signed in", func() {
 			It("renders with status 200", func() {
