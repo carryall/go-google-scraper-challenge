@@ -27,32 +27,15 @@ type SearchResult struct {
 }
 
 const GOOGLE_SEARCH_URL = "http://www.google.com/search?q=%s"
-//const currentBrowser = "Chrome/88.0.4324.182"
-//const currentOs = "Macintosh; Intel Mac OS X 10_15_5"
 
 func Search(keywords []string) {
-	//runMode, err := web.AppConfig.String("runmode")
-	//if err != nil {
-	//	log.Fatal("Run mode not found: ", err)
-	//}
-
 	results := map[string] *SearchResult{}
 	collector := colly.NewCollector(colly.Async(true))
-	//extensions.RandomUserAgent(collector)
-
-	//if runMode == "dev" {
-	//	collector.SetDebugger(&debug.LogDebugger{})
-	//}
 
 	q, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
 	if err != nil {
 		log.Fatal("Failed to create a queue", err.Error())
 	}
-
-	//collector.Limit(&colly.LimitRule{
-	//	DomainGlob:  "*httpbin.*",
-	//	Parallelism: 2,
-	//})
 
 	for _, keyword := range keywords {
 		results[keyword] = &SearchResult{Keyword: keyword}
@@ -128,14 +111,8 @@ func Search(keywords []string) {
 }
 
 func RequestHandler (r *colly.Request) {
-	//userAgent := fmt.Sprintf("Mozilla/5.0 (%s) AppleWebKit/537.36 (KHTML, like Gecko) %s Safari/537.36", currentOs, currentBrowser)
-	//r.Headers.Set("User-Agent", userAgent)
-
 	ua := RandomUserAgent()
-	log.Println("========USER AGENT========", ua)
 	r.Headers.Set("User-Agent", ua)
-	//ua := r.Headers.Get("User-Agent")
-	//log.Println("========USER AGENT========", ua)
 
 	log.Println("Visiting", r.URL)
 	r.Ctx.Put("keyword", keywordFromUrl(r.URL.String()))
