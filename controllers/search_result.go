@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/services/scraper"
 
 	"github.com/beego/beego/v2/server/web"
 )
@@ -31,19 +31,14 @@ func (c *SearchResultController) List() {
 func (c *SearchResultController) Create() {
 	c.EnsureAuthenticatedUser(true)
 
-	//var keyword string
-	//c.Ctx.Input.Bind(&keyword, "keyword")
-	//if len(keyword) > 0 {
-	//	helpers.Scrape(keyword)
-	//}
-
 	keywords := []string{
 		"ergonomic chair",
 		"cloud storage service",
 		"cloud computing service",
 		"crypto currency",
+		"เตา balmuda",
 	}
-	helpers.Search(keywords)
+	scraper.Search(keywords)
 
 	c.Redirect("/", http.StatusFound)
 }
