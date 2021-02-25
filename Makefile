@@ -61,6 +61,5 @@ test:
 
 test/run:
 	docker-compose -f docker-compose.test.yml up -d
-	psql $(DATABASE_URL) -f ./database/schema.sql
 	APP_RUN_MODE=test go test -v -p 1 ./...
 	docker-compose -f docker-compose.test.yml down
