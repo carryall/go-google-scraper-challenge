@@ -71,18 +71,7 @@ func Search(keywords []string) {
 		addResultLink("otherAd", e)
 	})
 
-	collector.OnScraped(func(r *colly.Response) {
-		// TODO: add the result to database on another PR
-		if q.IsEmpty() {
-			log.Println("Finished scraping ==========")
-			for _, result := range results {
-				log.Println("Keyword:", result.Keyword)
-				log.Println("	Top Ad:", len(result.TopAdLinks))
-				log.Println("	Non Ad:", len(result.NonAdLinks))
-				log.Println("	Other Ad:", len(result.OtherAdLinks))
-			}
-		}
-	})
+	collector.OnScraped(saveResult)
 
 	err = q.Run(collector)
 	if err != nil {
@@ -130,4 +119,16 @@ func addResultLink(linkType string, e *colly.HTMLElement)  {
 			result.OtherAdLinks = append(result.OtherAdLinks, link)
 		}
 	}
+}
+
+func saveResult(r *colly.Response) {
+	// TODO: add the result to database on another PR
+	keyword := r.Request.Ctx.Get("keyword")
+	result := results[keyword]
+
+	log.Println("Finished scraping for keyword:", keyword, "==========")
+	log.Println("Keyword:", result.Keyword)
+	log.Println("	Top Ad:", len(result.TopAdLinks))
+	log.Println("	Non Ad:", len(result.NonAdLinks))
+	log.Println("	Other Ad:", len(result.OtherAdLinks))
 }
