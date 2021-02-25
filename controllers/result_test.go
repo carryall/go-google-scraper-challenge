@@ -32,6 +32,29 @@ var _ = Describe("ResultController", func() {
 		})
 	})
 
+	Describe("POST /results", func() {
+		Context("given user already signed in", func() {
+			It("redirects to root path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				body := GenerateRequestBody(nil)
+				response := MakeAuthenticatedRequest("POST", "/results", body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
+			})
+		})
+
+		Context("given user is NOT signed in", func() {
+			It("returns error", func() {
+				body := GenerateRequestBody(nil)
+				response := MakeRequest("POST", "/results", body)
+
+				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
+			})
+		})
+	})
+
 	AfterEach(func() {
 		initializers.CleanupDatabase("users")
 	})
