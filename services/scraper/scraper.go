@@ -10,6 +10,7 @@ import (
 )
 
 var selectors = map[string]string {
+	"wholePage": "html",
 	"topImageAds": "#tvcap .plantl a.pla-unit-title-link",
 	"topLinkAds": "#tvcap .d5oMvf > a",
 	"sideImageAds": ".cu-container a.plantl.clickable-card",
@@ -50,6 +51,11 @@ func Search(keywords []string) {
 	collector.OnRequest(RequestHandler)
 	collector.OnResponse(ResponseHandler)
 	collector.OnError(ErrorHandler)
+
+	collector.OnHTML(selectors["wholePage"], func(e *colly.HTMLElement) {
+		keyword := e.Request.Ctx.Get("keyword")
+		results[keyword].PageCache = string(e.Response.Body)
+	})
 
 	collector.OnHTML(selectors["nonAds"], func(e *colly.HTMLElement) {
 		addResultLink("nonAd", e)
