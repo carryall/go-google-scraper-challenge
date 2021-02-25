@@ -38,6 +38,3 @@ go-google-scraper-challenge
 
 # Generated files
 /static/*
-
-# Cache
-/cache/*
