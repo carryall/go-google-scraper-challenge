@@ -9,8 +9,8 @@ import (
 
 func init() {
 	//
-	web.Router("/", &controllers.SearchResultController{}, "get:List")
-	web.Router("/search_results", &controllers.SearchResultController{}, "post:Create")
+	web.Router("/", &controllers.ResultController{}, "get:List")
+	web.Router("/results", &controllers.ResultController{}, "post:Create")
 
 	// Authentication
 	web.Router("/signup", &controllers.UserController{}, "get:New")

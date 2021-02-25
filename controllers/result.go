@@ -8,18 +8,18 @@ import (
 	"github.com/beego/beego/v2/server/web"
 )
 
-// SearchResultController operations for User
-type SearchResultController struct {
+// ResultController operations for User
+type ResultController struct {
 	BaseController
 }
 
 // URLMapping map user controller actions to functions
-func (c *SearchResultController) URLMapping() {
+func (c *ResultController) URLMapping() {
 	c.Mapping("List", c.List)
 	c.Mapping("Create", c.Create)
 }
 
-func (c *SearchResultController) List() {
+func (c *ResultController) List() {
 	c.EnsureAuthenticatedUser(true)
 
 	c.Layout = "layouts/default.html"
@@ -28,7 +28,7 @@ func (c *SearchResultController) List() {
 	web.ReadFromRequest(&c.Controller)
 }
 
-func (c *SearchResultController) Create() {
+func (c *ResultController) Create() {
 	c.EnsureAuthenticatedUser(true)
 
 	keywords := []string{

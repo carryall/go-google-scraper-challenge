@@ -19,14 +19,14 @@ var selectors = map[string]string {
 }
 
 // TODO: Replace this struct with model
-type SearchResult struct {
+type Result struct {
 	Keyword string
 	TopAdLinks []string
 	OtherAdLinks []string
 	NonAdLinks []string
 	PageCache string
 }
-var results = map[string]*SearchResult{}
+var results = map[string]*Result{}
 
 const GOOGLE_SEARCH_URL = "http://www.google.com/search?q=%s"
 
@@ -39,7 +39,7 @@ func Search(keywords []string) {
 	}
 
 	for _, keyword := range keywords {
-		results[keyword] = &SearchResult{Keyword: keyword}
+		results[keyword] = &Result{Keyword: keyword}
 
 		escapedKeyword := url.QueryEscape(keyword)
 		err := q.AddURL(fmt.Sprintf(GOOGLE_SEARCH_URL, escapedKeyword))
