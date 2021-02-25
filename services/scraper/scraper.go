@@ -25,11 +25,11 @@ type SearchResult struct {
 	NonAdLinks []string
 	PageCache string
 }
+var results = map[string]*SearchResult{}
 
 const GOOGLE_SEARCH_URL = "http://www.google.com/search?q=%s"
 
 func Search(keywords []string) {
-	results := map[string] *SearchResult{}
 	collector := colly.NewCollector(colly.Async(true))
 
 	q, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
@@ -46,53 +46,33 @@ func Search(keywords []string) {
 			log.Println("Failed to add url to queue", err.Error())
 		}
 	}
-	q.IsEmpty()
 
 	collector.OnRequest(RequestHandler)
 	collector.OnResponse(ResponseHandler)
 	collector.OnError(ErrorHandler)
 
 	collector.OnHTML(selectors["nonAds"], func(e *colly.HTMLElement) {
-		keyword := e.Request.Ctx.Get("keyword")
-		link := e.Attr("href")
-		if len(link) > 0 {
-			results[keyword].NonAdLinks = append(results[keyword].NonAdLinks, link)
-		}
+		addResultLink("nonAd", e)
 	})
 
 	collector.OnHTML(selectors["topImageAds"], func(e *colly.HTMLElement) {
-		keyword := e.Request.Ctx.Get("keyword")
-		link := e.Attr("href")
-		if len(link) > 0 {
-			results[keyword].TopAdLinks = append(results[keyword].TopAdLinks, link)
-		}
+		addResultLink("topAd", e)
 	})
 
 	collector.OnHTML(selectors["topLinkAds"], func(e *colly.HTMLElement) {
-		keyword := e.Request.Ctx.Get("keyword")
-		link := e.Attr("href")
-		if len(link) > 0 {
-			results[keyword].TopAdLinks = append(results[keyword].TopAdLinks, link)
-		}
+		addResultLink("topAd", e)
 	})
 
 	collector.OnHTML(selectors["sideImageAds"], func(e *colly.HTMLElement) {
-		keyword := e.Request.Ctx.Get("keyword")
-		link := e.Attr("href")
-		if len(link) > 0 {
-			results[keyword].OtherAdLinks = append(results[keyword].OtherAdLinks, link)
-		}
+		addResultLink("otherAd", e)
 	})
 
 	collector.OnHTML(selectors["bottomAds"], func(e *colly.HTMLElement) {
-		keyword := e.Request.Ctx.Get("keyword")
-		link := e.Attr("href")
-		if len(link) > 0 {
-			results[keyword].OtherAdLinks = append(results[keyword].OtherAdLinks, link)
-		}
+		addResultLink("otherAd", e)
 	})
 
 	collector.OnScraped(func(r *colly.Response) {
+		// TODO: add the result to database on another PR
 		if q.IsEmpty() {
 			log.Println("Finished scraping ==========")
 			for _, result := range results {
@@ -133,4 +113,21 @@ func keywordFromUrl(urlStr string) (keyword string) {
 	}
 
 	return u.Query().Get("q")
+}
+
+func addResultLink(linkType string, e *colly.HTMLElement)  {
+	keyword := e.Request.Ctx.Get("keyword")
+	link := e.Attr("href")
+
+	result := results[keyword]
+	if len(link) > 0 {
+		switch linkType {
+		case "nonAd":
+			result.NonAdLinks = append(result.NonAdLinks, link)
+		case "topAd":
+			result.TopAdLinks = append(result.TopAdLinks, link)
+		case "otherAd":
+			result.OtherAdLinks = append(result.OtherAdLinks, link)
+		}
+	}
 }
