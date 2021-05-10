@@ -9,3 +9,5 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "5432:5432"
+    volumes:
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
