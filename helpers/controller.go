@@ -2,7 +2,7 @@ package helpers
 
 import "github.com/beego/beego/v2/server/web"
 
-var ActionsWithGetMethod = []string{"List", "New", "Edit"}
+var ActionsWithGetMethod = []string{"List", "New", "Edit", "Delete"}
 
 // SetControllerAttributes set attributes for controller
 func SetControllerAttributes(controller *web.Controller) {
