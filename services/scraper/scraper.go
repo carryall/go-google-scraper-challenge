@@ -86,8 +86,8 @@ func Search(keywords []string) {
 }
 
 func RequestHandler (request *colly.Request) {
-	usrAgent := RandomUserAgent()
-	request.Headers.Set("User-Agent", usrAgent)
+	userAgent := RandomUserAgent()
+	request.Headers.Set("User-Agent", userAgent)
 
 	log.Println("Visiting", request.URL)
 	request.Ctx.Put("keyword", keywordFromUrl(request.URL.String()))
