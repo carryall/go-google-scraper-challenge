@@ -22,7 +22,7 @@ func (c *ResultController) URLMapping() {
 func (c *ResultController) List() {
 	c.EnsureAuthenticatedUser(true)
 
-	c.TplName = "search_results/list.html"
+	c.TplName = "results/list.html"
 
 	web.ReadFromRequest(&c.Controller)
 }
