@@ -24,6 +24,7 @@ func SetupTestEnvironment() {
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
 	SetupStaticPaths()
+	SetModelDefaultValueFilter()
 	SetLowercaseValidationErrors()
 	oauth.SetUpOauth()
 }

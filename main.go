@@ -22,7 +22,9 @@ func init() {
 	initializers.SetUpDatabase()
 	initializers.SetUpTemplateFunction()
 	initializers.SetupStaticPaths()
+	initializers.SetModelDefaultValueFilter()
 	initializers.SetLowercaseValidationErrors()
+
 	oauth_services.SetUpOauth()
 }
 
