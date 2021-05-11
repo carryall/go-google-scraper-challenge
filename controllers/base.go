@@ -23,6 +23,8 @@ type BaseController struct {
 
 func (base *BaseController) Prepare() {
 	helpers.SetControllerAttributes(&base.Controller)
+
+	base.Layout = "layouts/default.html"
 }
 
 func (base *BaseController) SetCurrentUser(user *models.User) {

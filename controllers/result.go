@@ -22,14 +22,13 @@ func (c *ResultController) URLMapping() {
 func (c *ResultController) List() {
 	c.EnsureAuthenticatedUser(true)
 
-	c.Layout = "layouts/default.html"
 	c.TplName = "search_results/list.html"
 
 	web.ReadFromRequest(&c.Controller)
 }
 
 func (c *ResultController) Create() {
-	c.EnsureAuthenticatedUser(false)
+	c.EnsureAuthenticatedUser(true)
 
 	keywords := []string{
 		"ergonomic chair",
