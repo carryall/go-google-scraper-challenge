@@ -19,8 +19,8 @@ func SetUpTemplateFunction() {
 		"render_icon":   renderIcon,
 	}
 
-	for name, fn := range templateFunctions {
-		err := web.AddFuncMap(name, fn)
+	for n, fn := range templateFunctions {
+		err := web.AddFuncMap(n, fn)
 		if err != nil {
 			log.Fatal("Failed to add template function", err.Error())
 		}

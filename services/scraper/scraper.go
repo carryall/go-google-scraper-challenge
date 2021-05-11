@@ -33,16 +33,16 @@ const GOOGLE_SEARCH_URL = "http://www.google.com/search?q=%s"
 func Search(keywords []string) {
 	collector := colly.NewCollector(colly.Async(true))
 
-	q, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
+	searchQueue, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
 	if err != nil {
 		log.Fatal("Failed to create a queue", err.Error())
 	}
 
-	for _, keyword := range keywords {
-		results[keyword] = &Result{Keyword: keyword}
+	for _, k := range keywords {
+		results[k] = &Result{Keyword: k}
 
-		escapedKeyword := url.QueryEscape(keyword)
-		err := q.AddURL(fmt.Sprintf(GOOGLE_SEARCH_URL, escapedKeyword))
+		escapedKeyword := url.QueryEscape(k)
+		err := searchQueue.AddURL(fmt.Sprintf(GOOGLE_SEARCH_URL, escapedKeyword))
 		if err != nil {
 			log.Println("Failed to add url to queue", err.Error())
 		}
@@ -79,40 +79,40 @@ func Search(keywords []string) {
 
 	collector.OnScraped(saveResult)
 
-	err = q.Run(collector)
+	err = searchQueue.Run(collector)
 	if err != nil {
 		log.Println("Failed to run the queue", err.Error())
 	}
 }
 
-func RequestHandler (r *colly.Request) {
-	ua := RandomUserAgent()
-	r.Headers.Set("User-Agent", ua)
+func RequestHandler (request *colly.Request) {
+	usrAgent := RandomUserAgent()
+	request.Headers.Set("User-Agent", usrAgent)
 
-	log.Println("Visiting", r.URL)
-	r.Ctx.Put("keyword", keywordFromUrl(r.URL.String()))
+	log.Println("Visiting", request.URL)
+	request.Ctx.Put("keyword", keywordFromUrl(request.URL.String()))
 }
 
-func ResponseHandler (r *colly.Response) {
-	log.Println("Visited", r.Request.URL)
+func ResponseHandler (response *colly.Response) {
+	log.Println("Visited", response.Request.URL)
 }
 
-func ErrorHandler(r *colly.Response, err error) {
-	log.Println("Failed to request URL:", r.Request.URL, "with response:", r, "\nError:", err)
+func ErrorHandler(response *colly.Response, err error) {
+	log.Println("Failed to request URL:", response.Request.URL, "with response:", response, "\nError:", err)
 }
 
 func keywordFromUrl(urlStr string) (keyword string) {
-	u, err := url.Parse(urlStr)
+	parsedUrl, err := url.Parse(urlStr)
 	if err != nil {
 		log.Println("Failed to parse url string", err.Error())
 	}
 
-	return u.Query().Get("q")
+	return parsedUrl.Query().Get("q")
 }
 
-func addResultLink(linkType string, e *colly.HTMLElement)  {
-	keyword := e.Request.Ctx.Get("keyword")
-	link := e.Attr("href")
+func addResultLink(linkType string, element *colly.HTMLElement)  {
+	keyword := element.Request.Ctx.Get("keyword")
+	link := element.Attr("href")
 
 	result := results[keyword]
 	if len(link) > 0 {
@@ -127,9 +127,9 @@ func addResultLink(linkType string, e *colly.HTMLElement)  {
 	}
 }
 
-func saveResult(r *colly.Response) {
+func saveResult(response *colly.Response) {
 	// TODO: add the result to database on another PR
-	keyword := r.Request.Ctx.Get("keyword")
+	keyword := response.Request.Ctx.Get("keyword")
 	result := results[keyword]
 
 	log.Println("Finished scraping for keyword:", keyword, "==========")
