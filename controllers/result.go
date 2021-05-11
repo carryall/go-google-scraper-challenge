@@ -28,7 +28,7 @@ func (c *ResultController) List() {
 }
 
 func (c *ResultController) Create() {
-	c.EnsureAuthenticatedUser(true)
+	c.EnsureAuthenticatedUser(false)
 
 	keywords := []string{
 		"ergonomic chair",
