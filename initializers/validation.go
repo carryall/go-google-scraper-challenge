@@ -8,8 +8,8 @@ import (
 
 func SetLowercaseValidationErrors() {
 	lowerCaseErrorMessage := map[string]string{}
-	for key, value := range validation.MessageTmpls {
-		lowerCaseErrorMessage[key] = strings.ToLower(value)
+	for k, v := range validation.MessageTmpls {
+		lowerCaseErrorMessage[k] = strings.ToLower(v)
 	}
 
 	validation.SetDefaultMessage(lowerCaseErrorMessage)

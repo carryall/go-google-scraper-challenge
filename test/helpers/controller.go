@@ -101,15 +101,15 @@ func GetCurrentPath(response *http.Response) string {
 
 // GetSession get session with given key from cookie, will fail the test if cannot get session store
 func GetSession(cookies []*http.Cookie, key string) interface{} {
-	c := context.Background()
-	for _, cookie := range cookies {
-		if cookie.Name == web.BConfig.WebConfig.Session.SessionName {
-			store, err := web.GlobalSessions.GetSessionStore(cookie.Value)
+	backgroundContext := context.Background()
+	for _, c := range cookies {
+		if c.Name == web.BConfig.WebConfig.Session.SessionName {
+			store, err := web.GlobalSessions.GetSessionStore(c.Value)
 			if err != nil {
 				ginkgo.Fail("Failed to get store " + err.Error())
 			}
 
-			return store.Get(c, key)
+			return store.Get(backgroundContext, key)
 		}
 	}
 	return nil
@@ -119,9 +119,9 @@ func GetSession(cookies []*http.Cookie, key string) interface{} {
 func GetFlashMessage(cookies []*http.Cookie) *web.FlashData {
 	flash := web.NewFlash()
 
-	for _, cookie := range cookies {
-		if cookie.Name == "BEEGO_FLASH" {
-			decodedCookie := decodeQueryString(cookie.Value)
+	for _, c := range cookies {
+		if c.Name == "BEEGO_FLASH" {
+			decodedCookie := decodeQueryString(c.Value)
 			// Trim null character out of the docoded cookie value
 			trimedCookie := strings.Trim(decodedCookie, "\x00")
 			cookieParts := strings.Split(trimedCookie, "#BEEGOFLASH#")
