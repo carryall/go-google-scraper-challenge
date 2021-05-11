@@ -24,7 +24,7 @@ func (c *UserController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *UserController) New() {
-	c.EnsureGuestUser(true)
+	c.EnsureGuestUser()
 
 	c.Data["Title"] = "Signup"
 
@@ -42,7 +42,7 @@ func (c *UserController) New() {
 // @Failure 302 redirect to signup with error message
 // @router / [post]
 func (c *UserController) Create() {
-	c.EnsureGuestUser(false)
+	c.EnsureGuestUser()
 
 	flash := web.NewFlash()
 	form := forms.RegistrationForm{}

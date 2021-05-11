@@ -26,7 +26,7 @@ func (c *SessionController) URLMapping() {
 // @Success 200
 // @router / [get]
 func (c *SessionController) New() {
-	c.EnsureGuestUser(true)
+	c.EnsureGuestUser()
 
 	c.Data["Title"] = "Sign In"
 
@@ -44,7 +44,7 @@ func (c *SessionController) New() {
 // @Failure 302 redirect to sign in path with error message
 // @router / [post]
 func (c *SessionController) Create() {
-	c.EnsureGuestUser(false)
+	c.EnsureGuestUser()
 
 	flash := web.NewFlash()
 	form := forms.SessionForm{}
@@ -79,7 +79,7 @@ func (c *SessionController) Create() {
 // @Failure 302 redirect to root path with error message
 // @router / [get]
 func (c *SessionController) Delete() {
-	c.EnsureAuthenticatedUser(true)
+	c.EnsureAuthenticatedUser()
 
 	flash := web.NewFlash()
 	redirectPath := ""

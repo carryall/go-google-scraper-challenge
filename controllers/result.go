@@ -20,7 +20,7 @@ func (c *ResultController) URLMapping() {
 }
 
 func (c *ResultController) List() {
-	c.EnsureAuthenticatedUser(true)
+	c.EnsureAuthenticatedUser()
 
 	c.TplName = "results/list.html"
 
@@ -28,7 +28,7 @@ func (c *ResultController) List() {
 }
 
 func (c *ResultController) Create() {
-	c.EnsureAuthenticatedUser(false)
+	c.EnsureAuthenticatedUser()
 
 	keywords := []string{
 		"ergonomic chair",

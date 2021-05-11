@@ -19,11 +19,15 @@ type BaseController struct {
 	web.Controller
 
 	CurrentUser *models.User
+	controllerName string
+	actionName string
 }
 
 func (base *BaseController) Prepare() {
-	helpers.SetControllerAttributes(&base.Controller)
+	controller := &base.Controller
+	helpers.SetControllerAttributes(controller)
 
+	base.controllerName, base.actionName = controller.GetControllerAndAction()
 	base.Layout = "layouts/default.html"
 }
 
@@ -51,10 +55,10 @@ func (base *BaseController) ClearCurrentUser() error {
 	return base.DelSession(CurrentUserKey)
 }
 
-func (base *BaseController) EnsureAuthenticatedUser(redirect bool) {
+func (base *BaseController) EnsureAuthenticatedUser() {
 	currentUser := base.GetCurrentUser()
 	if currentUser == nil {
-		if redirect {
+		if helpers.IsActionWithGetMethod(base.actionName) {
 			base.Controller.Redirect("/signin", http.StatusFound)
 		} else {
 			base.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
@@ -63,10 +67,10 @@ func (base *BaseController) EnsureAuthenticatedUser(redirect bool) {
 	base.Controller.Data["CurrentUser"] = currentUser
 }
 
-func (base *BaseController) EnsureGuestUser(redirect bool) {
+func (base *BaseController) EnsureGuestUser() {
 	currentUser := base.GetCurrentUser()
 	if currentUser != nil {
-		if redirect {
+		if helpers.IsActionWithGetMethod(base.actionName) {
 			base.Controller.Redirect("/", http.StatusFound)
 		} else {
 			base.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
