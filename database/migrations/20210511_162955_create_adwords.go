@@ -14,7 +14,10 @@ func init() {
 	m := &CreateAdwords_20210511_162955{}
 	m.Created = "20210511_162955"
 
-	migration.Register("CreateAdwords_20210511_162955", m)
+	err := migration.Register("CreateAdwords_20210511_162955", m)
+	if err != nil {
+		log.Fatal("Migration failed:", err)
+	}
 }
 
 // Run the migrations
