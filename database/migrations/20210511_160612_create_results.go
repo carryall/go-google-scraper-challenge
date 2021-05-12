@@ -23,13 +23,12 @@ func init() {
 
 // Run the migrations
 func (m *CreateResults_20210511_160612) Up() {
-	m.SQL(`CREATE TYPE result_status AS ENUM ('pending', 'processing', 'completed', 'failed');
-		CREATE TABLE "results"
+	m.SQL(`CREATE TABLE "results"
 		(
 			id SERIAL,
 			user_id integer REFERENCES "users" ON DELETE CASCADE,
 			keyword text NOT NULL,
-			status result_status NOT NULL,
+			status text NOT NULL,
 			non_ad_links json,
 			page_cache text,
 			created_at timestamp NOT NULL,
