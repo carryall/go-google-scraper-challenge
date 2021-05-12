@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/beego/beego/v2/client/orm/migration"
 )
 
