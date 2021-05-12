@@ -2,6 +2,7 @@ package tests
 
 import (
 	"go-google-scraper-challenge/models"
+	"go-google-scraper-challenge/models/adwords"
 	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/onsi/ginkgo"
@@ -41,4 +42,44 @@ func FabricateOAuthClient() (client oauth.OAuthClient) {
 	}
 
 	return client
+}
+
+func FabricateResult(user *models.User) (result *models.Result) {
+	result = &models.Result{
+		User: user,
+		Keyword: "Keyword",
+	}
+
+	resultID, err := models.CreateResult(result)
+	if err != nil {
+		ginkgo.Fail("Failed to add result " + err.Error())
+	}
+
+	result, err = models.GetResultById(resultID)
+	if err != nil {
+		ginkgo.Fail("Failed to get result " + err.Error())
+	}
+
+	return result
+}
+
+func FabricateAdword(result *models.Result) (adword *models.Adword)  {
+	adword = &models.Adword{
+		Result: result,
+		Link: "link",
+		Position: adwords.Top,
+		Type: adwords.Link,
+	}
+
+	adwordID, err := models.CreateAdword(adword)
+	if err != nil {
+		ginkgo.Fail("Failed to add adword " + err.Error())
+	}
+
+	adword, err = models.GetAdwordById(adwordID)
+	if err != nil {
+		ginkgo.Fail("Failed to get adword " + err.Error())
+	}
+
+	return adword
 }

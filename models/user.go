@@ -7,8 +7,10 @@ import (
 type User struct {
 	Base
 
-	Email          string `orm:"unique;size(128)"`
-	HashedPassword string
+	Results         []*Result       `orm:"reverse(many)"`
+
+	Email          	string          `orm:"unique;size(128)"`
+	HashedPassword 	string
 }
 
 func init() {
