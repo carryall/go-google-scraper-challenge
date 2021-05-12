@@ -3,6 +3,7 @@ package models_test
 import (
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
+	"go-google-scraper-challenge/models/results"
 	. "go-google-scraper-challenge/test/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -151,6 +152,38 @@ var _ = Describe("Result", func() {
 
 				_, err := models.GetResultsByUserId(999)
 				Expect(err).To(BeNil())
+			})
+		})
+	})
+
+	Describe("#UpdateResultById", func() {
+		Context("given result id exist in the system", func() {
+			It("updates the result with given id", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				existResult := FabricateResult(user)
+				existResult.Status = results.Processing
+
+				err := models.UpdateResultById(existResult)
+				if err != nil {
+					Fail("Failed to update result with ID")
+				}
+
+				result, err := models.GetResultById(existResult.Id)
+				if err != nil {
+					Fail("Failed to get result with ID")
+				}
+
+				Expect(result.Keyword).To(Equal(existResult.Keyword))
+				Expect(result.Status).To(Equal(results.Processing))
+			})
+		})
+
+		Context("given result id does NOT exist in the system", func() {
+			It("returns error", func() {
+				result := &models.Result{Base: models.Base{Id: 999}}
+				err := models.UpdateResultById(result)
+
+				Expect(err.Error()).To(ContainSubstring("no row found"))
 			})
 		})
 	})

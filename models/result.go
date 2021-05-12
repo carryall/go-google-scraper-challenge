@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	"go-google-scraper-challenge/models/results"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -53,6 +55,23 @@ func GetResultsByUserId(userId int64) (results []*Result, err error) {
 	_, err = querySeter.All(&results)
 
 	return results, err
+}
+
+// UpdateResult updates Result by Id and returns error if the record to be updated doesn't exist
+func UpdateResultById(result *Result) (err error) {
+	ormer := orm.NewOrm()
+	_, err = GetResultById(result.Id)
+	if err != nil {
+		return err
+	}
+
+	num, err := ormer.Update(result)
+	if err != nil {
+		return err
+	}
+
+	log.Println("Updated ", num, " results in database")
+	return
 }
 
 func resultQuerySeter() orm.QuerySeter {
