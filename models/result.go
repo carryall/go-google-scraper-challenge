@@ -11,12 +11,12 @@ import (
 type Result struct {
 	Base
 
-	User		    *User     `orm:"rel(fk)"`
-	AdWords			[]*Adword `orm:"reverse(many)"`
+	User    *User     `orm:"rel(fk)"`
+	AdLinks []*AdLink `orm:"reverse(many)"`
+	Links   []*Link   `orm:"reverse(many)"`
 
 	Keyword       	string    `orm:"type(text)"`
 	Status			string    `orm:"type(text);default(pending)"`
-	NonAdLinks    	string    `orm:"type(json);null"`
 	PageCache	  	string    `orm:"type(text);null"`
 }
 

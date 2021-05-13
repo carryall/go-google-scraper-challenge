@@ -1,4 +1,4 @@
-package adwords
+package adlinks
 
 const (
 	Top = "top"

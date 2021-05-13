@@ -47,7 +47,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: adwords; Type: TABLE; Schema: public; Owner: postgres
+-- Name: adlinks; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.adwords (
@@ -55,6 +55,7 @@ CREATE TABLE public.adwords (
     result_id integer,
     type text NOT NULL,
     "position" text NOT NULL,
+    link text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -120,6 +121,58 @@ ALTER TABLE public.migrations_id_migration_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.migrations_id_migration_seq OWNED BY public.migrations.id_migration;
+
+
+--
+-- Name: oauth2_clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth2_clients (
+    id text NOT NULL,
+    secret text NOT NULL,
+    domain text NOT NULL,
+    data jsonb NOT NULL
+);
+
+
+ALTER TABLE public.oauth2_clients OWNER TO postgres;
+
+--
+-- Name: oauth2_tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth2_tokens (
+    id bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    expires_at timestamp with time zone NOT NULL,
+    code text NOT NULL,
+    access text NOT NULL,
+    refresh text NOT NULL,
+    data jsonb NOT NULL
+);
+
+
+ALTER TABLE public.oauth2_tokens OWNER TO postgres;
+
+--
+-- Name: oauth2_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.oauth2_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.oauth2_tokens_id_seq OWNER TO postgres;
+
+--
+-- Name: oauth2_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.oauth2_tokens_id_seq OWNED BY public.oauth2_tokens.id;
 
 
 --
@@ -213,7 +266,7 @@ ALTER SEQUENCE public.user_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: adwords id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: adlinks id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.adwords ALTER COLUMN id SET DEFAULT nextval('public.adwords_id_seq'::regclass);
@@ -224,6 +277,13 @@ ALTER TABLE ONLY public.adwords ALTER COLUMN id SET DEFAULT nextval('public.adwo
 --
 
 ALTER TABLE ONLY public.migrations ALTER COLUMN id_migration SET DEFAULT nextval('public.migrations_id_migration_seq'::regclass);
+
+
+--
+-- Name: oauth2_tokens id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth2_tokens ALTER COLUMN id SET DEFAULT nextval('public.oauth2_tokens_id_seq'::regclass);
 
 
 --
@@ -241,7 +301,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.user_i
 
 
 --
--- Name: adwords adword_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: adlinks adword_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.adwords
@@ -254,6 +314,22 @@ ALTER TABLE ONLY public.adwords
 
 ALTER TABLE ONLY public.migrations
     ADD CONSTRAINT migrations_pkey PRIMARY KEY (id_migration);
+
+
+--
+-- Name: oauth2_clients oauth2_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth2_clients
+    ADD CONSTRAINT oauth2_clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth2_tokens oauth2_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth2_tokens
+    ADD CONSTRAINT oauth2_tokens_pkey PRIMARY KEY (id);
 
 
 --
@@ -289,7 +365,35 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: adwords adwords_result_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: idx_oauth2_tokens_access; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_access ON public.oauth2_tokens USING btree (access);
+
+
+--
+-- Name: idx_oauth2_tokens_code; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_code ON public.oauth2_tokens USING btree (code);
+
+
+--
+-- Name: idx_oauth2_tokens_expires_at; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_expires_at ON public.oauth2_tokens USING btree (expires_at);
+
+
+--
+-- Name: idx_oauth2_tokens_refresh; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_refresh ON public.oauth2_tokens USING btree (refresh);
+
+
+--
+-- Name: adlinks adwords_result_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.adwords

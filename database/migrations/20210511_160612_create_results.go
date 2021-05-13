@@ -29,7 +29,6 @@ func (m *CreateResults_20210511_160612) Up() {
 			user_id integer REFERENCES "users" ON DELETE CASCADE,
 			keyword text NOT NULL,
 			status text NOT NULL,
-			non_ad_links json,
 			page_cache text,
 			created_at timestamp NOT NULL,
 			updated_at timestamp NOT NULL,
