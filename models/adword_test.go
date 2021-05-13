@@ -4,7 +4,7 @@ import (
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/models/adwords"
-	. "go-google-scraper-challenge/test/helpers"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
