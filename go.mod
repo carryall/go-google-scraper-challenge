@@ -10,6 +10,7 @@ require (
 	github.com/antchfx/xmlquery v1.3.4 // indirect
 	github.com/antchfx/xpath v1.1.11 // indirect
 	github.com/beego/beego/v2 v2.0.1
+	github.com/dnaeon/go-vcr v1.1.0
 	github.com/fasthttp-contrib/websocket v0.0.0-20160511215533-1f3b11f56072 // indirect
 	github.com/gavv/httpexpect v2.0.0+incompatible // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
