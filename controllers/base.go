@@ -64,6 +64,7 @@ func (b *BaseController) EnsureAuthenticatedUser() {
 			b.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
 		}
 	}
+	b.CurrentUser = currentUser
 	b.Controller.Data["CurrentUser"] = currentUser
 }
 
