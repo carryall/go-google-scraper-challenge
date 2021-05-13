@@ -58,12 +58,7 @@ func Search(keywords []string, user *models.User) {
 	collector.OnError(ErrorHandler)
 
 	collector.OnHTML(selectors["wholePage"], func(e *colly.HTMLElement) {
-		resultID := ResultIDFromContext(e.Request.Ctx)
-		result, err := models.GetResultById(resultID)
-		if err != nil {
-			log.Fatal("Failed to get result by id", err.Error())
-		}
-
+		result := ResultFromContext(e.Request.Ctx)
 		result.Status = results.Processing
 		result.PageCache = string(e.Response.Body)
 		err = models.UpdateResultById(result)
@@ -73,26 +68,26 @@ func Search(keywords []string, user *models.User) {
 	})
 
 	collector.OnHTML(selectors["nonAds"], func(e *colly.HTMLElement) {
-		addResultNonAd(e)
+		addNonAdLinkToResult(e)
 	})
 
 	collector.OnHTML(selectors["topImageAds"], func(e *colly.HTMLElement) {
-		addResultAd(adlinks.Image, adlinks.Top, e)
+		addAdLinkToResult(adlinks.Image, adlinks.Top, e)
 	})
 
 	collector.OnHTML(selectors["topLinkAds"], func(e *colly.HTMLElement) {
-		addResultAd(adlinks.Link, adlinks.Top, e)
+		addAdLinkToResult(adlinks.Link, adlinks.Top, e)
 	})
 
 	collector.OnHTML(selectors["sideImageAds"], func(e *colly.HTMLElement) {
-		addResultAd(adlinks.Side, adlinks.Image, e)
+		addAdLinkToResult(adlinks.Side, adlinks.Image, e)
 	})
 
 	collector.OnHTML(selectors["bottomAds"], func(e *colly.HTMLElement) {
-		addResultAd(adlinks.Bottom, adlinks.Link, e)
+		addAdLinkToResult(adlinks.Bottom, adlinks.Link, e)
 	})
 
-	collector.OnScraped(saveResult)
+	collector.OnScraped(finishScrapingResult)
 
 	err = searchQueue.Run(collector)
 	if err != nil {
@@ -106,7 +101,6 @@ func RequestHandler (request *colly.Request) {
 
 	log.Println("Visiting", request.URL)
 	keyword := keywordFromUrl(request.URL.String())
-	request.Ctx.Put("keyword", keyword)
 	request.Ctx.Put("resultID", fmt.Sprint(resultIDFromKeyword(keyword)))
 }
 
@@ -119,13 +113,9 @@ func ErrorHandler(response *colly.Response, err error) {
 }
 
 func ResultFromContext(context *colly.Context) (result *models.Result) {
-	rID := context.Get("resultID")
-	resultID, err := num.ParseInt64(rID)
-	if err != nil {
-		log.Fatal("Failed to parse result ID", err.Error())
-	}
+	resultID := ResultIDFromContext(context)
 
-	result, err = models.GetResultById(resultID)
+	result, err := models.GetResultById(resultID)
 	if err != nil {
 		log.Fatal("Failed to get result by ID", err.Error())
 	}
@@ -156,7 +146,7 @@ func keywordFromUrl(urlStr string) (keyword string) {
 	return parsedUrl.Query().Get("q")
 }
 
-func addResultNonAd(element *colly.HTMLElement) {
+func addNonAdLinkToResult(element *colly.HTMLElement) {
 	link := element.Attr("href")
 	result := ResultFromContext(element.Request.Ctx)
 
@@ -172,7 +162,7 @@ func addResultNonAd(element *colly.HTMLElement) {
 	}
 }
 
-func addResultAd(linkType string, linkPosition string, element *colly.HTMLElement) {
+func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTMLElement) {
 	link := element.Attr("href")
 	result := ResultFromContext(element.Request.Ctx)
 
@@ -190,12 +180,12 @@ func addResultAd(linkType string, linkPosition string, element *colly.HTMLElemen
 	}
 }
 
-func saveResult(response *colly.Response) {
+func finishScrapingResult(response *colly.Response) {
 	result := ResultFromContext(response.Ctx)
 	result.Status = results.Completed
 	err := models.UpdateResultById(result)
 	if err != nil {
-		log.Fatal("Failed to set result as completed", err.Error())
+		log.Fatal("Failed to complete result", err.Error())
 	}
 	log.Println("Finished scraping for keyword:", result.Keyword)
 }
