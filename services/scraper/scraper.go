@@ -58,7 +58,7 @@ func Search(keywords []string, user *models.User) {
 	collector.OnError(ErrorHandler)
 
 	collector.OnHTML(selectors["wholePage"], func(e *colly.HTMLElement) {
-		result := ResultFromContext(e.Request.Ctx)
+		result := getResultFromContext(e.Request.Ctx)
 		result.Status = results.Processing
 		result.PageCache = string(e.Response.Body)
 		err = models.UpdateResultById(result)
@@ -112,8 +112,8 @@ func ErrorHandler(response *colly.Response, err error) {
 	log.Println("Failed to request URL:", response.Request.URL, "with response:", response, "\nError:", err)
 }
 
-func ResultFromContext(context *colly.Context) (result *models.Result) {
-	resultID := ResultIDFromContext(context)
+func getResultFromContext(context *colly.Context) (result *models.Result) {
+	resultID := getResultIDFromContext(context)
 
 	result, err := models.GetResultById(resultID)
 	if err != nil {
@@ -123,7 +123,7 @@ func ResultFromContext(context *colly.Context) (result *models.Result) {
 	return result
 }
 
-func ResultIDFromContext(context *colly.Context) (resultID int64) {
+func getResultIDFromContext(context *colly.Context) (resultID int64) {
 	rID := context.Get("resultID")
 	resultID, err := num.ParseInt64(rID)
 	if err != nil {
@@ -148,7 +148,7 @@ func keywordFromUrl(urlStr string) (keyword string) {
 
 func addNonAdLinkToResult(element *colly.HTMLElement) {
 	link := element.Attr("href")
-	result := ResultFromContext(element.Request.Ctx)
+	result := getResultFromContext(element.Request.Ctx)
 
 	if len(link) > 0 {
 		link := &models.Link{
@@ -164,7 +164,7 @@ func addNonAdLinkToResult(element *colly.HTMLElement) {
 
 func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTMLElement) {
 	link := element.Attr("href")
-	result := ResultFromContext(element.Request.Ctx)
+	result := getResultFromContext(element.Request.Ctx)
 
 	if len(link) > 0 {
 		adLink := &models.AdLink{
@@ -181,7 +181,7 @@ func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTML
 }
 
 func finishScrapingResult(response *colly.Response) {
-	result := ResultFromContext(response.Ctx)
+	result := getResultFromContext(response.Ctx)
 	result.Status = results.Completed
 	err := models.UpdateResultById(result)
 	if err != nil {
