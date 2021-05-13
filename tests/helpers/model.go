@@ -2,7 +2,7 @@ package tests
 
 import (
 	"go-google-scraper-challenge/models"
-	"go-google-scraper-challenge/models/adwords"
+	"go-google-scraper-challenge/models/adlinks"
 	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/onsi/ginkgo"
@@ -63,23 +63,42 @@ func FabricateResult(user *models.User) (result *models.Result) {
 	return result
 }
 
-func FabricateAdword(result *models.Result) (adword *models.Adword)  {
-	adword = &models.Adword{
+func FabricateLink(result *models.Result) (link *models.Link)  {
+	link = &models.Link{
 		Result: result,
 		Link: "link",
-		Position: adwords.Top,
-		Type: adwords.Link,
 	}
 
-	adwordID, err := models.CreateAdword(adword)
+	linkID, err := models.CreateLink(link)
 	if err != nil {
-		ginkgo.Fail("Failed to add adword " + err.Error())
+		ginkgo.Fail("Failed to add adLink " + err.Error())
 	}
 
-	adword, err = models.GetAdwordById(adwordID)
+	link, err = models.GetLinkById(linkID)
 	if err != nil {
-		ginkgo.Fail("Failed to get adword " + err.Error())
+		ginkgo.Fail("Failed to get link " + err.Error())
 	}
 
-	return adword
+	return link
+}
+
+func FabricateAdLink(result *models.Result) (adLink *models.AdLink)  {
+	adLink = &models.AdLink{
+		Result: result,
+		Link: "link",
+		Position: adlinks.Top,
+		Type: adlinks.Link,
+	}
+
+	adLinkID, err := models.CreateAdLink(adLink)
+	if err != nil {
+		ginkgo.Fail("Failed to add adLink " + err.Error())
+	}
+
+	adLink, err = models.GetAdLinkById(adLinkID)
+	if err != nil {
+		ginkgo.Fail("Failed to get adLink " + err.Error())
+	}
+
+	return adLink
 }

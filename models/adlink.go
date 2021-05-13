@@ -19,7 +19,7 @@ func init() {
 
 // TableName set the custom table name to plural because the default table name is singular
 func (a *AdLink) TableName() string {
-	return "adlinks"
+	return "ad_links"
 }
 
 // CreateAdLink insert a new AdLink into database and returns last inserted Id on success.

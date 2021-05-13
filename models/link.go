@@ -21,7 +21,7 @@ func (a *Link) TableName() string {
 }
 
 // AddLink insert a new Link into database and returns last inserted Id on success.
-func AddLink(link *Link) (id int64, err error) {
+func CreateLink(link *Link) (id int64, err error) {
 	ormer := orm.NewOrm()
 	id, err = ormer.Insert(link)
 	return
