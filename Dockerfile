@@ -1,4 +1,4 @@
-FROM  node:14.15-alpine as assets-builder
+FROM  node:14.15-alpine AS assets-builder
 
 RUN apk --no-cache add ca-certificates make
 
@@ -35,7 +35,8 @@ COPY . .
 RUN go get github.com/beego/bee/v2
 
 # Migrate database
-RUN bee migrate -driver=postgres -conn=$DATABASE_URL
+# RUN bee migrate -driver=postgres -conn=$DATABASE_URL
+RUN make db/migrate
 
 FROM golang:1.15-alpine
 
