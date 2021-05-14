@@ -6,8 +6,6 @@ import (
 	"net/url"
 
 	"go-google-scraper-challenge/models"
-	"go-google-scraper-challenge/models/adlinks"
-	"go-google-scraper-challenge/models/results"
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/queue"
