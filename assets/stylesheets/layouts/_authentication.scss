@@ -1,0 +1,14 @@
+.layout-authentication {
+  body {
+    @apply min-h-screen justify-center;
+  }
+
+  .app-content,
+  .app-header {
+    @apply max-w-md w-full mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .app-content {
+    @apply mt-8;
+  }
+}

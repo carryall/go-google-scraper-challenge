@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12.3
+    container_name: google_scraper_db_test
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
