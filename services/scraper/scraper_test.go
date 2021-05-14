@@ -35,7 +35,7 @@ var _ = Describe("Scraper", func() {
 					Fail("Failed to get user results")
 				}
 
-				Expect(len(userResults)).To(Equal(1))
+				Expect(userResults).To(HaveLen(1))
 				Expect(userResults[0].Keyword).To(Equal("keyword"))
 			})
 		})
