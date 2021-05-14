@@ -35,7 +35,7 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (registrationForm *RegistrationForm) Save() (user *models.User, errors []error) {
+func (registrationForm *RegistrationForm) Save() (*models.User, []error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(registrationForm)
@@ -44,6 +44,7 @@ func (registrationForm *RegistrationForm) Save() (user *models.User, errors []er
 	}
 
 	if !valid {
+		errors := []error{}
 		for _, err := range validation.Errors {
 			errors = append(errors, err)
 		}
@@ -56,7 +57,7 @@ func (registrationForm *RegistrationForm) Save() (user *models.User, errors []er
 		return nil, []error{err}
 	}
 
-	user = &models.User{
+	user := &models.User{
 		Email:          registrationForm.Email,
 		HashedPassword: hashedPassword,
 	}

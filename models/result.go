@@ -30,18 +30,19 @@ func (r *Result) TableName() string {
 }
 
 // CreateResult insert a new Result into database and returns last inserted Id on success.
-func CreateResult(result *Result) (id int64, err error) {
+func CreateResult(result *Result) (int64, error) {
 	ormer := orm.NewOrm()
 	result.Status = results.Pending
-	id, err = ormer.Insert(result)
-	return
+	id, err := ormer.Insert(result)
+
+	return id, err
 }
 
 // GetResultById retrieves Result by Id. Returns error if Id doesn't exist
-func GetResultById(id int64) (result *Result, err error) {
+func GetResultById(id int64) (*Result, error) {
 	querySeter := resultQuerySeter().Filter("Id", id).RelatedSel()
-	result = &Result{}
-	err = querySeter.One(result)
+	result := &Result{}
+	err := querySeter.One(result)
 	if err != nil {
 		return nil, err
 	}
@@ -50,17 +51,18 @@ func GetResultById(id int64) (result *Result, err error) {
 }
 
 // GetResultsByUserId retrieves all Results with User Id. Returns empty list if no records exist
-func GetResultsByUserId(userId int64) (results []*Result, err error) {
+func GetResultsByUserId(userId int64) ([]*Result, error) {
 	querySeter := resultQuerySeter().Filter("user_id", userId).RelatedSel()
-	_, err = querySeter.All(&results)
+	results := []*Result{}
+	_, err := querySeter.All(&results)
 
 	return results, err
 }
 
 // UpdateResult updates Result by Id and returns error if the record to be updated doesn't exist
-func UpdateResultById(result *Result) (err error) {
+func UpdateResultById(result *Result) error {
 	ormer := orm.NewOrm()
-	_, err = GetResultById(result.Id)
+	_, err := GetResultById(result.Id)
 	if err != nil {
 		return err
 	}
@@ -71,10 +73,11 @@ func UpdateResultById(result *Result) (err error) {
 	}
 
 	log.Println("Updated ", num, " results in database")
-	return
+	return nil
 }
 
 func resultQuerySeter() orm.QuerySeter {
 	ormer := orm.NewOrm()
+
 	return ormer.QueryTable(Result{})
 }

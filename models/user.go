@@ -23,17 +23,18 @@ func (u *User) TableName() string {
 }
 
 // CreateUser insert a new User into database and returns last inserted Id on success.
-func CreateUser(u *User) (id int64, err error) {
+func CreateUser(u *User) (int64, error) {
 	ormer := orm.NewOrm()
+
 	return ormer.Insert(u)
 }
 
 // GetUserById get a user with given id, return error if user with id does not exist
-func GetUserById(id int64) (user *User, err error) {
+func GetUserById(id int64) (*User, error) {
 	ormer := orm.NewOrm()
-	user = &User{}
+	user := &User{}
 
-	err = ormer.QueryTable(User{}).Filter("Id", id).RelatedSel().One(user)
+	err := ormer.QueryTable(User{}).Filter("Id", id).RelatedSel().One(user)
 	if err != nil {
 		return nil, err
 	}
@@ -42,18 +43,18 @@ func GetUserById(id int64) (user *User, err error) {
 }
 
 // UserEmailAlreadyExist retrieves user email and returns true if user with email already exist.
-func UserEmailAlreadyExist(email string) (userExist bool) {
+func UserEmailAlreadyExist(email string) bool {
 	ormer := orm.NewOrm()
 
 	return ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().Exist()
 }
 
 // GetUserByEmail retrieves User by Email and returns error if User with given Email doesn't exist.
-func GetUserByEmail(email string) (user *User, err error) {
+func GetUserByEmail(email string) (*User, error) {
 	ormer := orm.NewOrm()
-	user = &User{Email: email}
+	user := &User{Email: email}
 
-	err = ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().One(user)
+	err := ormer.QueryTable(User{}).Filter("Email", email).RelatedSel().One(user)
 	if err != nil {
 		return nil, err
 	}

@@ -38,7 +38,7 @@ func (sessionForm *SessionForm) Valid(v *validation.Validation) {
 }
 
 // Save validates login form, returns errors if validation failed.
-func (sessionForm *SessionForm) Save() (user *models.User, errs []error) {
+func (sessionForm *SessionForm) Save() (*models.User, []error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(sessionForm)

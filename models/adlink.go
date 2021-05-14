@@ -7,7 +7,7 @@ import (
 type AdLink struct {
 	Base
 
-	Result		    *Result  `orm:"rel(fk)"`
+	Result          *Result  `orm:"rel(fk)"`
 	Type            string   `orm:"type(text)"`
 	Position        string   `orm:"type(text)"`
 	Link            string   `orm:"type(text)"`
@@ -23,17 +23,18 @@ func (a *AdLink) TableName() string {
 }
 
 // CreateAdLink insert a new AdLink into database and returns last inserted Id on success.
-func CreateAdLink(adLink *AdLink) (id int64, err error) {
+func CreateAdLink(adLink *AdLink) (int64, error) {
 	ormer := orm.NewOrm()
-	id, err = ormer.Insert(adLink)
-	return
+	id, err := ormer.Insert(adLink)
+
+	return id, err
 }
 
 // GetAdLinkById retrieves AdLink by Id. Returns error if Id doesn't exist
-func GetAdLinkById(id int64) (adLink *AdLink, err error) {
+func GetAdLinkById(id int64) (*AdLink, error) {
 	querySeter := adLinkQuerySeter().Filter("Id", id).RelatedSel()
-	adLink = &AdLink{}
-	err = querySeter.One(adLink)
+	adLink := &AdLink{}
+	err := querySeter.One(adLink)
 	if err != nil {
 		return nil, err
 	}
@@ -42,14 +43,16 @@ func GetAdLinkById(id int64) (adLink *AdLink, err error) {
 }
 
 // GetAdLinksByResultId retrieves all AdLinks with Result Id. Returns empty list if no records exist
-func GetAdLinksByResultId(resultId int64) (adLinks []*AdLink, err error) {
+func GetAdLinksByResultId(resultId int64) ([]*AdLink, error) {
 	querySeter := adLinkQuerySeter().Filter("result_id", resultId).RelatedSel()
-	_, err = querySeter.All(&adLinks)
+	adLinks := []*AdLink{}
+	_, err := querySeter.All(&adLinks)
 
 	return adLinks, err
 }
 
 func adLinkQuerySeter() orm.QuerySeter {
 	ormer := orm.NewOrm()
+
 	return ormer.QueryTable(AdLink{})
 }
