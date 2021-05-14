@@ -10,7 +10,7 @@ import (
 )
 
 var _ = Describe("Link", func() {
-	Describe("CreateLink", func() {
+	Describe("#CreateLink", func() {
 		Context("given link with valid params", func() {
 			It("returns the link ID", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")

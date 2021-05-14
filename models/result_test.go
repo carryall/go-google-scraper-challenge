@@ -10,7 +10,7 @@ import (
 )
 
 var _ = Describe("Result", func() {
-	Describe("CreateResult", func() {
+	Describe("#CreateResult", func() {
 		Context("given result with valid params", func() {
 			It("returns the result ID", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
