@@ -53,7 +53,7 @@ func GetResultById(id int64) (*Result, error) {
 // GetResultsByUserId retrieves all Results with User Id. Returns empty list if no records exist
 func GetResultsByUserId(userId int64) ([]*Result, error) {
 	querySeter := resultQuerySeter().Filter("user_id", userId).RelatedSel()
-	results := []*Result{}
+	var results []*Result
 	_, err := querySeter.All(&results)
 
 	return results, err

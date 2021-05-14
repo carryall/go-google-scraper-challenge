@@ -43,7 +43,7 @@ func GetLinkById(id int64) (*Link, error) {
 // GetLinksByResultId retrieves all Links with Result Id. Returns empty list if no records exist
 func GetLinksByResultId(resultId int64) ([]*Link, error) {
 	querySeter := linkQuerySeter().Filter("result_id", resultId).RelatedSel()
-	links := []*Link{}
+	var links []*Link
 	_, err := querySeter.All(&links)
 
 	return links, err

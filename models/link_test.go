@@ -94,7 +94,7 @@ var _ = Describe("Link", func() {
 					Fail("Failed to get links with Result Id")
 				}
 
-				LinkIds := []int64{}
+				var LinkIds []int64
 				for _, a := range links {
 					LinkIds = append(LinkIds, a.Id)
 				}

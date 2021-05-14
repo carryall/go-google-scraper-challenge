@@ -47,7 +47,7 @@ func (sessionForm *SessionForm) Save() (*models.User, []error) {
 	}
 
 	if !valid {
-		errs := []error{}
+		var errs []error
 		for _, err := range validation.Errors {
 			errs = append(errs, err)
 		}

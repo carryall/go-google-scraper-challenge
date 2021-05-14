@@ -110,7 +110,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to get results with User Id")
 				}
 
-				resultIds := []int64{}
+				var resultIds []int64
 				for _, r := range results {
 					resultIds = append(resultIds, r.Id)
 				}

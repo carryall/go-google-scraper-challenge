@@ -44,7 +44,7 @@ func (registrationForm *RegistrationForm) Save() (*models.User, []error) {
 	}
 
 	if !valid {
-		errors := []error{}
+		var errors []error
 		for _, err := range validation.Errors {
 			errors = append(errors, err)
 		}

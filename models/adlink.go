@@ -45,7 +45,7 @@ func GetAdLinkById(id int64) (*AdLink, error) {
 // GetAdLinksByResultId retrieves all AdLinks with Result Id. Returns empty list if no records exist
 func GetAdLinksByResultId(resultId int64) ([]*AdLink, error) {
 	querySeter := adLinkQuerySeter().Filter("result_id", resultId).RelatedSel()
-	adLinks := []*AdLink{}
+	var adLinks []*AdLink
 	_, err := querySeter.All(&adLinks)
 
 	return adLinks, err

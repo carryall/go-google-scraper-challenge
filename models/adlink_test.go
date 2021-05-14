@@ -99,7 +99,7 @@ var _ = Describe("AdLink", func() {
 					Fail("Failed to get adlinks with Result Id")
 				}
 
-				AdLinkIds := []int64{}
+				var AdLinkIds []int64
 				for _, a := range adLinks {
 					AdLinkIds = append(AdLinkIds, a.Id)
 				}
