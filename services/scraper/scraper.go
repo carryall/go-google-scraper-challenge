@@ -26,23 +26,19 @@ var scrapingResults = map[string]int64{}
 const GOOGLE_SEARCH_URL = "http://www.google.com/search?q=%s"
 
 func Search(keywords []string, user *models.User) {
-	collector := colly.NewCollector(colly.Async(true))
+	queue := setupQueue(user, keywords)
 
+	startScraping(queue)
+}
+
+func setupQueue(user *models.User, keywords []string) *queue.Queue {
 	searchQueue, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
 	if err != nil {
 		log.Fatal("Failed to create a queue", err.Error())
 	}
 
 	for _, k := range keywords {
-		result := &models.Result{
-			User: user,
-			Keyword: k,
-		}
-		resultID, err := models.CreateResult(result)
-		if err != nil {
-			log.Fatal("Failed to create result", err.Error())
-		}
-		scrapingResults[k] = resultID
+		scrapingResults[k] = createResult(user, k)
 
 		escapedKeyword := url.QueryEscape(k)
 		err = searchQueue.AddURL(fmt.Sprintf(GOOGLE_SEARCH_URL, escapedKeyword))
@@ -51,19 +47,30 @@ func Search(keywords []string, user *models.User) {
 		}
 	}
 
-	collector.OnRequest(RequestHandler)
-	collector.OnResponse(ResponseHandler)
-	collector.OnError(ErrorHandler)
+	return searchQueue
+}
 
-	collector.OnHTML(selectors["wholePage"], func(e *colly.HTMLElement) {
-		result := getResultFromContext(e.Request.Ctx)
-		result.Status = models.ResultStatusPending
-		result.PageCache = string(e.Response.Body)
-		err = models.UpdateResultById(result)
-		if err != nil {
-			log.Fatal("Failed to update result page cache", err.Error())
-		}
-	})
+func createResult(user *models.User, keyword string) int64  {
+	result := &models.Result{
+		User: user,
+		Keyword: keyword,
+	}
+	resultID, err := models.CreateResult(result)
+	if err != nil {
+		log.Fatal("Failed to create result", err.Error())
+	}
+
+	return resultID
+}
+
+func startScraping(queue *queue.Queue)  {
+	collector := colly.NewCollector(colly.Async(true))
+
+	collector.OnRequest(requestHandler)
+	collector.OnResponse(responseHandler)
+	collector.OnError(errorHandler)
+
+	collector.OnHTML(selectors["wholePage"], wholePageCollector)
 
 	collector.OnHTML(selectors["nonAds"], func(e *colly.HTMLElement) {
 		addNonAdLinkToResult(e)
@@ -85,15 +92,15 @@ func Search(keywords []string, user *models.User) {
 		addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionBottom, e)
 	})
 
-	collector.OnScraped(finishScrapingResult)
+	collector.OnScraped(finishScrapingHandler)
 
-	err = searchQueue.Run(collector)
+	err := queue.Run(collector)
 	if err != nil {
 		log.Println("Failed to run the queue", err.Error())
 	}
 }
 
-func RequestHandler (request *colly.Request) {
+func requestHandler(request *colly.Request) {
 	userAgent := RandomUserAgent()
 	request.Headers.Set("User-Agent", userAgent)
 
@@ -102,46 +109,21 @@ func RequestHandler (request *colly.Request) {
 	request.Ctx.Put("resultID", fmt.Sprint(resultIDFromKeyword(keyword)))
 }
 
-func ResponseHandler (response *colly.Response) {
+func responseHandler(response *colly.Response) {
 	log.Println("Visited", response.Request.URL)
 }
 
-func ErrorHandler(response *colly.Response, err error) {
+func errorHandler(response *colly.Response, err error) {
 	log.Println("Failed to request URL:", response.Request.URL, "with response:", response, "\nError:", err)
 }
 
-func getResultFromContext(context *colly.Context) *models.Result {
-	resultID := getResultIDFromContext(context)
-
-	result, err := models.GetResultById(resultID)
+func wholePageCollector(e *colly.HTMLElement) {
+	result := getResultFromContext(e.Request.Ctx)
+	result.PageCache = string(e.Response.Body)
+	err := models.UpdateResultById(result)
 	if err != nil {
-		log.Fatal("Failed to get result by ID", err.Error())
+		log.Fatal("Failed to update result page cache", err.Error())
 	}
-
-	return result
-}
-
-func getResultIDFromContext(context *colly.Context) int64 {
-	rID := context.Get("resultID")
-	resultID, err := num.ParseInt64(rID)
-	if err != nil {
-		log.Fatal("Failed to parse result ID", err.Error())
-	}
-
-	return resultID
-}
-
-func resultIDFromKeyword(keyword string) int64 {
-	return scrapingResults[keyword]
-}
-
-func keywordFromUrl(urlStr string) string {
-	parsedUrl, err := url.Parse(urlStr)
-	if err != nil {
-		log.Println("Failed to parse url string", err.Error())
-	}
-
-	return parsedUrl.Query().Get("q")
 }
 
 func addNonAdLinkToResult(element *colly.HTMLElement) {
@@ -178,7 +160,7 @@ func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTML
 	}
 }
 
-func finishScrapingResult(response *colly.Response) {
+func finishScrapingHandler(response *colly.Response) {
 	result := getResultFromContext(response.Ctx)
 	result.Status = models.ResultStatusCompleted
 	err := models.UpdateResultById(result)
@@ -186,4 +168,38 @@ func finishScrapingResult(response *colly.Response) {
 		log.Fatal("Failed to complete result", err.Error())
 	}
 	log.Println("Finished scraping for keyword:", result.Keyword)
+}
+
+func getResultFromContext(context *colly.Context) *models.Result {
+	resultID := getResultIDFromContext(context)
+
+	result, err := models.GetResultById(resultID)
+	if err != nil {
+		log.Fatal("Failed to get result by ID", err.Error())
+	}
+
+	return result
+}
+
+func getResultIDFromContext(context *colly.Context) int64 {
+	rID := context.Get("resultID")
+	resultID, err := num.ParseInt64(rID)
+	if err != nil {
+		log.Fatal("Failed to parse result ID", err.Error())
+	}
+
+	return resultID
+}
+
+func resultIDFromKeyword(keyword string) int64 {
+	return scrapingResults[keyword]
+}
+
+func keywordFromUrl(urlStr string) string {
+	parsedUrl, err := url.Parse(urlStr)
+	if err != nil {
+		log.Println("Failed to parse url string", err.Error())
+	}
+
+	return parsedUrl.Query().Get("q")
 }
