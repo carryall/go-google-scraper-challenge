@@ -10,7 +10,7 @@ import (
 )
 
 var _ = Describe("AdLink", func() {
-	Describe("CreateAdLink", func() {
+	Describe("#CreateAdLink", func() {
 		Context("given ad link with valid params", func() {
 			It("returns the ad link ID", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
