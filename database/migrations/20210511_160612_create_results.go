@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/beego/beego/v2/client/orm/migration"
 	"log"
+
+	"github.com/beego/beego/v2/client/orm/migration"
 )
 
 // DO NOT MODIFY
