@@ -40,5 +40,7 @@ jobs:
           heroku_app_name: $HEROKU_APP_NAME
           heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           usedocker: true
+          docker_build_args: |
+            DATABASE_URL
         env:
           APP_RUN_MODE: 'prod'
