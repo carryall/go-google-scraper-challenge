@@ -59,7 +59,7 @@ func Search(keywords []string, user *models.User) {
 
 	collector.OnHTML(selectors["wholePage"], func(e *colly.HTMLElement) {
 		result := getResultFromContext(e.Request.Ctx)
-		result.Status = results.Processing
+		result.Status = models.ResultStatusPending
 		result.PageCache = string(e.Response.Body)
 		err = models.UpdateResultById(result)
 		if err != nil {
@@ -72,19 +72,19 @@ func Search(keywords []string, user *models.User) {
 	})
 
 	collector.OnHTML(selectors["topImageAds"], func(e *colly.HTMLElement) {
-		addAdLinkToResult(adlinks.Image, adlinks.Top, e)
+		addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionTop, e)
 	})
 
 	collector.OnHTML(selectors["topLinkAds"], func(e *colly.HTMLElement) {
-		addAdLinkToResult(adlinks.Link, adlinks.Top, e)
+		addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionTop, e)
 	})
 
 	collector.OnHTML(selectors["sideImageAds"], func(e *colly.HTMLElement) {
-		addAdLinkToResult(adlinks.Side, adlinks.Image, e)
+		addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionSide, e)
 	})
 
 	collector.OnHTML(selectors["bottomAds"], func(e *colly.HTMLElement) {
-		addAdLinkToResult(adlinks.Bottom, adlinks.Link, e)
+		addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionBottom, e)
 	})
 
 	collector.OnScraped(finishScrapingResult)
@@ -112,7 +112,7 @@ func ErrorHandler(response *colly.Response, err error) {
 	log.Println("Failed to request URL:", response.Request.URL, "with response:", response, "\nError:", err)
 }
 
-func getResultFromContext(context *colly.Context) (result *models.Result) {
+func getResultFromContext(context *colly.Context) *models.Result {
 	resultID := getResultIDFromContext(context)
 
 	result, err := models.GetResultById(resultID)
@@ -123,7 +123,7 @@ func getResultFromContext(context *colly.Context) (result *models.Result) {
 	return result
 }
 
-func getResultIDFromContext(context *colly.Context) (resultID int64) {
+func getResultIDFromContext(context *colly.Context) int64 {
 	rID := context.Get("resultID")
 	resultID, err := num.ParseInt64(rID)
 	if err != nil {
@@ -133,11 +133,11 @@ func getResultIDFromContext(context *colly.Context) (resultID int64) {
 	return resultID
 }
 
-func resultIDFromKeyword(keyword string) (resultID int64) {
+func resultIDFromKeyword(keyword string) int64 {
 	return scrapingResults[keyword]
 }
 
-func keywordFromUrl(urlStr string) (keyword string) {
+func keywordFromUrl(urlStr string) string {
 	parsedUrl, err := url.Parse(urlStr)
 	if err != nil {
 		log.Println("Failed to parse url string", err.Error())
@@ -182,7 +182,7 @@ func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTML
 
 func finishScrapingResult(response *colly.Response) {
 	result := getResultFromContext(response.Ctx)
-	result.Status = results.Completed
+	result.Status = models.ResultStatusCompleted
 	err := models.UpdateResultById(result)
 	if err != nil {
 		log.Fatal("Failed to complete result", err.Error())
