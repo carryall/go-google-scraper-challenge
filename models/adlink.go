@@ -28,7 +28,7 @@ func init() {
 }
 
 // TableName set the custom table name to plural because the default table name is singular
-func (a *AdLink) TableName() string {
+func (al *AdLink) TableName() string {
 	return "ad_links"
 }
 

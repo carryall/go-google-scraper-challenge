@@ -16,7 +16,7 @@ func init() {
 }
 
 // TableName set the custom table name to plural because the default table name is singular
-func (a *Link) TableName() string {
+func (l *Link) TableName() string {
 	return "links"
 }
 
