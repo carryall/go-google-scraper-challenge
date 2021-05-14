@@ -3,7 +3,6 @@ package models_test
 import (
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
-	"go-google-scraper-challenge/models/results"
 	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -43,7 +42,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to add result: " + err.Error())
 				}
 
-				Expect(result.Status).To(Equal("pending"))
+				Expect(result.Status).To(Equal(models.ResultStatusPending))
 			})
 
 			It("returns NO error", func() {
@@ -55,6 +54,28 @@ var _ = Describe("Result", func() {
 				_, err := models.CreateResult(result)
 
 				Expect(err).To(BeNil())
+			})
+
+			Context("given result with status", func() {
+				It("sets status to given status", func() {
+					user := FabricateUser("dev@nimblehq.co", "password")
+					result := &models.Result{
+						User: user,
+						Keyword: "valid keyword",
+						Status: models.ResultStatusProcessing,
+					}
+					resultID, err := models.CreateResult(result)
+					if err != nil {
+						Fail("Failed to add result: " + err.Error())
+					}
+
+					result, err = models.GetResultById(resultID)
+					if err != nil {
+						Fail("Failed to add result: " + err.Error())
+					}
+
+					Expect(result.Status).To(Equal(models.ResultStatusProcessing))
+				})
 			})
 		})
 
@@ -161,7 +182,7 @@ var _ = Describe("Result", func() {
 			It("updates the result with given id", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				existResult := FabricateResult(user)
-				existResult.Status = results.Processing
+				existResult.Status = models.ResultStatusPending
 
 				err := models.UpdateResultById(existResult)
 				if err != nil {
@@ -174,7 +195,7 @@ var _ = Describe("Result", func() {
 				}
 
 				Expect(result.Keyword).To(Equal(existResult.Keyword))
-				Expect(result.Status).To(Equal(results.Processing))
+				Expect(result.Status).To(Equal(models.ResultStatusPending))
 			})
 		})
 

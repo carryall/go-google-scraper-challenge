@@ -2,7 +2,6 @@ package tests
 
 import (
 	"go-google-scraper-challenge/models"
-	"go-google-scraper-challenge/models/adlinks"
 	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/onsi/ginkgo"
@@ -86,8 +85,8 @@ func FabricateAdLink(result *models.Result) (adLink *models.AdLink)  {
 	adLink = &models.AdLink{
 		Result: result,
 		Link: "link",
-		Position: adlinks.Top,
-		Type: adlinks.Link,
+		Position: models.AdLinkPositionTop,
+		Type: models.AdLinkTypeLink,
 	}
 
 	adLinkID, err := models.CreateAdLink(adLink)

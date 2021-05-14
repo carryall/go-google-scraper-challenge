@@ -13,6 +13,16 @@ type AdLink struct {
 	Link            string   `orm:"type(text)"`
 }
 
+const (
+	// AdLink positions
+	AdLinkPositionTop = "top"
+	AdLinkPositionBottom = "bottom"
+	AdLinkPositionSide = "side"
+	// AdLink types
+	AdLinkTypeImage = "image"
+	AdLinkTypeLink = "link"
+)
+
 func init() {
 	orm.RegisterModel(new(AdLink))
 }

@@ -3,22 +3,28 @@ package models
 import (
 	"log"
 
-	"go-google-scraper-challenge/models/results"
-
 	"github.com/beego/beego/v2/client/orm"
 )
 
 type Result struct {
 	Base
 
-	User    *User     `orm:"rel(fk)"`
-	AdLinks []*AdLink `orm:"reverse(many)"`
-	Links   []*Link   `orm:"reverse(many)"`
+	User     *User      `orm:"rel(fk)"`
+	AdLinks  []*AdLink  `orm:"reverse(many)"`
+	Links    []*Link    `orm:"reverse(many)"`
 
-	Keyword       	string    `orm:"type(text)"`
-	Status			string    `orm:"type(text);default(pending)"`
-	PageCache	  	string    `orm:"type(text);null"`
+	Keyword     string  `orm:"type(text)"`
+	Status      string  `orm:"type(text);default(pending)"`
+	PageCache   string  `orm:"type(text);null"`
 }
+
+const (
+	//Result statuses
+	ResultStatusPending = "pending"
+	ResultStatusProcessing = "processing"
+	ResultStatusCompleted = "completed"
+	ResultStatusFailed = "failed"
+)
 
 func init() {
 	orm.RegisterModel(new(Result))
@@ -32,7 +38,6 @@ func (r *Result) TableName() string {
 // CreateResult insert a new Result into database and returns last inserted Id on success.
 func CreateResult(result *Result) (int64, error) {
 	ormer := orm.NewOrm()
-	result.Status = results.Pending
 	id, err := ormer.Insert(result)
 
 	return id, err

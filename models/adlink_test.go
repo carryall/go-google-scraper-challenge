@@ -3,7 +3,6 @@ package models_test
 import (
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
-	"go-google-scraper-challenge/models/adlinks"
 	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -18,8 +17,8 @@ var _ = Describe("AdLink", func() {
 				result := FabricateResult(user)
 				adLink := &models.AdLink{
 					Result:   result,
-					Position: adlinks.Top,
-					Type:     adlinks.Link,
+					Position: models.AdLinkPositionTop,
+					Type:     models.AdLinkTypeLink,
 				}
 				adLinkID, err := models.CreateAdLink(adLink)
 				if err != nil {
@@ -34,8 +33,8 @@ var _ = Describe("AdLink", func() {
 				result := FabricateResult(user)
 				adLink := &models.AdLink{
 					Result:   result,
-					Position: adlinks.Top,
-					Type:     adlinks.Link,
+					Position: models.AdLinkPositionTop,
+					Type:     models.AdLinkTypeLink,
 				}
 				_, err := models.CreateAdLink(adLink)
 
