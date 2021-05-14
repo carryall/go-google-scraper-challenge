@@ -35,8 +35,7 @@ COPY . .
 RUN go get github.com/beego/bee/v2
 
 # Migrate database
-# RUN bee migrate -driver=postgres -conn=$DATABASE_URL
-RUN make db/migrate
+RUN bee migrate -driver=postgres -conn=$DATABASE_URL -dir="database/migrations"
 
 FROM golang:1.15-alpine
 
