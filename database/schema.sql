@@ -161,6 +161,58 @@ ALTER SEQUENCE public.migrations_id_migration_seq OWNED BY public.migrations.id_
 
 
 --
+-- Name: oauth2_clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth2_clients (
+    id text NOT NULL,
+    secret text NOT NULL,
+    domain text NOT NULL,
+    data jsonb NOT NULL
+);
+
+
+ALTER TABLE public.oauth2_clients OWNER TO postgres;
+
+--
+-- Name: oauth2_tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.oauth2_tokens (
+    id bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    expires_at timestamp with time zone NOT NULL,
+    code text NOT NULL,
+    access text NOT NULL,
+    refresh text NOT NULL,
+    data jsonb NOT NULL
+);
+
+
+ALTER TABLE public.oauth2_tokens OWNER TO postgres;
+
+--
+-- Name: oauth2_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.oauth2_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.oauth2_tokens_id_seq OWNER TO postgres;
+
+--
+-- Name: oauth2_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.oauth2_tokens_id_seq OWNED BY public.oauth2_tokens.id;
+
+
+--
 -- Name: results; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -271,6 +323,13 @@ ALTER TABLE ONLY public.migrations ALTER COLUMN id_migration SET DEFAULT nextval
 
 
 --
+-- Name: oauth2_tokens id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth2_tokens ALTER COLUMN id SET DEFAULT nextval('public.oauth2_tokens_id_seq'::regclass);
+
+
+--
 -- Name: results id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -309,6 +368,22 @@ ALTER TABLE ONLY public.migrations
 
 
 --
+-- Name: oauth2_clients oauth2_clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth2_clients
+    ADD CONSTRAINT oauth2_clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth2_tokens oauth2_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.oauth2_tokens
+    ADD CONSTRAINT oauth2_tokens_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: results result_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -338,6 +413,34 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_oauth2_tokens_access; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_access ON public.oauth2_tokens USING btree (access);
+
+
+--
+-- Name: idx_oauth2_tokens_code; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_code ON public.oauth2_tokens USING btree (code);
+
+
+--
+-- Name: idx_oauth2_tokens_expires_at; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_expires_at ON public.oauth2_tokens USING btree (expires_at);
+
+
+--
+-- Name: idx_oauth2_tokens_refresh; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_oauth2_tokens_refresh ON public.oauth2_tokens USING btree (refresh);
 
 
 --
