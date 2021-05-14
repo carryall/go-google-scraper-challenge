@@ -34,8 +34,11 @@ COPY . .
 # Install command-line tool
 RUN go get github.com/beego/bee/v2
 
+RUN echo bee version
+RUN echo $DATABASE_URL
+
 # Migrate database
-RUN bee migrate -driver=postgres -conn=$DATABASE_URL -dir="database/migrations"
+RUN bee migrate -driver=postgres -conn=$DATABASE_URL
 
 FROM golang:1.15-alpine
 
