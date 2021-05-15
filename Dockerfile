@@ -42,16 +42,16 @@ COPY . .
 # Copy assets from assets builder
 COPY --from=assets-builder /app/static/. ./static/
 
-# Build the application
-RUN go build -o main .
-
-EXPOSE 8080
-
 # Install command-line tool
 RUN go get github.com/beego/bee/v2
 
 # Migrate database
-RUN bee migrate -driver=postgres -conn=$DATABASE_URL
+RUN make db/migrate
+
+# Build the application
+RUN go build -o main .
+
+EXPOSE 8080
 
 # Run the executable
 CMD ["./main"]
