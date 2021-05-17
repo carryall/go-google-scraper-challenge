@@ -10,6 +10,7 @@ require (
 	github.com/antchfx/xmlquery v1.3.4 // indirect
 	github.com/antchfx/xpath v1.1.11 // indirect
 	github.com/beego/beego/v2 v2.0.1
+	github.com/dnaeon/go-vcr v1.1.0
 	github.com/fasthttp-contrib/websocket v0.0.0-20160511215533-1f3b11f56072 // indirect
 	github.com/gavv/httpexpect v2.0.0+incompatible // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
@@ -33,6 +34,7 @@ require (
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
+	github.com/siddontang/go v0.0.0-20170517070808-cb568a3e5cc0
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	github.com/tidwall/buntdb v1.1.8 // indirect

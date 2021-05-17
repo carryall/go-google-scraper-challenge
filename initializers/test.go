@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"go-google-scraper-challenge/services/oauth"
 
@@ -52,10 +53,10 @@ func OverloadTestConfig() {
 	}
 }
 
-// CleanupDatabase cleanup database
-func CleanupDatabase(tableName string) {
+// CleanupDatabase cleanup the given database table
+func CleanupDatabase(tableNames []string) {
 	ormer := orm.NewOrm()
-	_, err := ormer.Raw("TRUNCATE TABLE `?`", tableName).Exec()
+	_, err := ormer.Raw("TRUNCATE TABLE `?`", strings.Join(tableNames[:], ",")).Exec()
 	if err != nil {
 		err := orm.RunSyncdb("default", true, false)
 		if err != nil {

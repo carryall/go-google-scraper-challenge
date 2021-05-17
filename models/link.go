@@ -8,7 +8,7 @@ type Link struct {
 	Base
 
 	Result     *Result  `orm:"rel(fk)"`
-	Link       string   `orm:"size(128)"`
+	Link       string   `orm:"type(text)"`
 }
 
 func init() {

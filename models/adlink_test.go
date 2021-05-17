@@ -149,8 +149,6 @@ var _ = Describe("AdLink", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
-		initializers.CleanupDatabase("results")
-		initializers.CleanupDatabase("ad_links")
+		initializers.CleanupDatabase([]string{"users", "results", "ad_links"})
 	})
 })

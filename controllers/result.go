@@ -37,7 +37,7 @@ func (c *ResultController) Create() {
 		"crypto currency",
 		"เตา balmuda",
 	}
-	scraper.Search(keywords)
+	scraper.Search(keywords, c.CurrentUser)
 
 	c.Redirect("/", http.StatusFound)
 }
