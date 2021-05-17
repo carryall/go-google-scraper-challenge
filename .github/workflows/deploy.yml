@@ -20,10 +20,8 @@ jobs:
         run: |
           if [[ $BRANCH_TAG = "latest" ]]
           then
-            echo "DATABASE_URL=${{ secrets.DATABASE_URL_PRODUCTION }}" >> $GITHUB_ENV
             echo "HEROKU_APP_NAME=${{ secrets.HEROKU_PRODUCTION_APP }}" >> $GITHUB_ENV
           else
-            echo "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" >> $GITHUB_ENV
             echo "HEROKU_APP_NAME=${{ secrets.HEROKU_STAGING_APP }}" >> $GITHUB_ENV
           fi
 
@@ -34,7 +32,5 @@ jobs:
           heroku_app_name: $HEROKU_APP_NAME
           heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           usedocker: true
-          docker_build_args: |
-            DATABASE_URL
         env:
           APP_RUN_MODE: 'prod'
