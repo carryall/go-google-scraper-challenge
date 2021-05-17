@@ -17,6 +17,8 @@ RUN make assets
 
 FROM golang:1.15-alpine AS migration
 
+ARG DATABASE_URL
+
 # Move to working directory /migration
 WORKDIR /migration
 
@@ -26,7 +28,7 @@ ENV GO111MODULE=on \
     GOOS=linux \
     GOARCH=amd64
 
-# Copy database related files
+# Copy the code into the container
 COPY . .
 
 # Install command-line tool
