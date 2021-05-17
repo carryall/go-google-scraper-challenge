@@ -16,23 +16,14 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch || github.ref }}
 
-      - name: Login Heroku
-        uses: akhileshns/heroku-deploy@v3.8.8
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: $HEROKU_APP_NAME
-          heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
-          justlogin: true
-
-      - name: Set Database URL
-        run: echo "DATABASE_URL=${{ heroku config:get DATABASE_URL }}" >> $GITHUB_ENV
-
       - name: Set environment variables
         run: |
           if [[ $BRANCH_TAG = "latest" ]]
           then
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL_PRODUCTION }}" >> $GITHUB_ENV
             echo "HEROKU_APP_NAME=${{ secrets.HEROKU_PRODUCTION_APP }}" >> $GITHUB_ENV
           else
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" >> $GITHUB_ENV
             echo "HEROKU_APP_NAME=${{ secrets.HEROKU_STAGING_APP }}" >> $GITHUB_ENV
           fi
 
