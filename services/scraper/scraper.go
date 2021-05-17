@@ -137,7 +137,7 @@ func addNonAdLinkToResult(element *colly.HTMLElement) {
 		}
 		_, err := models.CreateLink(link)
 		if err != nil {
-			log.Fatal("Failed to creat link", err.Error())
+			log.Fatal("Failed to creat link:", err.Error())
 		}
 	}
 }
@@ -155,7 +155,7 @@ func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTML
 		}
 		_, err := models.CreateAdLink(adLink)
 		if err != nil {
-			log.Fatal("Failed to creat adLink", err.Error())
+			log.Fatal("Failed to creat adLink:", err.Error())
 		}
 	}
 }
