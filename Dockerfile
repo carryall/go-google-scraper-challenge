@@ -1,4 +1,4 @@
-FROM  node:14.15-alpine as assets-builder
+FROM  node:14.15-alpine AS assets-builder
 
 RUN apk --no-cache add ca-certificates make
 
