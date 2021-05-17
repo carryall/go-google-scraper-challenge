@@ -210,7 +210,6 @@ var _ = Describe("Result", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
-		initializers.CleanupDatabase("results")
+		initializers.CleanupDatabase([]string{"users", "results"})
 	})
 })

@@ -145,8 +145,6 @@ var _ = Describe("Link", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
-		initializers.CleanupDatabase("results")
-		initializers.CleanupDatabase("links")
+		initializers.CleanupDatabase([]string{"users", "results", "links"})
 	})
 })

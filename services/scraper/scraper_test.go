@@ -59,9 +59,6 @@ var _ = Describe("Scraper", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
-		initializers.CleanupDatabase("results")
-		initializers.CleanupDatabase("links")
-		initializers.CleanupDatabase("ad_links")
+		initializers.CleanupDatabase([]string{"users", "results", "links", "ad_links"})
 	})
 })

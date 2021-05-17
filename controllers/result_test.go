@@ -56,6 +56,6 @@ var _ = Describe("ResultController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
+		initializers.CleanupDatabase([]string{"users", "results", "links", "ad_links"})
 	})
 })
