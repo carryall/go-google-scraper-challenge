@@ -46,7 +46,7 @@ COPY --from=assets-builder /app/static/. ./static/
 RUN go get github.com/beego/bee/v2
 
 # Migrate database
-RUN make db/migrate
+RUN bee migrate -driver=postgres -conn=$DATABASE_URL
 
 # Build the application
 RUN go build -o main .
