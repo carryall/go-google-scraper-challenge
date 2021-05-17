@@ -16,13 +16,15 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch || github.ref }}
 
-      - name: Set Database URL
+      - name: Login Heroku
         uses: akhileshns/heroku-deploy@v3.8.8
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: $HEROKU_APP_NAME
           heroku_email: ${{ secrets.HEROKU_ACCOUNT_EMAIL }}
           justlogin: true
+
+      - name: Set Database URL
         run: echo "DATABASE_URL=${{ heroku config:get DATABASE_URL }}" >> $GITHUB_ENV
 
       - name: Set environment variables
