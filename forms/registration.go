@@ -16,8 +16,8 @@ type RegistrationForm struct {
 }
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
-func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
-	userExist := models.UserEmailAlreadyExist(registrationForm.Email)
+func (rf *RegistrationForm) Valid(v *validation.Validation) {
+	userExist := models.UserEmailAlreadyExist(rf.Email)
 	if userExist {
 		validationError := v.SetError("Email", "User with this email already exist")
 		if validationError == nil {
@@ -25,7 +25,7 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 		}
 	}
 
-	if registrationForm.Password != registrationForm.PasswordConfirmation {
+	if rf.Password != rf.PasswordConfirmation {
 		validationError := v.SetError("PasswordConfirmation", "Password confirmation must match the password")
 		if validationError == nil {
 			log.Print("Failed to set error on validation")
@@ -35,15 +35,16 @@ func (registrationForm *RegistrationForm) Valid(v *validation.Validation) {
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (registrationForm *RegistrationForm) Save() (user *models.User, errors []error) {
+func (rf *RegistrationForm) Save() (*models.User, []error) {
 	validation := validation.Validation{}
 
-	valid, err := validation.Valid(registrationForm)
+	valid, err := validation.Valid(rf)
 	if err != nil {
 		return nil, []error{err}
 	}
 
 	if !valid {
+		var errors []error
 		for _, err := range validation.Errors {
 			errors = append(errors, err)
 		}
@@ -51,13 +52,13 @@ func (registrationForm *RegistrationForm) Save() (user *models.User, errors []er
 		return nil, errors
 	}
 
-	hashedPassword, err := helpers.HashPassword(registrationForm.Password)
+	hashedPassword, err := helpers.HashPassword(rf.Password)
 	if err != nil {
 		return nil, []error{err}
 	}
 
-	user = &models.User{
-		Email:          registrationForm.Email,
+	user := &models.User{
+		Email:          rf.Email,
 		HashedPassword: hashedPassword,
 	}
 

@@ -22,7 +22,7 @@ func (loginForm *LoginForm) Save() (errs []error) {
 	}
 
 	if !valid {
-		errs := []error{}
+		var errs []error
 		for _, err := range validation.Errors {
 			errs = append(errs, err)
 		}

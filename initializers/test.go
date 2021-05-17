@@ -24,6 +24,7 @@ func SetupTestEnvironment() {
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
 	SetupStaticPaths()
+	SetModelDefaultValueFilter()
 	SetLowercaseValidationErrors()
 	oauth.SetUpOauth()
 }
@@ -53,12 +54,12 @@ func OverloadTestConfig() {
 
 // CleanupDatabase cleanup database
 func CleanupDatabase(tableName string) {
-	o := orm.NewOrm()
-	_, err := o.Raw("TRUNCATE TABLE `?`", tableName).Exec()
+	ormer := orm.NewOrm()
+	_, err := ormer.Raw("TRUNCATE TABLE `?`", tableName).Exec()
 	if err != nil {
 		err := orm.RunSyncdb("default", true, false)
 		if err != nil {
-			log.Fatal("Failed to run sync database", err)
+			log.Fatal("Failed to sync database", err)
 		}
 	}
 }

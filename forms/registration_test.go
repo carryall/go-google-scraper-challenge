@@ -3,7 +3,7 @@ package forms_test
 import (
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/initializers"
-	. "go-google-scraper-challenge/test/helpers"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	"github.com/beego/beego/v2/core/validation"
 	. "github.com/onsi/ginkgo"
