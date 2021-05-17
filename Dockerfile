@@ -27,7 +27,7 @@ ENV GO111MODULE=on \
     GOARCH=amd64
 
 # Copy database related files
-COPY database/. ./database/
+COPY . .
 
 # Install command-line tool
 RUN go get github.com/beego/bee/v2
