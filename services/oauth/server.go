@@ -3,12 +3,12 @@ package oauth
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 	app_context "github.com/beego/beego/v2/server/web/context"
 	"github.com/jackc/pgx/v4"
@@ -26,12 +26,12 @@ var clientStore *pg.ClientStore
 func SetUpOauth() {
 	dbURL, err := web.AppConfig.String("db_url")
 	if err != nil {
-		log.Fatal("Database URL not found: ", err)
+		logs.Error("Database URL not found: ", err)
 	}
 
 	pgxConn, err := pgx.Connect(context.TODO(), dbURL)
 	if err != nil {
-		log.Fatal("Failed to connect to database: ", err)
+		logs.Error("Failed to connect to database: ", err)
 	}
 	manager := manage.NewDefaultManager()
 
@@ -39,13 +39,13 @@ func SetUpOauth() {
 	adapter := pgx4adapter.NewConn(pgxConn)
 	tokenStore, err := pg.NewTokenStore(adapter, pg.WithTokenStoreGCInterval(time.Minute))
 	if err != nil {
-		log.Fatal("Failed to create the token store: ", err)
+		logs.Error("Failed to create the token store: ", err)
 	}
 	defer tokenStore.Close()
 
 	store, err := pg.NewClientStore(adapter)
 	if err != nil {
-		log.Fatal("Failed to create the client store: ", err)
+		logs.Error("Failed to create the client store: ", err)
 	}
 
 	manager.MapTokenStorage(tokenStore)
@@ -74,7 +74,7 @@ func GetClientStore() *pg.ClientStore {
 }
 
 func internalErrorHandler(err error) (response *errors.Response) {
-	log.Println("Internal Error:", err.Error())
+	logs.Info("Internal Error:", err.Error())
 
 	response = errors.NewResponse(errors.ErrInvalidClient, errors.StatusCodes[errors.ErrInvalidClient])
 	response.Description = errors.Descriptions[errors.ErrInvalidClient]
@@ -82,7 +82,7 @@ func internalErrorHandler(err error) (response *errors.Response) {
 }
 
 func responseErrorHandler(re *errors.Response) {
-	log.Println("Oauth server response Error:", re.Error.Error())
+	logs.Info("Oauth server response Error:", re.Error.Error())
 }
 
 func passwordAuthorizationHandler(email string, password string) (userID string, err error) {

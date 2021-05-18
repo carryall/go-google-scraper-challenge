@@ -1,7 +1,6 @@
 package initializers
 
 import (
-	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -11,6 +10,7 @@ import (
 	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
 )
@@ -41,7 +41,7 @@ func AppRootDir() string {
 func SetWorkingDirectory(dir string) {
 	err := os.Chdir(dir)
 	if err != nil {
-		log.Fatal("Failed to set working directory", err.Error())
+		logs.Error("Failed to set working directory", err.Error())
 	}
 }
 
@@ -49,7 +49,7 @@ func SetWorkingDirectory(dir string) {
 func OverloadTestConfig() {
 	err := godotenv.Overload(".env.test")
 	if err != nil {
-		log.Fatal("Failed to overload test environment file", err.Error())
+		logs.Error("Failed to overload test environment file", err.Error())
 	}
 }
 
@@ -60,7 +60,7 @@ func CleanupDatabase(tableNames []string) {
 	if err != nil {
 		err := orm.RunSyncdb("default", true, false)
 		if err != nil {
-			log.Fatal("Failed to sync database", err)
+			logs.Error("Failed to sync database", err)
 		}
 	}
 }

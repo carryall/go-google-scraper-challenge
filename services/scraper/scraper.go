@@ -2,11 +2,11 @@ package scraper
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/queue"
 	"github.com/siddontang/go/num"
@@ -34,7 +34,7 @@ func Search(keywords []string, user *models.User) {
 func setupQueue(user *models.User, keywords []string) *queue.Queue {
 	searchQueue, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
 	if err != nil {
-		log.Fatal("Failed to create a queue", err.Error())
+		logs.Error("Failed to create a queue", err.Error())
 	}
 
 	for _, k := range keywords {
@@ -43,7 +43,7 @@ func setupQueue(user *models.User, keywords []string) *queue.Queue {
 		escapedKeyword := url.QueryEscape(k)
 		err = searchQueue.AddURL(fmt.Sprintf(GOOGLE_SEARCH_URL, escapedKeyword))
 		if err != nil {
-			log.Println("Failed to add url to queue", err.Error())
+			logs.Info("Failed to add url to queue", err.Error())
 		}
 	}
 
@@ -57,7 +57,7 @@ func createResult(user *models.User, keyword string) int64  {
 	}
 	resultID, err := models.CreateResult(result)
 	if err != nil {
-		log.Fatal("Failed to create result", err.Error())
+		logs.Error("Failed to create result", err.Error())
 	}
 
 	return resultID
@@ -96,7 +96,7 @@ func startScraping(queue *queue.Queue)  {
 
 	err := queue.Run(collector)
 	if err != nil {
-		log.Println("Failed to run the queue", err.Error())
+		logs.Info("Failed to run the queue", err.Error())
 	}
 }
 
@@ -104,17 +104,17 @@ func requestHandler(request *colly.Request) {
 	userAgent := RandomUserAgent()
 	request.Headers.Set("User-Agent", userAgent)
 
-	log.Println("Visiting", request.URL)
+	logs.Info("Visiting", request.URL)
 	keyword := keywordFromUrl(request.URL.String())
 	request.Ctx.Put("resultID", fmt.Sprint(resultIDFromKeyword(keyword)))
 }
 
 func responseHandler(response *colly.Response) {
-	log.Println("Visited", response.Request.URL)
+	logs.Info("Visited", response.Request.URL)
 }
 
 func errorHandler(response *colly.Response, err error) {
-	log.Println("Failed to request URL:", response.Request.URL, "with response:", response, "\nError:", err)
+	logs.Info("Failed to request URL:", response.Request.URL, "with response:", response, "\nError:", err)
 }
 
 func wholePageCollector(e *colly.HTMLElement) {
@@ -122,7 +122,7 @@ func wholePageCollector(e *colly.HTMLElement) {
 	result.PageCache = string(e.Response.Body)
 	err := models.UpdateResultById(result)
 	if err != nil {
-		log.Fatal("Failed to update result page cache", err.Error())
+		logs.Error("Failed to update result page cache", err.Error())
 	}
 }
 
@@ -137,7 +137,7 @@ func addNonAdLinkToResult(element *colly.HTMLElement) {
 		}
 		_, err := models.CreateLink(link)
 		if err != nil {
-			log.Fatal("Failed to creat link:", err.Error())
+			logs.Error("Failed to creat link:", err.Error())
 		}
 	}
 }
@@ -155,7 +155,7 @@ func addAdLinkToResult(linkType string, linkPosition string, element *colly.HTML
 		}
 		_, err := models.CreateAdLink(adLink)
 		if err != nil {
-			log.Fatal("Failed to creat adLink:", err.Error())
+			logs.Error("Failed to creat adLink:", err.Error())
 		}
 	}
 }
@@ -165,9 +165,9 @@ func finishScrapingHandler(response *colly.Response) {
 	result.Status = models.ResultStatusCompleted
 	err := models.UpdateResultById(result)
 	if err != nil {
-		log.Fatal("Failed to complete result", err.Error())
+		logs.Error("Failed to complete result", err.Error())
 	}
-	log.Println("Finished scraping for keyword:", result.Keyword)
+	logs.Info("Finished scraping for keyword:", result.Keyword)
 }
 
 func getResultFromContext(context *colly.Context) *models.Result {
@@ -175,7 +175,7 @@ func getResultFromContext(context *colly.Context) *models.Result {
 
 	result, err := models.GetResultById(resultID)
 	if err != nil {
-		log.Fatal("Failed to get result by ID", err.Error())
+		logs.Error("Failed to get result by ID", err.Error())
 	}
 
 	return result
@@ -185,7 +185,7 @@ func getResultIDFromContext(context *colly.Context) int64 {
 	rID := context.Get("resultID")
 	resultID, err := num.ParseInt64(rID)
 	if err != nil {
-		log.Fatal("Failed to parse result ID", err.Error())
+		logs.Error("Failed to parse result ID", err.Error())
 	}
 
 	return resultID
@@ -198,7 +198,7 @@ func resultIDFromKeyword(keyword string) int64 {
 func keywordFromUrl(urlStr string) string {
 	parsedUrl, err := url.Parse(urlStr)
 	if err != nil {
-		log.Println("Failed to parse url string", err.Error())
+		logs.Info("Failed to parse url string", err.Error())
 	}
 
 	return parsedUrl.Query().Get("q")

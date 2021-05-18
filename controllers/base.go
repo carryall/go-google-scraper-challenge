@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 )
 
@@ -34,7 +34,7 @@ func (b *BaseController) Prepare() {
 func (b *BaseController) SetCurrentUser(user *models.User) {
 	err := b.SetSession(CurrentUserKey, user.Id)
 	if err != nil {
-		log.Fatal("Fail to set current user", err.Error())
+		logs.Error("Fail to set current user", err.Error())
 	}
 }
 

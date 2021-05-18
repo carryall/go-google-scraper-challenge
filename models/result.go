@@ -1,9 +1,8 @@
 package models
 
 import (
-	"log"
-
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/beego/beego/v2/core/logs"
 )
 
 type Result struct {
@@ -77,7 +76,7 @@ func UpdateResultById(result *Result) error {
 		return err
 	}
 
-	log.Println("Updated ", num, " results in database")
+	logs.Info("Updated ", num, " results in database")
 	return nil
 }
 

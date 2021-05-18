@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/beego/beego/v2/client/orm/migration"
-	"log"
+	"github.com/beego/beego/v2/core/logs"
 )
 
 // DO NOT MODIFY
@@ -17,7 +17,7 @@ func init() {
 
 	err := migration.Register("CreateSession_20210218_130252", m)
 	if err != nil {
-		log.Fatal("Migration failed:", err)
+		logs.Error("Migration failed:", err)
 	}
 }
 
