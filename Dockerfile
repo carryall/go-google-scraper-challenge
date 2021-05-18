@@ -4,13 +4,13 @@ RUN apk --no-cache add ca-certificates make
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json ./
 COPY assets/. ./assets/
 
 ADD .env.example ./.env
 COPY Makefile ./Makefile
 
-RUN npm install
+RUN yarn
 
 # Prepare all assets
 RUN make assets
