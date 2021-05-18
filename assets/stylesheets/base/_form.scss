@@ -35,7 +35,7 @@
   [multiple],
   textarea,
   select {
-    @apply border border-gray-300 text-gray-900 focus:border-indigo-500 focus:z-10 sm:text-sm;
+    @apply border-gray-300 text-gray-900 focus:border-indigo-500 focus:z-10 sm:text-sm;
   }
 
   [type='submit'] {

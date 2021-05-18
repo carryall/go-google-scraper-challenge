@@ -6,6 +6,7 @@ WORKDIR /app
 
 COPY package.json ./
 COPY assets/. ./assets/
+COPY tailwind.config.js ./
 
 ADD .env.example ./.env
 COPY Makefile ./Makefile
