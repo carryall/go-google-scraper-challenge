@@ -140,6 +140,6 @@ var _ = Describe("Forms/UploadForm", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase([]string{"users", "results", "links", "ad_links"})
+		initializers.CleanupDatabase([]string{"users"})
 	})
 })
