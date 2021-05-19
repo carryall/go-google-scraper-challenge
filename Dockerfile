@@ -4,7 +4,7 @@ RUN apk --no-cache add ca-certificates make
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json yarn.lock ./
 COPY assets/. ./assets/
 COPY tailwind.config.js ./
 
