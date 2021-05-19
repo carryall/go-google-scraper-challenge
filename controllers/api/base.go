@@ -28,6 +28,6 @@ func (this *BaseController) ResponseWithError(errorMessage string, status int) {
 
 	err := controller.ServeJSON()
 	if err != nil {
-		logs.Info("Failed to serve JSON response", err.Error())
+		logs.Info("Failed to serve JSON response:", err.Error())
 	}
 }

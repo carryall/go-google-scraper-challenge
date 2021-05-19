@@ -43,7 +43,7 @@ func setupQueue(user *models.User, keywords []string) *queue.Queue {
 		escapedKeyword := url.QueryEscape(k)
 		err = searchQueue.AddURL(fmt.Sprintf(GOOGLE_SEARCH_URL, escapedKeyword))
 		if err != nil {
-			logs.Info("Failed to add url to queue", err.Error())
+			logs.Info("Failed to add url to queue:", err.Error())
 		}
 	}
 
@@ -96,7 +96,7 @@ func startScraping(queue *queue.Queue)  {
 
 	err := queue.Run(collector)
 	if err != nil {
-		logs.Info("Failed to run the queue", err.Error())
+		logs.Info("Failed to run the queue:", err.Error())
 	}
 }
 
@@ -104,13 +104,13 @@ func requestHandler(request *colly.Request) {
 	userAgent := RandomUserAgent()
 	request.Headers.Set("User-Agent", userAgent)
 
-	logs.Info("Visiting", request.URL)
+	logs.Info("Visiting ", request.URL)
 	keyword := keywordFromUrl(request.URL.String())
 	request.Ctx.Put("resultID", fmt.Sprint(resultIDFromKeyword(keyword)))
 }
 
 func responseHandler(response *colly.Response) {
-	logs.Info("Visited", response.Request.URL)
+	logs.Info("Visited ", response.Request.URL)
 }
 
 func errorHandler(response *colly.Response, err error) {
@@ -198,7 +198,7 @@ func resultIDFromKeyword(keyword string) int64 {
 func keywordFromUrl(urlStr string) string {
 	parsedUrl, err := url.Parse(urlStr)
 	if err != nil {
-		logs.Info("Failed to parse url string", err.Error())
+		logs.Info("Failed to parse url string:", err.Error())
 	}
 
 	return parsedUrl.Query().Get("q")
