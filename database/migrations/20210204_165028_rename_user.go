@@ -1,9 +1,8 @@
 package main
 
 import (
-	"log"
-
 	"github.com/beego/beego/v2/client/orm/migration"
+	"github.com/beego/beego/v2/core/logs"
 )
 
 // DO NOT MODIFY
@@ -18,7 +17,7 @@ func init() {
 
 	err := migration.Register("RenameUser_20210204_165028", m)
 	if err != nil {
-		log.Fatal("Migration failed:", err)
+		logs.Error("Migration failed:", err)
 	}
 }
 

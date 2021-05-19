@@ -1,9 +1,9 @@
 package apicontrollers
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 )
 
@@ -28,6 +28,6 @@ func (this *BaseController) ResponseWithError(errorMessage string, status int) {
 
 	err := controller.ServeJSON()
 	if err != nil {
-		log.Println("Failed to serve JSON response", err.Error())
+		logs.Info("Failed to serve JSON response:", err.Error())
 	}
 }

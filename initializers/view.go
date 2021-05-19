@@ -1,12 +1,13 @@
 package initializers
 
 import (
-	"go-google-scraper-challenge/helpers"
 	"html/template"
 	"io/ioutil"
-	"log"
 	"strings"
 
+	"go-google-scraper-challenge/helpers"
+
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 )
 
@@ -22,7 +23,7 @@ func SetUpTemplateFunction() {
 	for n, fn := range templateFunctions {
 		err := web.AddFuncMap(n, fn)
 		if err != nil {
-			log.Fatal("Failed to add template function", err.Error())
+			logs.Error("Failed to add template function", err.Error())
 		}
 	}
 }
@@ -30,7 +31,7 @@ func SetUpTemplateFunction() {
 func renderFile(path string) template.HTML {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatal(err)
+		logs.Error(err)
 	}
 
 	return web.Str2html(string(content))

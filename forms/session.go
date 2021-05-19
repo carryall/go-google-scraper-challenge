@@ -1,11 +1,10 @@
 package forms
 
 import (
-	"log"
-
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
 )
 
@@ -22,14 +21,14 @@ func (sf *SessionForm) Valid(v *validation.Validation) {
 	if err != nil {
 		err := v.SetError("Email", "Incorrect email or password")
 		if err == nil {
-			log.Print("Failed to set error on validation")
+			logs.Info("Failed to set error on validation")
 		}
 	} else {
 		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, sf.Password)
 		if !validPassword {
 			err := v.SetError("Password", "Incorrect email or password")
 			if err == nil {
-				log.Print("Failed to set error on validation")
+				logs.Info("Failed to set error on validation")
 			}
 		} else {
 			currentUser = user

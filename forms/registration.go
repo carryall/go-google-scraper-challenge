@@ -1,11 +1,10 @@
 package forms
 
 import (
-	"log"
-
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
 )
 
@@ -21,14 +20,14 @@ func (rf *RegistrationForm) Valid(v *validation.Validation) {
 	if userExist {
 		validationError := v.SetError("Email", "User with this email already exist")
 		if validationError == nil {
-			log.Print("Failed to set error on validation")
+			logs.Info("Failed to set error on validation")
 		}
 	}
 
 	if rf.Password != rf.PasswordConfirmation {
 		validationError := v.SetError("PasswordConfirmation", "Password confirmation must match the password")
 		if validationError == nil {
-			log.Print("Failed to set error on validation")
+			logs.Info("Failed to set error on validation")
 		}
 	}
 }
