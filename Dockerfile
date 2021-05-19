@@ -4,13 +4,14 @@ RUN apk --no-cache add ca-certificates make
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock ./
 COPY assets/. ./assets/
+COPY tailwind.config.js ./
 
 ADD .env.example ./.env
 COPY Makefile ./Makefile
 
-RUN npm install
+RUN yarn
 
 # Prepare all assets
 RUN make assets
