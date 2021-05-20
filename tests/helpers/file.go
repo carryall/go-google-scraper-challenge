@@ -8,7 +8,10 @@ import (
 	"net/http"
 	"net/textproto"
 	"os"
+	"path"
 	"path/filepath"
+
+	"go-google-scraper-challenge/initializers"
 
 	"github.com/onsi/ginkgo"
 )
@@ -31,7 +34,7 @@ func GetMultipartFromFile(filePath string) (multipart.File, *multipart.FileHeade
 }
 
 func CreateRequestInfoFormFile(filePath string) (http.Header, *bytes.Buffer) {
-	file, err := os.Open(filePath)
+	file, err := os.Open(path.Join(initializers.AppRootDir(), filePath))
 	if err != nil {
 		ginkgo.Fail("Failed to open file: " + err.Error())
 	}
@@ -57,12 +60,17 @@ func CreateRequestInfoFormFile(filePath string) (http.Header, *bytes.Buffer) {
 	return headers, body
 }
 
-func createPart(multipartWriter *multipart.Writer, fileName string) io.Writer {
-	h := make(textproto.MIMEHeader)
-	h.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"; filename="%s"`, "file", fileName))
-	h.Set("Content-Type", mockFileType(fileName))
+func CreateMIMEHaader(fileName string) textproto.MIMEHeader {
+	header := make(textproto.MIMEHeader)
+	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"; filename="%s"`, "file", fileName))
+	header.Set("Content-Type", mockFileType(fileName))
 
-	writer, err := multipartWriter.CreatePart(h)
+	return header
+}
+
+func createPart(multipartWriter *multipart.Writer, fileName string) io.Writer {
+	header := CreateMIMEHaader(fileName)
+	writer, err := multipartWriter.CreatePart(header)
 	if err != nil {
 		ginkgo.Fail("Failed to create part:" + err.Error())
 	}
