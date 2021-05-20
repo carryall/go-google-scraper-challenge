@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/initializers"
+	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
@@ -54,6 +55,23 @@ var _ = Describe("ResultController", func() {
 
 				Expect(flash.Data["success"]).To(Equal("Successfully uploaded the file, the result status would be update soon"))
 				Expect(flash.Data["error"]).To(BeEmpty())
+			})
+
+			It("created results with given keywords", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
+
+				MakeAuthenticatedRequest("POST", "/results", header, body, user)
+
+				results, err := models.GetResultsByUserId(user.Id)
+				if err != nil {
+					Fail("Failed to get user results: " + err.Error())
+				}
+
+				for _, r := range results {
+					Expect(r.Keyword).To(SatisfyAny(Equal("cloud computing service"), Equal("crypto currency")))
+					Expect(r.Status).To(Equal(models.ResultStatusPending))
+				}
 			})
 		})
 
