@@ -22,7 +22,7 @@ var _ = Describe("Controller", func() {
 				testController.Init(context.NewContext(), "TestController", "ActionName", web.BeeApp)
 				helpers.SetControllerAttributes(&testController.Controller)
 
-				Expect(testController.Data["ControllerName"]).To(Equal("test-controller"))
+				Expect(testController.Data["ControllerName"]).To(Equal("test"))
 				Expect(testController.Data["ActionName"]).To(Equal("action-name"))
 			})
 		})
