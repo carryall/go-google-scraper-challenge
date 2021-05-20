@@ -34,7 +34,7 @@ func (c *ResultController) Create() {
 
 	file, fileHeader, err := c.GetFile("file")
 	if err != nil {
-		flash.Error("The specified file could not be uploaded :(")
+		flash.Error("Failed to upload file, please make sure the file is not corrupted")
 	} else {
 		uploadForm := forms.UploadForm{
 			File: file,
@@ -43,9 +43,11 @@ func (c *ResultController) Create() {
 		}
 		keywords, errs := uploadForm.Save()
 		if len(errs) > 0 {
-			flash.Error(err.Error())
+			for _, err := range errs {
+				flash.Error(err.Error())
+			}
 		} else {
-			flash.Success("Searching all keywords :)")
+			flash.Success("Successfully upload file, the result status would be update soon")
 			scraper.Search(keywords, c.CurrentUser)
 		}
 	}
