@@ -50,7 +50,7 @@ A project for Nimble Go Internal Certification on Web
   - put the new SVG file on `assets/images/icons` directory
   - install dependency
   ```sh
-  npm install
+  yarn
   ```
   - generate the SVG sprite
   ```sh
