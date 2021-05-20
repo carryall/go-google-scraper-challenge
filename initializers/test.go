@@ -19,7 +19,7 @@ import (
 func SetupTestEnvironment() {
 	appRoot := AppRootDir()
 
-	logs.SetLevel(logs.LevelError)
+	logs.SetLevel(logs.LevelWarning)
 
 	SetWorkingDirectory(appRoot)
 	OverloadTestConfig()
