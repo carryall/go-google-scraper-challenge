@@ -19,6 +19,8 @@ import (
 func SetupTestEnvironment() {
 	appRoot := AppRootDir()
 
+	logs.SetLevel(logs.LevelError)
+
 	SetWorkingDirectory(appRoot)
 	OverloadTestConfig()
 	SetUpTemplateFunction()

@@ -297,6 +297,6 @@ var _ = Describe("SessionController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase([]string{"users"})
+		initializers.CleanupDatabase([]string{"users", "session"})
 	})
 })

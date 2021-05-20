@@ -2,6 +2,8 @@ package apiforms_test
 
 import (
 	apiforms "go-google-scraper-challenge/forms/api"
+	"go-google-scraper-challenge/initializers"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -11,11 +13,13 @@ var _ = Describe("Forms/API/LoginForm", func() {
 	Describe("#Save", func() {
 		Context("given login form with valid params", func() {
 			It("returns NO error", func() {
+				FabricateUser("dev@nimblehq.co", "password")
+				oauthClient := FabricateOAuthClient()
 				form := apiforms.LoginForm{
 					Username:     "dev@nimblehq.co",
 					Password:     "password",
-					ClientId:     "client_id",
-					ClientSecret: "client_secret",
+					ClientId:     oauthClient.ClientID,
+					ClientSecret: oauthClient.ClientSecret,
 					GrantType:    "password",
 				}
 
@@ -122,5 +126,9 @@ var _ = Describe("Forms/API/LoginForm", func() {
 				})
 			})
 		})
+	})
+
+	AfterEach(func() {
+		initializers.CleanupDatabase([]string{"users", "oauth2_clients", "oauth2_tokens"})
 	})
 })
