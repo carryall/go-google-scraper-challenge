@@ -23,7 +23,7 @@ var _ = Describe("UserController", func() {
 		Context("given user is already signed in", func() {
 			It("redirects to root path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				response := MakeAuthenticatedRequest("GET", "/signup", nil, user)
+				response := MakeAuthenticatedRequest("GET", "/signup", nil, nil, user)
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -104,7 +104,7 @@ var _ = Describe("UserController", func() {
 					"password_confirmation": "password",
 				})
 
-				response := MakeAuthenticatedRequest("POST", "/users", body, user)
+				response := MakeAuthenticatedRequest("POST", "/users", nil, body, user)
 
 				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
 			})

@@ -40,8 +40,11 @@ func MakeRequest(method string, url string, body io.Reader) *http.Response {
 	return responseRecoder.Result()
 }
 
-func MakeAuthenticatedRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
+func MakeAuthenticatedRequest(method string, url string, header http.Header, body io.Reader, user *models.User) *http.Response {
 	request := HTTPRequest(method, url, body)
+	if header != nil {
+		request.Header = header
+	}
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	responseRecoder := httptest.NewRecorder()

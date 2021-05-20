@@ -47,7 +47,7 @@ func (c *ResultController) Create() {
 				flash.Error(err.Error())
 			}
 		} else {
-			flash.Success("Successfully upload file, the result status would be update soon")
+			flash.Success("Successfully uploaded the file, the result status would be update soon")
 			scraper.Search(keywords, c.CurrentUser)
 		}
 	}
