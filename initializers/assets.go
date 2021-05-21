@@ -7,4 +7,5 @@ func SetupStaticPaths() {
 	web.SetStaticPath("/css", "static/css")
 	web.SetStaticPath("/js", "static/js")
 	web.SetStaticPath("/svg", "static/symbol/svg")
+	web.SetStaticPath("/files", "static/files")
 }

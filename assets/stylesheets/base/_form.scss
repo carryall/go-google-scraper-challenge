@@ -1,5 +1,5 @@
 .form {
-  @apply space-y-6 rounded-md shadow-sm;
+  @apply space-y-6 rounded-md;
 
   [type='submit'],
   [type='text'],
@@ -53,6 +53,14 @@
 
     .form__input-group:last-of-type .form__input {
       @apply rounded-b-md;
+    }
+  }
+
+  &--inline {
+    @apply w-full inline-flex items-center justify-between;
+
+    > :not([hidden])[type='submit'] {
+      @apply w-auto mt-0;
     }
   }
 }
