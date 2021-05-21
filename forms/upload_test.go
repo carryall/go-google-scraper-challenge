@@ -30,6 +30,22 @@ var _ = Describe("Forms/UploadForm", func() {
 		})
 
 		Context("given upload form with INVALID params", func() {
+			Context("given NO file", func() {
+				It("adds an error to validation", func() {
+					user := FabricateUser("dev@nimblehq.co", "password")
+					form := forms.UploadForm{
+						User: user,
+					}
+
+					formValidation := validation.Validation{}
+					form.Valid(&formValidation)
+
+					Expect(len(formValidation.Errors)).To(Equal(1))
+					Expect(formValidation.Errors[0].Key).To(Equal("File"))
+					Expect(formValidation.Errors[0].Message).To(Equal("File cannot be empty"))
+				})
+			})
+
 			Context("given wrong file type", func() {
 				It("adds an error to validation", func() {
 					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/text.txt")
@@ -46,6 +62,25 @@ var _ = Describe("Forms/UploadForm", func() {
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("File"))
 					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect file type"))
+				})
+			})
+
+			Context("given an empty CSV file", func() {
+				It("adds an error to validation", func() {
+					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/empty.csv")
+					user := FabricateUser("dev@nimblehq.co", "password")
+					form := forms.UploadForm{
+						File: file,
+						FileHeader: fileHeader,
+						User: user,
+					}
+
+					formValidation := validation.Validation{}
+					form.Valid(&formValidation)
+
+					Expect(len(formValidation.Errors)).To(Equal(1))
+					Expect(formValidation.Errors[0].Key).To(Equal("File"))
+					Expect(formValidation.Errors[0].Message).To(Equal("File should contains at least one keyword"))
 				})
 			})
 
@@ -90,39 +125,9 @@ var _ = Describe("Forms/UploadForm", func() {
 				Expect(len(errors)).To(BeZero())
 				Expect(keywords).To(Equal(expectedKeyword))
 			})
-
-			Context("given an empty CSV file", func() {
-				It("returns an empty array", func() {
-					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/empty.csv")
-					user := FabricateUser("dev@nimblehq.co", "password")
-					form := forms.UploadForm{
-						File: file,
-						FileHeader: fileHeader,
-						User: user,
-					}
-
-					keywords, errors := form.Save()
-
-					Expect(len(errors)).To(BeZero())
-					Expect(keywords).To(BeEmpty())
-				})
-			})
 		})
 
 		Context("given upload form with an INVALID params", func() {
-			Context("given NO file", func() {
-				It("returns an invalid file error", func() {
-					user := FabricateUser("dev@nimblehq.co", "password")
-					form := forms.UploadForm{
-						User: user,
-					}
-
-					_, errors := form.Save()
-
-					Expect(errors[0].Error()).To(Equal("File cannot be empty"))
-				})
-			})
-
 			Context("given NO user", func() {
 				It("returns an invalid user error", func() {
 					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/invalid.csv")

@@ -31,23 +31,28 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 			if err == nil {
 				logs.Info("Failed to set error on validation")
 			}
-		}
-
-		keywords, err := helpers.GetFileContent(uf.File)
-		if err != nil {
-			err := v.SetError("File", "Unreadable file")
-			if err == nil {
-				logs.Info("Failed to set error on validation")
-			}
-		}
-
-		if len(keywords) > 1000 {
-			err := v.SetError("File", "File contains too many keywords")
-			if err == nil {
-				logs.Info("Failed to set error on validation")
-			}
 		} else {
-			uf.Keywords = keywords
+			keywords, err := helpers.GetFileContent(uf.File)
+			if err != nil {
+				err := v.SetError("File", "Unreadable file")
+				if err == nil {
+					logs.Info("Failed to set error on validation")
+				}
+			}
+
+			if len(keywords) < 1 {
+				err := v.SetError("File", "File should contains at least one keyword")
+				if err == nil {
+					logs.Info("Failed to set error on validation")
+				}
+			} else if len(keywords) > 1000 {
+				err := v.SetError("File", "File contains too many keywords")
+				if err == nil {
+					logs.Info("Failed to set error on validation")
+				}
+			} else {
+				uf.Keywords = keywords
+			}
 		}
 	}
 }
