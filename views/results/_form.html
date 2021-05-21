@@ -1,8 +1,13 @@
 <div class="card card-upload">
-    <form class="form form--rounded-input form-upload" action="/results" method="post" enctype="multipart/form-data">
-        <div class="form__input-group">
-            <input id="file" name="file" type="file" accept="text/csv" class="form__input" required>
-        </div>
+    <h3 class="card__title">Upload your keywords here</h3>
+    <p class="card__subtitle">
+        {{ render_icon "info" "icon--sm" }}
+        Only CSV file allowed, check
+        <a href="/files/sample.csv"> this sample file </a>
+        for the file format
+    </p>
+    <form class="form form--inline form-upload" action="/results" method="post" enctype="multipart/form-data">
+        <input id="file" name="file" type="file" accept="text/csv" class="form__input" required>
         <input type="submit" value="Submit" class="form__submit-button"/>
     </form>
 </div>

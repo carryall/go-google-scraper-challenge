@@ -1,3 +1,7 @@
 .icon {
-  @apply h-6 w-6;
+  @apply h-6 w-6 align-text-bottom;
+
+  &--sm {
+    @apply h-4 w-4;
+  }
 }

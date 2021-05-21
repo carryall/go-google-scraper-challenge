@@ -1,6 +1,10 @@
 package helpers
 
-import "github.com/beego/beego/v2/server/web"
+import (
+	"strings"
+
+	"github.com/beego/beego/v2/server/web"
+)
 
 var ActionsWithGetMethod = []string{"List", "New", "Edit", "Delete"}
 
@@ -8,6 +12,7 @@ var ActionsWithGetMethod = []string{"List", "New", "Edit", "Delete"}
 func SetControllerAttributes(controller *web.Controller) {
 	controllerName, actionName := controller.GetControllerAndAction()
 
+	controllerName = strings.Replace(controllerName, "Controller", "", 1)
 	controller.Data["ControllerName"] = ToKebabCase(controllerName)
 	controller.Data["ActionName"] = ToKebabCase(actionName)
 }

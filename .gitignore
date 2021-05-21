@@ -37,4 +37,6 @@ go-google-scraper-challenge
 *.tmp
 
 # Generated files
-/static/*
+/static/css/*
+/static/js/*
+/static/symbol/*
