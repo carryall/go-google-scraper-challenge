@@ -57,7 +57,7 @@ var _ = Describe("ResultController", func() {
 				Expect(flash.Data["error"]).To(BeEmpty())
 			})
 
-			It("created results with given keywords", func() {
+			It("creates results with given keywords", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 

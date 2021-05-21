@@ -38,41 +38,36 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 				if err == nil {
 					logs.Info("Failed to set error on validation")
 				}
-			}
-
-			if len(keywords) < 1 {
-				err := v.SetError("File", "File should contains at least one keyword")
-				if err == nil {
-					logs.Info("Failed to set error on validation")
-				}
-			} else if len(keywords) > 1000 {
-				err := v.SetError("File", "File contains too many keywords")
-				if err == nil {
-					logs.Info("Failed to set error on validation")
-				}
 			} else {
-				uf.Keywords = keywords
+				if len(keywords) < 1 {
+					err := v.SetError("File", "File should contains at least one keyword")
+					if err == nil {
+						logs.Info("Failed to set error on validation")
+					}
+				} else if len(keywords) > 1000 {
+					err := v.SetError("File", "File contains too many keywords")
+					if err == nil {
+						logs.Info("Failed to set error on validation")
+					}
+				} else {
+					uf.Keywords = keywords
+				}
 			}
 		}
 	}
 }
 
 // Save validates upload form, returns errors if validation failed.
-func (uf *UploadForm) Save() ([]string, []error) {
+func (uf *UploadForm) Save() ([]string, error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(uf)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	if !valid {
-		var errs []error
-		for _, err := range validation.Errors {
-			errs = append(errs, err)
-		}
-
-		return nil, errs
+		return nil, validation.Errors[0]
 	} else {
 		return uf.Keywords, nil
 	}

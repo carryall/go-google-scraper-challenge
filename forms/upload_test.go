@@ -120,9 +120,9 @@ var _ = Describe("Forms/UploadForm", func() {
 					"crypto currency",
 				}
 
-				keywords, errors := form.Save()
+				keywords, error := form.Save()
 
-				Expect(len(errors)).To(BeZero())
+				Expect(error).To(BeNil())
 				Expect(keywords).To(Equal(expectedKeyword))
 			})
 		})
@@ -136,9 +136,9 @@ var _ = Describe("Forms/UploadForm", func() {
 						FileHeader: fileHeader,
 					}
 
-					_, errors := form.Save()
+					_, error := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("User can not be empty"))
+					Expect(error.Error()).To(Equal("User can not be empty"))
 				})
 			})
 		})

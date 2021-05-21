@@ -41,13 +41,11 @@ func (c *ResultController) Create() {
 			FileHeader: fileHeader,
 			User: c.CurrentUser,
 		}
-		keywords, errs := uploadForm.Save()
-		if len(errs) > 0 {
-			for _, err := range errs {
-				flash.Error(err.Error())
-			}
+		keywords, err := uploadForm.Save()
+		if err != nil {
+			flash.Error(err.Error())
 		} else {
-			flash.Success("Successfully uploaded the file, the result status would be update soon")
+			flash.Success("Successfully uploaded the file, the result status would be updated soon")
 			scraper.Search(keywords, c.CurrentUser)
 		}
 	}
