@@ -14,12 +14,12 @@ type UploadForm struct {
 	File       multipart.File
 	FileHeader *multipart.FileHeader
 	User       *models.User          `valid:"Required"`
-	Keywords   []string
+	keywords   []string
 }
 
 // Valid adds custom validation to upload form, sets error when the validation failed.
 func (uf *UploadForm) Valid(v *validation.Validation) {
-	if uf.File == nil || uf.FileHeader == nil {
+	if !uf.validateFilePresence() {
 		err := v.SetError("File", "File cannot be empty")
 		if err == nil {
 			logs.Info("Failed to set error on validation")
@@ -28,8 +28,7 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 		return
 	}
 
-	fileType := helpers.GetFileType(uf.FileHeader)
-	if fileType != "text/csv" {
+	if !uf.validateFileType() {
 		err := v.SetError("File", "Incorrect file type")
 		if err == nil {
 			logs.Info("Failed to set error on validation")
@@ -38,8 +37,7 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 		return
 	}
 
-	keywords, err := helpers.GetFileContent(uf.File)
-	if err != nil {
+	if !uf.validateFileReadability() {
 		err := v.SetError("File", "Unreadable file")
 		if err == nil {
 			logs.Info("Failed to set error on validation")
@@ -48,18 +46,20 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 		return
 	}
 
-	if len(keywords) < 1 {
+	if !uf.validateKeywordsNotEmpty() {
 		err := v.SetError("File", "File should contains at least one keyword")
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
-	} else if len(keywords) > 1000 {
+
+		return
+	}
+
+	if !uf.validateKeywordsCountNotExceed() {
 		err := v.SetError("File", "File contains too many keywords")
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
-	} else {
-		uf.Keywords = keywords
 	}
 }
 
@@ -75,6 +75,31 @@ func (uf *UploadForm) Save() ([]string, error) {
 	if !valid {
 		return nil, validation.Errors[0]
 	} else {
-		return uf.Keywords, nil
+		return uf.keywords, nil
 	}
+}
+
+func (uf *UploadForm) validateFilePresence() bool {
+	return uf.File != nil && uf.FileHeader != nil
+}
+
+func (uf *UploadForm) validateFileType() bool {
+	fileType := helpers.GetFileType(uf.FileHeader)
+
+	return fileType == "text/csv"
+}
+
+func (uf *UploadForm) validateFileReadability() bool {
+	keywords, err := helpers.GetFileContent(uf.File)
+	uf.keywords = keywords
+
+	return err == nil
+}
+
+func (uf *UploadForm) validateKeywordsNotEmpty() bool {
+	return len(uf.keywords) > 0
+}
+
+func (uf *UploadForm) validateKeywordsCountNotExceed() bool {
+	return len(uf.keywords) <= 1000
 }
