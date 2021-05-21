@@ -2,19 +2,19 @@
 @import 'vendors/tailwind';
 
 // Base
-@import 'base/_body';
-@import 'base/_form';
-@import 'base/_typography';
+@import 'base/body';
+@import 'base/form';
+@import 'base/typography';
 
 // Components
-@import 'components/_alert';
-@import 'components/_app-header';
-@import 'components/_card';
-@import 'components/_icon';
+@import 'components/alert';
+@import 'components/app-header';
+@import 'components/card';
+@import 'components/icon';
 
 // Layouts
-@import 'layouts/_authentication';
-@import 'layouts/_default';
+@import 'layouts/authentication';
+@import 'layouts/default';
 
 // Screens
-@import 'screens/_result';
+@import 'screens/result';
