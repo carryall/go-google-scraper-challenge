@@ -63,7 +63,7 @@ func CreateRequestInfoFormFile(filePath string) (http.Header, *bytes.Buffer) {
 func CreateMIMEHaader(fileName string) textproto.MIMEHeader {
 	header := make(textproto.MIMEHeader)
 	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"; filename="%s"`, "file", fileName))
-	header.Set("Content-Type", mockFileType(fileName))
+	header.Set("Content-Type", getFileType(fileName))
 
 	return header
 }
@@ -78,12 +78,13 @@ func createPart(multipartWriter *multipart.Writer, fileName string) io.Writer {
 	return writer
 }
 
-func mockFileType(fileName string) string {
+func getFileType(fileName string) string {
 	switch filepath.Ext(fileName) {
 	case ".csv":
 		return "text/csv"
 	case ".txt":
 		return "text/txt"
+	default:
+		return ""
 	}
-	return ""
 }
