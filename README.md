@@ -59,7 +59,7 @@ A project for Nimble Go Internal Certification on Web
 
   #### Use SVG inline
   ```html
-  {{ render_icon "iconName" }}
+  {{ render_icon "iconName", "additional class names" }}
   ```
 
 ## API
