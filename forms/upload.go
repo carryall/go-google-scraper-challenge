@@ -24,36 +24,42 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
-	} else {
-		fileType := helpers.GetFileType(uf.FileHeader)
-		if fileType != "text/csv" {
-			err := v.SetError("File", "Incorrect file type")
-			if err == nil {
-				logs.Info("Failed to set error on validation")
-			}
-		} else {
-			keywords, err := helpers.GetFileContent(uf.File)
-			if err != nil {
-				err := v.SetError("File", "Unreadable file")
-				if err == nil {
-					logs.Info("Failed to set error on validation")
-				}
-			} else {
-				if len(keywords) < 1 {
-					err := v.SetError("File", "File should contains at least one keyword")
-					if err == nil {
-						logs.Info("Failed to set error on validation")
-					}
-				} else if len(keywords) > 1000 {
-					err := v.SetError("File", "File contains too many keywords")
-					if err == nil {
-						logs.Info("Failed to set error on validation")
-					}
-				} else {
-					uf.Keywords = keywords
-				}
-			}
+
+		return
+	}
+
+	fileType := helpers.GetFileType(uf.FileHeader)
+	if fileType != "text/csv" {
+		err := v.SetError("File", "Incorrect file type")
+		if err == nil {
+			logs.Info("Failed to set error on validation")
 		}
+
+		return
+	}
+
+	keywords, err := helpers.GetFileContent(uf.File)
+	if err != nil {
+		err := v.SetError("File", "Unreadable file")
+		if err == nil {
+			logs.Info("Failed to set error on validation")
+		}
+
+		return
+	}
+
+	if len(keywords) < 1 {
+		err := v.SetError("File", "File should contains at least one keyword")
+		if err == nil {
+			logs.Info("Failed to set error on validation")
+		}
+	} else if len(keywords) > 1000 {
+		err := v.SetError("File", "File contains too many keywords")
+		if err == nil {
+			logs.Info("Failed to set error on validation")
+		}
+	} else {
+		uf.Keywords = keywords
 	}
 }
 
