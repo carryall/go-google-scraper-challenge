@@ -84,7 +84,7 @@ var _ = Describe("Forms/UploadForm", func() {
 				})
 			})
 
-			Context("given CSV file with exceed 1000 keywords", func() {
+			Context("given an CSV file that contains more than 1000 keywords", func() {
 				It("adds an error to validation", func() {
 					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/invalid.csv")
 					user := FabricateUser("dev@nimblehq.co", "password")

@@ -3,11 +3,11 @@ package helpers_test
 import (
 	"mime/multipart"
 
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-
 	"go-google-scraper-challenge/helpers"
 	. "go-google-scraper-challenge/tests/helpers"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("File", func() {

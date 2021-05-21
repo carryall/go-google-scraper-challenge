@@ -78,4 +78,3 @@ func (uf *UploadForm) Save() ([]string, error) {
 		return uf.Keywords, nil
 	}
 }
-
