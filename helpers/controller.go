@@ -13,7 +13,7 @@ func SetControllerAttributes(controller *web.Controller) {
 	controllerName, actionName := controller.GetControllerAndAction()
 
 	controllerName = strings.Replace(controllerName, "Controller", "", 1)
-	controller.Data["ControllerName"] = ToKebabCase( controllerName)
+	controller.Data["ControllerName"] = ToKebabCase(controllerName)
 	controller.Data["ActionName"] = ToKebabCase(actionName)
 }
 
