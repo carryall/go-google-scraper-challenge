@@ -53,7 +53,7 @@ var _ = Describe("ResultController", func() {
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
 				flash := GetFlashMessage(response.Cookies())
 
-				Expect(flash.Data["success"]).To(Equal("Successfully uploaded the file, the result status would be update soon"))
+				Expect(flash.Data["success"]).To(Equal("Successfully uploaded the file, the result status would be updated soon"))
 				Expect(flash.Data["error"]).To(BeEmpty())
 			})
 
