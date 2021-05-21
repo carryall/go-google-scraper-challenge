@@ -28,10 +28,10 @@ var _ = Describe("File", func() {
 
 		Context("given a text file header", func() {
 			It("returns text file type", func() {
-				csvMIMEHeader := CreateMIMEHaader("text.txt")
+				textMIMEHeader := CreateMIMEHaader("text.txt")
 				fileHeader := multipart.FileHeader{
 					Filename: "text.txt",
-					Header: csvMIMEHeader,
+					Header: textMIMEHeader,
 					Size: 0,
 				}
 				fileType := helpers.GetFileType(&fileHeader)

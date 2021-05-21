@@ -21,7 +21,7 @@ func GetMultipartFromFile(filePath string) (multipart.File, *multipart.FileHeade
 
 	req, err := http.NewRequest("POST", "", body)
 	if err != nil {
-		ginkgo.Fail("Failed to create request form file: " + err.Error())
+		ginkgo.Fail("Failed to create request form file info: " + err.Error())
 	}
 	req.Header = httpHeader
 
@@ -46,7 +46,7 @@ func CreateRequestInfoFormFile(filePath string) (http.Header, *bytes.Buffer) {
 
 	_, err = io.Copy(writer, file)
 	if err != nil {
-		ginkgo.Fail("Failed to copy file to FormFile: " + err.Error())
+		ginkgo.Fail("Failed to copy file to Part: " + err.Error())
 	}
 
 	err = multipartWriter.Close()
