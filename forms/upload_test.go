@@ -72,7 +72,7 @@ var _ = Describe("Forms/UploadForm", func() {
 
 	Describe("#Save", func() {
 		Context("given upload form with a valid params", func() {
-			It("returns keywords from the given files", func() {
+			It("returns keywords from the given file", func() {
 				file, fileHeader := GetMultipartFromFile("tests/fixtures/files/valid.csv")
 				user := FabricateUser("dev@nimblehq.co", "password")
 				form := forms.UploadForm{
@@ -91,7 +91,7 @@ var _ = Describe("Forms/UploadForm", func() {
 				Expect(keywords).To(Equal(expectedKeyword))
 			})
 
-			Context("given an empty CSV files", func() {
+			Context("given an empty CSV file", func() {
 				It("returns an empty array", func() {
 					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/empty.csv")
 					user := FabricateUser("dev@nimblehq.co", "password")

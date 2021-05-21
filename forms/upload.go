@@ -35,7 +35,7 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 
 		keywords, err := helpers.GetFileContent(uf.File)
 		if err != nil {
-			err := v.SetError("File", "Unreadable files")
+			err := v.SetError("File", "Unreadable file")
 			if err == nil {
 				logs.Info("Failed to set error on validation")
 			}
