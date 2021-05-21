@@ -80,11 +80,11 @@ var _ = Describe("Forms/UploadForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("File"))
-					Expect(formValidation.Errors[0].Message).To(Equal("File should contains at least one keyword"))
+					Expect(formValidation.Errors[0].Message).To(Equal("File should contains between 1 to 1000 keywords"))
 				})
 			})
 
-			Context("given an CSV file that contains more than 1000 keywords", func() {
+			Context("given a CSV file that contains more than 1000 keywords", func() {
 				It("adds an error to validation", func() {
 					file, fileHeader := GetMultipartFromFile("tests/fixtures/files/invalid.csv")
 					user := FabricateUser("dev@nimblehq.co", "password")
@@ -99,7 +99,7 @@ var _ = Describe("Forms/UploadForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("File"))
-					Expect(formValidation.Errors[0].Message).To(Equal("File contains too many keywords"))
+					Expect(formValidation.Errors[0].Message).To(Equal("File should contains between 1 to 1000 keywords"))
 				})
 			})
 		})

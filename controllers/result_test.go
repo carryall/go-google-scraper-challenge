@@ -75,7 +75,31 @@ var _ = Describe("ResultController", func() {
 			})
 		})
 
-		Context("given a CSV file with more than 1000 keywords", func() {
+		Context("given a blank CSV file", func() {
+			It("redirects to root path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
+			})
+
+			It("sets the error message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(BeEmpty())
+				Expect(flash.Data["error"]).To(Equal("File should contains between 1 to 1000 keywords"))
+			})
+		})
+
+		Context("given a CSV file that contains more than 1000 keywords", func() {
 			It("redirects to root path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
@@ -95,7 +119,7 @@ var _ = Describe("ResultController", func() {
 				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["success"]).To(BeEmpty())
-				Expect(flash.Data["error"]).To(Equal("File contains too many keywords"))
+				Expect(flash.Data["error"]).To(Equal("File should contains between 1 to 1000 keywords"))
 			})
 		})
 

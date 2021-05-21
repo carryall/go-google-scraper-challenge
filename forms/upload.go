@@ -46,17 +46,8 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 		return
 	}
 
-	if !uf.validateKeywordsNotEmpty() {
-		err := v.SetError("File", "File should contains at least one keyword")
-		if err == nil {
-			logs.Info("Failed to set error on validation")
-		}
-
-		return
-	}
-
-	if !uf.validateKeywordsCountNotExceed() {
-		err := v.SetError("File", "File contains too many keywords")
+	if !uf.validateKeywordsLength() {
+		err := v.SetError("File", "File should contains between 1 to 1000 keywords")
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
@@ -96,10 +87,6 @@ func (uf *UploadForm) validateFileReadability() bool {
 	return err == nil
 }
 
-func (uf *UploadForm) validateKeywordsNotEmpty() bool {
-	return len(uf.keywords) > 0
-}
-
-func (uf *UploadForm) validateKeywordsCountNotExceed() bool {
-	return len(uf.keywords) <= 1000
+func (uf *UploadForm) validateKeywordsLength() bool {
+	return len(uf.keywords) > 0 && len(uf.keywords) <= 1000
 }
