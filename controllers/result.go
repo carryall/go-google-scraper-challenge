@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/services/scraper"
 
 	"github.com/beego/beego/v2/server/web"
@@ -29,15 +30,26 @@ func (c *ResultController) List() {
 
 func (c *ResultController) Create() {
 	c.EnsureAuthenticatedUser()
+	flash := web.NewFlash()
 
-	keywords := []string{
-		"ergonomic chair",
-		"cloud storage service",
-		"cloud computing service",
-		"crypto currency",
-		"เตา balmuda",
+	file, fileHeader, err := c.GetFile("file")
+	if err != nil {
+		flash.Error("Failed to upload file, please make sure the file is not corrupted")
+	} else {
+		uploadForm := forms.UploadForm{
+			File: file,
+			FileHeader: fileHeader,
+			User: c.CurrentUser,
+		}
+		keywords, err := uploadForm.Save()
+		if err != nil {
+			flash.Error(err.Error())
+		} else {
+			flash.Success("Successfully uploaded the file, the result status would be updated soon")
+			scraper.Search(keywords, c.CurrentUser)
+		}
 	}
-	scraper.Search(keywords, c.CurrentUser)
 
+	flash.Store(&c.Controller)
 	c.Redirect("/", http.StatusFound)
 }

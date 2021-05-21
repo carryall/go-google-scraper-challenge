@@ -76,6 +76,6 @@ var _ = Describe("OAuthClientController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase([]string{"oauth2_clients"})
+		initializers.CleanupDatabase([]string{"oauth2_clients", "oauth2_secrets"})
 	})
 })
