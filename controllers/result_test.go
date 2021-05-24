@@ -21,6 +21,22 @@ var _ = Describe("ResultController", func() {
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
+
+			Context("given user have results", func() {
+				It("renders list of user results", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					otherUser := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+					result3 := FabricateResult(otherUser)
+					response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
+					responseBody := GetResponseBody(response)
+
+					Expect(responseBody).To(ContainSubstring(result1.Keyword))
+					Expect(responseBody).To(ContainSubstring(result2.Keyword))
+					Expect(responseBody).NotTo(ContainSubstring(result3.Keyword))
+				})
+			})
 		})
 
 		Context("given user is NOT signed in", func() {

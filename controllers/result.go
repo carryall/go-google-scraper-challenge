@@ -24,13 +24,12 @@ func (c *ResultController) URLMapping() {
 
 func (c *ResultController) List() {
 	c.EnsureAuthenticatedUser()
-
 	c.TplName = "results/list.html"
-
 	web.ReadFromRequest(&c.Controller)
+
 	results, err := models.GetResultsByUserId(c.CurrentUser.Id)
 	if err != nil {
-		logs.Info("Failed to get current user results", err.Error())
+		logs.Warn("Failed to get current user results", err.Error())
 		c.Data["results"] = []*models.Result{}
 	}
 

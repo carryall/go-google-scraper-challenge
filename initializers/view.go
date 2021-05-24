@@ -48,5 +48,5 @@ func renderIcon(iconName string, classNames string) template.HTML {
 }
 
 func formatDateTime(dateTime time.Time) string {
-	return web.Date(dateTime.Local(), "d/m/Y H:i:s")
+	return web.Date(dateTime.Local(), "d/m/y H:i:s")
 }
