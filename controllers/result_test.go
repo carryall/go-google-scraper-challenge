@@ -87,7 +87,8 @@ var _ = Describe("ResultController", func() {
 
 				for _, r := range results {
 					Expect(r.Keyword).To(SatisfyAny(Equal("cloud computing service"), Equal("crypto currency")))
-					Expect(r.Status).To(Equal(models.ResultStatusPending))
+					Expect(r.Status).To(Equal(models.ResultStatusCompleted))
+					Expect(r.PageCache).NotTo(BeEmpty())
 				}
 			})
 		})

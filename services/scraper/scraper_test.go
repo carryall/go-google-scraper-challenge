@@ -3,7 +3,6 @@ package scraper_test
 import (
 	"fmt"
 	"net/url"
-	"time"
 
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
@@ -31,7 +30,6 @@ var _ = Describe("Scraper", func() {
 				keywords := []string{"ergonomic chair"}
 				scraper.Search(keywords, user)
 
-				time.Sleep(time.Second * 5)
 				userResults, err := models.GetResultsByUserId(user.Id)
 				if err != nil {
 					Fail("Failed to get user results")

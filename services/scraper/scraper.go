@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
 	"github.com/beego/beego/v2/core/logs"
@@ -64,7 +65,8 @@ func createResult(user *models.User, keyword string) int64  {
 }
 
 func startScraping(queue *queue.Queue)  {
-	collector := colly.NewCollector(colly.Async(true))
+	async := helpers.GetAppRunMode() != "test"
+	collector := colly.NewCollector(colly.Async(async))
 
 	collector.OnRequest(requestHandler)
 	collector.OnResponse(responseHandler)
@@ -175,7 +177,7 @@ func getResultFromContext(context *colly.Context) *models.Result {
 
 	result, err := models.GetResultById(resultID)
 	if err != nil {
-		logs.Error("Failed to get result by ID", err.Error())
+		logs.Error("Failed to get result by ID", resultID, err.Error())
 	}
 
 	return result
