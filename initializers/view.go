@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"strings"
+	"time"
 
 	"go-google-scraper-challenge/helpers"
 
@@ -18,6 +19,7 @@ func SetUpTemplateFunction() {
 		"sentence_case": helpers.ToSentenceCase,
 		"render_file":   renderFile,
 		"render_icon":   renderIcon,
+		"format_datetime": formatDateTime,
 	}
 
 	for n, fn := range templateFunctions {
@@ -43,4 +45,8 @@ func renderIcon(iconName string, classNames string) template.HTML {
 	</svg>`
 
 	return web.Str2html(iconTemplate)
+}
+
+func formatDateTime(dateTime time.Time) string {
+	return web.Date(dateTime.Local(), "d/m/Y H:i:s")
 }

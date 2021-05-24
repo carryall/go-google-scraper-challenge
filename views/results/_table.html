@@ -1,0 +1,4 @@
+{{ range $result := .results }}
+    <span>ID: {{ $result.Id }} Keyword: {{ $result.Keyword }} Status: {{ $result.Status }} Created At: {{ format_datetime $result.CreatedAt }}</span>
+    <br>
+{{ end }}
