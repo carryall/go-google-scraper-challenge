@@ -11,7 +11,7 @@ func DivideByHalf(results []*models.Result) [][]*models.Result {
 	divided := make([][]*models.Result, 2)
 	splitIndex := (len(results)+1)/2
 	divided[0] = results[0:splitIndex]
-	divided[1] = results[splitIndex:len(results)]
+	divided[1] = results[splitIndex:]
 
 	return divided
 }
