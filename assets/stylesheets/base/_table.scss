@@ -1,19 +1,23 @@
-table {
+.table {
   @apply my-4 shadow overflow-hidden border border-primary-200 rounded-md divide-y divide-primary-200;
 
-  thead {
+  .table-headers {
     @apply bg-primary-100;
 
-    th {
-      @apply px-6 py-3 text-left text-xs font-bold text-primary-500 uppercase tracking-wider;
+    .table-header {
+      @apply px-3 py-2 text-left text-xs font-bold text-primary-500 uppercase sm:px-6 sm:py-3 sm:font-medium sm:tracking-wide;
     }
   }
 
-  tbody {
+  .table-body {
     @apply bg-white divide-y divide-primary-200;
 
-    td {
-      @apply px-6 py-4 whitespace-nowrap;
+    .table-data {
+      @apply px-4 py-2 sm:px-6 sm:py-4;
+
+      &--unwrap {
+        @apply whitespace-nowrap;
+      }
     }
   }
 }

@@ -8,6 +8,18 @@
   }
 
   .table-wrapper {
-    @apply flex justify-around;
+    @apply flex flex-wrap justify-around;
+  }
+
+  .table-results {
+    @apply max-w-lg;
+
+    td {
+      @apply whitespace-normal;
+    }
+
+    td.table-results__date {
+      @apply text-sm text-gray-500;
+    }
   }
 }

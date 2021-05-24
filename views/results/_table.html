@@ -1,19 +1,19 @@
 {{ range $resultChunk := .dividedResults }}
-    <table class="table">
-        <thead>
+    <table class="table table-results">
+        <thead class="table-headers">
             <tr>
-                <th scope="col">Created At</th>
-                <th scope="col">Keyword</th>
-                <th scope="col">Status</th>
+                <th scope="col" class="table-header">Created At</th>
+                <th scope="col" class="table-header">Keyword</th>
+                <th scope="col" class="table-header">Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-body">
         {{ range $result := $resultChunk }}
-        <tr id="_{{ $result.Id }}">
-            <td>{{ format_datetime $result.CreatedAt }}</td>
-            <td>{{ $result.Keyword }}</td>
-            <td><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
-        </tr>
+            <tr id="{{ $result.Id }}">
+                <td class="table-data table-results__date">{{ format_datetime $result.CreatedAt }}</td>
+                <td class="table-data">{{ $result.Keyword }}</td>
+                <td class="table-data table-data--unwrap"><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
+            </tr>
         {{ end }}
         </tbody>
     </table>

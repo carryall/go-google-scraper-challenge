@@ -2,18 +2,18 @@
   @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full;
 
   &--pending {
-    @apply bg-nude-100 text-nude-800;
+    @apply bg-nude-300 text-nude-800;
   }
 
   &--processing {
-    @apply bg-brown-100 text-brown-800;
+    @apply bg-brown-300 text-brown-800;
   }
 
   &--completed {
-    @apply bg-olive-100 text-olive-800;
+    @apply bg-olive-300 text-olive-800;
   }
 
   &--failed {
-    @apply bg-crimson-100 text-crimson-800;
+    @apply bg-crimson-300 text-crimson-800;
   }
 }
