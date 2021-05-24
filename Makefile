@@ -63,6 +63,6 @@ test:
 
 test/run:
 	docker-compose -f docker-compose.test.yml up -d
-	sleep 3
+	sleep 5
 	APP_RUN_MODE=test go test -v -p 1 ./...
 	docker-compose -f docker-compose.test.yml down
