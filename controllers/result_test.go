@@ -23,7 +23,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			Context("given user have results", func() {
-				It("renders list of user results", func() {
+				It("renders user results", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					otherUser := FabricateUser(faker.Email(), faker.Password())
 					result1 := FabricateResult(user)
