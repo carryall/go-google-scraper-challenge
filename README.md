@@ -22,7 +22,13 @@ A project for Nimble Go Internal Certification on Web
   make assets
   ```
 
-### Run Database service, migrations and the Go application for development
+### Run Database service
+
+  ```sh
+  make db/setup
+  ```
+
+### Run migrations and the Go application for development
 
   ```sh
   make dev

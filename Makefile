@@ -37,8 +37,6 @@ assets/icon-sprite:
 	yarn generate-svg-sprite
 
 dev:
-	make db/setup
-	sleep 3
 	make db/migrate
 	bee run
 
@@ -61,8 +59,12 @@ lint:
 test:
 	make test/run ENV=test
 
-test/run:
+test/setup:
+	make test/db/setup ENV=test
+
+test/db/setup:
 	docker-compose -f docker-compose.test.yml up -d
-	sleep 5
+
+test/run:
 	APP_RUN_MODE=test go test -v -p 1 ./...
 	docker-compose -f docker-compose.test.yml down

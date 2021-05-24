@@ -1,11 +1,11 @@
 package initializers
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"go-google-scraper-challenge/services/oauth"
 
@@ -57,9 +57,15 @@ func OverloadTestConfig() {
 
 // CleanupDatabase cleanup the given database table
 func CleanupDatabase(tableNames []string) {
+	truncateSQL := ""
+	for _, t := range tableNames {
+		truncateSQL += fmt.Sprintf("TRUNCATE TABLE \"%s\" CASCADE;", t)
+	}
+
 	ormer := orm.NewOrm()
-	_, err := ormer.Raw("TRUNCATE TABLE `?`", strings.Join(tableNames[:], ",")).Exec()
+	_, err := ormer.Raw(truncateSQL).Exec()
 	if err != nil {
+		logs.Warn("FAILED TO TRUNCATE TABLE", tableNames, err.Error())
 		err := orm.RunSyncdb("default", true, false)
 		if err != nil {
 			logs.Error("Failed to sync database", err)

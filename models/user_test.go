@@ -50,7 +50,7 @@ var _ = Describe("User", func() {
 					}
 					userID, err := models.CreateUser(&user)
 
-					Expect(err.Error()).To(Equal(`pq: duplicate key value violates unique constraint "users_email_key"`))
+					Expect(err.Error()).To(Equal(`pq: duplicate key value violates unique constraint "user_email_key"`))
 					Expect(userID).To(Equal(int64(0)))
 				})
 			})
