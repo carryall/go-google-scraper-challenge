@@ -39,12 +39,6 @@ A project for Nimble Go Internal Certification on Web
 
 ## Testing
 
-### Run Database service for test environment
-
-  ```sh
-  make test/setup
-  ```
-
 ### Run test
 
   ```sh

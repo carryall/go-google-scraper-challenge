@@ -30,8 +30,5 @@ jobs:
       - name: Prepare assets
         run: make assets
 
-      - name: Setup test DB
-        run: make test/setup
-
       - name: Run test
         run: make test
