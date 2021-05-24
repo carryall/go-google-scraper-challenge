@@ -40,12 +40,11 @@ var _ = Describe("User", func() {
 		Context("given user with INVALID params", func() {
 			Context("given email that already exist in database", func() {
 				It("returns an error", func() {
-					email := faker.Email()
 					password := faker.Password()
-					FabricateUser(email, password)
+					existingUser := FabricateUser(faker.Email(), password)
 
 					user := models.User{
-						Email:          email,
+						Email:          existingUser.Email,
 						HashedPassword: password,
 					}
 					userID, err := models.CreateUser(&user)
@@ -85,10 +84,9 @@ var _ = Describe("User", func() {
 	Describe("#UserEmailAlreadyExist", func() {
 		Context("given user email exist in the system", func() {
 			It("returns true", func() {
-				email := faker.Email()
-				FabricateUser(email, faker.Password())
+				user := FabricateUser(faker.Email(), faker.Password())
 
-				userExist := models.UserEmailAlreadyExist(email)
+				userExist := models.UserEmailAlreadyExist(user.Email)
 
 				Expect(userExist).To(BeTrue())
 			})
@@ -106,10 +104,9 @@ var _ = Describe("User", func() {
 	Describe("#GetUserByEmail", func() {
 		Context("given user email exist in the system", func() {
 			It("returns the user", func() {
-				email := faker.Email()
-				existUser := FabricateUser(email, faker.Password())
+				existUser := FabricateUser(faker.Email(), faker.Password())
 
-				user, err := models.GetUserByEmail(email)
+				user, err := models.GetUserByEmail(existUser.Email)
 				if err != nil {
 					Fail("Failed to find user with given email")
 				}

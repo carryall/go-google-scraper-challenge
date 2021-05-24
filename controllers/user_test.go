@@ -100,11 +100,10 @@ var _ = Describe("UserController", func() {
 
 		Context("given user is already signed on", func() {
 			It("returns error", func() {
-				email := faker.Email()
 				password := faker.Password()
-				user := FabricateUser(email, password)
+				user := FabricateUser(faker.Email(), password)
 				body := GenerateRequestBody(map[string]string{
-					"email":                 email,
+					"email":                 user.Email,
 					"password":              password,
 					"password_confirmation": password,
 				})
