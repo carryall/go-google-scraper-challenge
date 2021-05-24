@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/initializers"
-	. "go-google-scraper-challenge/test/helpers"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -76,6 +76,6 @@ var _ = Describe("OAuthClientController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("oauth2_clients")
+		initializers.CleanupDatabase([]string{"oauth2_clients", "oauth2_secrets"})
 	})
 })

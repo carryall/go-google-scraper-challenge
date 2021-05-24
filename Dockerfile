@@ -1,19 +1,42 @@
-FROM  node:14.15-alpine as assets-builder
+FROM  node:14.15-alpine AS assets-builder
 
 RUN apk --no-cache add ca-certificates make
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock ./
 COPY assets/. ./assets/
+COPY tailwind.config.js ./
 
 ADD .env.example ./.env
 COPY Makefile ./Makefile
 
-RUN npm install
+RUN yarn
 
 # Prepare all assets
 RUN make assets
+
+FROM golang:1.15-alpine AS migration
+
+ARG DATABASE_URL
+
+# Move to working directory /migration
+WORKDIR /migration
+
+# Set necessary environment variables needed for our image
+ENV GO111MODULE=on \
+    CGO_ENABLE=0 \
+    GOOS=linux \
+    GOARCH=amd64
+
+# Copy the code into the container
+COPY . .
+
+# Install command-line tool
+RUN go get github.com/beego/bee/v2
+
+# Migrate database
+RUN bee migrate -driver=postgres -conn=$DATABASE_URL
 
 FROM golang:1.15-alpine
 

@@ -4,7 +4,8 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/initializers"
-	. "go-google-scraper-challenge/test/helpers"
+	"go-google-scraper-challenge/models"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -15,7 +16,7 @@ var _ = Describe("ResultController", func() {
 		Context("given user already signed in", func() {
 			It("renders with status 200", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				response := MakeAuthenticatedRequest("GET", "/", nil, user)
+				response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
@@ -33,15 +34,116 @@ var _ = Describe("ResultController", func() {
 	})
 
 	Describe("POST /results", func() {
-		Context("given user already signed in", func() {
+		Context("given a valid CSV file", func() {
 			It("redirects to root path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				body := GenerateRequestBody(nil)
-				response := MakeAuthenticatedRequest("POST", "/results", body, user)
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
 				Expect(currentPath).To(Equal("/"))
+			})
+
+			It("sets the success message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(Equal("Successfully uploaded the file, the result status would be updated soon"))
+				Expect(flash.Data["error"]).To(BeEmpty())
+			})
+
+			It("creates results with given keywords", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
+
+				MakeAuthenticatedRequest("POST", "/results", header, body, user)
+
+				results, err := models.GetResultsByUserId(user.Id)
+				if err != nil {
+					Fail("Failed to get user results: " + err.Error())
+				}
+
+				for _, r := range results {
+					Expect(r.Keyword).To(SatisfyAny(Equal("cloud computing service"), Equal("crypto currency")))
+					Expect(r.Status).To(Equal(models.ResultStatusPending))
+				}
+			})
+		})
+
+		Context("given a blank CSV file", func() {
+			It("redirects to root path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
+			})
+
+			It("sets the error message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(BeEmpty())
+				Expect(flash.Data["error"]).To(Equal("File should contains between 1 to 1000 keywords"))
+			})
+		})
+
+		Context("given a CSV file that contains more than 1000 keywords", func() {
+			It("redirects to root path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
+			})
+
+			It("sets the error message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
+
+				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(BeEmpty())
+				Expect(flash.Data["error"]).To(Equal("File should contains between 1 to 1000 keywords"))
+			})
+		})
+
+		Context("given an INVALID file type", func() {
+			It("redirects to root path", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
+
+				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/"))
+			})
+
+			It("sets the error message", func() {
+				user := FabricateUser("dev@nimblehq.co", "password")
+				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
+
+				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
+				flash := GetFlashMessage(response.Cookies())
+
+				Expect(flash.Data["success"]).To(BeEmpty())
+				Expect(flash.Data["error"]).To(Equal("Incorrect file type"))
 			})
 		})
 
@@ -56,6 +158,6 @@ var _ = Describe("ResultController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
+		initializers.CleanupDatabase([]string{"users", "results", "links", "ad_links"})
 	})
 })

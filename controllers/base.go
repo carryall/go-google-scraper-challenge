@@ -2,12 +2,12 @@ package controllers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 )
 
@@ -23,23 +23,23 @@ type BaseController struct {
 	actionName string
 }
 
-func (base *BaseController) Prepare() {
-	controller := &base.Controller
+func (b *BaseController) Prepare() {
+	controller := &b.Controller
 	helpers.SetControllerAttributes(controller)
 
-	base.controllerName, base.actionName = controller.GetControllerAndAction()
-	base.Layout = "layouts/default.html"
+	b.controllerName, b.actionName = controller.GetControllerAndAction()
+	b.Layout = "layouts/default.html"
 }
 
-func (base *BaseController) SetCurrentUser(user *models.User) {
-	err := base.SetSession(CurrentUserKey, user.Id)
+func (b *BaseController) SetCurrentUser(user *models.User) {
+	err := b.SetSession(CurrentUserKey, user.Id)
 	if err != nil {
-		log.Fatal("Fail to set current user", err.Error())
+		logs.Error("Fail to set current user", err.Error())
 	}
 }
 
-func (base *BaseController) GetCurrentUser() (user *models.User) {
-	userId := base.GetSession(CurrentUserKey)
+func (b *BaseController) GetCurrentUser() (*models.User) {
+	userId := b.GetSession(CurrentUserKey)
 	if userId == nil {
 		return nil
 	}
@@ -51,29 +51,30 @@ func (base *BaseController) GetCurrentUser() (user *models.User) {
 	return user
 }
 
-func (base *BaseController) ClearCurrentUser() error {
-	return base.DelSession(CurrentUserKey)
+func (b *BaseController) ClearCurrentUser() error {
+	return b.DelSession(CurrentUserKey)
 }
 
-func (base *BaseController) EnsureAuthenticatedUser() {
-	currentUser := base.GetCurrentUser()
+func (b *BaseController) EnsureAuthenticatedUser() {
+	currentUser := b.GetCurrentUser()
 	if currentUser == nil {
-		if helpers.IsActionWithGetMethod(base.actionName) {
-			base.Controller.Redirect("/signin", http.StatusFound)
+		if helpers.IsActionWithGetMethod(b.actionName) {
+			b.Controller.Redirect("/signin", http.StatusFound)
 		} else {
-			base.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
+			b.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
 		}
 	}
-	base.Controller.Data["CurrentUser"] = currentUser
+	b.CurrentUser = currentUser
+	b.Controller.Data["CurrentUser"] = currentUser
 }
 
-func (base *BaseController) EnsureGuestUser() {
-	currentUser := base.GetCurrentUser()
+func (b *BaseController) EnsureGuestUser() {
+	currentUser := b.GetCurrentUser()
 	if currentUser != nil {
-		if helpers.IsActionWithGetMethod(base.actionName) {
-			base.Controller.Redirect("/", http.StatusFound)
+		if helpers.IsActionWithGetMethod(b.actionName) {
+			b.Controller.Redirect("/", http.StatusFound)
 		} else {
-			base.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
+			b.Controller.Abort(fmt.Sprint(http.StatusMethodNotAllowed))
 		}
 	}
 }

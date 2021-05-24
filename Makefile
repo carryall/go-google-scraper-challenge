@@ -19,7 +19,7 @@ JS_DIST=$(DIST_DIR)/js
 build-dependencies:
 	go get github.com/beego/bee/v2
 	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.35.2
-	npm install
+	yarn
 
 assets:
 	make assets/css
@@ -27,16 +27,18 @@ assets:
 	make assets/icon-sprite
 
 assets/css:
-	npm run build-scss
+	yarn build-scss
 	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
 
 assets/js:
-	npm run minify-js
+	yarn minify-js
 
 assets/icon-sprite:
-	npm run generate-svg-sprite
+	yarn generate-svg-sprite
 
 dev:
+	make db/setup
+	sleep 3
 	make db/migrate
 	bee run
 
@@ -61,5 +63,6 @@ test:
 
 test/run:
 	docker-compose -f docker-compose.test.yml up -d
+	sleep 3
 	APP_RUN_MODE=test go test -v -p 1 ./...
 	docker-compose -f docker-compose.test.yml down

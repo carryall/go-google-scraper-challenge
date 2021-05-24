@@ -1,10 +1,18 @@
 .layout-default {
+  body {
+    @apply bg-nude-300;
+  }
+
   .app-content,
   .app-header {
     @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .app-header {
-    @apply relative bg-gray-300 mb-4 p-4 text-right;
+    @apply relative bg-nude-500 mb-4 p-4 text-right;
+  }
+
+  .alert {
+    @apply shadow-md;
   }
 }

@@ -1,8 +1,7 @@
 package helpers
 
 import (
-	"log"
-
+	"github.com/beego/beego/v2/core/logs"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -10,7 +9,7 @@ import (
 func HashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
-		log.Println(err)
+		logs.Info(err)
 
 		return "", err
 	}
@@ -22,7 +21,7 @@ func HashPassword(password string) (string, error) {
 func CompareHashWithPassword(hashedPassword string, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	if err != nil {
-		log.Println(err)
+		logs.Info(err)
 
 		return false
 	}

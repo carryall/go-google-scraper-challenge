@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -14,6 +13,7 @@ import (
 	"go-google-scraper-challenge/controllers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 	"github.com/onsi/ginkgo"
 )
@@ -40,8 +40,11 @@ func MakeRequest(method string, url string, body io.Reader) *http.Response {
 	return responseRecoder.Result()
 }
 
-func MakeAuthenticatedRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
+func MakeAuthenticatedRequest(method string, url string, header http.Header, body io.Reader, user *models.User) *http.Response {
 	request := HTTPRequest(method, url, body)
+	if header != nil {
+		request.Header = header
+	}
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	responseRecoder := httptest.NewRecorder()
@@ -140,7 +143,7 @@ func GetFlashMessage(cookies []*http.Cookie) *web.FlashData {
 func decodeQueryString(encodedString string) string {
 	decodedString, err := url.QueryUnescape(encodedString)
 	if err != nil {
-		log.Println(err)
+		logs.Info(err)
 
 		return ""
 	}

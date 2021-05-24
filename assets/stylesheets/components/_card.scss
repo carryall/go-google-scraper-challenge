@@ -1,0 +1,15 @@
+.card {
+  @apply px-4 py-5 sm:px-6 mx-auto rounded-lg bg-white shadow-md;
+
+  &__title {
+    @apply text-lg leading-6 font-bold;
+  }
+
+  &__subtitle {
+    @apply mb-2;
+
+    svg {
+      @apply inline;
+    }
+  }
+}

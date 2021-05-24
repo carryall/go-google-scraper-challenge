@@ -1,15 +1,16 @@
 package initializers
 
 import (
-	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/client/orm"
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 	"github.com/joho/godotenv"
 )
@@ -18,12 +19,15 @@ import (
 func SetupTestEnvironment() {
 	appRoot := AppRootDir()
 
+	logs.SetLevel(logs.LevelWarning)
+
 	SetWorkingDirectory(appRoot)
 	OverloadTestConfig()
 	SetUpTemplateFunction()
 	web.TestBeegoInit(appRoot)
 	SetUpDatabase()
 	SetupStaticPaths()
+	SetModelDefaultValueFilter()
 	SetLowercaseValidationErrors()
 	oauth.SetUpOauth()
 }
@@ -39,7 +43,7 @@ func AppRootDir() string {
 func SetWorkingDirectory(dir string) {
 	err := os.Chdir(dir)
 	if err != nil {
-		log.Fatal("Failed to set working directory", err.Error())
+		logs.Error("Failed to set working directory", err.Error())
 	}
 }
 
@@ -47,18 +51,18 @@ func SetWorkingDirectory(dir string) {
 func OverloadTestConfig() {
 	err := godotenv.Overload(".env.test")
 	if err != nil {
-		log.Fatal("Failed to overload test environment file", err.Error())
+		logs.Error("Failed to overload test environment file", err.Error())
 	}
 }
 
-// CleanupDatabase cleanup database
-func CleanupDatabase(tableName string) {
-	o := orm.NewOrm()
-	_, err := o.Raw("TRUNCATE TABLE `?`", tableName).Exec()
+// CleanupDatabase cleanup the given database table
+func CleanupDatabase(tableNames []string) {
+	ormer := orm.NewOrm()
+	_, err := ormer.Raw("TRUNCATE TABLE `?`", strings.Join(tableNames[:], ",")).Exec()
 	if err != nil {
 		err := orm.RunSyncdb("default", true, false)
 		if err != nil {
-			log.Fatal("Failed to run sync database", err)
+			logs.Error("Failed to sync database", err)
 		}
 	}
 }

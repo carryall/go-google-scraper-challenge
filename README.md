@@ -22,13 +22,7 @@ A project for Nimble Go Internal Certification on Web
   make assets
   ```
 
-### Run Database service on Docker
-
-  ```sh
-  make db/setup
-  ```
-
-### Run migrations and the Go application for development
+### Run Database service, migrations and the Go application for development
 
   ```sh
   make dev
@@ -50,7 +44,7 @@ A project for Nimble Go Internal Certification on Web
   - put the new SVG file on `assets/images/icons` directory
   - install dependency
   ```sh
-  npm install
+  yarn
   ```
   - generate the SVG sprite
   ```sh
@@ -59,7 +53,7 @@ A project for Nimble Go Internal Certification on Web
 
   #### Use SVG inline
   ```html
-  {{ render_icon "iconName" }}
+  {{ render_icon "iconName", "additional class names" }}
   ```
 
 ## API

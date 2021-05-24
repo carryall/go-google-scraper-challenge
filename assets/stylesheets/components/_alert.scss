@@ -4,66 +4,66 @@
   @apply w-full flex items-start rounded-lg mx-auto mb-8 p-3 sm:p-5 sm:align-middle sm:max-w-lg;
 
   &--error {
-    @apply bg-red-50;
+    @apply bg-crimson-100;
 
     #{$self}__icon svg {
-      @apply text-red-400;
+      @apply text-crimson-400;
     }
 
     #{$self}__title {
-      @apply text-red-700;
+      @apply text-crimson-700;
     }
 
     #{$self}__message {
-      @apply text-red-600;
+      @apply text-crimson-600;
     }
   }
 
   &--success {
-    @apply bg-green-50;
+    @apply bg-olive-100;
 
     #{$self}__icon svg {
-      @apply text-green-400;
+      @apply text-olive-400;
     }
 
     #{$self}__title {
-      @apply text-green-700;
+      @apply text-olive-700;
     }
 
     #{$self}__message {
-      @apply text-green-600;
+      @apply text-olive-600;
     }
   }
 
   &--info {
-    @apply bg-blue-50;
+    @apply bg-primary-100;
 
     #{$self}__icon svg {
-      @apply text-blue-400;
+      @apply text-primary-400;
     }
 
     #{$self}__title {
-      @apply text-blue-700;
+      @apply text-primary-700;
     }
 
     #{$self}__message {
-      @apply text-blue-600;
+      @apply text-primary-600;
     }
   }
 
   &--warning {
-    @apply bg-yellow-50;
+    @apply bg-brown-100;
 
     #{$self}__icon svg {
-      @apply text-yellow-400;
+      @apply text-brown-400;
     }
 
     #{$self}__title {
-      @apply text-yellow-700;
+      @apply text-brown-700;
     }
 
     #{$self}__message {
-      @apply text-yellow-600;
+      @apply text-brown-600;
     }
   }
 

@@ -1,11 +1,10 @@
 package forms
 
 import (
-	"log"
-
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
 )
 
@@ -17,19 +16,19 @@ type SessionForm struct {
 var currentUser *models.User
 
 // Valid adds custom validation to registration form, sets error when the validation failed.
-func (sessionForm *SessionForm) Valid(v *validation.Validation) {
-	user, err := models.GetUserByEmail(sessionForm.Email)
+func (sf *SessionForm) Valid(v *validation.Validation) {
+	user, err := models.GetUserByEmail(sf.Email)
 	if err != nil {
 		err := v.SetError("Email", "Incorrect email or password")
 		if err == nil {
-			log.Print("Failed to set error on validation")
+			logs.Info("Failed to set error on validation")
 		}
 	} else {
-		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, sessionForm.Password)
+		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, sf.Password)
 		if !validPassword {
 			err := v.SetError("Password", "Incorrect email or password")
 			if err == nil {
-				log.Print("Failed to set error on validation")
+				logs.Info("Failed to set error on validation")
 			}
 		} else {
 			currentUser = user
@@ -38,16 +37,16 @@ func (sessionForm *SessionForm) Valid(v *validation.Validation) {
 }
 
 // Save validates login form, returns errors if validation failed.
-func (sessionForm *SessionForm) Save() (user *models.User, errs []error) {
+func (sf *SessionForm) Save() (*models.User, []error) {
 	validation := validation.Validation{}
 
-	valid, err := validation.Valid(sessionForm)
+	valid, err := validation.Valid(sf)
 	if err != nil {
 		return nil, []error{err}
 	}
 
 	if !valid {
-		errs := []error{}
+		var errs []error
 		for _, err := range validation.Errors {
 			errs = append(errs, err)
 		}

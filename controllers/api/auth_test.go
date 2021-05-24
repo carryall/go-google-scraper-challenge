@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/initializers"
-	. "go-google-scraper-challenge/test/helpers"
-	. "go-google-scraper-challenge/test/serializers"
+	. "go-google-scraper-challenge/tests/helpers"
+	. "go-google-scraper-challenge/tests/serializers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -266,8 +266,6 @@ var _ = Describe("AuthController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
-		initializers.CleanupDatabase("oauth2_clients")
-		initializers.CleanupDatabase("oauth2_tokens")
+		initializers.CleanupDatabase([]string{"users", "oauth2_clients", "oauth2_tokens"})
 	})
 })

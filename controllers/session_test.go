@@ -5,7 +5,7 @@ import (
 
 	"go-google-scraper-challenge/controllers"
 	"go-google-scraper-challenge/initializers"
-	. "go-google-scraper-challenge/test/helpers"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -24,7 +24,7 @@ var _ = Describe("SessionController", func() {
 		Context("given user already signed in", func() {
 			It("redirects to root path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				response := MakeAuthenticatedRequest("GET", "/signin", nil, user)
+				response := MakeAuthenticatedRequest("GET", "/signin", nil, nil, user)
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -245,7 +245,7 @@ var _ = Describe("SessionController", func() {
 					"email":    "dev@nimblehq.co",
 					"password": "password",
 				})
-				response := MakeAuthenticatedRequest("POST", "/sessions", body, user)
+				response := MakeAuthenticatedRequest("POST", "/sessions", nil, body, user)
 
 				Expect(response.StatusCode).To(Equal(http.StatusMethodNotAllowed))
 			})
@@ -257,7 +257,7 @@ var _ = Describe("SessionController", func() {
 			It("redirects to sign in path", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				body := GenerateRequestBody(nil)
-				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
+				response := MakeAuthenticatedRequest("GET", "/signout", nil, body, user)
 				currentPath := GetCurrentPath(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
@@ -267,7 +267,7 @@ var _ = Describe("SessionController", func() {
 			It("sets the success message", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				body := GenerateRequestBody(nil)
-				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
+				response := MakeAuthenticatedRequest("GET", "/signout", nil, body, user)
 				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["success"]).To(Equal("Successfully signed out"))
@@ -277,7 +277,7 @@ var _ = Describe("SessionController", func() {
 			It("removes user id from session", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
 				body := GenerateRequestBody(nil)
-				response := MakeAuthenticatedRequest("GET", "/signout", body, user)
+				response := MakeAuthenticatedRequest("GET", "/signout", nil, body, user)
 				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
 
 				Expect(currentUserId).To(BeNil())
@@ -297,6 +297,6 @@ var _ = Describe("SessionController", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
+		initializers.CleanupDatabase([]string{"users", "session"})
 	})
 })

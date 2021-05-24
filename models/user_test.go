@@ -3,7 +3,7 @@ package models_test
 import (
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
-	. "go-google-scraper-challenge/test/helpers"
+	. "go-google-scraper-challenge/tests/helpers"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -124,6 +124,6 @@ var _ = Describe("User", func() {
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase("users")
+		initializers.CleanupDatabase([]string{"users"})
 	})
 })
