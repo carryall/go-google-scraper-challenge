@@ -56,7 +56,7 @@ func GetResultById(id int64) (*Result, error) {
 
 // GetResultsByUserId retrieves all Results with User Id. Returns empty list if no records exist
 func GetResultsByUserId(userId int64) ([]*Result, error) {
-	querySeter := resultQuerySeter().Filter("user_id", userId).OrderBy("-updated_at").RelatedSel()
+	querySeter := resultQuerySeter().Filter("user_id", userId).OrderBy("-created_at").RelatedSel()
 	var results []*Result
 	_, err := querySeter.All(&results)
 
