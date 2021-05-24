@@ -7,6 +7,7 @@ import (
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -23,7 +24,7 @@ var _ = Describe("SessionController", func() {
 
 		Context("given user already signed in", func() {
 			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeAuthenticatedRequest("GET", "/signin", nil, nil, user)
 				currentPath := GetCurrentPath(response)
 
@@ -37,10 +38,11 @@ var _ = Describe("SessionController", func() {
 		Context("given user not signed in", func() {
 			Context("given valid params", func() {
 				It("redirects to root path", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					password := faker.Password()
+					user := FabricateUser(faker.Email(), password)
 					body := GenerateRequestBody(map[string]string{
-						"email":    "dev@nimblehq.co",
-						"password": "password",
+						"email":    user.Email,
+						"password": password,
 					})
 					response := MakeRequest("POST", "/sessions", body)
 					currentPath := GetCurrentPath(response)
@@ -50,10 +52,11 @@ var _ = Describe("SessionController", func() {
 				})
 
 				It("sets the success message", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					password := faker.Password()
+					user := FabricateUser(faker.Email(), password)
 					body := GenerateRequestBody(map[string]string{
-						"email":    "dev@nimblehq.co",
-						"password": "password",
+						"email":    user.Email,
+						"password": password,
 					})
 					response := MakeRequest("POST", "/sessions", body)
 					flash := GetFlashMessage(response.Cookies())
@@ -63,10 +66,11 @@ var _ = Describe("SessionController", func() {
 				})
 
 				It("sets user id to session", func() {
-					user := FabricateUser("dev@nimblehq.co", "password")
+					password := faker.Password()
+					user := FabricateUser(faker.Email(), password)
 					body := GenerateRequestBody(map[string]string{
-						"email":    "dev@nimblehq.co",
-						"password": "password",
+						"email":    user.Email,
+						"password": password,
 					})
 					response := MakeRequest("POST", "/sessions", body)
 					currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
@@ -78,10 +82,11 @@ var _ = Describe("SessionController", func() {
 			Context("given INVALID params", func() {
 				Context("given NO email", func() {
 					It("redirects to signin page", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						password := faker.Password()
+						FabricateUser(faker.Email(), password)
 						body := GenerateRequestBody(map[string]string{
 							"email":    "",
-							"password": "password",
+							"password": password,
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
@@ -91,10 +96,11 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("sets the error message", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						password := faker.Password()
+						FabricateUser(faker.Email(), password)
 						body := GenerateRequestBody(map[string]string{
 							"email":    "",
-							"password": "password",
+							"password": password,
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
@@ -104,10 +110,11 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("does NOT set user id to session", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						password := faker.Password()
+						FabricateUser(faker.Email(), password)
 						body := GenerateRequestBody(map[string]string{
 							"email":    "",
-							"password": "password",
+							"password": password,
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
@@ -118,9 +125,9 @@ var _ = Describe("SessionController", func() {
 
 				Context("given NO password", func() {
 					It("redirects to signin page", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						user := FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "dev@nimblehq.cp",
+							"email":    user.Email,
 							"password": "",
 						})
 						response := MakeRequest("POST", "/sessions", body)
@@ -131,9 +138,9 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("sets the error message", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						user := FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "dev@nimblehq.co",
+							"email":    user.Email,
 							"password": "",
 						})
 						response := MakeRequest("POST", "/sessions", body)
@@ -144,9 +151,9 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("does NOT set user id to session", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						user := FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "dev@nimblehq.co",
+							"email":    user.Email,
 							"password": "",
 						})
 						response := MakeRequest("POST", "/sessions", body)
@@ -158,10 +165,10 @@ var _ = Describe("SessionController", func() {
 
 				Context("given INVALID email", func() {
 					It("redirects to signin page", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "invalid@email.com",
-							"password": "password",
+							"email":    faker.Email(),
+							"password": faker.Password(),
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
@@ -171,10 +178,10 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("sets the error message", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "invalid@email.com",
-							"password": "password",
+							"email":    faker.Email(),
+							"password": faker.Password(),
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
@@ -184,10 +191,10 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("does NOT set user id to session", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "invalid@email.com",
-							"password": "password",
+							"email":    faker.Email(),
+							"password": faker.Password(),
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
@@ -198,10 +205,10 @@ var _ = Describe("SessionController", func() {
 
 				Context("given INVALID password", func() {
 					It("redirects to signin page", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						user := FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "dev@nimblehq.co",
-							"password": "invalid password",
+							"email":    user.Email,
+							"password": faker.Password(),
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						currentPath := GetCurrentPath(response)
@@ -211,10 +218,10 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("sets the error message", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						user := FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "dev@nimblehq.co",
-							"password": "invalid password",
+							"email":    user.Email,
+							"password": faker.Password(),
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
@@ -224,10 +231,10 @@ var _ = Describe("SessionController", func() {
 					})
 
 					It("does NOT set user id to session", func() {
-						FabricateUser("dev@nimblehq.co", "password")
+						user := FabricateUser(faker.Email(), faker.Password())
 						body := GenerateRequestBody(map[string]string{
-							"email":    "dev@nimblehq.co",
-							"password": "invalid password",
+							"email":    user.Email,
+							"password": faker.Password(),
 						})
 						response := MakeRequest("POST", "/sessions", body)
 						currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)
@@ -240,10 +247,11 @@ var _ = Describe("SessionController", func() {
 
 		Context("given user is already signed in", func() {
 			It("returns error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				password := faker.Password()
+				user := FabricateUser(faker.Email(), password)
 				body := GenerateRequestBody(map[string]string{
-					"email":    "dev@nimblehq.co",
-					"password": "password",
+					"email":    user.Email,
+					"password": password,
 				})
 				response := MakeAuthenticatedRequest("POST", "/sessions", nil, body, user)
 
@@ -255,7 +263,7 @@ var _ = Describe("SessionController", func() {
 	Describe("GET /signout", func() {
 		Context("given user is already signed in", func() {
 			It("redirects to sign in path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				body := GenerateRequestBody(nil)
 				response := MakeAuthenticatedRequest("GET", "/signout", nil, body, user)
 				currentPath := GetCurrentPath(response)
@@ -265,7 +273,7 @@ var _ = Describe("SessionController", func() {
 			})
 
 			It("sets the success message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				body := GenerateRequestBody(nil)
 				response := MakeAuthenticatedRequest("GET", "/signout", nil, body, user)
 				flash := GetFlashMessage(response.Cookies())
@@ -275,7 +283,7 @@ var _ = Describe("SessionController", func() {
 			})
 
 			It("removes user id from session", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				body := GenerateRequestBody(nil)
 				response := MakeAuthenticatedRequest("GET", "/signout", nil, body, user)
 				currentUserId := GetSession(response.Cookies(), controllers.CurrentUserKey)

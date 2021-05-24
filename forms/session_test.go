@@ -6,6 +6,7 @@ import (
 	. "go-google-scraper-challenge/tests/helpers"
 
 	"github.com/beego/beego/v2/core/validation"
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -14,10 +15,11 @@ var _ = Describe("Forms/SessionForm", func() {
 	Describe("#Valid", func() {
 		Context("given session form with valid params", func() {
 			It("does NOT add error to validation", func() {
-				FabricateUser("dev@nimblehq.co", "password")
+				password := faker.Password()
+				user := FabricateUser(faker.Email(), password)
 				form := forms.SessionForm{
-					Email:    "dev@nimblehq.co",
-					Password: "password",
+					Email:    user.Email,
+					Password: password,
 				}
 
 				formValidation := validation.Validation{}
@@ -31,8 +33,8 @@ var _ = Describe("Forms/SessionForm", func() {
 			Context("given user email does NOT exist", func() {
 				It("adds an error to validation", func() {
 					form := forms.SessionForm{
-						Email:    "john.doe@nimblehq.co",
-						Password: "password",
+						Email:    faker.Email(),
+						Password: faker.Password(),
 					}
 
 					formValidation := validation.Validation{}
@@ -46,10 +48,10 @@ var _ = Describe("Forms/SessionForm", func() {
 
 			Context("given email is INVALID", func() {
 				It("adds an error to validation", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					FabricateUser(faker.Email(), faker.Password())
 					form := forms.SessionForm{
-						Email:    "wrong.email@nimblehq.co",
-						Password: "password",
+						Email:    faker.Email(),
+						Password: faker.Password(),
 					}
 
 					formValidation := validation.Validation{}
@@ -63,10 +65,10 @@ var _ = Describe("Forms/SessionForm", func() {
 
 			Context("given password is INVALID", func() {
 				It("adds an error to validation", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					user := FabricateUser(faker.Email(), faker.Password())
 					form := forms.SessionForm{
-						Email:    "dev@nimblehq.co",
-						Password: "wrong password",
+						Email:    user.Email,
+						Password: faker.Password(),
 					}
 
 					formValidation := validation.Validation{}
@@ -83,10 +85,11 @@ var _ = Describe("Forms/SessionForm", func() {
 	Describe("#Save", func() {
 		Context("given session form with valid params", func() {
 			It("returns user with NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				password := faker.Password()
+				user := FabricateUser(faker.Email(), password)
 				form := forms.SessionForm{
-					Email:    "dev@nimblehq.co",
-					Password: "password",
+					Email:    user.Email,
+					Password: password,
 				}
 
 				currentUser, errors := form.Save()
@@ -101,7 +104,7 @@ var _ = Describe("Forms/SessionForm", func() {
 				It("returns an email is invalid error", func() {
 					form := forms.SessionForm{
 						Email:    "not an email",
-						Password: "password",
+						Password: faker.Password(),
 					}
 
 					user, errors := form.Save()
@@ -115,7 +118,7 @@ var _ = Describe("Forms/SessionForm", func() {
 				It("returns an invalid email or password error", func() {
 					form := forms.SessionForm{
 						Email:    "",
-						Password: "password",
+						Password: faker.Password(),
 					}
 
 					user, errors := form.Save()
@@ -128,7 +131,7 @@ var _ = Describe("Forms/SessionForm", func() {
 			Context("given NO password", func() {
 				It("returns an invalid email or password error", func() {
 					form := forms.SessionForm{
-						Email:    "dev@nimblehq.co",
+						Email:    faker.Email(),
 						Password: "",
 					}
 

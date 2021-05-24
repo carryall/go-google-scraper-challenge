@@ -5,6 +5,7 @@ import (
 	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -13,7 +14,7 @@ var _ = Describe("Result", func() {
 	Describe("#CreateResult", func() {
 		Context("given result with valid params", func() {
 			It("returns the result ID", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := &models.Result{
 					User: user,
 					Keyword: "valid keyword",
@@ -27,7 +28,7 @@ var _ = Describe("Result", func() {
 			})
 
 			It("sets default result status to pending", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := &models.Result{
 					User: user,
 					Keyword: "valid keyword",
@@ -46,7 +47,7 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := &models.Result{
 					User: user,
 					Keyword: "valid keyword",
@@ -58,7 +59,7 @@ var _ = Describe("Result", func() {
 
 			Context("given result with status", func() {
 				It("sets status to given status", func() {
-					user := FabricateUser("dev@nimblehq.co", "password")
+					user := FabricateUser(faker.Email(), faker.Password())
 					result := &models.Result{
 						User: user,
 						Keyword: "valid keyword",
@@ -95,7 +96,7 @@ var _ = Describe("Result", func() {
 	Describe("#GetResultById", func() {
 		Context("given result id exist in the system", func() {
 			It("returns result with given id", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				existResult := FabricateResult(user)
 				result, err := models.GetResultById(existResult.Id)
 				if err != nil {
@@ -120,8 +121,8 @@ var _ = Describe("Result", func() {
 	Describe("#GetResultsByUserId", func() {
 		Context("given a valid user id", func() {
 			It("returns results with the given user id", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
-				otherUser := FabricateUser("dev2@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
 				userResult1 := FabricateResult(user)
 				userResult2 := FabricateResult(user)
 				otherUserResult := FabricateResult(otherUser)
@@ -141,8 +142,8 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
-				otherUser := FabricateUser("dev2@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
 				FabricateResult(user)
 				FabricateResult(user)
 				FabricateResult(otherUser)
@@ -154,7 +155,7 @@ var _ = Describe("Result", func() {
 
 		Context("given an invalid user id", func() {
 			It("returns an empty list", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				FabricateResult(user)
 				FabricateResult(user)
 
@@ -167,7 +168,7 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				FabricateResult(user)
 				FabricateResult(user)
 
@@ -180,7 +181,7 @@ var _ = Describe("Result", func() {
 	Describe("#UpdateResultById", func() {
 		Context("given result id exist in the system", func() {
 			It("updates the result with given id", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				existResult := FabricateResult(user)
 				existResult.Status = models.ResultStatusPending
 

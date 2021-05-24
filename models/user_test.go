@@ -5,6 +5,7 @@ import (
 	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -14,8 +15,8 @@ var _ = Describe("User", func() {
 		Context("given user with valid params", func() {
 			It("returns the user ID", func() {
 				user := models.User{
-					Email:          "dev@nimblehq.co",
-					HashedPassword: "password",
+					Email:          faker.Email(),
+					HashedPassword: faker.Password(),
 				}
 				userID, err := models.CreateUser(&user)
 				if err != nil {
@@ -27,8 +28,8 @@ var _ = Describe("User", func() {
 
 			It("returns NO error", func() {
 				user := models.User{
-					Email:          "dev@nimblehq.co",
-					HashedPassword: "password",
+					Email:          faker.Email(),
+					HashedPassword: faker.Password(),
 				}
 				_, err := models.CreateUser(&user)
 
@@ -39,11 +40,13 @@ var _ = Describe("User", func() {
 		Context("given user with INVALID params", func() {
 			Context("given email that already exist in database", func() {
 				It("returns an error", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					email := faker.Email()
+					password := faker.Password()
+					FabricateUser(email, password)
 
 					user := models.User{
-						Email:          "dev@nimblehq.co",
-						HashedPassword: "password",
+						Email:          email,
+						HashedPassword: password,
 					}
 					userID, err := models.CreateUser(&user)
 
@@ -57,7 +60,7 @@ var _ = Describe("User", func() {
 	Describe("#GetUserById", func() {
 		Context("given user id exist in the system", func() {
 			It("returns user with given id", func() {
-				existUser := FabricateUser("dev@nimblehq.co", "password")
+				existUser := FabricateUser(faker.Email(), faker.Password())
 
 				user, err := models.GetUserById(existUser.Id)
 				if err != nil {
@@ -82,9 +85,10 @@ var _ = Describe("User", func() {
 	Describe("#UserEmailAlreadyExist", func() {
 		Context("given user email exist in the system", func() {
 			It("returns true", func() {
-				FabricateUser("dev@nimblehq.co", "password")
+				email := faker.Email()
+				FabricateUser(email, faker.Password())
 
-				userExist := models.UserEmailAlreadyExist("dev@nimblehq.co")
+				userExist := models.UserEmailAlreadyExist(email)
 
 				Expect(userExist).To(BeTrue())
 			})
@@ -92,7 +96,7 @@ var _ = Describe("User", func() {
 
 		Context("given user email does NOT exist in the system", func() {
 			It("returns false", func() {
-				userExist := models.UserEmailAlreadyExist("dev@nimblehq.co")
+				userExist := models.UserEmailAlreadyExist(faker.Email())
 
 				Expect(userExist).To(BeFalse())
 			})
@@ -102,9 +106,10 @@ var _ = Describe("User", func() {
 	Describe("#GetUserByEmail", func() {
 		Context("given user email exist in the system", func() {
 			It("returns the user", func() {
-				existUser := FabricateUser("dev@nimblehq.co", "password")
+				email := faker.Email()
+				existUser := FabricateUser(email, faker.Password())
 
-				user, err := models.GetUserByEmail("dev@nimblehq.co")
+				user, err := models.GetUserByEmail(email)
 				if err != nil {
 					Fail("Failed to find user with given email")
 				}
@@ -115,7 +120,7 @@ var _ = Describe("User", func() {
 
 		Context("given user email does NOT exist in the system", func() {
 			It("returns error", func() {
-				user, err := models.GetUserByEmail("dev@nimblehq.co")
+				user, err := models.GetUserByEmail(faker.Email())
 
 				Expect(err.Error()).To(ContainSubstring("no row found"))
 				Expect(user).To(BeNil())

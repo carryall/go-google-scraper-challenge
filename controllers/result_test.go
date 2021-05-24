@@ -7,6 +7,7 @@ import (
 	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -15,7 +16,7 @@ var _ = Describe("ResultController", func() {
 	Describe("GET /", func() {
 		Context("given user already signed in", func() {
 			It("renders with status 200", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -36,7 +37,7 @@ var _ = Describe("ResultController", func() {
 	Describe("POST /results", func() {
 		Context("given a valid CSV file", func() {
 			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -47,7 +48,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the success message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -58,7 +59,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("creates results with given keywords", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
 				MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -77,7 +78,7 @@ var _ = Describe("ResultController", func() {
 
 		Context("given a blank CSV file", func() {
 			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -88,7 +89,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the error message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -101,7 +102,7 @@ var _ = Describe("ResultController", func() {
 
 		Context("given a CSV file that contains more than 1000 keywords", func() {
 			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -112,7 +113,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the error message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -125,7 +126,7 @@ var _ = Describe("ResultController", func() {
 
 		Context("given an INVALID file type", func() {
 			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -136,7 +137,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the error message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
