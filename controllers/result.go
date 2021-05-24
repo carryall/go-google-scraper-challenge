@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/forms"
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/services/scraper"
 
@@ -32,8 +33,9 @@ func (c *ResultController) List() {
 		logs.Warn("Failed to get current user results: ", err.Error())
 		c.Data["results"] = []*models.Result{}
 	}
+	dividedResults := helpers.DivideByHalf(results)
 
-	c.Data["results"] = results
+	c.Data["dividedResults"] = dividedResults
 }
 
 func (c *ResultController) Create() {

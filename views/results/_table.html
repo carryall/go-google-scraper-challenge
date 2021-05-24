@@ -1,18 +1,20 @@
-<table>
-    <thead>
-    <tr>
-        <th>Created At</th>
-        <th>Keyword</th>
-        <th>Status</th>
-    </tr>
-    </thead>
-    <tbody>
-        {{ range $result := .results }}
-            <tr id="{{ $result.Id }}">
-                <td>{{ format_datetime $result.CreatedAt }}</td>
-                <td>{{ $result.Keyword }}</td>
-                <td>{{ $result.Status }}</td>
+{{ range $resultChunk := .dividedResults }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Created At</th>
+                <th scope="col">Keyword</th>
+                <th scope="col">Status</th>
             </tr>
+        </thead>
+        <tbody>
+        {{ range $result := $resultChunk }}
+        <tr id="_{{ $result.Id }}">
+            <td>{{ format_datetime $result.CreatedAt }}</td>
+            <td>{{ $result.Keyword }}</td>
+            <td><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
+        </tr>
         {{ end }}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+{{ end }}

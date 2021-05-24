@@ -1,0 +1,19 @@
+.badge {
+  @apply px-2 inline-flex text-xs leading-5 font-semibold rounded-full;
+
+  &--pending {
+    @apply bg-nude-100 text-nude-800;
+  }
+
+  &--processing {
+    @apply bg-brown-100 text-brown-800;
+  }
+
+  &--completed {
+    @apply bg-olive-100 text-olive-800;
+  }
+
+  &--failed {
+    @apply bg-crimson-100 text-crimson-800;
+  }
+}

@@ -1,0 +1,19 @@
+table {
+  @apply my-4 shadow overflow-hidden border border-primary-200 rounded-md divide-y divide-primary-200;
+
+  thead {
+    @apply bg-primary-100;
+
+    th {
+      @apply px-6 py-3 text-left text-xs font-bold text-primary-500 uppercase tracking-wider;
+    }
+  }
+
+  tbody {
+    @apply bg-white divide-y divide-primary-200;
+
+    td {
+      @apply px-6 py-4 whitespace-nowrap;
+    }
+  }
+}
