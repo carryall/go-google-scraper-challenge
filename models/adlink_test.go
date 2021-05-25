@@ -5,6 +5,7 @@ import (
 	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -13,7 +14,7 @@ var _ = Describe("AdLink", func() {
 	Describe("#CreateAdLink", func() {
 		Context("given ad link with valid params", func() {
 			It("returns the ad link ID", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				adLink := &models.AdLink{
 					Result:   result,
@@ -29,7 +30,7 @@ var _ = Describe("AdLink", func() {
 			})
 
 			It("returns NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				adLink := &models.AdLink{
 					Result:   result,
@@ -59,7 +60,7 @@ var _ = Describe("AdLink", func() {
 	Describe("#GetAdLinkById", func() {
 		Context("given adLink id exist in the system", func() {
 			It("returns adLink with given id", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				existAdLink := FabricateAdLink(result)
 				adLink, err := models.GetAdLinkById(existAdLink.Id)
@@ -85,8 +86,8 @@ var _ = Describe("AdLink", func() {
 	Describe("#GetAdLinksByResultId", func() {
 		Context("given a valid result id", func() {
 			It("returns adlinks with the given result id", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
-				otherUser := FabricateUser("dev2@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				otherResult := FabricateResult(otherUser)
 				adLink1 := FabricateAdLink(result)
@@ -108,8 +109,8 @@ var _ = Describe("AdLink", func() {
 			})
 
 			It("returns NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
-				otherUser := FabricateUser("dev2@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				otherResult := FabricateResult(otherUser)
 				FabricateAdLink(result)
@@ -123,7 +124,7 @@ var _ = Describe("AdLink", func() {
 
 		Context("given an invalid result id", func() {
 			It("returns an empty list", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				FabricateAdLink(result)
 				FabricateAdLink(result)
@@ -137,7 +138,7 @@ var _ = Describe("AdLink", func() {
 			})
 
 			It("returns NO error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				FabricateAdLink(result)
 				FabricateAdLink(result)

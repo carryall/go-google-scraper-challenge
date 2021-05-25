@@ -6,6 +6,7 @@ import (
 	. "go-google-scraper-challenge/tests/helpers"
 
 	"github.com/beego/beego/v2/core/validation"
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -14,10 +15,11 @@ var _ = Describe("Forms/RegistrationForm", func() {
 	Describe("#Valid", func() {
 		Context("given registration form with valid params", func() {
 			It("does NOT add error to validation", func() {
+				password := faker.Password()
 				form := forms.RegistrationForm{
-					Email:                "dev@nimblehq.co",
-					Password:             "password",
-					PasswordConfirmation: "password",
+					Email:                faker.Email(),
+					Password:             password,
+					PasswordConfirmation: password,
 				}
 
 				formValidation := validation.Validation{}
@@ -30,12 +32,13 @@ var _ = Describe("Forms/RegistrationForm", func() {
 		Context("given registration form with INVALID params", func() {
 			Context("given email that already registered", func() {
 				It("adds duplicate email error to validation", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					password := faker.Password()
+					user := FabricateUser(faker.Email(), password)
 
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
-						PasswordConfirmation: "password",
+						Email:                user.Email,
+						Password:             password,
+						PasswordConfirmation: password,
 					}
 
 					formValidation := validation.Validation{}
@@ -50,8 +53,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given password confirmation is NOT match with the password", func() {
 				It("adds a mismatch password confirmation error to validation", func() {
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
+						Email:                faker.Email(),
+						Password:             faker.Password(),
 						PasswordConfirmation: "does not match the password",
 					}
 
@@ -69,10 +72,11 @@ var _ = Describe("Forms/RegistrationForm", func() {
 	Describe("#Save", func() {
 		Context("given registration form with valid params", func() {
 			It("returns a user ID", func() {
+				password := faker.Password()
 				form := forms.RegistrationForm{
-					Email:                "dev@nimblehq.co",
-					Password:             "password",
-					PasswordConfirmation: "password",
+					Email:                faker.Email(),
+					Password:             password,
+					PasswordConfirmation: password,
 				}
 
 				userID, errors := form.Save()
@@ -84,10 +88,11 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			})
 
 			It("returns NO error", func() {
+				password := faker.Password()
 				form := forms.RegistrationForm{
-					Email:                "dev@nimblehq.co",
-					Password:             "password",
-					PasswordConfirmation: "password",
+					Email:                faker.Email(),
+					Password:             password,
+					PasswordConfirmation: password,
 				}
 
 				_, errors := form.Save()
@@ -99,12 +104,13 @@ var _ = Describe("Forms/RegistrationForm", func() {
 		Context("given registration form with INVALID params", func() {
 			Context("given email that already registered", func() {
 				It("returns a duplicate email error", func() {
-					FabricateUser("dev@nimblehq.co", "password")
+					user := FabricateUser(faker.Email(), faker.Password())
 
+					password := faker.Password()
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
-						PasswordConfirmation: "password",
+						Email:                user.Email,
+						Password:             password,
+						PasswordConfirmation: password,
 					}
 
 					userID, errors := form.Save()
@@ -116,10 +122,11 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 			Context("given NO email", func() {
 				It("returns an invalid email error", func() {
+					password := faker.Password()
 					form := forms.RegistrationForm{
 						Email:                "",
-						Password:             "password",
-						PasswordConfirmation: "password",
+						Password:             password,
+						PasswordConfirmation: password,
 					}
 
 					userID, errors := form.Save()
@@ -131,10 +138,11 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 			Context("given an INVALID email", func() {
 				It("returns an invalid email error", func() {
+					password := faker.Password()
 					form := forms.RegistrationForm{
 						Email:                "invalid",
-						Password:             "password",
-						PasswordConfirmation: "password",
+						Password:             password,
+						PasswordConfirmation: password,
 					}
 
 					userID, errors := form.Save()
@@ -147,9 +155,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given NO password", func() {
 				It("returns an invalid password error", func() {
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
+						Email:                faker.Email(),
 						Password:             "",
-						PasswordConfirmation: "password",
+						PasswordConfirmation: faker.Password(),
 					}
 
 					userID, errors := form.Save()
@@ -162,9 +170,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given password length is less than 6", func() {
 				It("returns an invalid password error", func() {
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
+						Email:                faker.Email(),
 						Password:             "1234",
-						PasswordConfirmation: "password",
+						PasswordConfirmation: faker.Password(),
 					}
 
 					userID, errors := form.Save()
@@ -177,8 +185,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given NO password confirmation", func() {
 				It("returns an invalid password confirmation error", func() {
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
+						Email:                faker.Email(),
+						Password:             faker.Password(),
 						PasswordConfirmation: "",
 					}
 
@@ -192,8 +200,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given password confirmation is length less than 6", func() {
 				It("returns an invalid password error", func() {
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
+						Email:                faker.Email(),
+						Password:             faker.Password(),
 						PasswordConfirmation: "1234",
 					}
 
@@ -207,8 +215,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 			Context("given password confirmation is NOT match with the password", func() {
 				It("returns a mismatch password confirmation error", func() {
 					form := forms.RegistrationForm{
-						Email:                "dev@nimblehq.co",
-						Password:             "password",
+						Email:                faker.Email(),
+						Password:             faker.Password(),
 						PasswordConfirmation: "does not match the password",
 					}
 

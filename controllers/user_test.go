@@ -6,6 +6,7 @@ import (
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -22,7 +23,7 @@ var _ = Describe("UserController", func() {
 
 		Context("given user is already signed in", func() {
 			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeAuthenticatedRequest("GET", "/signup", nil, nil, user)
 				currentPath := GetCurrentPath(response)
 
@@ -36,10 +37,11 @@ var _ = Describe("UserController", func() {
 		Context("given user is not signed in", func() {
 			Context("given valid params", func() {
 				It("redirects to signup page", func() {
+					password := faker.Password()
 					body := GenerateRequestBody(map[string]string{
-						"email":                 "dev@nimblehq.co",
-						"password":              "password",
-						"password_confirmation": "password",
+						"email":                 faker.Email(),
+						"password":              password,
+						"password_confirmation": password,
 					})
 
 					response := MakeRequest("POST", "/users", body)
@@ -50,10 +52,11 @@ var _ = Describe("UserController", func() {
 				})
 
 				It("sets the success message", func() {
+					password := faker.Password()
 					body := GenerateRequestBody(map[string]string{
-						"email":                 "dev@nimblehq.co",
-						"password":              "password",
-						"password_confirmation": "password",
+						"email":                 faker.Email(),
+						"password":              password,
+						"password_confirmation": password,
 					})
 
 					response := MakeRequest("POST", "/users", body)
@@ -97,11 +100,12 @@ var _ = Describe("UserController", func() {
 
 		Context("given user is already signed on", func() {
 			It("returns error", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				password := faker.Password()
+				user := FabricateUser(faker.Email(), password)
 				body := GenerateRequestBody(map[string]string{
-					"email":                 "dev@nimblehq.co",
-					"password":              "password",
-					"password_confirmation": "password",
+					"email":                 user.Email,
+					"password":              password,
+					"password_confirmation": password,
 				})
 
 				response := MakeAuthenticatedRequest("POST", "/users", nil, body, user)
