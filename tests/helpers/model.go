@@ -1,6 +1,8 @@
 package tests
 
 import (
+	"fmt"
+
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/services/oauth"
 
@@ -47,7 +49,7 @@ func FabricateOAuthClient() (client oauth.OAuthClient) {
 func FabricateResult(user *models.User) (result *models.Result) {
 	result = &models.Result{
 		User: user,
-		Keyword: faker.Word(),
+		Keyword: fmt.Sprintf("Keyword %s", faker.Word()),
 	}
 
 	resultID, err := models.CreateResult(result)

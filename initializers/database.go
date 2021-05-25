@@ -1,6 +1,8 @@
 package initializers
 
 import (
+	"go-google-scraper-challenge/helpers"
+
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
@@ -9,11 +11,7 @@ import (
 
 // SetUpDatabase setup database for the project
 func SetUpDatabase() {
-	runMode, err := web.AppConfig.String("runmode")
-	if err != nil {
-		logs.Error("Run mode not found: ", err)
-	}
-
+	runMode := helpers.GetAppRunMode()
 	orm.Debug = runMode == "dev"
 
 	dbURL, err := web.AppConfig.String("db_url")

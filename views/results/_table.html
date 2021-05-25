@@ -1,0 +1,18 @@
+<table>
+    <thead>
+    <tr>
+        <th>Created At</th>
+        <th>Keyword</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{ range $result := .results }}
+            <tr id="{{ $result.Id }}">
+                <td>{{ format_datetime $result.CreatedAt }}</td>
+                <td>{{ $result.Keyword }}</td>
+                <td>{{ $result.Status }}</td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
