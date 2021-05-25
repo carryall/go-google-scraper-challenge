@@ -2,4 +2,24 @@
   .card-upload {
     @apply sm:max-w-lg;
   }
+
+  .title-feature {
+    @apply mt-8 mb-4 text-2xl text-center leading-8 font-bold tracking-tight text-primary-900 sm:text-4xl;
+  }
+
+  .table-wrapper {
+    @apply flex flex-wrap justify-around;
+  }
+
+  .table-result {
+    @apply max-w-lg;
+
+    .table-data {
+      @apply whitespace-normal;
+    }
+
+    .table-data.table-result__date {
+      @apply text-sm text-gray-500;
+    }
+  }
 }

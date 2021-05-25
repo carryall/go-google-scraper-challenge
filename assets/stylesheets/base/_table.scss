@@ -1,0 +1,23 @@
+.table {
+  @apply my-4 shadow overflow-hidden border border-primary-200 rounded-md divide-y divide-primary-200;
+
+  &__head {
+    @apply bg-primary-100;
+
+    .table-header {
+      @apply px-3 py-2 text-left text-xs font-bold text-primary-500 uppercase sm:px-6 sm:py-3 sm:font-medium sm:tracking-wide;
+    }
+  }
+
+  &__body {
+    @apply bg-white divide-y divide-primary-200;
+
+    .table-data {
+      @apply px-4 py-2 sm:px-6 sm:py-4;
+
+      &--unwrap {
+        @apply whitespace-nowrap;
+      }
+    }
+  }
+}
