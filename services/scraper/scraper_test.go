@@ -30,7 +30,7 @@ var _ = Describe("Scraper", func() {
 				keywords := []string{"ergonomic chair"}
 				scraper.Search(keywords, user)
 
-				userResults, err := models.GetResultsByUserId(user.Id)
+				userResults, err := models.GetPaginatedResultsByUserId(user.Id, 0, 0)
 				if err != nil {
 					Fail("Failed to get user results")
 				}
