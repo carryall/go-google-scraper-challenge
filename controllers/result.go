@@ -4,9 +4,12 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/forms"
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/services/scraper"
 
+	"github.com/beego/beego/v2/adapter/context"
+	"github.com/beego/beego/v2/adapter/utils/pagination"
 	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/server/web"
 )
@@ -15,6 +18,8 @@ import (
 type ResultController struct {
 	BaseController
 }
+
+const ITEMS_PER_PAGE = 20
 
 // URLMapping map user controller actions to functions
 func (c *ResultController) URLMapping() {
@@ -27,13 +32,23 @@ func (c *ResultController) List() {
 	c.TplName = "results/list.html"
 	web.ReadFromRequest(&c.Controller)
 
-	results, err := models.GetResultsByUserId(c.CurrentUser.Id)
+	totalResultCount, err := models.CountResultsByUserId(c.CurrentUser.Id)
 	if err != nil {
-		logs.Warn("Failed to get current user results: ", err.Error())
+		logs.Warn("Failed to count user results: ", err.Error())
 		c.Data["results"] = []*models.Result{}
 	}
 
-	c.Data["results"] = results
+	paginator := pagination.SetPaginator((*context.Context)(c.Ctx), ITEMS_PER_PAGE, totalResultCount)
+
+	results, err := models.GetPaginatedResultsByUserId(c.CurrentUser.Id, ITEMS_PER_PAGE, int64(paginator.Offset()))
+	if err != nil {
+		logs.Warn("Failed to get current user results: ", err.Error())
+	}
+
+	resultSets := helpers.PrepareResultSet(results)
+
+	c.Data["paginator"] = paginator
+	c.Data["resultSets"] = resultSets
 }
 
 func (c *ResultController) Create() {
