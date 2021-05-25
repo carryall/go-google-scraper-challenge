@@ -27,15 +27,13 @@ func (c *ResultController) List() {
 	c.TplName = "results/list.html"
 	web.ReadFromRequest(&c.Controller)
 
-	if c.CurrentUser != nil {
-		results, err := models.GetResultsByUserId(c.CurrentUser.Id)
-		if err != nil {
-			logs.Warn("Failed to get current user results", err.Error())
-			c.Data["results"] = []*models.Result{}
-		}
-
-		c.Data["results"] = results
+	results, err := models.GetResultsByUserId(c.CurrentUser.Id)
+	if err != nil {
+		logs.Warn("Failed to get current user results", err.Error())
+		c.Data["results"] = []*models.Result{}
 	}
+
+	c.Data["results"] = results
 }
 
 func (c *ResultController) Create() {
