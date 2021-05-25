@@ -35,7 +35,7 @@ func Search(keywords []string, user *models.User) {
 func setupQueue(user *models.User, keywords []string) *queue.Queue {
 	searchQueue, err := queue.New(2, &queue.InMemoryQueueStorage{MaxSize: 10000})
 	if err != nil {
-		logs.Error("Failed to create a queue", err.Error())
+		logs.Error("Failed to create a queue:", err.Error())
 	}
 
 	for _, k := range keywords {
@@ -58,7 +58,7 @@ func createResult(user *models.User, keyword string) int64  {
 	}
 	resultID, err := models.CreateResult(result)
 	if err != nil {
-		logs.Error("Failed to create result", err.Error())
+		logs.Error("Failed to create result:", err.Error())
 	}
 
 	return resultID
@@ -124,7 +124,7 @@ func wholePageCollector(e *colly.HTMLElement) {
 	result.PageCache = string(e.Response.Body)
 	err := models.UpdateResultById(result)
 	if err != nil {
-		logs.Error("Failed to update result page cache", err.Error())
+		logs.Error("Failed to update result page cache:", err.Error())
 	}
 }
 
@@ -167,7 +167,7 @@ func finishScrapingHandler(response *colly.Response) {
 	result.Status = models.ResultStatusCompleted
 	err := models.UpdateResultById(result)
 	if err != nil {
-		logs.Error("Failed to complete result", err.Error())
+		logs.Error("Failed to complete result:", err.Error())
 	}
 	logs.Info("Finished scraping for keyword:", result.Keyword)
 }
@@ -177,7 +177,7 @@ func getResultFromContext(context *colly.Context) *models.Result {
 
 	result, err := models.GetResultById(resultID)
 	if err != nil {
-		logs.Error("Failed to get result by ID", resultID, err.Error())
+		logs.Error("Failed to get result by ID:", resultID, err.Error())
 	}
 
 	return result
@@ -187,7 +187,7 @@ func getResultIDFromContext(context *colly.Context) int64 {
 	rID := context.Get("resultID")
 	resultID, err := num.ParseInt64(rID)
 	if err != nil {
-		logs.Error("Failed to parse result ID", err.Error())
+		logs.Error("Failed to parse result ID:", err.Error())
 	}
 
 	return resultID
