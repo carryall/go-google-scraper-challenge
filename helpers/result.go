@@ -4,14 +4,22 @@ import (
 	"go-google-scraper-challenge/models"
 )
 
-func DivideByHalf(results []*models.Result) [][]*models.Result {
+func PrepareResultSet(results []*models.Result) [][]*models.Result {
 	if len(results) == 0 {
 		return nil
 	}
-	divided := make([][]*models.Result, 2)
-	splitIndex := (len(results)+1)/2
-	divided[0] = results[0:splitIndex]
-	divided[1] = results[splitIndex:]
 
-	return divided
+	if len(results) > 10 {
+		chunks := make([][]*models.Result, 2)
+		splitIndex := (len(results)+1)/2
+		chunks[0] = results[0:splitIndex]
+		chunks[1] = results[splitIndex:]
+
+		return chunks
+	}
+
+	chunks := make([][]*models.Result, 1)
+	chunks[0] = results
+
+	return chunks
 }

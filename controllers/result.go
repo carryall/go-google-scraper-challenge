@@ -33,9 +33,9 @@ func (c *ResultController) List() {
 		logs.Warn("Failed to get current user results: ", err.Error())
 		c.Data["results"] = []*models.Result{}
 	}
-	dividedResults := helpers.DivideByHalf(results)
+	resultSets := helpers.PrepareResultSet(results)
 
-	c.Data["dividedResults"] = dividedResults
+	c.Data["resultSets"] = resultSets
 }
 
 func (c *ResultController) Create() {
