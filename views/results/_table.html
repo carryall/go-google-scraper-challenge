@@ -1,12 +1,12 @@
 <table class="table table-result">
-    <thead class="table-head">
+    <thead class="table__head">
         <tr>
             <th scope="col" class="table-header">Created At</th>
             <th scope="col" class="table-header">Keyword</th>
             <th scope="col" class="table-header">Status</th>
         </tr>
     </thead>
-    <tbody class="table-body">
+    <tbody class="table__body">
     {{ range $result := .results }}
         <tr id="{{ $result.Id }}">
             <td class="table-data table-result__date">{{ format_datetime $result.CreatedAt }}</td>
