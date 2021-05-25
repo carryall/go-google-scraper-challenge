@@ -14,7 +14,7 @@ import (
 
 var _ = Describe("ResultController", func() {
 	Describe("GET /", func() {
-		Context("given user already signed in", func() {
+		Context("given the user already signed in", func() {
 			It("renders with status 200", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
@@ -22,13 +22,14 @@ var _ = Describe("ResultController", func() {
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 
-			Context("given user have results", func() {
+			Context("given the user have results", func() {
 				It("renders user results", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					otherUser := FabricateUser(faker.Email(), faker.Password())
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 					result3 := FabricateResult(otherUser)
+
 					response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
 					responseBody := GetResponseBody(response)
 
@@ -39,7 +40,7 @@ var _ = Describe("ResultController", func() {
 			})
 		})
 
-		Context("given user is NOT signed in", func() {
+		Context("given the user is NOT signed in", func() {
 			It("redirects to sign in path", func() {
 				response := MakeRequest("GET", "/", nil)
 				currentPath := GetCurrentPath(response)
@@ -52,7 +53,7 @@ var _ = Describe("ResultController", func() {
 
 	Describe("POST /results", func() {
 		Context("given a valid CSV file", func() {
-			It("redirects to root path", func() {
+			It("redirects to the root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
@@ -74,7 +75,7 @@ var _ = Describe("ResultController", func() {
 				Expect(flash.Data["error"]).To(BeEmpty())
 			})
 
-			It("creates results with given keywords", func() {
+			It("creates results with the given keywords", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
@@ -94,7 +95,7 @@ var _ = Describe("ResultController", func() {
 		})
 
 		Context("given a blank CSV file", func() {
-			It("redirects to root path", func() {
+			It("redirects to the root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
 
@@ -118,7 +119,7 @@ var _ = Describe("ResultController", func() {
 		})
 
 		Context("given a CSV file that contains more than 1000 keywords", func() {
-			It("redirects to root path", func() {
+			It("redirects to the root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
 
@@ -142,7 +143,7 @@ var _ = Describe("ResultController", func() {
 		})
 
 		Context("given an INVALID file type", func() {
-			It("redirects to root path", func() {
+			It("redirects to the root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
 
@@ -166,7 +167,7 @@ var _ = Describe("ResultController", func() {
 		})
 
 		Context("given user is NOT signed in", func() {
-			It("returns error", func() {
+			It("returns an error", func() {
 				body := GenerateRequestBody(nil)
 				response := MakeRequest("POST", "/results", body)
 
