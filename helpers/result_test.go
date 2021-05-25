@@ -22,7 +22,7 @@ var _ = Describe("Result", func() {
 		})
 
 		Context("given a list of 10 results", func() {
-			It("returns a kebab case string", func() {
+			It("returns a set of 10 results", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				var results []*models.Result
 				for i := 0; i < 10; i++ {

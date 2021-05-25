@@ -386,7 +386,7 @@ var _ = Describe("Result", func() {
 
 	Describe("#CountResultsByUserId", func() {
 		Context("given a valid user id", func() {
-			It("returns user result count", func() {
+			It("returns the correct number of user results", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				otherUser := FabricateUser(faker.Email(), faker.Password())
 				FabricateResult(user)
@@ -421,7 +421,7 @@ var _ = Describe("Result", func() {
 
 				count, err := models.CountResultsByUserId(999)
 				if err != nil {
-					Fail("Failed to get results with User Id")
+					Fail("Failed to count results with User Id")
 				}
 
 				Expect(count).To(BeZero())
