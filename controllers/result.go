@@ -29,7 +29,7 @@ func (c *ResultController) List() {
 
 	results, err := models.GetResultsByUserId(c.CurrentUser.Id)
 	if err != nil {
-		logs.Warn("Failed to get current user results", err.Error())
+		logs.Warn("Failed to get current user results: ", err.Error())
 		c.Data["results"] = []*models.Result{}
 	}
 
