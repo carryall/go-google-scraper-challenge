@@ -22,7 +22,7 @@ var _ = Describe("ResultController", func() {
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 
-			Context("given the user have results", func() {
+			Context("given the user has results", func() {
 				It("renders user results", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					otherUser := FabricateUser(faker.Email(), faker.Password())
