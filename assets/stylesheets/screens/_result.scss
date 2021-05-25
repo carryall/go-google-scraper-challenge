@@ -11,14 +11,14 @@
     @apply flex flex-wrap justify-around;
   }
 
-  .table-results {
+  .table-result {
     @apply max-w-lg;
 
-    td {
+    .table-data {
       @apply whitespace-normal;
     }
 
-    td.table-results__date {
+    .table-data.table-result__date {
       @apply text-sm text-gray-500;
     }
   }

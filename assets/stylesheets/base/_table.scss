@@ -1,7 +1,7 @@
 .table {
   @apply my-4 shadow overflow-hidden border border-primary-200 rounded-md divide-y divide-primary-200;
 
-  .table-headers {
+  .table-head {
     @apply bg-primary-100;
 
     .table-header {
