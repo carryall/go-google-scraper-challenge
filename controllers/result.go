@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/forms"
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/services/scraper"
 
@@ -33,9 +32,8 @@ func (c *ResultController) List() {
 		logs.Warn("Failed to get current user results: ", err.Error())
 		c.Data["results"] = []*models.Result{}
 	}
-	resultSets := helpers.PrepareResultSet(results)
 
-	c.Data["resultSets"] = resultSets
+	c.Data["results"] = results
 }
 
 func (c *ResultController) Create() {
