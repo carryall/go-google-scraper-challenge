@@ -1,6 +1,7 @@
 package presenters_test
 
 import (
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/presenters"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -20,33 +21,35 @@ var _ = Describe("Result", func() {
 			})
 		})
 
-		Context("given a list of 10 results", func() {
-			It("returns a set of 10 results", func() {
+		Context("given a result list with half of configured `PaginationPerPage` length", func() {
+			It("returns a set of all results", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				var results []*models.Result
-				for i := 0; i < 10; i++ {
+				perPage := helpers.GetPaginationPerPage()
+				for i := 0; i < perPage/2; i++ {
 					results = append(results, FabricateResult(user))
 				}
 
 				resultSet := presenters.PrepareResultSet(results)
 
 				Expect(resultSet).To(HaveLen(1))
-				Expect(resultSet[0]).To(HaveLen(10))
+				Expect(resultSet[0]).To(HaveLen(perPage/2))
 			})
 		})
 
-		Context("given a list of more than 10 results", func() {
-			It("returns two sets of result", func() {
+		Context("given a result list with more than half of configured `PaginationPerPage` length", func() {
+			It("returns two sets of result divided by half of configured `PaginationPerPage`", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				var results []*models.Result
-				for i := 0; i < 15; i++ {
+				perPage := helpers.GetPaginationPerPage()
+				for i := 0; i < (perPage / 2) + 5; i++ {
 					results = append(results, FabricateResult(user))
 				}
 
 				resultSet := presenters.PrepareResultSet(results)
 
 				Expect(resultSet).To(HaveLen(2))
-				Expect(resultSet[0]).To(HaveLen(10))
+				Expect(resultSet[0]).To(HaveLen(perPage / 2))
 				Expect(resultSet[1]).To(HaveLen(5))
 			})
 		})
