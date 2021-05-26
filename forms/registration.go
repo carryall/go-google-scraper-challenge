@@ -1,6 +1,7 @@
 package forms
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
@@ -18,14 +19,14 @@ type RegistrationForm struct {
 func (rf *RegistrationForm) Valid(v *validation.Validation) {
 	userExist := models.UserEmailAlreadyExist(rf.Email)
 	if userExist {
-		validationError := v.SetError("Email", "User with this email already exist")
+		validationError := v.SetError("Email", constants.UserAlreadyExist)
 		if validationError == nil {
 			logs.Info("Failed to set error on validation")
 		}
 	}
 
 	if rf.Password != rf.PasswordConfirmation {
-		validationError := v.SetError("PasswordConfirmation", "Password confirmation must match the password")
+		validationError := v.SetError("PasswordConfirmation", constants.PasswordConfirmNotMatch)
 		if validationError == nil {
 			logs.Info("Failed to set error on validation")
 		}

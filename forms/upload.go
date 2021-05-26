@@ -3,6 +3,7 @@ package forms
 import (
 	"mime/multipart"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
@@ -20,7 +21,7 @@ type UploadForm struct {
 // Valid adds custom validation to upload form, sets error when the validation failed.
 func (uf *UploadForm) Valid(v *validation.Validation) {
 	if !uf.validateFilePresence() {
-		err := v.SetError("File", "File cannot be empty")
+		err := v.SetError("File", constants.FileEmpty)
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
@@ -29,7 +30,7 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 	}
 
 	if !uf.validateFileType() {
-		err := v.SetError("File", "Incorrect file type")
+		err := v.SetError("File", constants.FileTypeInvalid)
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
@@ -38,7 +39,7 @@ func (uf *UploadForm) Valid(v *validation.Validation) {
 	}
 
 	if !uf.validateFileReadability() {
-		err := v.SetError("File", "Unreadable file")
+		err := v.SetError("File", constants.FileUnreadable)
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}

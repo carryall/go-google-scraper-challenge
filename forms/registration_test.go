@@ -1,6 +1,7 @@
 package forms_test
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -46,7 +47,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
-					Expect(formValidation.Errors[0].Message).To(Equal("User with this email already exist"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.UserAlreadyExist))
 				})
 			})
 
@@ -63,7 +64,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("PasswordConfirmation"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Password confirmation must match the password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.PasswordConfirmNotMatch))
 				})
 			})
 		})
@@ -116,7 +117,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 					userID, errors := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("User with this email already exist"))
+					Expect(errors[0].Error()).To(Equal(constants.UserAlreadyExist))
 				})
 			})
 
@@ -223,7 +224,7 @@ var _ = Describe("Forms/RegistrationForm", func() {
 					userID, errors := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("Password confirmation must match the password"))
+					Expect(errors[0].Error()).To(Equal(constants.PasswordConfirmNotMatch))
 				})
 			})
 		})

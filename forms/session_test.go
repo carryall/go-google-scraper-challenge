@@ -1,6 +1,7 @@
 package forms_test
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -42,7 +43,7 @@ var _ = Describe("Forms/SessionForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect email or password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.SignInFail))
 				})
 			})
 
@@ -59,7 +60,7 @@ var _ = Describe("Forms/SessionForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect email or password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.SignInFail))
 				})
 			})
 
@@ -76,7 +77,7 @@ var _ = Describe("Forms/SessionForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Password"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect email or password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.SignInFail))
 				})
 			})
 		})

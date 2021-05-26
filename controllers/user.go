@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"net/http"
 
@@ -60,7 +61,7 @@ func (c *UserController) Create() {
 		}
 		redirectPath = "/signup"
 	} else {
-		flash.Success("The user was successfully created")
+		flash.Success(constants.UserCreateSuccess)
 		redirectPath = "/signin"
 	}
 

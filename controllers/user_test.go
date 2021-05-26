@@ -3,6 +3,7 @@ package controllers_test
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
 
@@ -62,7 +63,7 @@ var _ = Describe("UserController", func() {
 					response := MakeRequest("POST", "/users", body)
 					flash := GetFlashMessage(response.Cookies())
 
-					Expect(flash.Data["success"]).To(Equal("The user was successfully created"))
+					Expect(flash.Data["success"]).To(Equal(constants.UserCreateSuccess))
 					Expect(flash.Data["error"]).To(BeEmpty())
 				})
 			})

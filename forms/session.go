@@ -1,6 +1,7 @@
 package forms
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
@@ -19,14 +20,14 @@ var currentUser *models.User
 func (sf *SessionForm) Valid(v *validation.Validation) {
 	user, err := models.GetUserByEmail(sf.Email)
 	if err != nil {
-		err := v.SetError("Email", "Incorrect email or password")
+		err := v.SetError("Email", constants.SignInFail)
 		if err == nil {
 			logs.Info("Failed to set error on validation")
 		}
 	} else {
 		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, sf.Password)
 		if !validPassword {
-			err := v.SetError("Password", "Incorrect email or password")
+			err := v.SetError("Password", constants.SignInFail)
 			if err == nil {
 				logs.Info("Failed to set error on validation")
 			}
