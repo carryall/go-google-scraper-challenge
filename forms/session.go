@@ -5,7 +5,6 @@ import (
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
-	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
 )
 
@@ -20,17 +19,11 @@ var currentUser *models.User
 func (sf *SessionForm) Valid(v *validation.Validation) {
 	user, err := models.GetUserByEmail(sf.Email)
 	if err != nil {
-		err := v.SetError("Email", constants.SignInFail)
-		if err == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("Email", constants.SignInFail)
 	} else {
 		validPassword := helpers.CompareHashWithPassword(user.HashedPassword, sf.Password)
 		if !validPassword {
-			err := v.SetError("Password", constants.SignInFail)
-			if err == nil {
-				logs.Info("Failed to set error on validation")
-			}
+			_ = v.SetError("Password", constants.SignInFail)
 		} else {
 			currentUser = user
 		}

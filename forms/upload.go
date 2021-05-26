@@ -7,7 +7,6 @@ import (
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
-	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
 )
 
@@ -21,37 +20,25 @@ type UploadForm struct {
 // Valid adds custom validation to upload form, sets error when the validation failed.
 func (uf *UploadForm) Valid(v *validation.Validation) {
 	if !uf.validateFilePresence() {
-		err := v.SetError("File", constants.FileEmpty)
-		if err == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("File", constants.FileEmpty)
 
 		return
 	}
 
 	if !uf.validateFileType() {
-		err := v.SetError("File", constants.FileTypeInvalid)
-		if err == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("File", constants.FileTypeInvalid)
 
 		return
 	}
 
 	if !uf.validateFileReadability() {
-		err := v.SetError("File", constants.FileUnreadable)
-		if err == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("File", constants.FileUnreadable)
 
 		return
 	}
 
 	if !uf.validateKeywordsLength() {
-		err := v.SetError("File", "File should contains between 1 to 1000 keywords")
-		if err == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("File", "File should contains between 1 to 1000 keywords")
 	}
 }
 
