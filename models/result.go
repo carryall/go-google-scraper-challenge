@@ -54,13 +54,21 @@ func GetResultById(id int64) (*Result, error) {
 	return result, nil
 }
 
-// GetResultsByUserId retrieves all Results with User Id. Returns empty list if no records exist
-func GetResultsByUserId(userId int64) ([]*Result, error) {
+// GetPaginatedResultsByUserId retrieves paginated Results with User Id. Returns empty list if no records exist
+func GetPaginatedResultsByUserId(userId int64, limit int64, offset int64) ([]*Result, error) {
 	querySeter := resultQuerySeter().Filter("user_id", userId).OrderBy("-created_at").RelatedSel()
 	var results []*Result
-	_, err := querySeter.All(&results)
+	_, err := querySeter.Limit(limit, offset).All(&results)
 
 	return results, err
+}
+
+// CountResultsByUserId count all Results with User Id. Returns 0 if no records exist
+func CountResultsByUserId(userId int64) (int64, error) {
+	querySeter := resultQuerySeter().Filter("user_id", userId)
+	count, err := querySeter.Count()
+
+	return count, err
 }
 
 // UpdateResult updates Result by Id and returns error if the record to be updated doesn't exist

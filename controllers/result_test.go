@@ -81,7 +81,7 @@ var _ = Describe("ResultController", func() {
 
 				MakeAuthenticatedRequest("POST", "/results", header, body, user)
 
-				results, err := models.GetResultsByUserId(user.Id)
+				results, err := models.GetPaginatedResultsByUserId(user.Id, 0, 0)
 				if err != nil {
 					Fail("Failed to get user results: " + err.Error())
 				}

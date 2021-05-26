@@ -1,0 +1,39 @@
+.paginator {
+  $self: &;
+
+  @apply w-full justify-center relative p-2 z-0 inline-flex -space-x-px sm:p-4 sm:pt-2;
+
+  &__page {
+    @apply bg-white border-gray-300 relative inline-flex items-center p-2 border shadow-sm text-sm font-medium hover:bg-gray-50;
+
+    #{$self}__page-text, #{$self}__page-link {
+      @apply text-gray-500 text-center;
+      min-width: 20px;
+      min-height: 16px;
+    }
+
+    &--active {
+      @apply z-10 bg-primary-100 border-primary-500 hover:bg-primary-300;
+
+      #{$self}__page-text, #{$self}__page-link {
+        @apply text-primary-600;
+      }
+    }
+
+    &:first-child {
+      @apply rounded-l-md rounded-bl-md;
+    }
+
+    &:last-child {
+      @apply rounded-r-md rounded-br-md;
+    }
+
+    &.disabled {
+      @apply bg-gray-100 cursor-default hover:bg-gray-100;
+
+      #{$self}__page-text, #{$self}__page-link {
+        @apply text-gray-300;
+      }
+    }
+  }
+}
