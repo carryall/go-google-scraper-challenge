@@ -19,6 +19,8 @@ func (rf *RegistrationForm) Valid(v *validation.Validation) {
 	userExist := models.UserEmailAlreadyExist(rf.Email)
 	if userExist {
 		_ = v.SetError("Email", constants.UserAlreadyExist)
+
+		return
 	}
 
 	if rf.Password != rf.PasswordConfirmation {
@@ -28,26 +30,21 @@ func (rf *RegistrationForm) Valid(v *validation.Validation) {
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (rf *RegistrationForm) Save() (*models.User, []error) {
+func (rf *RegistrationForm) Save() (*models.User, error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(rf)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	if !valid {
-		var errors []error
-		for _, err := range validation.Errors {
-			errors = append(errors, err)
-		}
-
-		return nil, errors
+		return nil, validation.Errors[0]
 	}
 
 	hashedPassword, err := helpers.HashPassword(rf.Password)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	user := &models.User{
@@ -57,13 +54,13 @@ func (rf *RegistrationForm) Save() (*models.User, []error) {
 
 	userID, err := models.CreateUser(user)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	user, err = models.GetUserById(userID)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
-	return user, []error{}
+	return user, nil
 }

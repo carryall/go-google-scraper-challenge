@@ -80,8 +80,8 @@ var _ = Describe("Forms/RegistrationForm", func() {
 					PasswordConfirmation: password,
 				}
 
-				userID, errors := form.Save()
-				if len(errors) > 0 {
+				userID, err := form.Save()
+				if err != nil {
 					Fail("Failed to save form")
 				}
 
@@ -96,9 +96,9 @@ var _ = Describe("Forms/RegistrationForm", func() {
 					PasswordConfirmation: password,
 				}
 
-				_, errors := form.Save()
+				_, err := form.Save()
 
-				Expect(len(errors)).To(BeZero())
+				Expect(err).To(BeNil())
 			})
 		})
 
@@ -114,10 +114,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: password,
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal(constants.UserAlreadyExist))
+					Expect(err.Error()).To(Equal(constants.UserAlreadyExist))
 				})
 			})
 
@@ -130,10 +130,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: password,
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(err.Error()).To(Equal("Email must be a valid email address"))
 				})
 			})
 
@@ -146,10 +146,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: password,
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(err.Error()).To(Equal("Email must be a valid email address"))
 				})
 			})
 
@@ -161,10 +161,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: faker.Password(),
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("Password can not be empty"))
+					Expect(err.Error()).To(Equal("Password can not be empty"))
 				})
 			})
 
@@ -176,10 +176,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: faker.Password(),
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("Password minimum size is 6"))
+					Expect(err.Error()).To(Equal("Password minimum size is 6"))
 				})
 			})
 
@@ -191,10 +191,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "",
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("PasswordConfirmation can not be empty"))
+					Expect(err.Error()).To(Equal("PasswordConfirmation can not be empty"))
 				})
 			})
 
@@ -206,10 +206,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "1234",
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal("PasswordConfirmation minimum size is 6"))
+					Expect(err.Error()).To(Equal("PasswordConfirmation minimum size is 6"))
 				})
 			})
 
@@ -221,10 +221,10 @@ var _ = Describe("Forms/RegistrationForm", func() {
 						PasswordConfirmation: "does not match the password",
 					}
 
-					userID, errors := form.Save()
+					userID, err := form.Save()
 
 					Expect(userID).To(BeNil())
-					Expect(errors[0].Error()).To(Equal(constants.PasswordConfirmNotMatch))
+					Expect(err.Error()).To(Equal(constants.PasswordConfirmNotMatch))
 				})
 			})
 		})

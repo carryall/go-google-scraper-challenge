@@ -93,9 +93,9 @@ var _ = Describe("Forms/SessionForm", func() {
 					Password: password,
 				}
 
-				currentUser, errors := form.Save()
+				currentUser, err := form.Save()
 
-				Expect(len(errors)).To(BeZero())
+				Expect(err).To(BeNil())
 				Expect(currentUser.Id).To(Equal(user.Id))
 			})
 		})
@@ -108,9 +108,9 @@ var _ = Describe("Forms/SessionForm", func() {
 						Password: faker.Password(),
 					}
 
-					user, errors := form.Save()
+					user, err := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(err.Error()).To(Equal("Email must be a valid email address"))
 					Expect(user).To(BeNil())
 				})
 			})
@@ -122,9 +122,9 @@ var _ = Describe("Forms/SessionForm", func() {
 						Password: faker.Password(),
 					}
 
-					user, errors := form.Save()
+					user, err := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(err.Error()).To(Equal("Email can not be empty"))
 					Expect(user).To(BeNil())
 				})
 			})
@@ -136,9 +136,9 @@ var _ = Describe("Forms/SessionForm", func() {
 						Password: "",
 					}
 
-					user, errors := form.Save()
+					user, err := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Password can not be empty"))
+					Expect(err.Error()).To(Equal("Password can not be empty"))
 					Expect(user).To(BeNil())
 				})
 			})

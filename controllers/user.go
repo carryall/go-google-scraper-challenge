@@ -54,11 +54,9 @@ func (c *UserController) Create() {
 		flash.Error(err.Error())
 	}
 
-	_, errors := form.Save()
-	if len(errors) > 0 {
-		for _, err := range errors {
-			flash.Error(err.Error())
-		}
+	_, err = form.Save()
+	if err != nil {
+		flash.Error(err.Error())
 		redirectPath = "/signup"
 	} else {
 		flash.Success(constants.UserCreateSuccess)
