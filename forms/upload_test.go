@@ -1,6 +1,7 @@
 package forms_test
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -43,7 +44,7 @@ var _ = Describe("Forms/UploadForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("File"))
-					Expect(formValidation.Errors[0].Message).To(Equal("File cannot be empty"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.FileEmpty))
 				})
 			})
 
@@ -62,7 +63,7 @@ var _ = Describe("Forms/UploadForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("File"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect file type"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.FileTypeInvalid))
 				})
 			})
 

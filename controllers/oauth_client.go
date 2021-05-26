@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/services/oauth"
 
 	"github.com/beego/beego/v2/server/web"
@@ -47,7 +48,7 @@ func (c *OAuthClientController) Create() {
 		flash.Store(&c.Controller)
 		c.Redirect("/oauth_client", http.StatusFound)
 	} else {
-		flash.Success("The Client was successfully created")
+		flash.Success(constants.OAuthClientCreateSuccess)
 		flash.Store(&c.Controller)
 		c.Redirect("/oauth_client/"+oauthClient.ClientID, http.StatusFound)
 	}
@@ -69,7 +70,7 @@ func (c *OAuthClientController) Show() {
 	oauthClient, err := oauth.GetClientStore().GetByID(clientID)
 	if err != nil {
 		flash := web.NewFlash()
-		flash.Error("OAuth client not found")
+		flash.Error(constants.OAuthClientNotFound)
 		flash.Store(&c.Controller)
 		c.Redirect("/oauth_client", http.StatusFound)
 	} else {

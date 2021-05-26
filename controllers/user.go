@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"net/http"
 
@@ -53,14 +54,12 @@ func (c *UserController) Create() {
 		flash.Error(err.Error())
 	}
 
-	_, errors := form.Save()
-	if len(errors) > 0 {
-		for _, err := range errors {
-			flash.Error(err.Error())
-		}
+	_, err = form.Save()
+	if err != nil {
+		flash.Error(err.Error())
 		redirectPath = "/signup"
 	} else {
-		flash.Success("The user was successfully created")
+		flash.Success(constants.UserCreateSuccess)
 		redirectPath = "/signin"
 	}
 

@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
@@ -56,7 +57,7 @@ func (c *ResultController) Create() {
 
 	file, fileHeader, err := c.GetFile("file")
 	if err != nil {
-		flash.Error("Failed to upload file, please make sure the file is not corrupted")
+		flash.Error(constants.FileUploadFail)
 	} else {
 		uploadForm := forms.UploadForm{
 			File: file,
@@ -67,7 +68,7 @@ func (c *ResultController) Create() {
 		if err != nil {
 			flash.Error(err.Error())
 		} else {
-			flash.Success("Successfully uploaded the file, the result status would be updated soon")
+			flash.Success(constants.FileUploadSuccess)
 			scraper.Search(keywords, c.CurrentUser)
 		}
 	}

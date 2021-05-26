@@ -1,6 +1,7 @@
 package forms_test
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -42,7 +43,7 @@ var _ = Describe("Forms/SessionForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect email or password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.SignInFail))
 				})
 			})
 
@@ -59,7 +60,7 @@ var _ = Describe("Forms/SessionForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Email"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect email or password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.SignInFail))
 				})
 			})
 
@@ -76,7 +77,7 @@ var _ = Describe("Forms/SessionForm", func() {
 
 					Expect(len(formValidation.Errors)).To(Equal(1))
 					Expect(formValidation.Errors[0].Key).To(Equal("Password"))
-					Expect(formValidation.Errors[0].Message).To(Equal("Incorrect email or password"))
+					Expect(formValidation.Errors[0].Message).To(Equal(constants.SignInFail))
 				})
 			})
 		})
@@ -92,9 +93,9 @@ var _ = Describe("Forms/SessionForm", func() {
 					Password: password,
 				}
 
-				currentUser, errors := form.Save()
+				currentUser, err := form.Save()
 
-				Expect(len(errors)).To(BeZero())
+				Expect(err).To(BeNil())
 				Expect(currentUser.Id).To(Equal(user.Id))
 			})
 		})
@@ -107,9 +108,9 @@ var _ = Describe("Forms/SessionForm", func() {
 						Password: faker.Password(),
 					}
 
-					user, errors := form.Save()
+					user, err := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(err.Error()).To(Equal("Email must be a valid email address"))
 					Expect(user).To(BeNil())
 				})
 			})
@@ -121,9 +122,9 @@ var _ = Describe("Forms/SessionForm", func() {
 						Password: faker.Password(),
 					}
 
-					user, errors := form.Save()
+					user, err := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Email must be a valid email address"))
+					Expect(err.Error()).To(Equal("Email can not be empty"))
 					Expect(user).To(BeNil())
 				})
 			})
@@ -135,9 +136,9 @@ var _ = Describe("Forms/SessionForm", func() {
 						Password: "",
 					}
 
-					user, errors := form.Save()
+					user, err := form.Save()
 
-					Expect(errors[0].Error()).To(Equal("Password can not be empty"))
+					Expect(err.Error()).To(Equal("Password can not be empty"))
 					Expect(user).To(BeNil())
 				})
 			})

@@ -3,6 +3,7 @@ package controllers_test
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -162,7 +163,7 @@ var _ = Describe("ResultController", func() {
 				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["success"]).To(BeEmpty())
-				Expect(flash.Data["error"]).To(Equal("Incorrect file type"))
+				Expect(flash.Data["error"]).To(Equal(constants.FileTypeInvalid))
 			})
 		})
 

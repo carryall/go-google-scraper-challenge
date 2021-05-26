@@ -3,6 +3,7 @@ package controllers_test
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/controllers"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
@@ -186,7 +187,7 @@ var _ = Describe("SessionController", func() {
 						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
 
-						Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
+						Expect(flash.Data["error"]).To(Equal(constants.SignInFail))
 						Expect(flash.Data["success"]).To(BeEmpty())
 					})
 
@@ -226,7 +227,7 @@ var _ = Describe("SessionController", func() {
 						response := MakeRequest("POST", "/sessions", body)
 						flash := GetFlashMessage(response.Cookies())
 
-						Expect(flash.Data["error"]).To(Equal("Incorrect email or password"))
+						Expect(flash.Data["error"]).To(Equal(constants.SignInFail))
 						Expect(flash.Data["success"]).To(BeEmpty())
 					})
 
