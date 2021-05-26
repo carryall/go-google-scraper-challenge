@@ -1,6 +1,7 @@
-package helpers
+package presenters
 
 import (
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 )
 
@@ -9,10 +10,12 @@ func PrepareResultSet(results []*models.Result) [][]*models.Result {
 		return nil
 	}
 
-	if len(results) > 10 {
+	defaultPerPage := helpers.GetPaginationPerPage()
+	splitIndex := defaultPerPage / 2
+	if len(results) > splitIndex {
 		chunks := make([][]*models.Result, 2)
-		chunks[0] = results[0:10]
-		chunks[1] = results[10:]
+		chunks[0] = results[0:splitIndex]
+		chunks[1] = results[splitIndex:]
 
 		return chunks
 	}

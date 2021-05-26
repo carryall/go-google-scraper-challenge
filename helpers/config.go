@@ -13,3 +13,12 @@ func GetAppRunMode() string {
 
 	return runMode
 }
+
+func GetPaginationPerPage() int {
+	perPage, err := web.AppConfig.Int("PaginationPerPage")
+	if err != nil {
+		logs.Error("Pagination per page not found: ", err)
+	}
+
+	return perPage
+}

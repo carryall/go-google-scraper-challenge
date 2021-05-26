@@ -6,6 +6,7 @@ import (
 	"go-google-scraper-challenge/forms"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
+	"go-google-scraper-challenge/presenters"
 	"go-google-scraper-challenge/services/scraper"
 
 	"github.com/beego/beego/v2/adapter/context"
@@ -38,14 +39,15 @@ func (c *ResultController) List() {
 		c.Data["results"] = []*models.Result{}
 	}
 
-	paginator := pagination.SetPaginator((*context.Context)(c.Ctx), ITEMS_PER_PAGE, totalResultCount)
+	perPage := helpers.GetPaginationPerPage()
+	paginator := pagination.SetPaginator((*context.Context)(c.Ctx), perPage, totalResultCount)
 
-	results, err := models.GetPaginatedResultsByUserId(c.CurrentUser.Id, ITEMS_PER_PAGE, int64(paginator.Offset()))
+	results, err := models.GetPaginatedResultsByUserId(c.CurrentUser.Id, int64(perPage), int64(paginator.Offset()))
 	if err != nil {
 		logs.Warn("Failed to get current user results: ", err.Error())
 	}
 
-	resultSets := helpers.PrepareResultSet(results)
+	resultSets := presenters.PrepareResultSet(results)
 
 	c.Data["paginator"] = paginator
 	c.Data["resultSets"] = resultSets

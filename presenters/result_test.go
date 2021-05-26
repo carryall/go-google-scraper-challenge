@@ -1,14 +1,13 @@
-package helpers_test
+package presenters_test
 
 import (
 	"go-google-scraper-challenge/models"
+	"go-google-scraper-challenge/presenters"
 	. "go-google-scraper-challenge/tests/helpers"
 
 	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-
-	"go-google-scraper-challenge/helpers"
 )
 
 var _ = Describe("Result", func() {
@@ -17,7 +16,7 @@ var _ = Describe("Result", func() {
 			It("returns nil", func() {
 				var results []*models.Result
 
-				Expect(helpers.PrepareResultSet(results)).To(BeNil())
+				Expect(presenters.PrepareResultSet(results)).To(BeNil())
 			})
 		})
 
@@ -29,7 +28,7 @@ var _ = Describe("Result", func() {
 					results = append(results, FabricateResult(user))
 				}
 
-				resultSet := helpers.PrepareResultSet(results)
+				resultSet := presenters.PrepareResultSet(results)
 
 				Expect(resultSet).To(HaveLen(1))
 				Expect(resultSet[0]).To(HaveLen(10))
@@ -44,7 +43,7 @@ var _ = Describe("Result", func() {
 					results = append(results, FabricateResult(user))
 				}
 
-				resultSet := helpers.PrepareResultSet(results)
+				resultSet := presenters.PrepareResultSet(results)
 
 				Expect(resultSet).To(HaveLen(2))
 				Expect(resultSet[0]).To(HaveLen(10))
