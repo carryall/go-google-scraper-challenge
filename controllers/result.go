@@ -47,7 +47,6 @@ func (c *ResultController) List() {
 
 	resultSets := presenters.PrepareResultSet(results)
 
-	c.Data["paginator"] = paginator
 	c.Data["resultSets"] = resultSets
 }
 
