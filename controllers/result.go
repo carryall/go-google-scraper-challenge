@@ -20,8 +20,6 @@ type ResultController struct {
 	BaseController
 }
 
-const ITEMS_PER_PAGE = 20
-
 // URLMapping map user controller actions to functions
 func (c *ResultController) URLMapping() {
 	c.Mapping("List", c.List)
