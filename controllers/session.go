@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
 
 	"github.com/beego/beego/v2/server/web"
@@ -55,16 +56,14 @@ func (c *SessionController) Create() {
 		flash.Error(err.Error())
 	}
 
-	user, errs := form.Save()
-	if len(errs) > 0 {
-		for _, err := range errs {
-			flash.Error(err.Error())
-		}
+	user, err := form.Save()
+	if err != nil {
+		flash.Error(err.Error())
 		redirectPath = "/signin"
 	} else {
 		c.SetCurrentUser(user)
 
-		flash.Success("Successfully signed in")
+		flash.Success(constants.SignInSuccess)
 		redirectPath = "/"
 	}
 
@@ -86,10 +85,10 @@ func (c *SessionController) Delete() {
 
 	err := c.ClearCurrentUser()
 	if err != nil {
-		flash.Error("Failed to sign out")
+		flash.Error(constants.SignOutFail)
 		redirectPath = "/"
 	} else {
-		flash.Success("Successfully signed out")
+		flash.Success(constants.SignOutSuccess)
 		redirectPath = "/signin"
 	}
 

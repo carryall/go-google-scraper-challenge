@@ -1,9 +1,12 @@
 package tests
 
 import (
+	"fmt"
+
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/services/oauth"
 
+	"github.com/bxcodec/faker/v3"
 	"github.com/onsi/ginkgo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -46,7 +49,7 @@ func FabricateOAuthClient() (client oauth.OAuthClient) {
 func FabricateResult(user *models.User) (result *models.Result) {
 	result = &models.Result{
 		User: user,
-		Keyword: "Keyword",
+		Keyword: fmt.Sprintf("Keyword %s", faker.Word()),
 	}
 
 	resultID, err := models.CreateResult(result)
@@ -65,7 +68,7 @@ func FabricateResult(user *models.User) (result *models.Result) {
 func FabricateLink(result *models.Result) (link *models.Link)  {
 	link = &models.Link{
 		Result: result,
-		Link: "link",
+		Link: faker.URL(),
 	}
 
 	linkID, err := models.CreateLink(link)
@@ -84,7 +87,7 @@ func FabricateLink(result *models.Result) (link *models.Link)  {
 func FabricateAdLink(result *models.Result) (adLink *models.AdLink)  {
 	adLink = &models.AdLink{
 		Result: result,
-		Link: "link",
+		Link: faker.URL(),
 		Position: models.AdLinkPositionTop,
 		Type: models.AdLinkTypeLink,
 	}

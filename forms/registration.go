@@ -1,10 +1,10 @@
 package forms
 
 import (
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 
-	"github.com/beego/beego/v2/core/logs"
 	"github.com/beego/beego/v2/core/validation"
 )
 
@@ -18,42 +18,33 @@ type RegistrationForm struct {
 func (rf *RegistrationForm) Valid(v *validation.Validation) {
 	userExist := models.UserEmailAlreadyExist(rf.Email)
 	if userExist {
-		validationError := v.SetError("Email", "User with this email already exist")
-		if validationError == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("Email", constants.UserAlreadyExist)
+
+		return
 	}
 
 	if rf.Password != rf.PasswordConfirmation {
-		validationError := v.SetError("PasswordConfirmation", "Password confirmation must match the password")
-		if validationError == nil {
-			logs.Info("Failed to set error on validation")
-		}
+		_ = v.SetError("PasswordConfirmation", constants.PasswordConfirmNotMatch)
 	}
 }
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (rf *RegistrationForm) Save() (*models.User, []error) {
+func (rf *RegistrationForm) Save() (*models.User, error) {
 	validation := validation.Validation{}
 
 	valid, err := validation.Valid(rf)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	if !valid {
-		var errors []error
-		for _, err := range validation.Errors {
-			errors = append(errors, err)
-		}
-
-		return nil, errors
+		return nil, validation.Errors[0]
 	}
 
 	hashedPassword, err := helpers.HashPassword(rf.Password)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	user := &models.User{
@@ -63,13 +54,13 @@ func (rf *RegistrationForm) Save() (*models.User, []error) {
 
 	userID, err := models.CreateUser(user)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
 	user, err = models.GetUserById(userID)
 	if err != nil {
-		return nil, []error{err}
+		return nil, err
 	}
 
-	return user, []error{}
+	return user, nil
 }

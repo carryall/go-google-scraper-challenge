@@ -3,26 +3,45 @@ package controllers_test
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
 	. "go-google-scraper-challenge/tests/helpers"
 
+	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("ResultController", func() {
 	Describe("GET /", func() {
-		Context("given user already signed in", func() {
+		Context("given the user already signed in", func() {
 			It("renders with status 200", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
+
+			Context("given the user has results", func() {
+				It("renders user results", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					otherUser := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+					result3 := FabricateResult(otherUser)
+
+					response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
+					responseBody := GetResponseBody(response)
+
+					Expect(responseBody).To(ContainSubstring(result1.Keyword))
+					Expect(responseBody).To(ContainSubstring(result2.Keyword))
+					Expect(responseBody).NotTo(ContainSubstring(result3.Keyword))
+				})
+			})
 		})
 
-		Context("given user is NOT signed in", func() {
+		Context("given the user is NOT signed in", func() {
 			It("redirects to sign in path", func() {
 				response := MakeRequest("GET", "/", nil)
 				currentPath := GetCurrentPath(response)
@@ -35,8 +54,8 @@ var _ = Describe("ResultController", func() {
 
 	Describe("POST /results", func() {
 		Context("given a valid CSV file", func() {
-			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+			It("redirects to the root path", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -47,7 +66,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the success message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -57,27 +76,28 @@ var _ = Describe("ResultController", func() {
 				Expect(flash.Data["error"]).To(BeEmpty())
 			})
 
-			It("creates results with given keywords", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+			It("creates results with the given keywords", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
 
 				MakeAuthenticatedRequest("POST", "/results", header, body, user)
 
-				results, err := models.GetResultsByUserId(user.Id)
+				results, err := models.GetPaginatedResultsByUserId(user.Id, 0, 0)
 				if err != nil {
 					Fail("Failed to get user results: " + err.Error())
 				}
 
 				for _, r := range results {
 					Expect(r.Keyword).To(SatisfyAny(Equal("cloud computing service"), Equal("crypto currency")))
-					Expect(r.Status).To(Equal(models.ResultStatusPending))
+					Expect(r.Status).To(Equal(models.ResultStatusCompleted))
+					Expect(r.PageCache).NotTo(BeEmpty())
 				}
 			})
 		})
 
 		Context("given a blank CSV file", func() {
-			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+			It("redirects to the root path", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -88,7 +108,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the error message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/empty.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -100,8 +120,8 @@ var _ = Describe("ResultController", func() {
 		})
 
 		Context("given a CSV file that contains more than 1000 keywords", func() {
-			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+			It("redirects to the root path", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -112,7 +132,7 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the error message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/invalid.csv")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
@@ -124,8 +144,8 @@ var _ = Describe("ResultController", func() {
 		})
 
 		Context("given an INVALID file type", func() {
-			It("redirects to root path", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+			It("redirects to the root path", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
 
 				response := MakeAuthenticatedRequest("POST", "/results",  header, body, user)
@@ -136,19 +156,19 @@ var _ = Describe("ResultController", func() {
 			})
 
 			It("sets the error message", func() {
-				user := FabricateUser("dev@nimblehq.co", "password")
+				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/text.txt")
 
 				response := MakeAuthenticatedRequest("POST", "/results", header, body, user)
 				flash := GetFlashMessage(response.Cookies())
 
 				Expect(flash.Data["success"]).To(BeEmpty())
-				Expect(flash.Data["error"]).To(Equal("Incorrect file type"))
+				Expect(flash.Data["error"]).To(Equal(constants.FileTypeInvalid))
 			})
 		})
 
 		Context("given user is NOT signed in", func() {
-			It("returns error", func() {
+			It("returns an error", func() {
 				body := GenerateRequestBody(nil)
 				response := MakeRequest("POST", "/results", body)
 

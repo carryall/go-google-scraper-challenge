@@ -3,6 +3,7 @@ package controllers_test
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/initializers"
 	. "go-google-scraper-challenge/tests/helpers"
 
@@ -34,7 +35,7 @@ var _ = Describe("OAuthClientController", func() {
 			response := MakeRequest("POST", "/oauth_client", body)
 			flash := GetFlashMessage(response.Cookies())
 
-			Expect(flash.Data["success"]).To(Equal("The Client was successfully created"))
+			Expect(flash.Data["success"]).To(Equal(constants.OAuthClientCreateSuccess))
 			Expect(flash.Data["error"]).To(BeEmpty())
 		})
 	})
@@ -69,13 +70,13 @@ var _ = Describe("OAuthClientController", func() {
 				response := MakeRequest("GET", "/oauth_client/invalid_id", nil)
 				flash := GetFlashMessage(response.Cookies())
 
-				Expect(flash.Data["error"]).To(Equal("OAuth client not found"))
+				Expect(flash.Data["error"]).To(Equal(constants.OAuthClientNotFound))
 				Expect(flash.Data["success"]).To(BeEmpty())
 			})
 		})
 	})
 
 	AfterEach(func() {
-		initializers.CleanupDatabase([]string{"oauth2_clients", "oauth2_secrets"})
+		initializers.CleanupDatabase([]string{"oauth2_clients", "oauth2_tokens"})
 	})
 })
