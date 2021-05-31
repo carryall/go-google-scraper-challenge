@@ -16,6 +16,7 @@ RUN yarn
 # Prepare all assets
 RUN make assets
 
+
 FROM golang:1.15-alpine AS migration
 
 ARG DATABASE_URL
@@ -37,6 +38,7 @@ RUN go get github.com/beego/bee/v2
 
 # Migrate database
 RUN bee migrate -driver=postgres -conn=$DATABASE_URL
+
 
 FROM golang:1.15-alpine
 

@@ -22,3 +22,21 @@ func GetPaginationPerPage() int {
 
 	return perPage
 }
+
+func GetRedisPoolNamespace() string {
+	namespace, err := web.AppConfig.String("redisPoolNamespace")
+	if err != nil {
+		logs.Error("Redis pool namespace not found: ", err)
+	}
+
+	return namespace
+}
+
+func GetScrapingJobName() string {
+	jobName, err := web.AppConfig.String("scrapingJobName")
+	if err != nil {
+		logs.Error("Job name not found: ", err)
+	}
+
+	return jobName
+}

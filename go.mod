@@ -16,7 +16,8 @@ require (
 	github.com/gavv/httpexpect v2.0.0+incompatible // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0
-	github.com/gocraft/work v0.5.1 // indirect
+	github.com/gocraft/work v0.5.1
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/google/go-cmp v0.5.4 // indirect
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/websocket v1.4.2 // indirect

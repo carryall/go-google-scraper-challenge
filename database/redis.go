@@ -9,11 +9,13 @@ import (
 var RedisPool *redis.Pool
 
 func SetupRedisPool() {
-	RedisPool = &redis.Pool{
-		MaxActive: 5,
-		MaxIdle:   5,
-		Wait:      true,
-		Dial:      connectRedis,
+	if RedisPool == nil {
+		RedisPool = &redis.Pool{
+			MaxActive: 5,
+			MaxIdle:   5,
+			Wait:      true,
+			Dial:      getRedisConnection,
+		}
 	}
 }
 
@@ -21,7 +23,7 @@ func GetRedisPool() *redis.Pool {
 	return RedisPool
 }
 
-func connectRedis() (redis.Conn, error) {
+func getRedisConnection() (redis.Conn, error) {
 	redisUrl, err := web.AppConfig.String("redisUrl")
 	if err != nil {
 		logs.Error("Redis URL not found: ", err)

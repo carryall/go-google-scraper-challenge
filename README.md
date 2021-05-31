@@ -36,6 +36,11 @@ A project for Nimble Go Internal Certification on Web
 
   The application would be running locally at `http://localhost:8080`
 
+### Run Worker
+
+  ```sh
+  make worker
+  ```
 
 ## Testing
 

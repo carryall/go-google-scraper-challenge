@@ -61,3 +61,17 @@ func GetUserByEmail(email string) (*User, error) {
 
 	return user, nil
 }
+
+// CreateResult create user result with given keyword
+func (u *User) CreateResult(keyword string) (int64, error) {
+	result := &Result{
+		User: u,
+		Keyword: keyword,
+	}
+	resultID, err := CreateResult(result)
+	if err != nil {
+		return 0, err
+	}
+
+	return resultID, nil
+}
