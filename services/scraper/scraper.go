@@ -82,15 +82,15 @@ func (service *Scraper) responseHandler(response *colly.Response) {
 	logs.Info("Visited ", response.Request.URL)
 }
 
-func (service *Scraper) errorHandler(response *colly.Response, err error) {
+func (service *Scraper) errorHandler(response *colly.Response, errResponse error) {
 	result := service.Result
 	result.Status = models.ResultStatusFailed
-	err = models.UpdateResultById(result)
+	err := models.UpdateResultById(result)
 	if err != nil {
 		logs.Error("Failed to fail result:", err.Error())
 	}
 
-	logs.Error("Failed to scrap result ID:", result.Id, " URL:", response.Request.URL, " with response:", response, "\nError:", err)
+	logs.Error("Failed to scrap result ID:", result.Id, " URL:", response.Request.URL, " with response:", response, "\nError:", errResponse.Error())
 }
 
 func (service *Scraper) wholePageCollector(e *colly.HTMLElement) {
