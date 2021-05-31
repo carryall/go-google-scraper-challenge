@@ -88,6 +88,24 @@ func UpdateResultById(result *Result) error {
 	return nil
 }
 
+func (result *Result) Process() error {
+	result.Status = ResultStatusProcessing
+
+	return UpdateResultById(result)
+}
+
+func (result *Result) Complete() error {
+	result.Status = ResultStatusCompleted
+
+	return UpdateResultById(result)
+}
+
+func (result *Result) Fail() error {
+	result.Status = ResultStatusFailed
+
+	return UpdateResultById(result)
+}
+
 func resultQuerySeter() orm.QuerySeter {
 	ormer := orm.NewOrm()
 

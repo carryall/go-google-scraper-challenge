@@ -31,14 +31,6 @@ func (c *Context) Perform(job *work.Job) error {
 		return err
 	}
 
-	result.Status = models.ResultStatusCompleted
-	err = models.UpdateResultById(result)
-	if err != nil {
-		logs.Error("Failed to mark result as complete: ", err.Error())
-
-		return err
-	}
-
 	logs.Info("Finished scraping keyword:", result.Keyword, "for result ID:", result.Id)
 
 	return nil

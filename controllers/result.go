@@ -68,25 +68,25 @@ func (c *ResultController) Create() {
 		if err != nil {
 			flash.Error(err.Error())
 		} else {
-			// Create all result here and enqueue them to the worker
 			for _, k := range keywords {
 				resultId, err := c.CurrentUser.CreateResult(k)
 				if err != nil {
 					logs.Error("Failed to create result:", err.Error())
-				} else {
-					err = enqueuer.EnqueueScraping(resultId)
-					if err != nil {
-						logs.Warn("Failed to enqueue scraping for result ID: ", resultId, " with error: ", err.Error())
+					continue
+				}
 
-						result, err := models.GetResultById(resultId)
-						if err != nil {
-							logs.Warn("Failed to get result ID:", err.Error())
-						}
-						result.Status = models.ResultStatusFailed
-						err = models.UpdateResultById(result)
-						if err != nil {
-							logs.Warn("Failed to update result ID:", err.Error())
-						}
+				err = enqueuer.EnqueueScraping(resultId)
+				if err != nil {
+					logs.Warn("Failed to enqueue scraping for result ID:", resultId, "with error:", err.Error())
+
+					result, err := models.GetResultById(resultId)
+					if err != nil {
+						logs.Warn("Failed to get result ID:", err.Error())
+						continue
+					}
+					err = result.Fail()
+					if err != nil {
+						logs.Warn("Failed to update result ID:", err.Error())
 					}
 				}
 			}
