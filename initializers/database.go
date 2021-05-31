@@ -1,31 +1,11 @@
 package initializers
 
 import (
-	"go-google-scraper-challenge/helpers"
-
-	"github.com/beego/beego/v2/client/orm"
-	"github.com/beego/beego/v2/core/logs"
-	"github.com/beego/beego/v2/server/web"
-	_ "github.com/lib/pq"
+	"go-google-scraper-challenge/database"
 )
 
 // SetUpDatabase setup database for the project
 func SetUpDatabase() {
-	runMode := helpers.GetAppRunMode()
-	orm.Debug = runMode == "dev"
-
-	dbURL, err := web.AppConfig.String("db_url")
-	if err != nil {
-		logs.Error("Database URL not found: ", err)
-	}
-
-	err = orm.RegisterDriver("postgres", orm.DRPostgres)
-	if err != nil {
-		logs.Error("Postgres Driver registration failed: ", err)
-	}
-
-	err = orm.RegisterDataBase("default", "postgres", dbURL)
-	if err != nil {
-		logs.Error("Database Registration failed: ", err)
-	}
+	database.SetupPostgresDB()
+	database.SetupRedisPool()
 }
