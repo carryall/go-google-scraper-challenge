@@ -15,8 +15,8 @@ import (
 )
 
 var _ = Describe("Scraper", func() {
-	Describe("#Search", func() {
-		Context("given valid keywords", func() {
+	Describe("#Run", func() {
+		Context("given valid keyword", func() {
 			BeforeEach(func() {
 				keyword := "ergonomic chair"
 				visitURL := fmt.Sprintf("http://www.google.com/search?q=%s", url.QueryEscape(keyword))
@@ -27,8 +27,15 @@ var _ = Describe("Scraper", func() {
 
 			It("creates a result with the given keyword", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				keywords := []string{"ergonomic chair"}
-				scraper.Search(keywords, user)
+				result := FabricateResultWithKeyword(user, "ergonomic chair")
+
+				service := scraper.Scraper{
+					Result: result,
+				}
+				err := service.Run()
+				if err != nil {
+					Fail("Failed to run scraper service")
+				}
 
 				userResults, err := models.GetPaginatedResultsByUserId(user.Id, 0, 0)
 				if err != nil {

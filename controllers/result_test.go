@@ -1,11 +1,14 @@
 package controllers_test
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/initializers"
 	"go-google-scraper-challenge/models"
+	. "go-google-scraper-challenge/tests"
 	. "go-google-scraper-challenge/tests/helpers"
 
 	"github.com/bxcodec/faker/v3"
@@ -54,6 +57,14 @@ var _ = Describe("ResultController", func() {
 
 	Describe("POST /results", func() {
 		Context("given a valid CSV file", func() {
+			BeforeEach(func() {
+				keyword := "ergonomic chair"
+				visitURL := fmt.Sprintf("http://www.google.com/search?q=%s", url.QueryEscape(keyword))
+				cassetteName := "scraper/success"
+
+				RecordResponse(cassetteName, visitURL)
+			})
+
 			It("redirects to the root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("tests/fixtures/files/valid.csv")
@@ -87,11 +98,8 @@ var _ = Describe("ResultController", func() {
 					Fail("Failed to get user results: " + err.Error())
 				}
 
-				for _, r := range results {
-					Expect(r.Keyword).To(SatisfyAny(Equal("cloud computing service"), Equal("crypto currency")))
-					Expect(r.Status).To(Equal(models.ResultStatusCompleted))
-					Expect(r.PageCache).NotTo(BeEmpty())
-				}
+				Expect(results).To(HaveLen(1))
+				Expect(results[0].Keyword).To(Equal("ergonomic chair"))
 			})
 		})
 

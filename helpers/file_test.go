@@ -51,7 +51,7 @@ var _ = Describe("File", func() {
 					Fail("Failed to get file content: " + err.Error())
 				}
 
-				Expect(content).To(Equal([]string{"cloud computing service", "crypto currency"}))
+				Expect(content).To(Equal([]string{"ergonomic chair"}))
 			})
 
 			It("does NOT return error", func() {

@@ -118,8 +118,7 @@ var _ = Describe("Forms/UploadForm", func() {
 					User: user,
 				}
 				expectedKeyword := []string{
-					"cloud computing service",
-					"crypto currency",
+					"ergonomic chair",
 				}
 
 				keywords, error := form.Save()
