@@ -125,6 +125,46 @@ var _ = Describe("User", func() {
 		})
 	})
 
+	Describe("#CreateResult", func() {
+		Context("given a valid keyword", func() {
+			It("returns a user result id", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+
+				resultId, err := user.CreateResult("keyword")
+				if err != nil {
+					Fail("Failed to create user result")
+				}
+
+				result, err := models.GetResultById(resultId)
+				if err != nil {
+					Fail("Failed to get user result")
+				}
+
+				Expect(result.Keyword).To(Equal("keyword"))
+				Expect(result.User.Id).To(Equal(user.Id))
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+
+				_, err := user.CreateResult("keyword")
+
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given a blank keyword", func() {
+			It("return an error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+
+				resultId, err := user.CreateResult("")
+
+				Expect(err.Error()).To(Equal("Keyword cannot be blank"))
+				Expect(resultId).To(BeZero())
+			})
+		})
+	})
+
 	AfterEach(func() {
 		initializers.CleanupDatabase([]string{"users"})
 	})

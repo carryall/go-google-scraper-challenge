@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/beego/beego/v2/client/orm"
 )
 
@@ -64,6 +66,9 @@ func GetUserByEmail(email string) (*User, error) {
 
 // CreateResult create user result with given keyword
 func (u *User) CreateResult(keyword string) (int64, error) {
+	if len(keyword) == 0 {
+		return 0, errors.New("Keyword cannot be blank")
+	}
 	result := &Result{
 		User: u,
 		Keyword: keyword,
