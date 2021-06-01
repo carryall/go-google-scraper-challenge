@@ -8,7 +8,6 @@ import (
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/presenters"
-	"go-google-scraper-challenge/services/enqueuer"
 
 	"github.com/beego/beego/v2/adapter/context"
 	"github.com/beego/beego/v2/adapter/utils/pagination"
@@ -69,25 +68,9 @@ func (c *ResultController) Create() {
 			flash.Error(err.Error())
 		} else {
 			for _, k := range keywords {
-				resultId, err := c.CurrentUser.CreateResult(k)
+				_, err := c.CurrentUser.CreateResult(k)
 				if err != nil {
 					logs.Error("Failed to create result:", err.Error())
-					continue
-				}
-
-				err = enqueuer.EnqueueScraping(resultId)
-				if err != nil {
-					logs.Warn("Failed to enqueue scraping for result ID:", resultId, "with error:", err.Error())
-
-					result, err := models.GetResultById(resultId)
-					if err != nil {
-						logs.Warn("Failed to get result ID:", err.Error())
-						continue
-					}
-					err = result.Fail()
-					if err != nil {
-						logs.Warn("Failed to update result ID:", err.Error())
-					}
 				}
 			}
 

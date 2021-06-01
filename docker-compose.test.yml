@@ -11,9 +11,3 @@ services:
       - "5432:5432"
     volumes:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
-
-  redis:
-    image: redis
-    container_name: google_scraper_redis_test
-    ports:
-      - "6380:6379"
