@@ -120,7 +120,7 @@ var _ = Describe("Result", func() {
 
 	Describe("#GetFirstPendingResult", func() {
 		Context("given at least one pending result", func() {
-			It("returns the early pending result", func() {
+			It("returns the oldest pending result", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				FabricateResultWithParams(user, "keyword", models.ResultStatusFailed)
 				FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
