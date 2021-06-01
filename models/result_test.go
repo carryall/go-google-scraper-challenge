@@ -470,6 +470,72 @@ var _ = Describe("Result", func() {
 		})
 	})
 
+	Describe("#Process", func() {
+		It("update result status to processing", func() {
+			user := FabricateUser(faker.Email(), faker.Password())
+			result := FabricateResult(user)
+
+			err := result.Process()
+			if err != nil {
+				Fail("Failed to process result")
+			}
+
+			Expect(result.Status).To(Equal(models.ResultStatusProcessing))
+		})
+
+		It("returns NO error", func() {
+			user := FabricateUser(faker.Email(), faker.Password())
+			result := FabricateResult(user)
+
+			err := result.Process()
+			Expect(err).To(BeNil())
+		})
+	})
+
+	Describe("#Complete", func() {
+		It("update result status to completed", func() {
+			user := FabricateUser(faker.Email(), faker.Password())
+			result := FabricateResult(user)
+
+			err := result.Complete()
+			if err != nil {
+				Fail("Failed to compleete result")
+			}
+
+			Expect(result.Status).To(Equal(models.ResultStatusCompleted))
+		})
+
+		It("returns NO error", func() {
+			user := FabricateUser(faker.Email(), faker.Password())
+			result := FabricateResult(user)
+
+			err := result.Complete()
+			Expect(err).To(BeNil())
+		})
+	})
+
+	Describe("#Fail", func() {
+		It("update result status to failed", func() {
+			user := FabricateUser(faker.Email(), faker.Password())
+			result := FabricateResult(user)
+
+			err := result.Fail()
+			if err != nil {
+				Fail("Failed to compleete result")
+			}
+
+			Expect(result.Status).To(Equal(models.ResultStatusFailed))
+		})
+
+		It("returns NO error", func() {
+			user := FabricateUser(faker.Email(), faker.Password())
+			result := FabricateResult(user)
+
+			err := result.Fail()
+			Expect(err).To(BeNil())
+		})
+	})
+
 	AfterEach(func() {
 		initializers.CleanupDatabase([]string{"users", "results"})
 	})
