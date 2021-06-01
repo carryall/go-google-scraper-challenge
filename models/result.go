@@ -54,6 +54,18 @@ func GetResultById(id int64) (*Result, error) {
 	return result, nil
 }
 
+// GetFirstPendingResult retrieves Result with pending status. Return err if no pending result
+func GetFirstPendingResult() (*Result, error) {
+	querySeter := resultQuerySeter().Filter("status", ResultStatusPending).OrderBy("created_at").RelatedSel()
+	result := &Result{}
+	err := querySeter.One(result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, err
+}
+
 // GetPaginatedResultsByUserId retrieves paginated Results with User Id. Returns empty list if no records exist
 func GetPaginatedResultsByUserId(userId int64, limit int64, offset int64) ([]*Result, error) {
 	querySeter := resultQuerySeter().Filter("user_id", userId).OrderBy("-created_at").RelatedSel()
