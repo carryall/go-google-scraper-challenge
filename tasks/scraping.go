@@ -26,7 +26,7 @@ func (t *ScrapingTask) GetTasker() *task.Task {
 	return t.Tasker
 }
 
-func perform(ctx context.Context) error {
+func perform(_ context.Context) error {
 	result, err := models.GetFirstPendingResult()
 	if err != nil {
 		logs.Info("No pending result", err.Error())
