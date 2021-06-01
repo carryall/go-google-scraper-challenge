@@ -118,6 +118,44 @@ var _ = Describe("Result", func() {
 		})
 	})
 
+	Describe("#GetFirstPendingResult", func() {
+		Context("given at least one pending result", func() {
+			It("returns the early pending result", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResultWithParams(user, "keyword", models.ResultStatusFailed)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
+				pendingResult := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusProcessing)
+
+				result, err := models.GetFirstPendingResult()
+				if err != nil {
+					Fail("Failed to get first pending result")
+				}
+
+				Expect(result.Id).To(Equal(pendingResult.Id))
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				_, err := models.GetFirstPendingResult()
+
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given NO pending result", func() {
+			It("returns an error", func() {
+				result, err := models.GetFirstPendingResult()
+
+				Expect(err.Error()).To(ContainSubstring("no row found"))
+				Expect(result).To(BeNil())
+			})
+		})
+	})
+
 	Describe("#GetPaginatedResultsByUserId", func() {
 		Context("given valid params", func() {
 			Context("given a valid user id", func() {

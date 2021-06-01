@@ -27,7 +27,7 @@ var _ = Describe("Scraper", func() {
 
 			It("creates a result with the given keyword", func() {
 				user := FabricateUser("dev@nimblehq.co", "password")
-				result := FabricateResultWithKeyword(user, "ergonomic chair")
+				result := FabricateResultWithParams(user, "ergonomic chair", models.ResultStatusPending)
 
 				service := scraper.Scraper{
 					Result: result,
