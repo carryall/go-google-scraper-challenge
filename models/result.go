@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
 )
@@ -24,6 +26,8 @@ const (
 	ResultStatusCompleted = "completed"
 	ResultStatusFailed = "failed"
 )
+
+var ResultStatuses = []string{ ResultStatusPending, ResultStatusProcessing, ResultStatusCompleted, ResultStatusFailed }
 
 func init() {
 	orm.RegisterModel(new(Result))
@@ -83,7 +87,7 @@ func CountResultsByUserId(userId int64) (int64, error) {
 	return count, err
 }
 
-// UpdateResult updates Result by Id and returns error if the record to be updated doesn't exist
+// UpdateResultById updates Result by Id and returns error if the record to be updated doesn't exist
 func UpdateResultById(result *Result) error {
 	ormer := orm.NewOrm()
 	_, err := GetResultById(result.Id)
@@ -100,26 +104,12 @@ func UpdateResultById(result *Result) error {
 	return nil
 }
 
-func (r *Result) UpdateStatus(status string) error {
-	r.Status = status
-
-	return UpdateResultById(r)
-}
-
-func (result *Result) Process() error {
-	result.Status = ResultStatusProcessing
-
-	return UpdateResultById(result)
-}
-
-func (result *Result) Complete() error {
-	result.Status = ResultStatusCompleted
-
-	return UpdateResultById(result)
-}
-
-func (result *Result) Fail() error {
-	result.Status = ResultStatusFailed
+// UpdateResultStatus updates Result status returns any error from updating
+func UpdateResultStatus(result *Result, status string) error {
+	if !validResultStatus(status) {
+		return errors.New("Invalid result status")
+	}
+	result.Status = status
 
 	return UpdateResultById(result)
 }
@@ -128,4 +118,16 @@ func resultQuerySeter() orm.QuerySeter {
 	ormer := orm.NewOrm()
 
 	return ormer.QueryTable(Result{})
+}
+
+func validResultStatus(status string) bool {
+	valid := false
+	for _, resultStatus := range ResultStatuses {
+		if status == resultStatus {
+			valid = true
+			break
+		}
+	}
+
+	return valid
 }

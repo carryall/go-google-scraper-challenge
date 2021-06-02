@@ -40,7 +40,12 @@ func perform(_ context.Context) error {
 	}
 	err = scraperService.Run()
 	if err != nil {
-		return result.Fail()
+		err = models.UpdateResultStatus(result, models.ResultStatusFailed)
+		if err != nil {
+			logs.Error("Failed to update result status", err.Error())
+		}
+
+		return err
 	}
 
 	return nil

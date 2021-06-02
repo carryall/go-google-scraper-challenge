@@ -508,69 +508,37 @@ var _ = Describe("Result", func() {
 		})
 	})
 
-	Describe("#Process", func() {
-		It("updates result status to processing", func() {
-			user := FabricateUser(faker.Email(), faker.Password())
-			result := FabricateResult(user)
+	Describe("#UpdateResultStatus", func() {
+		Context("given a valid status", func() {
+			It("updates result status to the given status", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
 
-			err := result.Process()
-			if err != nil {
-				Fail("Failed to process result")
-			}
+				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
+				if err != nil {
+					Fail("Failed to update result status")
+				}
 
-			Expect(result.Status).To(Equal(models.ResultStatusProcessing))
+				Expect(result.Status).To(Equal(models.ResultStatusCompleted))
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+
+				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
+				Expect(err).To(BeNil())
+			})
 		})
 
-		It("returns NO error", func() {
-			user := FabricateUser(faker.Email(), faker.Password())
-			result := FabricateResult(user)
+		Context("given an INVALID status", func() {
+			It("returns the error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
 
-			err := result.Process()
-			Expect(err).To(BeNil())
-		})
-	})
-
-	Describe("#Complete", func() {
-		It("updates result status to completed", func() {
-			user := FabricateUser(faker.Email(), faker.Password())
-			result := FabricateResult(user)
-
-			err := result.Complete()
-			if err != nil {
-				Fail("Failed to compleete result")
-			}
-
-			Expect(result.Status).To(Equal(models.ResultStatusCompleted))
-		})
-
-		It("returns NO error", func() {
-			user := FabricateUser(faker.Email(), faker.Password())
-			result := FabricateResult(user)
-
-			err := result.Complete()
-			Expect(err).To(BeNil())
-		})
-	})
-
-	Describe("#Fail", func() {
-		It("updates result status to failed", func() {
-			user := FabricateUser(faker.Email(), faker.Password())
-			result := FabricateResult(user)
-
-			err := result.Fail()
-			if err != nil {
-				Fail("Failed to compleete result")
-			}
-
-			Expect(result.Status).To(Equal(models.ResultStatusFailed))
-		})
-
-		It("returns NO error", func() {
-			user := FabricateUser(faker.Email(), faker.Password())
-			result := FabricateResult(user)
-
-			err := result.Fail()
-			Expect(err).To(BeNil())
+				err := models.UpdateResultStatus(result, "invalid status")
+				Expect(err.Error()).To(Equal("Invalid result status"))
+			})
 		})
 	})
 

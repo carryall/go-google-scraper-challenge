@@ -77,7 +77,7 @@ func (s *Scraper) requestHandler(request *colly.Request) {
 
 	logs.Info("Visiting ", request.URL)
 
-	err := s.Result.Process()
+	err := models.UpdateResultStatus(s.Result, models.ResultStatusProcessing)
 	if err != nil {
 		logs.Error("Failed to process result:", err.Error())
 	}
@@ -89,7 +89,7 @@ func (s *Scraper) responseHandler(response *colly.Response) {
 
 func (s *Scraper) errorHandler(response *colly.Response, errResponse error) {
 	result := s.Result
-	err := result.Fail()
+	err := models.UpdateResultStatus(s.Result, models.ResultStatusFailed)
 	if err != nil {
 		logs.Error("Failed to fail result:", err.Error())
 	}
@@ -138,9 +138,9 @@ func (s *Scraper) addAdLinkToResult(linkType string, linkPosition string, elemen
 	}
 }
 
-func (s *Scraper) finishScrapingHandler(response *colly.Response) {
+func (s *Scraper) finishScrapingHandler(_ *colly.Response) {
 	result := s.Result
-	err := result.Complete()
+	err := models.UpdateResultStatus(s.Result, models.ResultStatusCompleted)
 	if err != nil {
 		logs.Error("Failed to complete result:", err.Error())
 	}
