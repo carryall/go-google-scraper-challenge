@@ -25,43 +25,43 @@ var selectors = map[string]string {
 
 const GoogleSearchUrl = "http://www.google.com/search?q=%s"
 
-func (service *Scraper) Run() error {
-	escapedKeyword := url.QueryEscape(service.Result.Keyword)
+func (s *Scraper) Run() error {
+	escapedKeyword := url.QueryEscape(s.Result.Keyword)
 	url := fmt.Sprintf(GoogleSearchUrl, escapedKeyword)
 
-	return service.startScraping(url)
+	return s.startScraping(url)
 }
 
-func (service *Scraper) startScraping(url string) error {
+func (s *Scraper) startScraping(url string) error {
 	collector := colly.NewCollector()
 
-	collector.OnRequest(service.requestHandler)
-	collector.OnResponse(service.responseHandler)
-	collector.OnError(service.errorHandler)
+	collector.OnRequest(s.requestHandler)
+	collector.OnResponse(s.responseHandler)
+	collector.OnError(s.errorHandler)
 
-	collector.OnHTML(selectors["wholePage"], service.wholePageCollector)
+	collector.OnHTML(selectors["wholePage"], s.wholePageCollector)
 
 	collector.OnHTML(selectors["nonAds"], func(e *colly.HTMLElement) {
-		service.addNonAdLinkToResult(e)
+		s.addNonAdLinkToResult(e)
 	})
 
 	collector.OnHTML(selectors["topImageAds"], func(e *colly.HTMLElement) {
-		service.addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionTop, e)
+		s.addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionTop, e)
 	})
 
 	collector.OnHTML(selectors["topLinkAds"], func(e *colly.HTMLElement) {
-		service.addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionTop, e)
+		s.addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionTop, e)
 	})
 
 	collector.OnHTML(selectors["sideImageAds"], func(e *colly.HTMLElement) {
-		service.addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionSide, e)
+		s.addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionSide, e)
 	})
 
 	collector.OnHTML(selectors["bottomAds"], func(e *colly.HTMLElement) {
-		service.addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionBottom, e)
+		s.addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionBottom, e)
 	})
 
-	collector.OnScraped(service.finishScrapingHandler)
+	collector.OnScraped(s.finishScrapingHandler)
 
 	err := collector.Visit(url)
 	if err != nil {
@@ -71,24 +71,24 @@ func (service *Scraper) startScraping(url string) error {
 	return nil
 }
 
-func (service *Scraper) requestHandler(request *colly.Request) {
+func (s *Scraper) requestHandler(request *colly.Request) {
 	userAgent := RandomUserAgent()
 	request.Headers.Set("User-Agent", userAgent)
 
 	logs.Info("Visiting ", request.URL)
 
-	err := service.Result.Process()
+	err := s.Result.Process()
 	if err != nil {
 		logs.Error("Failed to process result:", err.Error())
 	}
 }
 
-func (service *Scraper) responseHandler(response *colly.Response) {
+func (s *Scraper) responseHandler(response *colly.Response) {
 	logs.Info("Visited ", response.Request.URL)
 }
 
-func (service *Scraper) errorHandler(response *colly.Response, errResponse error) {
-	result := service.Result
+func (s *Scraper) errorHandler(response *colly.Response, errResponse error) {
+	result := s.Result
 	err := result.Fail()
 	if err != nil {
 		logs.Error("Failed to fail result:", err.Error())
@@ -97,8 +97,8 @@ func (service *Scraper) errorHandler(response *colly.Response, errResponse error
 	logs.Error("Failed to scrap result ID:", result.Id, " URL:", response.Request.URL, " with response:", response, "\nError:", errResponse.Error())
 }
 
-func (service *Scraper) wholePageCollector(e *colly.HTMLElement) {
-	result := service.Result
+func (s *Scraper) wholePageCollector(e *colly.HTMLElement) {
+	result := s.Result
 	result.PageCache = string(e.Response.Body)
 	err := models.UpdateResultById(result)
 	if err != nil {
@@ -106,12 +106,12 @@ func (service *Scraper) wholePageCollector(e *colly.HTMLElement) {
 	}
 }
 
-func (service *Scraper) addNonAdLinkToResult(element *colly.HTMLElement) {
+func (s *Scraper) addNonAdLinkToResult(element *colly.HTMLElement) {
 	link := element.Attr("href")
 
 	if len(link) > 0 {
 		link := &models.Link{
-			Result: service.Result,
+			Result: s.Result,
 			Link: link,
 		}
 		_, err := models.CreateLink(link)
@@ -121,12 +121,12 @@ func (service *Scraper) addNonAdLinkToResult(element *colly.HTMLElement) {
 	}
 }
 
-func (service *Scraper) addAdLinkToResult(linkType string, linkPosition string, element *colly.HTMLElement) {
+func (s *Scraper) addAdLinkToResult(linkType string, linkPosition string, element *colly.HTMLElement) {
 	link := element.Attr("href")
 
 	if len(link) > 0 {
 		adLink := &models.AdLink{
-			Result: service.Result,
+			Result: s.Result,
 			Type: linkType,
 			Position: linkPosition,
 			Link: link,
@@ -138,8 +138,8 @@ func (service *Scraper) addAdLinkToResult(linkType string, linkPosition string, 
 	}
 }
 
-func (service *Scraper) finishScrapingHandler(response *colly.Response) {
-	result := service.Result
+func (s *Scraper) finishScrapingHandler(response *colly.Response) {
+	result := s.Result
 	err := result.Complete()
 	if err != nil {
 		logs.Error("Failed to complete result:", err.Error())

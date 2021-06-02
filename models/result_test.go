@@ -118,7 +118,7 @@ var _ = Describe("Result", func() {
 		})
 	})
 
-	Describe("#GetFirstPendingResult", func() {
+	Describe("#GetOldestPendingResult()", func() {
 		Context("given at least one pending result", func() {
 			It("returns the oldest pending result", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
@@ -128,7 +128,7 @@ var _ = Describe("Result", func() {
 				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 				FabricateResultWithParams(user, "keyword", models.ResultStatusProcessing)
 
-				result, err := models.GetFirstPendingResult()
+				result, err := models.GetOldestPendingResult()
 				if err != nil {
 					Fail("Failed to get first pending result")
 				}
@@ -140,7 +140,7 @@ var _ = Describe("Result", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
-				_, err := models.GetFirstPendingResult()
+				_, err := models.GetOldestPendingResult()
 
 				Expect(err).To(BeNil())
 			})
@@ -148,7 +148,7 @@ var _ = Describe("Result", func() {
 
 		Context("given NO pending result", func() {
 			It("returns an error", func() {
-				result, err := models.GetFirstPendingResult()
+				result, err := models.GetOldestPendingResult()
 
 				Expect(err.Error()).To(ContainSubstring("no row found"))
 				Expect(result).To(BeNil())
@@ -509,7 +509,7 @@ var _ = Describe("Result", func() {
 	})
 
 	Describe("#Process", func() {
-		It("update result status to processing", func() {
+		It("updates result status to processing", func() {
 			user := FabricateUser(faker.Email(), faker.Password())
 			result := FabricateResult(user)
 
@@ -531,7 +531,7 @@ var _ = Describe("Result", func() {
 	})
 
 	Describe("#Complete", func() {
-		It("update result status to completed", func() {
+		It("updates result status to completed", func() {
 			user := FabricateUser(faker.Email(), faker.Password())
 			result := FabricateResult(user)
 
@@ -553,7 +553,7 @@ var _ = Describe("Result", func() {
 	})
 
 	Describe("#Fail", func() {
-		It("update result status to failed", func() {
+		It("updates result status to failed", func() {
 			user := FabricateUser(faker.Email(), faker.Password())
 			result := FabricateResult(user)
 

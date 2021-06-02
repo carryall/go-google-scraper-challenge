@@ -54,8 +54,8 @@ func GetResultById(id int64) (*Result, error) {
 	return result, nil
 }
 
-// GetFirstPendingResult retrieves Result with pending status. Return err if no pending result
-func GetFirstPendingResult() (*Result, error) {
+// GetOldestPendingResult retrieves Result with pending status. Return err if no pending result
+func GetOldestPendingResult() (*Result, error) {
 	querySeter := resultQuerySeter().Filter("status", ResultStatusPending).OrderBy("created_at").RelatedSel()
 	result := &Result{}
 	err := querySeter.One(result)
@@ -98,6 +98,12 @@ func UpdateResultById(result *Result) error {
 
 	logs.Info("Updated ", num, " results in database")
 	return nil
+}
+
+func (r *Result) UpdateStatus(status string) error {
+	r.Status = status
+
+	return UpdateResultById(r)
 }
 
 func (result *Result) Process() error {

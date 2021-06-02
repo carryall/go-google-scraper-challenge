@@ -27,7 +27,7 @@ func (t *ScrapingTask) GetTasker() *task.Task {
 }
 
 func perform(_ context.Context) error {
-	result, err := models.GetFirstPendingResult()
+	result, err := models.GetOldestPendingResult()
 	if err != nil {
 		logs.Info("No pending result", err.Error())
 
