@@ -19,7 +19,7 @@ func GetScrapingTasker() *task.Task {
 func perform(_ context.Context) error {
 	result, err := models.GetOldestPendingResult()
 	if err != nil {
-		logs.Info("No pending result", err.Error())
+		logs.Info("No pending result:", err.Error())
 
 		return nil
 	}
@@ -32,7 +32,7 @@ func perform(_ context.Context) error {
 	if err != nil {
 		err = models.UpdateResultStatus(result, models.ResultStatusFailed)
 		if err != nil {
-			logs.Error("Failed to update result status", err.Error())
+			logs.Error("Failed to update result status:", err.Error())
 		}
 
 		return err
