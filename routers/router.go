@@ -12,6 +12,7 @@ func init() {
 	web.Router("/", &controllers.ResultController{}, "get:List")
 	web.Router("/results", &controllers.ResultController{}, "post:Create")
 	web.Router("/results/:id", &controllers.ResultController{}, "get:Show")
+	web.Router("/results/:id/cache", &controllers.ResultController{}, "get:Cache")
 
 	// Authentication
 	web.Router("/signup", &controllers.UserController{}, "get:New")

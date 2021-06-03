@@ -26,6 +26,7 @@ func (c *ResultController) URLMapping() {
 	c.Mapping("List", c.List)
 	c.Mapping("Create", c.Create)
 	c.Mapping("Show", c.Show)
+	c.Mapping("Cache", c.Cache)
 }
 
 func (c *ResultController) List() {
@@ -85,21 +86,44 @@ func (c *ResultController) Show() {
 	c.Data["Title"] = "Result Detail"
 	web.ReadFromRequest(&c.Controller)
 
-	var result *models.Result
+	resultID := c.getResultID()
+	if resultID > 0 {
+		result, err := models.GetResultByIdWithRelations(resultID)
+		if err != nil {
+			logs.Error("Failed to get result:", err.Error())
+		}
+		c.Data["result"] = result
+	}
+}
 
+func (c *ResultController) Cache() {
+	c.EnsureAuthenticatedUser()
+	c.TplName = "results/cache.html"
+	c.Data["Title"] = "Result Detail"
+	web.ReadFromRequest(&c.Controller)
+
+	resultID := c.getResultID()
+	if resultID > 0 {
+		result, err := models.GetResultById(resultID)
+		if err != nil {
+			logs.Error("Failed to get result:", err.Error())
+		}
+		c.Data["pageCache"] = result.PageCache
+	} else {
+		c.Data["pageCache"] = ""
+	}
+}
+
+func (c *ResultController) getResultID() int64 {
 	resultIDParam := c.Ctx.Input.Param(":id")
 	resultID, err := strconv.ParseInt(resultIDParam, 0, 64)
 	if err != nil {
 		logs.Error("Failed to parse result ID params:", err.Error())
-		result = nil
-	} else {
-		result, err = models.GetResultById(resultID)
-		if err != nil {
-			logs.Error("Failed to get result:", err.Error())
-		}
+
+		return 0
 	}
 
-	c.Data["result"] = result
+	return resultID
 }
 
 func (c *ResultController) storeKeywords(keywords []string)  {
