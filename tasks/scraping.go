@@ -13,7 +13,7 @@ import (
 const ScrapingTaskName = "scraping"
 
 func GetScrapingTasker() *task.Task {
-	return task.NewTask(ScrapingTaskName, "0 * * * * *", perform)
+	return task.NewTask(ScrapingTaskName, "0/30 * * * * *", perform)
 }
 
 func perform(_ context.Context) error {

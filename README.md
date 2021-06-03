@@ -67,7 +67,7 @@ A project for Nimble Go Internal Certification on Web
 ## Background Tasks
 
   Use Beego's [Task Module](https://beego.me/docs/module/task.md) to schedule and process background tasks.
-  The scraping task is scheduled to run at the beginning of every minute.
+  The scraping task is scheduled to run at the beginning of every 30 seconds.
   It will scrape the Google search result for the oldest pending result.
 
 ## API
