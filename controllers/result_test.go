@@ -218,7 +218,7 @@ var _ = Describe("ResultController", func() {
 				It("display an error message with a link to root path", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 
-					response := MakeAuthenticatedRequest("GET", fmt.Sprintf("/results/9999"), nil, nil, user)
+					response := MakeAuthenticatedRequest("GET", "/results/9999", nil, nil, user)
 					responseBody := GetResponseBody(response)
 					Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
 					Expect(responseBody).To(ContainSubstring("Back to Home"))
