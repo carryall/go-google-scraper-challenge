@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
 )
@@ -24,6 +26,8 @@ const (
 	ResultStatusCompleted = "completed"
 	ResultStatusFailed = "failed"
 )
+
+var ResultStatuses = []string{ ResultStatusPending, ResultStatusProcessing, ResultStatusCompleted, ResultStatusFailed }
 
 func init() {
 	orm.RegisterModel(new(Result))
@@ -54,6 +58,18 @@ func GetResultById(id int64) (*Result, error) {
 	return result, nil
 }
 
+// GetOldestPendingResult retrieves Result with pending status. Return err if no pending result
+func GetOldestPendingResult() (*Result, error) {
+	querySeter := resultQuerySeter().Filter("status", ResultStatusPending).OrderBy("created_at").RelatedSel()
+	result := &Result{}
+	err := querySeter.One(result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, err
+}
+
 // GetPaginatedResultsByUserId retrieves paginated Results with User Id. Returns empty list if no records exist
 func GetPaginatedResultsByUserId(userId int64, limit int64, offset int64) ([]*Result, error) {
 	querySeter := resultQuerySeter().Filter("user_id", userId).OrderBy("-created_at").RelatedSel()
@@ -71,7 +87,7 @@ func CountResultsByUserId(userId int64) (int64, error) {
 	return count, err
 }
 
-// UpdateResult updates Result by Id and returns error if the record to be updated doesn't exist
+// UpdateResultById updates Result by Id and returns error if the record to be updated doesn't exist
 func UpdateResultById(result *Result) error {
 	ormer := orm.NewOrm()
 	_, err := GetResultById(result.Id)
@@ -88,8 +104,30 @@ func UpdateResultById(result *Result) error {
 	return nil
 }
 
+// UpdateResultStatus updates Result status returns any error from updating
+func UpdateResultStatus(result *Result, status string) error {
+	if !validResultStatus(status) {
+		return errors.New("Invalid result status")
+	}
+	result.Status = status
+
+	return UpdateResultById(result)
+}
+
 func resultQuerySeter() orm.QuerySeter {
 	ormer := orm.NewOrm()
 
 	return ormer.QueryTable(Result{})
+}
+
+func validResultStatus(status string) bool {
+	valid := false
+	for _, resultStatus := range ResultStatuses {
+		if status == resultStatus {
+			valid = true
+			break
+		}
+	}
+
+	return valid
 }

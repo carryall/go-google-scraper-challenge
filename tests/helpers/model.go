@@ -47,9 +47,14 @@ func FabricateOAuthClient() (client oauth.OAuthClient) {
 }
 
 func FabricateResult(user *models.User) (result *models.Result) {
+	return FabricateResultWithParams(user, fmt.Sprintf("Keyword %s", faker.Word()), models.ResultStatusPending)
+}
+
+func FabricateResultWithParams(user *models.User, keyword string, status string) (result *models.Result) {
 	result = &models.Result{
 		User: user,
-		Keyword: fmt.Sprintf("Keyword %s", faker.Word()),
+		Keyword: keyword,
+		Status: status,
 	}
 
 	resultID, err := models.CreateResult(result)

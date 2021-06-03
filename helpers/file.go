@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"io"
 	"mime/multipart"
+	"strings"
 )
 
 func GetFileType(fileHeader *multipart.FileHeader) string {
@@ -12,7 +13,7 @@ func GetFileType(fileHeader *multipart.FileHeader) string {
 
 func GetFileContent(csvFile multipart.File) ([]string, error) {
 	reader := csv.NewReader(csvFile)
-	var content []string
+	var allContent []string
 
 	for {
 		row, err := reader.Read()
@@ -22,8 +23,11 @@ func GetFileContent(csvFile multipart.File) ([]string, error) {
 			return []string{}, err
 		}
 
-		content = append(content, row[0])
+		content := strings.TrimSpace(row[0])
+		if len(content) > 0 {
+			allContent = append(allContent, content)
+		}
 	}
 
-	return content, nil
+	return allContent, nil
 }

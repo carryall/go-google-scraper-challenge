@@ -30,6 +30,7 @@ func SetupTestEnvironment() {
 	SetModelDefaultValueFilter()
 	SetLowercaseValidationErrors()
 	oauth.SetUpOauth()
+	SetupTask()
 }
 
 // AppRootDir returns the app root path of the project

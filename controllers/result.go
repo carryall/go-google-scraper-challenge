@@ -8,7 +8,6 @@ import (
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/models"
 	"go-google-scraper-challenge/presenters"
-	"go-google-scraper-challenge/services/scraper"
 
 	"github.com/beego/beego/v2/adapter/context"
 	"github.com/beego/beego/v2/adapter/utils/pagination"
@@ -68,11 +67,25 @@ func (c *ResultController) Create() {
 		if err != nil {
 			flash.Error(err.Error())
 		} else {
+			c.storeKeywords(keywords)
+
 			flash.Success(constants.FileUploadSuccess)
-			scraper.Search(keywords, c.CurrentUser)
 		}
 	}
 
 	flash.Store(&c.Controller)
 	c.Redirect("/", http.StatusFound)
+}
+
+func (c *ResultController) storeKeywords(keywords []string)  {
+	for _, k := range keywords {
+		result := &models.Result{
+			User: c.CurrentUser,
+			Keyword: k,
+		}
+		_, err := models.CreateResult(result)
+		if err != nil {
+			logs.Error("Failed to create result:", err.Error())
+		}
+	}
 }

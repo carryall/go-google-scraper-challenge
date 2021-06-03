@@ -118,6 +118,44 @@ var _ = Describe("Result", func() {
 		})
 	})
 
+	Describe("#GetOldestPendingResult()", func() {
+		Context("given at least one pending result", func() {
+			It("returns the oldest pending result", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResultWithParams(user, "keyword", models.ResultStatusFailed)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
+				pendingResult := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusProcessing)
+
+				result, err := models.GetOldestPendingResult()
+				if err != nil {
+					Fail("Failed to get first pending result")
+				}
+
+				Expect(result.Id).To(Equal(pendingResult.Id))
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				_, err := models.GetOldestPendingResult()
+
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given NO pending result", func() {
+			It("returns an error", func() {
+				result, err := models.GetOldestPendingResult()
+
+				Expect(err.Error()).To(ContainSubstring("no row found"))
+				Expect(result).To(BeNil())
+			})
+		})
+	})
+
 	Describe("#GetPaginatedResultsByUserId", func() {
 		Context("given valid params", func() {
 			Context("given a valid user id", func() {
@@ -466,6 +504,49 @@ var _ = Describe("Result", func() {
 				err := models.UpdateResultById(result)
 
 				Expect(err.Error()).To(ContainSubstring("no row found"))
+			})
+		})
+	})
+
+	Describe("#UpdateResultStatus", func() {
+		Context("given a valid status", func() {
+			It("updates result status to the given status", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
+				if err != nil {
+					Fail("Failed to update result status")
+				}
+
+				Expect(result.Status).To(Equal(models.ResultStatusCompleted))
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given an INVALID status", func() {
+			It("does NOT update the result status", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				err := models.UpdateResultStatus(result, "invalid status")
+				Expect(err).NotTo(BeNil())
+				Expect(result.Status).To(Equal(models.ResultStatusPending))
+			})
+
+			It("returns the error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				err := models.UpdateResultStatus(result, "invalid status")
+				Expect(err.Error()).To(Equal("Invalid result status"))
 			})
 		})
 	})
