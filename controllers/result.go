@@ -67,12 +67,7 @@ func (c *ResultController) Create() {
 		if err != nil {
 			flash.Error(err.Error())
 		} else {
-			for _, k := range keywords {
-				_, err := c.CurrentUser.CreateResult(k)
-				if err != nil {
-					logs.Error("Failed to create result:", err.Error())
-				}
-			}
+			c.storeKeywords(keywords)
 
 			flash.Success(constants.FileUploadSuccess)
 		}
@@ -80,4 +75,13 @@ func (c *ResultController) Create() {
 
 	flash.Store(&c.Controller)
 	c.Redirect("/", http.StatusFound)
+}
+
+func (c *ResultController) storeKeywords(keywords []string)  {
+	for _, k := range keywords {
+		_, err := c.CurrentUser.CreateResult(k)
+		if err != nil {
+			logs.Error("Failed to create result:", err.Error())
+		}
+	}
 }
