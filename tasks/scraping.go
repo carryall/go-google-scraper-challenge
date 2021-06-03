@@ -10,20 +10,10 @@ import (
 	"github.com/beego/beego/v2/task"
 )
 
-type ScrapingTask struct {
-	Tasker *task.Task
-}
+const ScrapingTaskName = "scraping"
 
-func (t *ScrapingTask) Name() string {
-	return "scraping"
-}
-
-func (t *ScrapingTask) GetTasker() *task.Task {
-	if t.Tasker == nil {
-		t.Tasker = task.NewTask(t.Name(), "0 * * * * *", perform)
-	}
-
-	return t.Tasker
+func GetScrapingTasker() *task.Task {
+	return task.NewTask(ScrapingTaskName, "0 * * * * *", perform)
 }
 
 func perform(_ context.Context) error {

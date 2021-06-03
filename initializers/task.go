@@ -7,7 +7,6 @@ import (
 )
 
 func SetupTask() {
-	scrapingTask := tasks.ScrapingTask{}
-	task.AddTask(scrapingTask.Name(), scrapingTask.GetTasker())
+	task.AddTask(tasks.ScrapingTaskName, tasks.GetScrapingTasker())
 	task.StartTask()
 }

@@ -11,18 +11,9 @@ import (
 )
 
 var _ = Describe("Scraping", func() {
-	Describe("#Name", func() {
-		It("returns the task name", func() {
-			scrapingTask := tasks.ScrapingTask{}
-
-			Expect(scrapingTask.Name()).To(Equal("scraping"))
-		})
-	})
-
-	Describe("#GetTasker", func() {
+	Describe("#GetScrapingTasker", func() {
 		It("returns a runnable tasker", func() {
-			scrapingTask := tasks.ScrapingTask{}
-			tasker := scrapingTask.GetTasker()
+			tasker := tasks.GetScrapingTasker()
 
 			Expect(tasker).To(BeAssignableToTypeOf(&task.Task{}))
 			err := tasker.Run(context.Background())
