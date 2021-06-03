@@ -240,6 +240,58 @@ var _ = Describe("ResultController", func() {
 		})
 	})
 
+	Describe("GET /results/:id/cache", func() {
+		Context("given the user already signed in", func() {
+			Context("given a valid result id", func() {
+				It("renders with status 200", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result := FabricateResultWithParams(user, "some specific keyword", models.ResultStatusCompleted)
+
+					response := MakeAuthenticatedRequest("GET", fmt.Sprintf("/results/%d/cache", result.Id), nil, nil, user)
+
+					Expect(response.StatusCode).To(Equal(http.StatusOK))
+				})
+
+				It("display result page cache", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result := FabricateResultWithParams(user, "some specific keyword", models.ResultStatusCompleted)
+					result.PageCache = "the page cache"
+					err := models.UpdateResultById(result)
+					if err != nil {
+						Fail("Failed to update result by id")
+					}
+
+					response := MakeAuthenticatedRequest("GET", fmt.Sprintf("/results/%d/cache", result.Id), nil, nil, user)
+					responseBody := GetResponseBody(response)
+					Expect(responseBody).To(ContainSubstring("the page cache"))
+				})
+			})
+
+			Context("given an INVALID result id", func() {
+				It("display an empty page", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+
+					response := MakeAuthenticatedRequest("GET", "/results/9999/cache", nil, nil, user)
+					responseBody := GetResponseBody(response)
+					Expect(responseBody).To(BeEmpty())
+				})
+			})
+		})
+
+		Context("given the user is NOT signed in", func() {
+			It("redirects to sign in path", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+
+				response := MakeRequest("GET", fmt.Sprintf("/results/%d/cache", result.Id), nil)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal("/signin"))
+			})
+		})
+	})
+
 	AfterEach(func() {
 		initializers.CleanupDatabase([]string{"users", "results", "links", "ad_links"})
 	})
