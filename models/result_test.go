@@ -512,7 +512,7 @@ var _ = Describe("Result", func() {
 		Context("given a valid status", func() {
 			It("updates result status to the given status", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
-				result := FabricateResult(user)
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
 				if err != nil {
@@ -524,7 +524,7 @@ var _ = Describe("Result", func() {
 
 			It("returns NO error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
-				result := FabricateResult(user)
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
 				Expect(err).To(BeNil())
@@ -532,9 +532,18 @@ var _ = Describe("Result", func() {
 		})
 
 		Context("given an INVALID status", func() {
+			It("does NOT update the result status", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+
+				err := models.UpdateResultStatus(result, "invalid status")
+				Expect(err).NotTo(BeNil())
+				Expect(result.Status).To(Equal(models.ResultStatusPending))
+			})
+
 			It("returns the error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
-				result := FabricateResult(user)
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, "invalid status")
 				Expect(err.Error()).To(Equal("Invalid result status"))
