@@ -79,7 +79,11 @@ func (c *ResultController) Create() {
 
 func (c *ResultController) storeKeywords(keywords []string)  {
 	for _, k := range keywords {
-		_, err := c.CurrentUser.CreateResult(k)
+		result := &models.Result{
+			User: c.CurrentUser,
+			Keyword: k,
+		}
+		_, err := models.CreateResult(result)
 		if err != nil {
 			logs.Error("Failed to create result:", err.Error())
 		}
