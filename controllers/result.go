@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
@@ -24,6 +25,7 @@ type ResultController struct {
 func (c *ResultController) URLMapping() {
 	c.Mapping("List", c.List)
 	c.Mapping("Create", c.Create)
+	c.Mapping("Show", c.Show)
 }
 
 func (c *ResultController) List() {
@@ -75,6 +77,29 @@ func (c *ResultController) Create() {
 
 	flash.Store(&c.Controller)
 	c.Redirect("/", http.StatusFound)
+}
+
+func (c *ResultController) Show() {
+	c.EnsureAuthenticatedUser()
+	c.TplName = "results/show.html"
+	c.Data["Title"] = "Result Detail"
+	web.ReadFromRequest(&c.Controller)
+
+	var result *models.Result
+
+	resultIDParam := c.Ctx.Input.Param(":id")
+	resultID, err := strconv.ParseInt(resultIDParam, 0, 64)
+	if err != nil {
+		logs.Error("Failed to parse result ID params:", err.Error())
+		result = nil
+	} else {
+		result, err = models.GetResultById(resultID)
+		if err != nil {
+			logs.Error("Failed to get result:", err.Error())
+		}
+	}
+
+	c.Data["result"] = result
 }
 
 func (c *ResultController) storeKeywords(keywords []string)  {

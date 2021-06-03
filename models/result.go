@@ -55,6 +55,16 @@ func GetResultById(id int64) (*Result, error) {
 		return nil, err
 	}
 
+	result.Links, err = GetLinksByResultId(result.Id)
+	if err != nil {
+		return result, err
+	}
+
+	result.AdLinks, err = GetAdLinksByResultId(result.Id)
+	if err != nil {
+		return result, err
+	}
+
 	return result, nil
 }
 
