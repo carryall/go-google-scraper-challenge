@@ -1,12 +1,55 @@
-Keyword: {{ .result.Keyword }} <br>
-Status: {{ .result.Status }} <br>
-AdLinks: <br>
-{{ range $adLink := .result.AdLinks }}
-    {{ $adLink.Position }} {{ $adLink.Type }} {{ $adLink.Link }} <br>
-{{ end }}
-Non-AdLinks: <br>
-{{ range $link := .result.Links }}
-    {{ $link.Link }} <br>
-{{ end }}
-Page Cache: <br>
-<a href="/results/{{.result.Id}}/cache" >Page Cache</a>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            {{ .result.Keyword }}
+        </h3>
+    </div>
+    <div class="card-body card-body--list">
+        <dl class="data-list">
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">
+                    Status
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {{ .result.Status }}
+                </dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">
+                    Total Links
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    15
+                </dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">
+                    Adwords links (10)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {{ range $adLink := .result.AdLinks }}
+                        {{ $adLink.Position }} {{ $adLink.Type }} {{ $adLink.Link }} <br>
+                    {{ end }}
+                </dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">
+                    Non-Adwords links (5)
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    {{ range $link := .result.Links }}
+                        {{ $link.Link }} <br>
+                    {{ end }}
+                </dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt class="text-sm font-medium text-gray-500">
+                    Page Cache
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <a href="/results/{{.result.Id}}/cache" >Page Cache</a>
+                </dd>
+            </div>
+        </dl>
+    </div>
+</div>
