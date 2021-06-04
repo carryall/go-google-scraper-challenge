@@ -27,24 +27,7 @@
                     Adwords links ({{ .result.AdLinkCount }})
                 </dt>
                 <dd class="data-item__detail">
-                    {{ range $position, $adLinks := .result.AdLinks }}
-                    <div class="card card--nested">
-                        <div class="card-header">
-                            <h3 class="card-title">{{ title_case $position }} ({{ len $adLinks }})</h3>
-                        </div>
-                        <div class="card-body card-body--list">
-                            <dl class="data-list data-list--sm">
-                                {{ range $adLink := $adLinks }}
-                                <div class="data-item">
-                                    <dd class="data-item__detail">
-                                        <a href="{{ $adLink }}" class="link-result">{{ $adLink }}</a>
-                                    </dd>
-                                </div>
-                                {{ end }}
-                            </dl>
-                        </div>
-                    </div>
-                    {{ end }}
+                    {{ template "ad_links/_list.html" . }}
                 </dd>
             </div>
             <div class="data-item">
@@ -52,19 +35,7 @@
                     Non-Adwords links ({{ .result.NonAdLinkCount }})
                 </dt>
                 <dd class="data-item__detail">
-                    <div class="card card--nested">
-                        <div class="card-body card-body--list">
-                            <dl class="data-list data-list--sm data-list-nonad">
-                                {{ range $link := .result.Links }}
-                                <div class="data-item">
-                                    <dd class="data-item__detail">
-                                        <a href="{{ $link.Link }}" class="link-result">{{ $link.Link }}</a>
-                                    </dd>
-                                </div>
-                                {{ end }}
-                            </dl>
-                        </div>
-                    </div>
+                    {{ template "links/_card.html" . }}
                 </dd>
             </div>
             <div class="data-item">
