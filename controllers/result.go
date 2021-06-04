@@ -87,7 +87,7 @@ func (c *ResultController) Show() {
 	web.ReadFromRequest(&c.Controller)
 
 	resultID, err := c.getResultID()
-	if err != nil {
+	if err == nil {
 		result, err := models.GetResultByIdWithRelations(resultID)
 		if err != nil {
 			logs.Error("Failed to get result:", err.Error())
@@ -104,7 +104,7 @@ func (c *ResultController) Cache() {
 	web.ReadFromRequest(&c.Controller)
 
 	resultID, err := c.getResultID()
-	if err != nil {
+	if err == nil {
 		result, err := models.GetResultById(resultID)
 		if err != nil {
 			logs.Error("Failed to get result:", err.Error())
