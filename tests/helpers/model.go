@@ -62,7 +62,7 @@ func FabricateResultWithParams(user *models.User, keyword string, status string)
 		ginkgo.Fail("Failed to add result " + err.Error())
 	}
 
-	result, err = models.GetResultByIdWithRelations(resultID)
+	result, err = models.GetResultById(resultID)
 	if err != nil {
 		ginkgo.Fail("Failed to get result " + err.Error())
 	}
