@@ -1,1 +1,8 @@
-{{ str2html .pageCache }}
+{{ if .pageCache }}
+    {{ str2html .pageCache }}
+{{ else }}
+    We cannot find the result you are looking for
+    <a href="/">
+        Back to Home
+    </a>
+{{ end }}

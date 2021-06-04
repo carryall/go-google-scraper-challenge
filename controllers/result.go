@@ -107,10 +107,9 @@ func (c *ResultController) Cache() {
 		result, err := models.GetResultById(resultID)
 		if err != nil {
 			logs.Error("Failed to get result:", err.Error())
+		} else {
+			c.Data["pageCache"] = result.PageCache
 		}
-		c.Data["pageCache"] = result.PageCache
-	} else {
-		c.Data["pageCache"] = ""
 	}
 }
 
