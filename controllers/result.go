@@ -99,7 +99,7 @@ func (c *ResultController) Show() {
 func (c *ResultController) Cache() {
 	c.EnsureAuthenticatedUser()
 	c.TplName = "results/cache.html"
-	c.Data["Title"] = "Result Detail"
+	c.Data["Title"] = "Result Page Cache"
 	web.ReadFromRequest(&c.Controller)
 
 	resultID := c.getResultID()
