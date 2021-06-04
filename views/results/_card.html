@@ -5,13 +5,13 @@
         </h3>
     </div>
     <div class="card-body card-body--list">
-        <dl class="data-list">
+        <dl class="data-list data-list--with-title">
             <div class="data-item">
                 <dt class="data-item__title">
                     Status
                 </dt>
                 <dd class="data-item__detail">
-                    {{ .result.Status }}
+                    <span class="badge badge--{{.result.Status}}">{{ .result.Status }}</span>
                 </dd>
             </div>
             <div class="data-item">
@@ -19,27 +19,52 @@
                     Total Links
                 </dt>
                 <dd class="data-item__detail">
-                    15
+                    {{ .result.TotalLinkCount }} links
                 </dd>
             </div>
             <div class="data-item">
                 <dt class="data-item__title">
-                    Adwords links (10)
+                    Adwords links ({{ .result.AdLinkCount }})
                 </dt>
                 <dd class="data-item__detail">
-                    {{ range $adLink := .result.AdLinks }}
-                        {{ $adLink.Position }} {{ $adLink.Type }} {{ $adLink.Link }} <br>
+                    {{ range $position, $adLinks := .result.AdLinks }}
+                    <div class="card card--nested">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ title_case $position }} ({{ len $adLinks }})</h3>
+                        </div>
+                        <div class="card-body card-body--list">
+                            <dl class="data-list data-list--sm">
+                                {{ range $adLink := $adLinks }}
+                                <div class="data-item">
+                                    <dd class="data-item__detail">
+                                        <a href="{{ $adLink }}" class="link-result">{{ $adLink }}</a>
+                                    </dd>
+                                </div>
+                                {{ end }}
+                            </dl>
+                        </div>
+                    </div>
                     {{ end }}
                 </dd>
             </div>
             <div class="data-item">
                 <dt class="data-item__title">
-                    Non-Adwords links (5)
+                    Non-Adwords links ({{ .result.NonAdLinkCount }})
                 </dt>
                 <dd class="data-item__detail">
-                    {{ range $link := .result.Links }}
-                        {{ $link.Link }} <br>
-                    {{ end }}
+                    <div class="card card--nested">
+                        <div class="card-body card-body--list">
+                            <dl class="data-list data-list--sm data-list-nonad">
+                                {{ range $link := .result.Links }}
+                                <div class="data-item">
+                                    <dd class="data-item__detail">
+                                        <a href="{{ $link.Link }}" class="link-result">{{ $link.Link }}</a>
+                                    </dd>
+                                </div>
+                                {{ end }}
+                            </dl>
+                        </div>
+                    </div>
                 </dd>
             </div>
             <div class="data-item">
@@ -47,7 +72,7 @@
                     Page Cache
                 </dt>
                 <dd class="data-item__detail">
-                    <a href="/results/{{.result.Id}}/cache" >Page Cache</a>
+                    <a href="/results/{{.result.Id}}/cache" target="_blank">{{ render_icon "eye" "icon" }}</a>
                 </dd>
             </div>
         </dl>

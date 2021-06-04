@@ -22,4 +22,14 @@
       @apply text-sm text-gray-500;
     }
   }
+
+  .link-result {
+    @apply block overflow-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  .data-list-nonad {
+    .data-item:first-child {
+      @apply rounded-t-lg rounded-tl-lg;
+    }
+  }
 }
