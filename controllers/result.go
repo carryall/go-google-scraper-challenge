@@ -86,12 +86,13 @@ func (c *ResultController) Show() {
 	c.Data["Title"] = "Result Detail"
 	web.ReadFromRequest(&c.Controller)
 
-	resultID := c.getResultID()
-	if resultID > 0 {
+	resultID, err := c.getResultID()
+	if err != nil {
 		result, err := models.GetResultByIdWithRelations(resultID)
 		if err != nil {
 			logs.Error("Failed to get result:", err.Error())
 		}
+
 		c.Data["result"] = result
 	}
 }
@@ -102,8 +103,8 @@ func (c *ResultController) Cache() {
 	c.Data["Title"] = "Result Page Cache"
 	web.ReadFromRequest(&c.Controller)
 
-	resultID := c.getResultID()
-	if resultID > 0 {
+	resultID, err := c.getResultID()
+	if err != nil {
 		result, err := models.GetResultById(resultID)
 		if err != nil {
 			logs.Error("Failed to get result:", err.Error())
@@ -113,16 +114,16 @@ func (c *ResultController) Cache() {
 	}
 }
 
-func (c *ResultController) getResultID() int64 {
+func (c *ResultController) getResultID() (int64, error) {
 	resultIDParam := c.Ctx.Input.Param(":id")
 	resultID, err := strconv.ParseInt(resultIDParam, 0, 64)
 	if err != nil {
 		logs.Error("Failed to parse result ID params:", err.Error())
 
-		return 0
+		return 0, err
 	}
 
-	return resultID
+	return resultID, nil
 }
 
 func (c *ResultController) storeKeywords(keywords []string)  {
