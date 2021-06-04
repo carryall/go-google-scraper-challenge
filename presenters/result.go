@@ -17,8 +17,12 @@ type ResultPresenter struct {
 	NonAdLinkCount int
 }
 
-func GetResultPresenter(result *models.Result) ResultPresenter {
-	resultPresenter := ResultPresenter{
+func GetResultPresenter(result *models.Result) *ResultPresenter {
+	if result == nil {
+		return nil
+	}
+
+	resultPresenter := &ResultPresenter{
 		Id: result.Id,
 		Keyword: result.Keyword,
 		Status: result.Status,
