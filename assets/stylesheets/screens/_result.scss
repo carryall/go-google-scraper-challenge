@@ -1,6 +1,15 @@
 .result {
-  .card-upload {
+  .card-upload,
+  .card-not-found {
     @apply sm:max-w-lg;
+  }
+
+  .card-not-found {
+    @apply text-center;
+
+    .icon {
+      @apply m-auto text-brown-600;
+    }
   }
 
   .title-feature {

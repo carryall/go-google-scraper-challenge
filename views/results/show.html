@@ -1,8 +1,5 @@
 {{ if .result }}
     {{ template "results/_card.html" . }}
 {{ else }}
-    We cannot find the result you are looking for
-    <a href="/">
-        Back to Home
-    </a>
+    {{ template "results/_not_found.html" }}
 {{ end }}
