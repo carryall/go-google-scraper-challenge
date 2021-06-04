@@ -9,7 +9,7 @@
   }
 
   .app-header {
-    @apply relative bg-nude-500 mb-4 p-4 text-right;
+    @apply flex relative justify-between bg-nude-500 mb-4 p-4 text-right;
   }
 
   .alert {
