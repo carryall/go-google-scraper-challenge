@@ -166,7 +166,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"limit": 2,
 						}
 						results, err := models.GetResultsBy(query)
@@ -189,7 +189,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"limit": 2,
 						}
 						_, err := models.GetResultsBy(query)
@@ -204,7 +204,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"limit": 0,
 						}
 						results, err := models.GetResultsBy(query)
@@ -226,7 +226,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"limit": 0,
 						}
 						_, err := models.GetResultsBy(query)
@@ -243,7 +243,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"offset": 1,
 						}
 						results, err := models.GetResultsBy(query)
@@ -266,7 +266,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"offset": 0,
 						}
 						_, err := models.GetResultsBy(query)
@@ -281,7 +281,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"offset": 0,
 						}
 						results, err := models.GetResultsBy(query)
@@ -303,7 +303,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						var query = map[string]interface{}{
+						query := map[string]interface{}{
 							"offset": 0,
 						}
 						_, err := models.GetResultsBy(query)
@@ -320,7 +320,7 @@ var _ = Describe("Result", func() {
 					result2 := FabricateResult(user)
 					otherUserResult := FabricateResult(otherUser)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"user_id": user.Id,
 					}
 					results, err := models.GetResultsBy(query)
@@ -344,7 +344,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(otherUser)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"user_id": user.Id,
 					}
 					_, err := models.GetResultsBy(query)
@@ -360,7 +360,7 @@ var _ = Describe("Result", func() {
 					result2 := FabricateResult(user)
 					otherUserResult := FabricateResult(otherUser)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"user_id": user.Id,
 					}
 					results, err := models.GetResultsBy(query)
@@ -384,7 +384,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(otherUser)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"user_id": user.Id,
 					}
 					_, err := models.GetResultsBy(query)
@@ -399,7 +399,7 @@ var _ = Describe("Result", func() {
 					result2 := FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
 					result3 := FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"keyword__icontains": "keyword",
 					}
 					results, err := models.GetResultsBy(query)
@@ -422,7 +422,7 @@ var _ = Describe("Result", func() {
 					FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
 					FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"keyword__icontains": "keyword",
 					}
 					_, err := models.GetResultsBy(query)
@@ -436,7 +436,7 @@ var _ = Describe("Result", func() {
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"order": "-id",
 					}
 					results, err := models.GetResultsBy(query)
@@ -458,7 +458,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"order": "-id",
 					}
 					_, err := models.GetResultsBy(query)
@@ -474,7 +474,7 @@ var _ = Describe("Result", func() {
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"limit": -1,
 					}
 					results, err := models.GetResultsBy(query)
@@ -495,7 +495,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"limit": -1,
 					}
 					_, err := models.GetResultsBy(query)
@@ -509,7 +509,7 @@ var _ = Describe("Result", func() {
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"offset": -1,
 					}
 					results, err := models.GetResultsBy(query)
@@ -530,7 +530,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"offset": -1,
 					}
 					_, err := models.GetResultsBy(query)
@@ -544,7 +544,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"user_id": 999,
 					}
 					results, err := models.GetResultsBy(query)
@@ -560,7 +560,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					var query = map[string]interface{}{
+					query := map[string]interface{}{
 						"user_id": 999,
 					}
 					_, err := models.GetResultsBy(query)
@@ -570,7 +570,7 @@ var _ = Describe("Result", func() {
 		})
 	})
 
-	Describe("#CountResultsByUserId", func() {
+	Describe("#CountResultsBy", func() {
 		Context("given a valid user id", func() {
 			It("returns the correct number of user results", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
@@ -579,7 +579,10 @@ var _ = Describe("Result", func() {
 				FabricateResult(user)
 				FabricateResult(otherUser)
 
-				count, err := models.CountResultsByUserId(user.Id)
+				query := map[string]interface{}{
+					"user_id": user.Id,
+				}
+				count, err := models.CountResultsBy(query)
 				if err != nil {
 					Fail("Failed to count results with User Id")
 				}
@@ -594,7 +597,10 @@ var _ = Describe("Result", func() {
 				FabricateResult(user)
 				FabricateResult(otherUser)
 
-				_, err := models.CountResultsByUserId(user.Id)
+				query := map[string]interface{}{
+					"user_id": user.Id,
+				}
+				_, err := models.CountResultsBy(query)
 				Expect(err).To(BeNil())
 			})
 		})
@@ -605,7 +611,10 @@ var _ = Describe("Result", func() {
 				FabricateResult(user)
 				FabricateResult(user)
 
-				count, err := models.CountResultsByUserId(999)
+				query := map[string]interface{}{
+					"user_id": 999,
+				}
+				count, err := models.CountResultsBy(query)
 				if err != nil {
 					Fail("Failed to count results with User Id")
 				}
@@ -618,7 +627,10 @@ var _ = Describe("Result", func() {
 				FabricateResult(user)
 				FabricateResult(user)
 
-				_, err := models.CountResultsByUserId(999)
+				query := map[string]interface{}{
+					"user_id": 999,
+				}
+				_, err := models.CountResultsBy(query)
 				Expect(err).To(BeNil())
 			})
 		})

@@ -1,6 +1,8 @@
 {{ template "results/_form.html" . }}
 
-<h3 class="title-feature">Results</h3>
+<h3 class="title-feature">Results ({{.paginator.Nums}})</h3>
+
+{{ template "results/_form_search.html" . }}
 
 <div class="table-wrapper">
     {{ template "results/_table.html" . }}

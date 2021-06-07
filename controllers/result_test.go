@@ -93,7 +93,7 @@ var _ = Describe("ResultController", func() {
 
 				MakeAuthenticatedRequest("POST", "/results", header, body, user)
 
-				var query = map[string]interface{}{
+				query := map[string]interface{}{
 					"user_id": user.Id,
 				}
 				results, err := models.GetResultsBy(query)

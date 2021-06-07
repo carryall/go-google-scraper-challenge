@@ -48,7 +48,7 @@ func CreateResult(result *Result) (int64, error) {
 
 // GetResultById retrieves Result by Id. Returns error if Id doesn't exist
 func GetResultById(id int64) (*Result, error) {
-	var query = map[string]interface{}{
+	query := map[string]interface{}{
 		"id": id,
 	}
 
@@ -84,7 +84,7 @@ func GetResultByIdWithRelations(id int64) (*Result, error) {
 
 // GetOldestPendingResult retrieves Result with pending status. Return err if no pending result
 func GetOldestPendingResult() (*Result, error) {
-	var query = map[string]interface{}{
+	query := map[string]interface{}{
 		"status": ResultStatusPending,
 		"order": "created_at",
 	}
@@ -108,11 +108,8 @@ func GetResultsBy(query map[string]interface{}) ([]*Result, error) {
 	return results, err
 }
 
-// CountResultsByUserId count all Results with User Id. Returns 0 if no records exist
-func CountResultsByUserId(userId int64) (int64, error) {
-	var query = map[string]interface{}{
-		"user_id": userId,
-	}
+// CountResultsBy count all Results with given query. Returns 0 if no records exist
+func CountResultsBy(query map[string]interface{}) (int64, error) {
 	querySeter := resultQuerySeter(query)
 	count, err := querySeter.Count()
 

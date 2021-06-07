@@ -36,10 +36,9 @@ func (rc *ResultController) List() {
 
 	query := rc.queryFromParams()
 
-	totalResultCount, err := models.CountResultsByUserId(rc.CurrentUser.Id)
+	totalResultCount, err := models.CountResultsBy(query)
 	if err != nil {
 		logs.Warn("Failed to count user results: ", err.Error())
-		rc.Data["results"] = []*models.Result{}
 	}
 
 	perPage := helpers.GetPaginationPerPage()
@@ -137,11 +136,13 @@ func (rc *ResultController) getResultID() (int64, error) {
 func (rc *ResultController) queryFromParams() map[string]interface{} {
 	searcheKeyword := rc.GetString("keyword")
 
-	var query = map[string]interface{}{
+	query := map[string]interface{}{
 		"user_id":            rc.CurrentUser.Id,
 		"order":              "-created_at",
 		"keyword__icontains": searcheKeyword,
 	}
+
+	rc.Data["keyword"] = searcheKeyword
 
 	return query
 }
