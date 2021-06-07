@@ -34,6 +34,8 @@ func (rc *ResultController) List() {
 	rc.TplName = "results/list.html"
 	web.ReadFromRequest(&rc.Controller)
 
+	query := rc.queryFromParams()
+
 	totalResultCount, err := models.CountResultsByUserId(rc.CurrentUser.Id)
 	if err != nil {
 		logs.Warn("Failed to count user results: ", err.Error())
@@ -43,7 +45,10 @@ func (rc *ResultController) List() {
 	perPage := helpers.GetPaginationPerPage()
 	paginator := pagination.SetPaginator((*context.Context)(rc.Ctx), perPage, totalResultCount)
 
-	results, err := models.GetPaginatedResultsByUserId(rc.CurrentUser.Id, int64(perPage), int64(paginator.Offset()))
+	query["limit"] = perPage
+	query["offset"] = paginator.Offset()
+
+	results, err := models.GetResultsBy(query)
 	if err != nil {
 		logs.Warn("Failed to get current user results: ", err.Error())
 	}
@@ -127,6 +132,18 @@ func (rc *ResultController) getResultID() (int64, error) {
 	}
 
 	return resultID, nil
+}
+
+func (rc *ResultController) queryFromParams() map[string]interface{} {
+	searcheKeyword := rc.GetString("keyword")
+
+	var query = map[string]interface{}{
+		"user_id":            rc.CurrentUser.Id,
+		"order":              "-created_at",
+		"keyword__icontains": searcheKeyword,
+	}
+
+	return query
 }
 
 func (rc *ResultController) storeKeywords(keywords []string)  {

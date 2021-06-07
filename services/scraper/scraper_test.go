@@ -37,7 +37,10 @@ var _ = Describe("Scraper", func() {
 					Fail("Failed to run scraper service")
 				}
 
-				userResults, err := models.GetPaginatedResultsByUserId(user.Id, 0, 0)
+				var query = map[string]interface{}{
+					"user_id": user.Id,
+				}
+				userResults, err := models.GetResultsBy(query)
 				if err != nil {
 					Fail("Failed to get user results")
 				}

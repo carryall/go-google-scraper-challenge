@@ -48,7 +48,11 @@ func CreateResult(result *Result) (int64, error) {
 
 // GetResultById retrieves Result by Id. Returns error if Id doesn't exist
 func GetResultById(id int64) (*Result, error) {
-	querySeter := resultQuerySeter().Filter("Id", id).RelatedSel()
+	var query = map[string]interface{}{
+		"id": id,
+	}
+
+	querySeter := resultQuerySeter(query).RelatedSel()
 	result := &Result{}
 	err := querySeter.One(result)
 	if err != nil {
@@ -80,7 +84,11 @@ func GetResultByIdWithRelations(id int64) (*Result, error) {
 
 // GetOldestPendingResult retrieves Result with pending status. Return err if no pending result
 func GetOldestPendingResult() (*Result, error) {
-	querySeter := resultQuerySeter().Filter("status", ResultStatusPending).OrderBy("created_at").RelatedSel()
+	var query = map[string]interface{}{
+		"status": ResultStatusPending,
+		"order": "created_at",
+	}
+	querySeter := resultQuerySeter(query).RelatedSel()
 	result := &Result{}
 	err := querySeter.One(result)
 	if err != nil {
@@ -90,18 +98,22 @@ func GetOldestPendingResult() (*Result, error) {
 	return result, err
 }
 
-// GetPaginatedResultsByUserId retrieves paginated Results with User Id. Returns empty list if no records exist
-func GetPaginatedResultsByUserId(userId int64, limit int64, offset int64) ([]*Result, error) {
-	querySeter := resultQuerySeter().Filter("user_id", userId).OrderBy("-created_at").RelatedSel()
+// GetResultsBy retrieves Results with given query. Returns empty list if no records exist
+// possible query params are order, limit, offset and result property filter
+func GetResultsBy(query map[string]interface{}) ([]*Result, error) {
+	querySeter := resultQuerySeter(query).RelatedSel()
 	var results []*Result
-	_, err := querySeter.Limit(limit, offset).All(&results)
+	_, err := querySeter.All(&results)
 
 	return results, err
 }
 
 // CountResultsByUserId count all Results with User Id. Returns 0 if no records exist
 func CountResultsByUserId(userId int64) (int64, error) {
-	querySeter := resultQuerySeter().Filter("user_id", userId)
+	var query = map[string]interface{}{
+		"user_id": userId,
+	}
+	querySeter := resultQuerySeter(query)
 	count, err := querySeter.Count()
 
 	return count, err
@@ -134,10 +146,24 @@ func UpdateResultStatus(result *Result, status string) error {
 	return UpdateResultById(result)
 }
 
-func resultQuerySeter() orm.QuerySeter {
+func resultQuerySeter(query map[string]interface{}) orm.QuerySeter {
 	ormer := orm.NewOrm()
+	querySeter := ormer.QueryTable(Result{})
 
-	return ormer.QueryTable(Result{})
+	for k, v := range query {
+		switch k {
+		case "limit":
+			querySeter = querySeter.Limit(v)
+		case "offset":
+			querySeter = querySeter.Offset(v)
+		case "order":
+			querySeter = querySeter.OrderBy(v.(string))
+		default:
+			querySeter = querySeter.Filter(k, v)
+		}
+	}
+
+	return querySeter
 }
 
 func validResultStatus(status string) bool {
