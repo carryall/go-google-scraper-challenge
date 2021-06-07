@@ -34,9 +34,9 @@ var _ = Describe("AdLink", func() {
 		Context("given a blank list", func() {
 			It("returns blank collections map with ad link position", func() {
 				expectedAdLinkCollection := map[string][]string{
-					models.AdLinkPositionTop: {},
-					models.AdLinkPositionBottom: {},
-					models.AdLinkPositionSide: {},
+					models.AdLinkPositionTop: nil,
+					models.AdLinkPositionBottom: nil,
+					models.AdLinkPositionSide: nil,
 				}
 
 				adLinkCollection := presenters.GetAdLinkCollection([]*models.AdLink{})
