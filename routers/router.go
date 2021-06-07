@@ -23,7 +23,7 @@ func init() {
 
 	// OAuth Client
 	web.Router("/oauth_client", &controllers.OAuthClientController{}, "get:New;post:Create")
-	web.Router("/oauth_client/:id:int", &controllers.OAuthClientController{}, "get:Show")
+	web.Router("/oauth_client/:id", &controllers.OAuthClientController{}, "get:Show")
 
 	// API
 	web.Router("/api/v1/login", &apicontrollers.AuthController{}, "post:Login")
