@@ -66,7 +66,7 @@ var _ = Describe("Result", func() {
 				expectedAdLinkCollection := map[string][]string{
 					models.AdLinkPositionTop: {adLink1.Link},
 					models.AdLinkPositionBottom: {adLink2.Link},
-					models.AdLinkPositionSide: {},
+					models.AdLinkPositionSide: nil,
 				}
 				result, err := models.GetResultByIdWithRelations(result.Id)
 				if err != nil {
