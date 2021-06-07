@@ -1,0 +1,23 @@
+.form-search {
+  @apply flex relative my-4 mx-auto md:max-w-3xl;
+
+  &__input-icon {
+    @apply absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-50;
+
+    .icon {
+      @apply text-gray-500 sm:text-sm;
+    }
+  }
+
+  &__input {
+    @apply pl-7 pr-12 rounded-tl-md rounded-bl-md;
+  }
+
+  input[type="submit"] {
+    @apply rounded-tl-none rounded-bl-none;
+  }
+
+  &__reset-button {
+    @apply ml-2;
+  }
+}
