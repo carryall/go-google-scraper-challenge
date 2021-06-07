@@ -11,10 +11,12 @@ type AdLinkCollectionPresenter struct {
 }
 
 func GetAdLinkCollection(adlink []*models.AdLink) map[string][]string {
-	var adLinkCollection = map[string][]string{
-		models.AdLinkPositionTop: []string{},
-		models.AdLinkPositionBottom: []string{},
-		models.AdLinkPositionSide: []string{},
+	var adLinkTop, adLinkBottom, adLinkSide []string
+
+	adLinkCollection := map[string][]string{
+		models.AdLinkPositionTop: adLinkTop,
+		models.AdLinkPositionBottom: adLinkBottom,
+		models.AdLinkPositionSide: adLinkSide,
 	}
 
 	for _, al := range adlink {
