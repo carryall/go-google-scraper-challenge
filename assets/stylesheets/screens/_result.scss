@@ -1,6 +1,15 @@
 .result {
-  .card-upload {
+  .card-upload,
+  .card-not-found {
     @apply sm:max-w-lg;
+  }
+
+  .card-not-found {
+    @apply text-center;
+
+    .icon {
+      @apply m-auto text-brown-600;
+    }
   }
 
   .title-feature {
@@ -20,6 +29,16 @@
 
     .table-data.table-result__date {
       @apply text-sm text-gray-500;
+    }
+  }
+
+  .link-result {
+    @apply block overflow-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  .data-list-nonad {
+    .data-item:first-child {
+      @apply rounded-t-lg rounded-tl-lg;
     }
   }
 }

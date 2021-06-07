@@ -93,12 +93,13 @@ func (rc *ResultController) Show() {
 			logs.Error("Failed to get result:", err.Error())
 		}
 
-		rc.Data["result"] = result
+		rc.Data["result"] = presenters.GetResultPresenter(result)
 	}
 }
 
 func (rc *ResultController) Cache() {
 	rc.EnsureAuthenticatedUser()
+	rc.Layout = "layouts/blank.html"
 	rc.TplName = "results/cache.html"
 	rc.Data["Title"] = "Result Page Cache"
 	web.ReadFromRequest(&rc.Controller)

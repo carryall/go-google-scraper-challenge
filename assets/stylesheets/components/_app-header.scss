@@ -1,13 +1,19 @@
 .app-header {
+  @apply text-nude-900;
+
+  &__logo {
+    @apply text-nude-900;
+  }
+
   &__title {
-    @apply text-center text-3xl font-extrabold text-gray-900;
+    @apply text-center text-3xl font-extrabold;
   }
 
   &__profile {
-    @apply border-r-2 border-gray-100 px-2 mr-2;
+    @apply border-r-2 border-nude-100 px-2 mr-2;
   }
 
   &__link {
-    @apply text-gray-500;
+    @apply text-nude-700;
   }
 }

@@ -90,10 +90,14 @@ func FabricateLink(result *models.Result) (link *models.Link)  {
 }
 
 func FabricateAdLink(result *models.Result) (adLink *models.AdLink)  {
+	return FabricateAdLinkWithParams(result, models.AdLinkPositionTop)
+}
+
+func FabricateAdLinkWithParams(result *models.Result, position string) (adLink *models.AdLink)  {
 	adLink = &models.AdLink{
 		Result: result,
 		Link: faker.URL(),
-		Position: models.AdLinkPositionTop,
+		Position: position,
 		Type: models.AdLinkTypeLink,
 	}
 
