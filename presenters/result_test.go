@@ -74,6 +74,7 @@ var _ = Describe("Result", func() {
 				}
 
 				presenter := presenters.GetResultPresenter(result)
+
 				Expect(presenter.Id).To(Equal(result.Id))
 				Expect(presenter.Keyword).To(Equal(result.Keyword))
 				Expect(presenter.Status).To(Equal(result.Status))
