@@ -4,7 +4,12 @@
     @apply sm:max-w-lg;
   }
 
-  .card-not-found {
+  .card-no-result {
+    @apply sm:w-1/3;
+  }
+
+  .card-not-found,
+  .card-no-result {
     @apply text-center;
 
     .icon {
@@ -21,7 +26,7 @@
   }
 
   .table-result {
-    @apply max-w-lg;
+    @apply max-w-lg w-1/3;
 
     .table-data {
       @apply whitespace-normal;
