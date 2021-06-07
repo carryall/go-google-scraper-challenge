@@ -62,7 +62,7 @@ func GetResultById(id int64) (*Result, error) {
 func GetResultByIdWithRelations(id int64) (*Result, error) {
 	result, err := GetResultById(id)
 	if err != nil {
-		return result, err
+		return nil, err
 	}
 
 	result.Links, err = GetLinksByResultId(result.Id)
