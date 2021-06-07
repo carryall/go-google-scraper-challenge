@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/forms"
@@ -21,66 +22,116 @@ type ResultController struct {
 }
 
 // URLMapping map user controller actions to functions
-func (c *ResultController) URLMapping() {
-	c.Mapping("List", c.List)
-	c.Mapping("Create", c.Create)
+func (rc *ResultController) URLMapping() {
+	rc.Mapping("List", rc.List)
+	rc.Mapping("Create", rc.Create)
+	rc.Mapping("Show", rc.Show)
+	rc.Mapping("Cache", rc.Cache)
 }
 
-func (c *ResultController) List() {
-	c.EnsureAuthenticatedUser()
-	c.TplName = "results/list.html"
-	web.ReadFromRequest(&c.Controller)
+func (rc *ResultController) List() {
+	rc.EnsureAuthenticatedUser()
+	rc.TplName = "results/list.html"
+	web.ReadFromRequest(&rc.Controller)
 
-	totalResultCount, err := models.CountResultsByUserId(c.CurrentUser.Id)
+	totalResultCount, err := models.CountResultsByUserId(rc.CurrentUser.Id)
 	if err != nil {
 		logs.Warn("Failed to count user results: ", err.Error())
-		c.Data["results"] = []*models.Result{}
+		rc.Data["results"] = []*models.Result{}
 	}
 
 	perPage := helpers.GetPaginationPerPage()
-	paginator := pagination.SetPaginator((*context.Context)(c.Ctx), perPage, totalResultCount)
+	paginator := pagination.SetPaginator((*context.Context)(rc.Ctx), perPage, totalResultCount)
 
-	results, err := models.GetPaginatedResultsByUserId(c.CurrentUser.Id, int64(perPage), int64(paginator.Offset()))
+	results, err := models.GetPaginatedResultsByUserId(rc.CurrentUser.Id, int64(perPage), int64(paginator.Offset()))
 	if err != nil {
 		logs.Warn("Failed to get current user results: ", err.Error())
 	}
 
 	resultSets := presenters.PrepareResultSet(results)
 
-	c.Data["resultSets"] = resultSets
+	rc.Data["resultSets"] = resultSets
 }
 
-func (c *ResultController) Create() {
-	c.EnsureAuthenticatedUser()
+func (rc *ResultController) Create() {
+	rc.EnsureAuthenticatedUser()
 	flash := web.NewFlash()
 
-	file, fileHeader, err := c.GetFile("file")
+	file, fileHeader, err := rc.GetFile("file")
 	if err != nil {
 		flash.Error(constants.FileUploadFail)
 	} else {
 		uploadForm := forms.UploadForm{
 			File: file,
 			FileHeader: fileHeader,
-			User: c.CurrentUser,
+			User: rc.CurrentUser,
 		}
 		keywords, err := uploadForm.Save()
 		if err != nil {
 			flash.Error(err.Error())
 		} else {
-			c.storeKeywords(keywords)
+			rc.storeKeywords(keywords)
 
 			flash.Success(constants.FileUploadSuccess)
 		}
 	}
 
-	flash.Store(&c.Controller)
-	c.Redirect("/", http.StatusFound)
+	flash.Store(&rc.Controller)
+	rc.Redirect("/", http.StatusFound)
 }
 
-func (c *ResultController) storeKeywords(keywords []string)  {
+func (rc *ResultController) Show() {
+	rc.EnsureAuthenticatedUser()
+	rc.TplName = "results/show.html"
+	rc.Data["Title"] = "Result Detail"
+	web.ReadFromRequest(&rc.Controller)
+
+	resultID, err := rc.getResultID()
+	if err == nil {
+		result, err := models.GetResultByIdWithRelations(resultID)
+		if err != nil {
+			logs.Error("Failed to get result:", err.Error())
+		}
+
+		rc.Data["result"] = result
+	}
+}
+
+func (rc *ResultController) Cache() {
+	rc.EnsureAuthenticatedUser()
+	rc.TplName = "results/cache.html"
+	rc.Data["Title"] = "Result Page Cache"
+	web.ReadFromRequest(&rc.Controller)
+
+	resultID, err := rc.getResultID()
+	if err != nil {
+		return
+	}
+
+	result, err := models.GetResultById(resultID)
+	if err != nil {
+		logs.Error("Failed to get result:", err.Error())
+	} else {
+		rc.Data["pageCache"] = result.PageCache
+	}
+}
+
+func (rc *ResultController) getResultID() (int64, error) {
+	resultIDParam := rc.Ctx.Input.Param(":id")
+	resultID, err := strconv.ParseInt(resultIDParam, 0, 64)
+	if err != nil {
+		logs.Error("Failed to parse result ID params:", err.Error())
+
+		return 0, err
+	}
+
+	return resultID, nil
+}
+
+func (rc *ResultController) storeKeywords(keywords []string)  {
 	for _, k := range keywords {
 		result := &models.Result{
-			User: c.CurrentUser,
+			User: rc.CurrentUser,
 			Keyword: k,
 		}
 		_, err := models.CreateResult(result)

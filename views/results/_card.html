@@ -1,0 +1,12 @@
+Keyword: {{ .result.Keyword }} <br>
+Status: {{ .result.Status }} <br>
+AdLinks: <br>
+{{ range $adLink := .result.AdLinks }}
+    {{ $adLink.Position }} {{ $adLink.Type }} {{ $adLink.Link }} <br>
+{{ end }}
+Non-AdLinks: <br>
+{{ range $link := .result.Links }}
+    {{ $link.Link }} <br>
+{{ end }}
+Page Cache: <br>
+<a href="/results/{{.result.Id}}/cache" >Page Cache</a>
