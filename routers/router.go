@@ -11,8 +11,8 @@ func init() {
 	//
 	web.Router("/", &controllers.ResultController{}, "get:List")
 	web.Router("/results", &controllers.ResultController{}, "post:Create")
-	web.Router("/results/:id", &controllers.ResultController{}, "get:Show")
-	web.Router("/results/:id/cache", &controllers.ResultController{}, "get:Cache")
+	web.Router("/results/:id:int", &controllers.ResultController{}, "get:Show")
+	web.Router("/results/:id:int/cache", &controllers.ResultController{}, "get:Cache")
 
 	// Authentication
 	web.Router("/signup", &controllers.UserController{}, "get:New")
@@ -23,7 +23,7 @@ func init() {
 
 	// OAuth Client
 	web.Router("/oauth_client", &controllers.OAuthClientController{}, "get:New;post:Create")
-	web.Router("/oauth_client/:id", &controllers.OAuthClientController{}, "get:Show")
+	web.Router("/oauth_client/:id:int", &controllers.OAuthClientController{}, "get:Show")
 
 	// API
 	web.Router("/api/v1/login", &apicontrollers.AuthController{}, "post:Login")
