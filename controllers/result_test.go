@@ -206,6 +206,7 @@ var _ = Describe("ResultController", func() {
 
 					response := MakeAuthenticatedRequest("GET", fmt.Sprintf("/results/%d", result.Id), nil, nil, user)
 					responseBody := GetResponseBody(response)
+
 					Expect(responseBody).To(ContainSubstring("some specific keyword"))
 					Expect(responseBody).To(ContainSubstring("completed"))
 					Expect(responseBody).To(ContainSubstring(adLink1.Link))
@@ -220,6 +221,7 @@ var _ = Describe("ResultController", func() {
 
 					response := MakeAuthenticatedRequest("GET", "/results/9999", nil, nil, user)
 					responseBody := GetResponseBody(response)
+
 					Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
 					Expect(responseBody).To(ContainSubstring("Back to Home"))
 				})
@@ -263,6 +265,7 @@ var _ = Describe("ResultController", func() {
 
 					response := MakeAuthenticatedRequest("GET", fmt.Sprintf("/results/%d/cache", result.Id), nil, nil, user)
 					responseBody := GetResponseBody(response)
+
 					Expect(responseBody).To(ContainSubstring("the page cache"))
 				})
 			})
@@ -273,6 +276,7 @@ var _ = Describe("ResultController", func() {
 
 					response := MakeAuthenticatedRequest("GET", "/results/9999/cache", nil, nil, user)
 					responseBody := GetResponseBody(response)
+
 					Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
 					Expect(responseBody).To(ContainSubstring("Back to Home"))
 				})
