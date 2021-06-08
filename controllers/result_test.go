@@ -43,7 +43,7 @@ var _ = Describe("ResultController", func() {
 					Expect(responseBody).NotTo(ContainSubstring(result3.Keyword))
 				})
 
-				Context("given the user filter results", func() {
+				Context("given the user filters results", func() {
 					It("renders filtered user results", func() {
 						user := FabricateUser(faker.Email(), faker.Password())
 						result1 := FabricateResultWithParams(user, "ergonomic chair", models.ResultStatusPending)
