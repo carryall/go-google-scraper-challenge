@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"go-google-scraper-challenge/constants"
@@ -34,7 +35,8 @@ func (rc *ResultController) List() {
 	rc.TplName = "results/list.html"
 	web.ReadFromRequest(&rc.Controller)
 
-	query := rc.queryFromParams()
+	params := rc.getUrlParams()
+	query := rc.generateQueryFromParams(params)
 
 	totalResultCount, err := models.CountResultsBy(query)
 	if err != nil {
@@ -54,6 +56,7 @@ func (rc *ResultController) List() {
 
 	resultSets := presenters.PrepareResultSet(results)
 
+	rc.Data["keyword"] = params.Get("keyword")
 	rc.Data["resultSets"] = resultSets
 }
 
@@ -133,18 +136,24 @@ func (rc *ResultController) getResultID() (int64, error) {
 	return resultID, nil
 }
 
-func (rc *ResultController) queryFromParams() map[string]interface{} {
-	searchKeyword := rc.GetString("keyword")
-
+func (rc *ResultController) generateQueryFromParams(urlParams url.Values) map[string]interface{} {
+	searchKeyword := urlParams.Get("keyword")
 	query := map[string]interface{}{
 		"user_id":            rc.CurrentUser.Id,
 		"order":              "-created_at",
 		"keyword__icontains": searchKeyword,
 	}
 
-	rc.Data["keyword"] = searchKeyword
-
 	return query
+}
+
+func (rc *ResultController) getUrlParams() url.Values {
+	params, err := rc.Input()
+	if err != nil {
+		logs.Error("Failed to get URL params:", err.Error())
+	}
+
+	return params
 }
 
 func (rc *ResultController) storeKeywords(keywords []string)  {
