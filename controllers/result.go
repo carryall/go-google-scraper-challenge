@@ -134,15 +134,15 @@ func (rc *ResultController) getResultID() (int64, error) {
 }
 
 func (rc *ResultController) queryFromParams() map[string]interface{} {
-	searcheKeyword := rc.GetString("keyword")
+	searchKeyword := rc.GetString("keyword")
 
 	query := map[string]interface{}{
 		"user_id":            rc.CurrentUser.Id,
 		"order":              "-created_at",
-		"keyword__icontains": searcheKeyword,
+		"keyword__icontains": searchKeyword,
 	}
 
-	rc.Data["keyword"] = searcheKeyword
+	rc.Data["keyword"] = searchKeyword
 
 	return query
 }
