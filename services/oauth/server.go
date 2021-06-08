@@ -24,7 +24,7 @@ var clientStore *pg.ClientStore
 
 // SetUpOauth setup OAuth server
 func SetUpOauth() {
-	dbURL, err := web.AppConfig.String("db_url")
+	dbURL, err := web.AppConfig.String("dbUrl")
 	if err != nil {
 		logs.Error("Database URL not found: ", err)
 	}

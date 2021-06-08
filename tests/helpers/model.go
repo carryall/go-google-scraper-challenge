@@ -47,9 +47,14 @@ func FabricateOAuthClient() (client oauth.OAuthClient) {
 }
 
 func FabricateResult(user *models.User) (result *models.Result) {
+	return FabricateResultWithParams(user, fmt.Sprintf("Keyword %s", faker.Word()), models.ResultStatusPending)
+}
+
+func FabricateResultWithParams(user *models.User, keyword string, status string) (result *models.Result) {
 	result = &models.Result{
 		User: user,
-		Keyword: fmt.Sprintf("Keyword %s", faker.Word()),
+		Keyword: keyword,
+		Status: status,
 	}
 
 	resultID, err := models.CreateResult(result)
@@ -85,10 +90,14 @@ func FabricateLink(result *models.Result) (link *models.Link)  {
 }
 
 func FabricateAdLink(result *models.Result) (adLink *models.AdLink)  {
+	return FabricateAdLinkWithParams(result, models.AdLinkPositionTop)
+}
+
+func FabricateAdLinkWithParams(result *models.Result, position string) (adLink *models.AdLink)  {
 	adLink = &models.AdLink{
 		Result: result,
 		Link: faker.URL(),
-		Position: models.AdLinkPositionTop,
+		Position: position,
 		Type: models.AdLinkTypeLink,
 	}
 

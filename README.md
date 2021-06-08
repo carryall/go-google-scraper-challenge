@@ -36,7 +36,6 @@ A project for Nimble Go Internal Certification on Web
 
   The application would be running locally at `http://localhost:8080`
 
-
 ## Testing
 
 ### Run test
@@ -64,6 +63,12 @@ A project for Nimble Go Internal Certification on Web
   ```html
   {{ render_icon "iconName", "additional class names" }}
   ```
+
+## Background Tasks
+
+  Use Beego's [Task Module](https://beego.me/docs/module/task.md) to schedule and process background tasks.
+  The scraping task is scheduled to run at the beginning of every 30 seconds.
+  It will scrape the Google search result for the oldest pending result.
 
 ## API
 

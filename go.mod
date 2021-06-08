@@ -35,7 +35,6 @@ require (
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
-	github.com/siddontang/go v0.0.0-20170517070808-cb568a3e5cc0
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	github.com/tidwall/buntdb v1.1.8 // indirect

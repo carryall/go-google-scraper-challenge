@@ -1,10 +1,34 @@
 .result {
-  .card-upload {
+  .card-upload,
+  .card-not-found {
     @apply sm:max-w-lg;
   }
 
+  .card-not-found,
+  .card-no-result {
+    @apply text-center;
+
+    .icon {
+      @apply m-auto;
+    }
+  }
+
+  .card-not-found {
+    .icon {
+      @apply text-brown-600;
+    }
+  }
+
+  .card-no-result {
+    @apply sm:w-1/3;
+
+    .icon {
+      @apply text-primary-600;
+    }
+  }
+
   .title-feature {
-    @apply mt-8 mb-4 text-2xl text-center leading-8 font-bold tracking-tight text-primary-900 sm:text-4xl;
+    @apply mt-8 mb-6 text-2xl text-center leading-8 font-bold tracking-tight text-primary-900 sm:text-4xl;
   }
 
   .table-wrapper {
@@ -12,7 +36,7 @@
   }
 
   .table-result {
-    @apply max-w-lg;
+    @apply max-w-lg w-1/3;
 
     .table-data {
       @apply whitespace-normal;
@@ -20,6 +44,16 @@
 
     .table-data.table-result__date {
       @apply text-sm text-gray-500;
+    }
+  }
+
+  .link-result {
+    @apply block overflow-ellipsis overflow-hidden whitespace-nowrap;
+  }
+
+  .data-list-nonad {
+    .data-item:first-child {
+      @apply rounded-t-lg rounded-tl-lg;
     }
   }
 }

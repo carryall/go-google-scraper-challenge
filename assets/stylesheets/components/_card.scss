@@ -1,15 +1,45 @@
 .card {
-  @apply px-4 py-5 sm:px-6 mx-auto rounded-lg bg-white shadow-md;
+  @apply mx-auto mb-4 rounded-lg bg-white shadow-md;
 
-  &__title {
+  .card-header {
+    @apply px-4 py-5 sm:px-6 border-b border-gray-200;
+  }
+
+  .card-body {
+    @apply px-4 py-5 sm:px-6;
+
+    &--list {
+      @apply p-0;
+    }
+  }
+
+  .card-title {
     @apply text-lg leading-6 font-bold;
   }
 
-  &__subtitle {
+  .card-subtitle {
     @apply mb-2;
 
     svg {
       @apply inline;
+    }
+  }
+
+  &--nested {
+    .card-header {
+      @apply px-2 py-3 sm:px-4;
+    }
+
+    .card-body {
+      @apply px-2 py-3 sm:px-4 text-xs;
+
+      &--list {
+        @apply p-0;
+      }
+    }
+
+    .card-title {
+      @apply text-xs leading-3 font-medium;
     }
   }
 }

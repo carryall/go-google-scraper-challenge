@@ -59,8 +59,14 @@
   &--inline {
     @apply w-full inline-flex items-center justify-between;
 
-    > :not([hidden])[type='submit'] {
-      @apply w-auto mt-0;
+    :not([hidden]) {
+      &:not([hidden]) {
+        @apply mt-0;
+      }
+    }
+
+    [type='submit']:not([hidden]) {
+      @apply w-auto;
     }
   }
 }
