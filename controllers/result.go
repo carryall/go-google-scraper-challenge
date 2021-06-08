@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"go-google-scraper-challenge/constants"
@@ -34,22 +35,28 @@ func (rc *ResultController) List() {
 	rc.TplName = "results/list.html"
 	web.ReadFromRequest(&rc.Controller)
 
-	totalResultCount, err := models.CountResultsByUserId(rc.CurrentUser.Id)
+	params := rc.getUrlParams()
+	query := rc.generateQueryFromParams(params)
+
+	totalResultCount, err := models.CountResultsBy(query)
 	if err != nil {
 		logs.Warn("Failed to count user results: ", err.Error())
-		rc.Data["results"] = []*models.Result{}
 	}
 
 	perPage := helpers.GetPaginationPerPage()
 	paginator := pagination.SetPaginator((*context.Context)(rc.Ctx), perPage, totalResultCount)
 
-	results, err := models.GetPaginatedResultsByUserId(rc.CurrentUser.Id, int64(perPage), int64(paginator.Offset()))
+	query["limit"] = perPage
+	query["offset"] = paginator.Offset()
+
+	results, err := models.GetResultsBy(query)
 	if err != nil {
 		logs.Warn("Failed to get current user results: ", err.Error())
 	}
 
 	resultSets := presenters.PrepareResultSet(results)
 
+	rc.Data["keyword"] = params.Get("keyword")
 	rc.Data["resultSets"] = resultSets
 }
 
@@ -127,6 +134,26 @@ func (rc *ResultController) getResultID() (int64, error) {
 	}
 
 	return resultID, nil
+}
+
+func (rc *ResultController) generateQueryFromParams(urlParams url.Values) map[string]interface{} {
+	searchKeyword := urlParams.Get("keyword")
+	query := map[string]interface{}{
+		"user_id":            rc.CurrentUser.Id,
+		"order":              "-created_at",
+		"keyword__icontains": searchKeyword,
+	}
+
+	return query
+}
+
+func (rc *ResultController) getUrlParams() url.Values {
+	params, err := rc.Input()
+	if err != nil {
+		logs.Error("Failed to get URL params:", err.Error())
+	}
+
+	return params
 }
 
 func (rc *ResultController) storeKeywords(keywords []string)  {

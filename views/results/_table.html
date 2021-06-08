@@ -22,3 +22,7 @@
         </tbody>
     </table>
 {{ end }}
+
+{{ if eq (len .resultSets) 0 }}
+    {{ template "results/_no_result.html" }}
+{{ end }}

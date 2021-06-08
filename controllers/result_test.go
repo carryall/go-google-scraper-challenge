@@ -37,9 +37,36 @@ var _ = Describe("ResultController", func() {
 					response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
 					responseBody := GetResponseBody(response)
 
+					Expect(responseBody).To(ContainSubstring("Results (2)"))
 					Expect(responseBody).To(ContainSubstring(result1.Keyword))
 					Expect(responseBody).To(ContainSubstring(result2.Keyword))
 					Expect(responseBody).NotTo(ContainSubstring(result3.Keyword))
+				})
+
+				Context("given the user filters results", func() {
+					It("renders filtered user results", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						result1 := FabricateResultWithParams(user, "ergonomic chair", models.ResultStatusPending)
+						result2 := FabricateResultWithParams(user, "another keyword", models.ResultStatusPending)
+
+						response := MakeAuthenticatedRequest("GET", "/?keyword=cha", nil, nil, user)
+						responseBody := GetResponseBody(response)
+
+						Expect(responseBody).To(ContainSubstring("Results (1)"))
+						Expect(responseBody).To(ContainSubstring(result1.Keyword))
+						Expect(responseBody).NotTo(ContainSubstring(result2.Keyword))
+					})
+				})
+			})
+
+			Context("given the user has NO result", func() {
+				It("renders no result message", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+
+					response := MakeAuthenticatedRequest("GET", "/", nil, nil, user)
+					responseBody := GetResponseBody(response)
+
+					Expect(responseBody).To(ContainSubstring("No result found"))
 				})
 			})
 		})
@@ -93,7 +120,10 @@ var _ = Describe("ResultController", func() {
 
 				MakeAuthenticatedRequest("POST", "/results", header, body, user)
 
-				results, err := models.GetPaginatedResultsByUserId(user.Id, 0, 0)
+				query := map[string]interface{}{
+					"user_id": user.Id,
+				}
+				results, err := models.GetResultsBy(query)
 				if err != nil {
 					Fail("Failed to get user results: " + err.Error())
 				}
