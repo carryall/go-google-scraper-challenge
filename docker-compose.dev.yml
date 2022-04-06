@@ -1,16 +1,11 @@
-version: '3.8'
+version: "3.5"
 
 services:
   db:
     image: postgres:12.3
-    container_name: google_scraper_db_dev
+    container_name: google_scraper_db
     environment:
-      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_DB=google_scraper_development
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "5432:5432"
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-
-volumes:
-  pg_data:

@@ -1,75 +1,132 @@
-# go-google-scraper-challenge
-A project for Nimble Go Internal Certification on Web
+[![Build Status](CI_BADGE_URL goes here)](REPO_URL goes here)
 
-[Staging](https://google-scraper-staging.herokuapp.com)
-[Production](https://google-scraper-web.herokuapp.com)
+## Introduction
 
-## Development
+> *App introduction goes here ...*
 
-### Create an ENV file
+## Project Setup
 
-  Copy the `.env.example` file and rename it to `.env`, then set the `APP_RUN_MODE` to `dev`
+### Prerequisites
 
-### Build development dependencies
+- [Go - 1.16](https://golang.org/doc/go1.16) or newer
 
-  ```sh
-  make build-dependencies
-  ```
+- [Node - 14](https://nodejs.org/en/)
 
-### Compile assets files
+### Development
 
-  ```sh
-  make assets
-  ```
+#### Create an ENV file
 
-### Run Database service
+To start the development server, `.env` file must be created.
 
-  ```sh
-  make db/setup
-  ```
+- Copy `.env.example` file and rename to `.env`
 
-### Run migrations and the Go application for development
+#### Build dependencies
 
-  ```sh
-  make dev
-  ```
+- [`air`](https://github.com/cosmtrek/air) is used for live reloading
 
-  The application would be running locally at `http://localhost:8080`
+- [`goose`](https://github.com/pressly/goose) is used for database migration.
 
-## Testing
+- [`forego`](https://github.com/ddollar/forego) manages Procfile-based applications.
 
-### Run test
+They need to be built as a binary file in `$GOPATH`.
 
-  ```sh
-  make test
-  ```
 
-### SVG Icons
+```make
+make install-dependencies
+```
 
-  The [SVG Sprite](https://github.com/jkphl/svg-sprite) is used on this project
+#### Start development server
 
-  #### Add a new SVG file
-  - put the new SVG file on `assets/images/icons` directory
-  - install dependency
-  ```sh
-  yarn
-  ```
-  - generate the SVG sprite
-  ```sh
-  make assets/icon-sprite
-  ```
+```make
+make dev
+```
 
-  #### Use SVG inline
-  ```html
-  {{ render_icon "iconName", "additional class names" }}
-  ```
+The application runs locally at http://localhost:8080
 
-## Background Tasks
+### Test
 
-  Use Beego's [Task Module](https://beego.me/docs/module/task.md) to schedule and process background tasks.
-  The scraping task is scheduled to run at the beginning of every 30 seconds.
-  It will scrape the Google search result for the oldest pending result.
+Execute all unit tests:
 
-## API
+```make
+make test
+```
 
-  API requests with examples are provided on [this Postman Collection](https://documenter.getpostman.com/view/8783956/TW77fNqE)
+### Migration
+
+#### Create migration
+
+```make
+make migration/create MIGRATION_NAME={migration name}
+```
+
+#### List the migration status
+
+```make
+make migration/status
+```
+
+#### Migrate the database
+
+```make
+make db/migrate
+```
+
+#### Rollback the migration
+
+```make
+make db/rollback
+```
+### Deploy to Heroku with Terraform
+
+#### Prerequisites
+
+- [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) latest version
+- [Terraform](https://www.terraform.io/downloads.html)
+
+To deploy the application to Heroku with Terraform, we need to create the Heroku API Key first:
+
+```bash
+$ heroku login
+$ heroku authorizations:create --description <api key description>
+```
+
+And then, move to the `deploy/heroku` folder and run the following steps:
+
+_Step 1:_ Copy the variable file and update the variables
+
+```sh
+$ cp terraform.tfvars.sample terraform.tfvars
+```
+
+*You can get the `tfvars` files from 1Password*
+
+_Step 2:_ Initialize Terraform
+
+```sh
+$ terraform init
+```
+
+_Step 3:_ Generate an execution plan
+
+```sh
+$ terraform plan -var-file="terraform.tfvars"
+```
+
+_Step 5:_ Execute the generated plan
+
+```sh
+$ terraform apply -var-file="terraform.tfvars"
+```
+
+_Step 6:_ Build the application and push to heroku
+
+You can check `.github/workflows/deploy.yml` workflow for more details
+
+_Make sure you set the following Github secrets before deploying the application:_
+
+```
+HEROKU_ACCOUNT_EMAIL       # Heroku email
+HEROKU_API_KEY             # Heroku OAuth token
+HEROKU_APP_NAME_PRODUCTION # Heroku app name for production
+HEROKU_APP_NAME_STAGING    # Heroku app name for staging
+```
