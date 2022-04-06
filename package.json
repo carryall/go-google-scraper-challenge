@@ -1,40 +1,26 @@
 {
-  "name": "go-google-scraper-challenge",
-  "version": "1.0.0",
-  "description": "A project for Nimble Go Internal Certification on Web",
-  "private": true,
-  "directories": {
-    "test": "tests"
-  },
-  "browserslist": [
-    "defaults"
-  ],
-  "dependencies": {
-    "@tailwindcss/forms": "0.2.1",
-    "tailwindcss": "2.0.1"
+  "name": "google_scraper",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [],
+  "author": "NimbleHQ",
+  "license": "MIT",
+  "scripts": {
+    "dev": "NODE_ENV=development MODE=development snowpack build --watch --no-minify --no-bundle",
+    "build": "snowpack build",
+    "clean": "rm -rf static"
   },
   "devDependencies": {
-    "@babel/preset-env": "7.12.11",
-    "autoprefixer": "10.0.2",
-    "babel-minify": "0.5.1",
-    "node-sass": "5.0.0",
-    "sass": "1.30.0",
-    "svg-sprite": "1.5.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-scss": "node-sass assets/stylesheets/index.scss static/css/application.css",
-    "minify-js": "minify assets/javascripts --out-dir static/js",
-    "generate-svg-sprite": "svg-sprite -cD static -cscss assets/images/icons/*.svg"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/carryall/go-google-scraper-challenge.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/carryall/go-google-scraper-challenge/issues"
-  },
-  "homepage": "https://github.com/carryall/go-google-scraper-challenge#readme"
+    "@snowpack/plugin-postcss": "1.4.3",
+    "@snowpack/plugin-sass": "1.4.0",
+    "@types/node": "15.12.5",
+    "autoprefixer": "10.2.6",
+    "eslint": "7.29.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "postcss": "8.3.5",
+    "prettier": "2.3.2",
+    "snowpack": "3.7.1",
+    "tailwindcss": "2.2.7"
+  }
 }

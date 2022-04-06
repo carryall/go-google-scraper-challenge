@@ -12,7 +12,3 @@ Describe the big picture of the feature and why it's needed.
 ## Who Benefits?
 
 Describe who will be the beneficiaries e.g. everyone, specific chapters, clients...
-
-## Acceptance Criteria
-
-Describe the definition of done for this feature

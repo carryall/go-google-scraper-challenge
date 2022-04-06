@@ -1,24 +1,30 @@
 package helpers
 
 import (
-	"github.com/beego/beego/v2/core/logs"
-	"github.com/beego/beego/v2/server/web"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
-func GetAppRunMode() string {
-	runMode, err := web.AppConfig.String("runmode")
-	if err != nil {
-		logs.Error("Run mode not found: ", err)
+func GetConfigPrefix() string {
+	if gin.Mode() == "release" {
+		return ""
 	}
 
-	return runMode
+	return gin.Mode() + "."
 }
 
-func GetPaginationPerPage() int {
-	perPage, err := web.AppConfig.Int("PaginationPerPage")
-	if err != nil {
-		logs.Error("Pagination per page not found: ", err)
-	}
+func GetBoolConfig(key string) bool {
+	return viper.GetBool(GetConfigPrefix() + key)
+}
 
-	return perPage
+func GetFloatConfig(key string) float64 {
+	return viper.GetFloat64(GetConfigPrefix() + key)
+}
+
+func GetIntConfig(key string) int {
+	return viper.GetInt(GetConfigPrefix() + key)
+}
+
+func GetStringConfig(key string) string {
+	return viper.GetString(GetConfigPrefix() + key)
 }
