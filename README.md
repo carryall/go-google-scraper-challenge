@@ -30,7 +30,6 @@ To start the development server, `.env` file must be created.
 
 They need to be built as a binary file in `$GOPATH`.
 
-
 ```make
 make install-dependencies
 ```
