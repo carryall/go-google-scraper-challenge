@@ -6,3 +6,6 @@ deploy/**/.terraform/
 deploy/**/terraform.tfstate
 deploy/**/terraform.tfstate.backup
 deploy/**/*.tfvars
+
+# misc
+.DS_Store
