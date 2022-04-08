@@ -1,6 +1,9 @@
+# compired assets
+static
+
+# dependencies
 /node_modules
-tmp/
-.env
+
 # Terraform generated files
 deploy/**/.terraform/
 deploy/**/terraform.tfstate
@@ -9,3 +12,5 @@ deploy/**/*.tfvars
 
 # misc
 .DS_Store
+tmp/
+.env
