@@ -7,8 +7,16 @@ labels: "type : feature"
 
 ## Why
 
-Describe the big picture of the feature and why it's needed.
+Describe the idea of the user story as in what the motive of the user story is.
 
-## Who Benefits?
+## Acceptance Criteria
 
-Describe who will be the beneficiaries e.g. everyone, specific chapters, clients...
+List down how the user story will be tested and what criteria are necessary for the user story to be accepted.
+
+## Design
+
+(Optional) Add design screenshots or Figma links for UI/UX-related stories.
+
+## Resources
+
+(Optional) Add useful resources such as links to documentation, implementation ideas, or best practices.
