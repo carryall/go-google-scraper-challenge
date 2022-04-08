@@ -75,6 +75,7 @@ make db/migrate
 ```make
 make db/rollback
 ```
+
 ### Deploy to Heroku with Terraform
 
 #### Prerequisites
@@ -85,36 +86,36 @@ make db/rollback
 To deploy the application to Heroku with Terraform, we need to create the Heroku API Key first:
 
 ```bash
-$ heroku login
-$ heroku authorizations:create --description <api key description>
+heroku login
+heroku authorizations:create --description <api key description>
 ```
 
 And then, move to the `deploy/heroku` folder and run the following steps:
 
 _Step 1:_ Copy the variable file and update the variables
 
-```sh
-$ cp terraform.tfvars.sample terraform.tfvars
+```bash
+cp terraform.tfvars.sample terraform.tfvars
 ```
 
 *You can get the `tfvars` files from 1Password*
 
 _Step 2:_ Initialize Terraform
 
-```sh
-$ terraform init
+```bash
+terraform init
 ```
 
 _Step 3:_ Generate an execution plan
 
-```sh
-$ terraform plan -var-file="terraform.tfvars"
+```bash
+terraform plan -var-file="terraform.tfvars"
 ```
 
 _Step 5:_ Execute the generated plan
 
-```sh
-$ terraform apply -var-file="terraform.tfvars"
+```bash
+terraform apply -var-file="terraform.tfvars"
 ```
 
 _Step 6:_ Build the application and push to heroku
@@ -123,7 +124,7 @@ You can check `.github/workflows/deploy.yml` workflow for more details
 
 _Make sure you set the following Github secrets before deploying the application:_
 
-```
+```bash
 HEROKU_ACCOUNT_EMAIL       # Heroku email
 HEROKU_API_KEY             # Heroku OAuth token
 HEROKU_APP_NAME_PRODUCTION # Heroku app name for production
