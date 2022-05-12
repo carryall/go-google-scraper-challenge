@@ -1,4 +1,4 @@
-https://github.com/nimblehq/git-template/issues/??
+https://github.com/carryall/go-google-scraper-challenge/issues/
 
 ## What happened 👀
 
