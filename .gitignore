@@ -14,3 +14,4 @@ deploy/**/*.tfvars
 .DS_Store
 tmp/
 .env
+.vscode
