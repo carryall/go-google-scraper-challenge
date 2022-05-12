@@ -1,9 +1,8 @@
-module github.com/nimblehq/google_scraper
+module go-google-scraper-challenge
 
 go 1.16
 
 require (
-	github.com/cosmtrek/air v1.15.1 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/json-iterator/go v1.1.11 // indirect
@@ -16,7 +15,6 @@ require (
 	github.com/onsi/gomega v1.10.5
 	github.com/pelletier/go-toml v1.9.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pressly/goose/v3 v3.5.3 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0 // indirect
