@@ -1,7 +1,0 @@
-heroku_email = ""
-heroku_api_key = ""
-heroku_organization = "nimblehq"
-app_name = "google_scraper"
-app_region = "us"
-postgresql_plan = "hobby-dev"
-dyno_size = "Free"
