@@ -3,8 +3,8 @@ package controllers_test
 import (
 	"net/http"
 
-	"github.com/nimblehq/google_scraper/lib/api/v1/controllers"
-	"github.com/nimblehq/google_scraper/test"
+	"go-google-scraper-challenge/lib/api/v1/controllers"
+	"go-google-scraper-challenge/test"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

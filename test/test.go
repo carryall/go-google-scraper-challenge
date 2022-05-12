@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/nimblehq/google_scraper/bootstrap"
-	"github.com/nimblehq/google_scraper/helpers/log"
+	"go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/gin-gonic/gin"
 )
