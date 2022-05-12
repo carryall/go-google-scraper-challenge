@@ -15,12 +15,7 @@ jobs:
           go-version: 1.16.x
 
       - name: Create .env file
-        run: cp ".env.example" ".env"
-
-      - name: Run linters
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: v1.29
+        run: cp ".env.test" ".env"
 
       - name: Install dependencies
         run: make install-dependencies
