@@ -1,0 +1,81 @@
+.alert {
+  $self: &;
+
+  @apply w-full flex items-start rounded-lg mx-auto mb-8 p-3 sm:p-5 sm:align-middle sm:max-w-lg;
+
+  &--error {
+    @apply bg-crimson-100;
+
+    #{$self}__icon svg {
+      @apply text-crimson-400;
+    }
+
+    #{$self}__title {
+      @apply text-crimson-700;
+    }
+
+    #{$self}__message {
+      @apply text-crimson-600;
+    }
+  }
+
+  &--success {
+    @apply bg-olive-100;
+
+    #{$self}__icon svg {
+      @apply text-olive-400;
+    }
+
+    #{$self}__title {
+      @apply text-olive-700;
+    }
+
+    #{$self}__message {
+      @apply text-olive-600;
+    }
+  }
+
+  &--info {
+    @apply bg-primary-100;
+
+    #{$self}__icon svg {
+      @apply text-primary-400;
+    }
+
+    #{$self}__title {
+      @apply text-primary-700;
+    }
+
+    #{$self}__message {
+      @apply text-primary-600;
+    }
+  }
+
+  &--warning {
+    @apply bg-brown-100;
+
+    #{$self}__icon svg {
+      @apply text-brown-400;
+    }
+
+    #{$self}__title {
+      @apply text-brown-700;
+    }
+
+    #{$self}__message {
+      @apply text-brown-600;
+    }
+  }
+
+  &__body {
+    @apply ml-3 text-left sm:text-sm;
+  }
+
+  &__title {
+    @apply text-lg font-bold leading-6;
+  }
+
+  &__message {
+    @apply text-sm mt-1 sm:text-sm;
+  }
+}

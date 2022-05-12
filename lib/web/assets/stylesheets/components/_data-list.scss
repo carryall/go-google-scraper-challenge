@@ -1,0 +1,41 @@
+.data-list {
+  .data-item {
+    @apply bg-gray-50 px-4 py-5 sm:px-6;
+
+    &:nth-child(even) {
+      @apply bg-white;
+    }
+
+    &:last-child {
+      @apply rounded-b-lg rounded-bl-lg;
+    }
+
+    &__title {
+      @apply text-sm font-medium text-gray-500;
+    }
+
+    &__detail {
+      @apply mt-1 text-sm text-gray-900 break-words sm:mt-0 sm:col-span-2;
+    }
+  }
+
+  &--with-title {
+    >.data-item {
+      @apply sm:grid sm:grid-cols-3 sm:gap-4;
+    }
+  }
+
+  &--sm {
+    .data-item {
+      @apply px-2 py-3 sm:px-4;
+
+      &__title {
+        @apply text-xs;
+      }
+
+      &__detail {
+        @apply text-xs;
+      }
+    }
+  }
+}
