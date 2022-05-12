@@ -1,7 +1,7 @@
 package helpers_test
 
 import (
-	"github.com/nimblehq/google_scraper/helpers"
+	"go-google-scraper-challenge/helpers"
 
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo"

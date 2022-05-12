@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"net/url"
 
-	"github.com/nimblehq/google_scraper/lib/web/controllers"
+	"go-google-scraper-challenge/lib/web/controllers"
 
 	"github.com/gin-gonic/gin"
 	eztemplate "github.com/michelloworld/ez-gin-template"

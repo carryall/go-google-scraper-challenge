@@ -3,7 +3,7 @@ package helpers_test
 import (
 	"testing"
 
-	"github.com/nimblehq/google_scraper/test"
+	"go-google-scraper-challenge/test"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

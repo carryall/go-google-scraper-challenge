@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/nimblehq/google_scraper/bootstrap"
-	"github.com/nimblehq/google_scraper/helpers/log"
+	"go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"

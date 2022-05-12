@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/nimblehq/google_scraper/lib/api/v1/controllers"
+	"go-google-scraper-challenge/lib/api/v1/controllers"
 
 	"github.com/gin-gonic/gin"
 )

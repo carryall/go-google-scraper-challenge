@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nimblehq/google_scraper/helpers"
-	"github.com/nimblehq/google_scraper/helpers/log"
+	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"

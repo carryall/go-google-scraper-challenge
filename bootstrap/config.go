@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"github.com/nimblehq/google_scraper/helpers/log"
+	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/spf13/viper"
 )

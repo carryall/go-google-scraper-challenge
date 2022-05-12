@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	apiv1router "github.com/nimblehq/google_scraper/lib/api/v1/routers"
-	webrouter "github.com/nimblehq/google_scraper/lib/web/routers"
+	apiv1router "go-google-scraper-challenge/lib/api/v1/routers"
+	webrouter "go-google-scraper-challenge/lib/web/routers"
 
 	"github.com/gin-gonic/gin"
 )
