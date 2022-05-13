@@ -6,9 +6,7 @@ on:
       - Test
     branches:
       - main
-      - master
       - develop
-      - development
     types:
       - completed
   workflow_dispatch:
