@@ -13,8 +13,6 @@ env-teardown:
 
 db/migrate:
 	make wait-for-postgres
-	go install github.com/pressly/goose/v3/cmd/goose@latest
-	goose -version
 	goose -dir database/migrations -table "migration_versions" postgres "$(DATABASE_URL)" up
 
 db/rollback:
@@ -38,7 +36,7 @@ dev:
 install-dependencies:
 	go mod tidy
 	go get github.com/cosmtrek/air@v1.15.1
-	go get github.com/pressly/goose/v3/cmd/goose
+	go install github.com/pressly/goose/v3/cmd/goose
 	go get github.com/ddollar/forego
 	npm install
 
