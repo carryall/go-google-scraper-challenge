@@ -11,7 +11,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Install goose for migration
-RUN go install github.com/pressly/goose/v3/cmd/goose
+RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 
 # Copy codebase
 COPY . .
