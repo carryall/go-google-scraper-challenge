@@ -8,7 +8,7 @@
 
 ### Prerequisites
 
-- [Go - 1.16](https://golang.org/doc/go1.16) or newer
+- [Go - 1.18](https://golang.org/doc/go1.18) or newer
 
 - [Node - 14](https://nodejs.org/en/)
 
