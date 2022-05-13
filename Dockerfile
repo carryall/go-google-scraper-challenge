@@ -1,4 +1,4 @@
-FROM golang:1.16-buster
+FROM golang:1.18-alpine
 
 ARG DATABASE_URL
 
