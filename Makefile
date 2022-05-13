@@ -13,6 +13,7 @@ env-teardown:
 
 db/migrate:
 	make wait-for-postgres
+	goose -version
 	goose -dir database/migrations -table "migration_versions" postgres "$(DATABASE_URL)" up
 
 db/rollback:
