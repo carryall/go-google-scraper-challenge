@@ -17,7 +17,12 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2.1.3
         with:
-          go-version: 1.16.x
+          go-version: 1.18.x
+
+      - name: Go Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.29
 
       - name: Create .env file
         run: cp ".env.test" ".env"
