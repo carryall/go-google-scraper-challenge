@@ -13,7 +13,7 @@ env-teardown:
 
 db/migrate:
 	make wait-for-postgres
-	go get github.com/pressly/goose/v3/cmd/goose
+	go install github.com/pressly/goose/v3/cmd/goose@latest
 	goose -version
 	goose -dir database/migrations -table "migration_versions" postgres "$(DATABASE_URL)" up
 
