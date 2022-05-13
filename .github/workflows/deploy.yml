@@ -55,3 +55,5 @@ jobs:
           usedocker: true
           docker_build_args: |
             DATABASE_URL
+        env:
+          APP_RUN_MODE: 'prod'
