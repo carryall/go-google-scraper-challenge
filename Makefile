@@ -34,10 +34,10 @@ dev:
 	forego start -f Procfile.dev
 
 install-dependencies:
+	go mod tidy
 	go get github.com/cosmtrek/air@v1.15.1
 	go get github.com/pressly/goose/v3/cmd/goose
 	go get github.com/ddollar/forego
-	go mod tidy
 	npm install
 
 test:
