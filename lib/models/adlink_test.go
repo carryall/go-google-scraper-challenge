@@ -51,7 +51,8 @@ var _ = Describe("AdLink", func() {
 					adLinkID, err := models.CreateAdLink(adLink)
 
 					fmt.Println("LOG ERROR", err.Error())
-					Expect(err.Error()).To(Equal("ERROR: insert field `go-google-scraper-challenge/models.AdLink.Result` cannot be NULL"))
+
+					Expect(err.Error()).To(HavePrefix("ERROR: insert or update on table \"ad_links\" violates foreign key constraint \"ad_links_result_id_fkey\""))
 					Expect(adLinkID).To(Equal(int64(0)))
 				})
 			})

@@ -8,7 +8,7 @@ type Link struct {
 	Base
 
 	ResultId int     `gorm:"not null;"`
-	Result   *Result `gorm:"foreignKey:ResultId"`
+	Result   *Result `gorm:"not null;foreignKey:ResultId"`
 	Link     string  `gorm:"not null;"`
 }
 

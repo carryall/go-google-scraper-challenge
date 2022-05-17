@@ -85,7 +85,7 @@ var _ = Describe("Result", func() {
 					result := &models.Result{}
 					resultID, err := models.CreateResult(result)
 
-					Expect(err.Error()).To(Equal("ERROR: field `go-google-scraper-challenge/models.Result.User` cannot be NULL"))
+					Expect(err.Error()).To(HavePrefix("ERROR: insert or update on table \"results\" violates foreign key constraint \"results_user_id_fkey\""))
 					Expect(resultID).To(Equal(int64(0)))
 				})
 			})
@@ -150,7 +150,7 @@ var _ = Describe("Result", func() {
 				result, err := models.GetOldestPendingResult()
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
-				Expect(result.Id).To(BeNil())
+				Expect(result.Id).To(Equal((int64(0))))
 			})
 		})
 	})
