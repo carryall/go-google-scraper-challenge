@@ -2,7 +2,7 @@ package models_test
 
 import (
 	"go-google-scraper-challenge/lib/models"
-	"go-google-scraper-challenge/test"
+	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
@@ -40,7 +40,7 @@ var _ = Describe("User", func() {
 			Context("given email that already exist in database", func() {
 				It("returns an error", func() {
 					password := faker.Password()
-					existingUser := test.FabricateUser(faker.Email(), password)
+					existingUser := FabricateUser(faker.Email(), password)
 
 					user := models.User{
 						Email:          existingUser.Email,
@@ -58,7 +58,7 @@ var _ = Describe("User", func() {
 	Describe("#GetUserById", func() {
 		Context("given user id exist in the system", func() {
 			It("returns user with given id", func() {
-				existUser := test.FabricateUser(faker.Email(), faker.Password())
+				existUser := FabricateUser(faker.Email(), faker.Password())
 
 				user, err := models.GetUserById(existUser.Id)
 				if err != nil {
@@ -83,7 +83,7 @@ var _ = Describe("User", func() {
 	Describe("#UserEmailAlreadyExist", func() {
 		Context("given user email exist in the system", func() {
 			It("returns true", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
+				user := FabricateUser(faker.Email(), faker.Password())
 
 				userExist := models.UserEmailAlreadyExist(user.Email)
 
@@ -103,7 +103,7 @@ var _ = Describe("User", func() {
 	Describe("#GetUserByEmail", func() {
 		Context("given user email exist in the system", func() {
 			It("returns the user", func() {
-				existUser := test.FabricateUser(faker.Email(), faker.Password())
+				existUser := FabricateUser(faker.Email(), faker.Password())
 
 				user, err := models.GetUserByEmail(existUser.Email)
 				if err != nil {
@@ -125,6 +125,6 @@ var _ = Describe("User", func() {
 	})
 
 	AfterEach(func() {
-		test.CleanupDatabase([]string{"users"})
+		CleanupDatabase([]string{"users"})
 	})
 })

@@ -2,7 +2,7 @@ package models_test
 
 import (
 	"go-google-scraper-challenge/lib/models"
-	"go-google-scraper-challenge/test"
+	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
@@ -13,8 +13,8 @@ var _ = Describe("Link", func() {
 	Describe("#CreateLink", func() {
 		Context("given link with valid params", func() {
 			It("returns the link ID", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
 				link := &models.Link{
 					Result: result,
 				}
@@ -27,8 +27,8 @@ var _ = Describe("Link", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
 				link := &models.Link{
 					Result: result,
 				}
@@ -55,9 +55,9 @@ var _ = Describe("Link", func() {
 	Describe("#GetLinkById", func() {
 		Context("given link id exist in the system", func() {
 			It("returns link with given id", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				existLink := test.FabricateLink(result)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				existLink := FabricateLink(result)
 				link, err := models.GetLinkById(existLink.Id)
 				if err != nil {
 					Fail("Failed to get link with ID")
@@ -81,13 +81,13 @@ var _ = Describe("Link", func() {
 	Describe("#GetLinksByResultId", func() {
 		Context("given a valid result id", func() {
 			It("returns links with the given result id", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				otherResult := test.FabricateResult(otherUser)
-				link1 := test.FabricateLink(result)
-				link2 := test.FabricateLink(result)
-				otherLink := test.FabricateLink(otherResult)
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				otherResult := FabricateResult(otherUser)
+				link1 := FabricateLink(result)
+				link2 := FabricateLink(result)
+				otherLink := FabricateLink(otherResult)
 
 				links, err := models.GetLinksByResultId(result.Id)
 				if err != nil {
@@ -104,13 +104,13 @@ var _ = Describe("Link", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				otherResult := test.FabricateResult(otherUser)
-				test.FabricateLink(result)
-				test.FabricateLink(result)
-				test.FabricateLink(otherResult)
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				otherResult := FabricateResult(otherUser)
+				FabricateLink(result)
+				FabricateLink(result)
+				FabricateLink(otherResult)
 
 				_, err := models.GetLinksByResultId(result.Id)
 				Expect(err).To(BeNil())
@@ -119,10 +119,10 @@ var _ = Describe("Link", func() {
 
 		Context("given an invalid result id", func() {
 			It("returns an empty list", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				test.FabricateLink(result)
-				test.FabricateLink(result)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				FabricateLink(result)
+				FabricateLink(result)
 
 				results, err := models.GetLinksByResultId(999)
 				if err != nil {
@@ -133,10 +133,10 @@ var _ = Describe("Link", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				test.FabricateLink(result)
-				test.FabricateLink(result)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				FabricateLink(result)
+				FabricateLink(result)
 
 				_, err := models.GetLinksByResultId(999)
 				Expect(err).To(BeNil())
@@ -145,6 +145,6 @@ var _ = Describe("Link", func() {
 	})
 
 	AfterEach(func() {
-		test.CleanupDatabase([]string{"users", "results", "links"})
+		CleanupDatabase([]string{"users", "results", "links"})
 	})
 })
