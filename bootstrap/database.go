@@ -22,6 +22,7 @@ func InitDatabase(databaseURL string) {
 		log.Fatalf("Failed to connect to %v database: %v", gin.Mode(), err)
 	} else {
 		viper.Set("database", db)
+		database = db
 
 		caser := cases.Title(language.English)
 		log.Println(caser.String(gin.Mode()) + " database connected successfully.")
