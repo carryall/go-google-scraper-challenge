@@ -2,7 +2,7 @@ package models_test
 
 import (
 	"go-google-scraper-challenge/lib/models"
-	"go-google-scraper-challenge/test"
+	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
@@ -13,7 +13,7 @@ var _ = Describe("Result", func() {
 	Describe("#CreateResult", func() {
 		Context("given result with valid params", func() {
 			It("returns the result ID", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := &models.Result{
 					User:    user,
 					Keyword: "valid keyword",
@@ -27,7 +27,7 @@ var _ = Describe("Result", func() {
 			})
 
 			It("sets default result status to pending", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := &models.Result{
 					User:    user,
 					Keyword: "valid keyword",
@@ -46,7 +46,7 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
+				user := FabricateUser(faker.Email(), faker.Password())
 				result := &models.Result{
 					User:    user,
 					Keyword: "valid keyword",
@@ -58,7 +58,7 @@ var _ = Describe("Result", func() {
 
 			Context("given result with status", func() {
 				It("sets status to given status", func() {
-					user := test.FabricateUser(faker.Email(), faker.Password())
+					user := FabricateUser(faker.Email(), faker.Password())
 					result := &models.Result{
 						User:    user,
 						Keyword: "valid keyword",
@@ -95,8 +95,8 @@ var _ = Describe("Result", func() {
 	Describe("#GetResultById", func() {
 		Context("given result id exist in the system", func() {
 			It("returns result with given id", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				existResult := test.FabricateResult(user)
+				user := FabricateUser(faker.Email(), faker.Password())
+				existResult := FabricateResult(user)
 				result, err := models.GetResultById(existResult.Id)
 				if err != nil {
 					Fail("Failed to get result with ID")
@@ -120,12 +120,12 @@ var _ = Describe("Result", func() {
 	Describe("#GetOldestPendingResult()", func() {
 		Context("given at least one pending result", func() {
 			It("returns the oldest pending result", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				test.FabricateResultWithParams(user, "keyword", models.ResultStatusFailed)
-				test.FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
-				pendingResult := test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
-				test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
-				test.FabricateResultWithParams(user, "keyword", models.ResultStatusProcessing)
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResultWithParams(user, "keyword", models.ResultStatusFailed)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
+				pendingResult := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				FabricateResultWithParams(user, "keyword", models.ResultStatusProcessing)
 
 				result, err := models.GetOldestPendingResult()
 				if err != nil {
@@ -136,8 +136,8 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				_, err := models.GetOldestPendingResult()
 
@@ -160,10 +160,10 @@ var _ = Describe("Result", func() {
 	// 		Context("given a valid limit", func() {
 	// 			Context("given limit is > 0", func() {
 	// 				It("returns the results with the given limit", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := test.FabricateResult(user)
-	// 					result2 := test.FabricateResult(user)
-	// 					result3 := test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					result1 := FabricateResult(user)
+	// 					result2 := FabricateResult(user)
+	// 					result3 := FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"limit": 2,
@@ -183,10 +183,10 @@ var _ = Describe("Result", func() {
 	// 				})
 
 	// 				It("returns NO error", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"limit": 2,
@@ -198,10 +198,10 @@ var _ = Describe("Result", func() {
 
 	// 			Context("given a 0 limit", func() {
 	// 				It("returns the results with no limit", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := test.FabricateResult(user)
-	// 					result2 := test.FabricateResult(user)
-	// 					result3 := test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					result1 := FabricateResult(user)
+	// 					result2 := FabricateResult(user)
+	// 					result3 := FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"limit": 0,
@@ -220,10 +220,10 @@ var _ = Describe("Result", func() {
 	// 				})
 
 	// 				It("returns NO error", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"limit": 0,
@@ -237,10 +237,10 @@ var _ = Describe("Result", func() {
 	// 		Context("given a valid offset", func() {
 	// 			Context("given offset is > 0", func() {
 	// 				It("returns the results with the given offset", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := test.FabricateResult(user)
-	// 					result2 := test.FabricateResult(user)
-	// 					result3 := test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					result1 := FabricateResult(user)
+	// 					result2 := FabricateResult(user)
+	// 					result3 := FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"offset": 1,
@@ -260,10 +260,10 @@ var _ = Describe("Result", func() {
 	// 				})
 
 	// 				It("returns NO error", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"offset": 0,
@@ -275,10 +275,10 @@ var _ = Describe("Result", func() {
 
 	// 			Context("given a 0 offset", func() {
 	// 				It("returns the results with no offset", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := test.FabricateResult(user)
-	// 					result2 := test.FabricateResult(user)
-	// 					result3 := test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					result1 := FabricateResult(user)
+	// 					result2 := FabricateResult(user)
+	// 					result3 := FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"offset": 0,
@@ -297,10 +297,10 @@ var _ = Describe("Result", func() {
 	// 				})
 
 	// 				It("returns NO error", func() {
-	// 					user := test.FabricateUser(faker.Email(), faker.Password())
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
-	// 					test.FabricateResult(user)
+	// 					user := FabricateUser(faker.Email(), faker.Password())
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
+	// 					FabricateResult(user)
 
 	// 					query := map[string]interface{}{
 	// 						"offset": 0,
@@ -313,11 +313,11 @@ var _ = Describe("Result", func() {
 
 	// 		Context("given a valid user id", func() {
 	// 			It("returns all user results", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := test.FabricateResult(user)
-	// 				result2 := test.FabricateResult(user)
-	// 				otherUserResult := test.FabricateResult(otherUser)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
+	// 				result1 := FabricateResult(user)
+	// 				result2 := FabricateResult(user)
+	// 				otherUserResult := FabricateResult(otherUser)
 
 	// 				query := map[string]interface{}{
 	// 					"user_id": user.Id,
@@ -337,11 +337,11 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(otherUser)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
+	// 				FabricateResult(otherUser)
 
 	// 				query := map[string]interface{}{
 	// 					"user_id": user.Id,
@@ -353,11 +353,11 @@ var _ = Describe("Result", func() {
 
 	// 		Context("given a valid user id", func() {
 	// 			It("returns all user results", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := test.FabricateResult(user)
-	// 				result2 := test.FabricateResult(user)
-	// 				otherUserResult := test.FabricateResult(otherUser)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
+	// 				result1 := FabricateResult(user)
+	// 				result2 := FabricateResult(user)
+	// 				otherUserResult := FabricateResult(otherUser)
 
 	// 				query := map[string]interface{}{
 	// 					"user_id": user.Id,
@@ -377,11 +377,11 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(otherUser)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
+	// 				FabricateResult(otherUser)
 
 	// 				query := map[string]interface{}{
 	// 					"user_id": user.Id,
@@ -393,10 +393,10 @@ var _ = Describe("Result", func() {
 
 	// 		Context("given a valid keyword query", func() {
 	// 			It("returns the results that match the query", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := test.FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
-	// 				result2 := test.FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
-	// 				result3 := test.FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				result1 := FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
+	// 				result2 := FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
+	// 				result3 := FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
 
 	// 				query := map[string]interface{}{
 	// 					"keyword__icontains": "keyword",
@@ -416,10 +416,10 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
-	// 				test.FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
-	// 				test.FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
+	// 				FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
+	// 				FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
 
 	// 				query := map[string]interface{}{
 	// 					"keyword__icontains": "keyword",
@@ -431,9 +431,9 @@ var _ = Describe("Result", func() {
 
 	// 		Context("given a valid order", func() {
 	// 			It("returns the results order by the given order", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := test.FabricateResult(user)
-	// 				result2 := test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				result1 := FabricateResult(user)
+	// 				result2 := FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"order": "-id",
@@ -453,9 +453,9 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"order": "-id",
@@ -469,9 +469,9 @@ var _ = Describe("Result", func() {
 	// 	Context("given invalid params", func() {
 	// 		Context("given a negative limit", func() {
 	// 			It("returns the results with no limit", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := test.FabricateResult(user)
-	// 				result2 := test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				result1 := FabricateResult(user)
+	// 				result2 := FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"limit": -1,
@@ -490,9 +490,9 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"limit": -1,
@@ -504,9 +504,9 @@ var _ = Describe("Result", func() {
 
 	// 		Context("given a negative offset", func() {
 	// 			It("returns the results with no offset", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := test.FabricateResult(user)
-	// 				result2 := test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				result1 := FabricateResult(user)
+	// 				result2 := FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"offset": -1,
@@ -525,9 +525,9 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"offset": -1,
@@ -539,9 +539,9 @@ var _ = Describe("Result", func() {
 
 	// 		Context("given an invalid user id", func() {
 	// 			It("returns an empty list", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"user_id": 999,
@@ -555,9 +555,9 @@ var _ = Describe("Result", func() {
 	// 			})
 
 	// 			It("returns NO error", func() {
-	// 				user := test.FabricateUser(faker.Email(), faker.Password())
-	// 				test.FabricateResult(user)
-	// 				test.FabricateResult(user)
+	// 				user := FabricateUser(faker.Email(), faker.Password())
+	// 				FabricateResult(user)
+	// 				FabricateResult(user)
 
 	// 				query := map[string]interface{}{
 	// 					"user_id": 999,
@@ -572,11 +572,11 @@ var _ = Describe("Result", func() {
 	// Describe("#CountResultsBy", func() {
 	// 	Context("given a valid user id", func() {
 	// 		It("returns the correct number of user results", func() {
-	// 			user := test.FabricateUser(faker.Email(), faker.Password())
-	// 			otherUser := test.FabricateUser(faker.Email(), faker.Password())
-	// 			test.FabricateResult(user)
-	// 			test.FabricateResult(user)
-	// 			test.FabricateResult(otherUser)
+	// 			user := FabricateUser(faker.Email(), faker.Password())
+	// 			otherUser := FabricateUser(faker.Email(), faker.Password())
+	// 			FabricateResult(user)
+	// 			FabricateResult(user)
+	// 			FabricateResult(otherUser)
 
 	// 			query := map[string]interface{}{
 	// 				"user_id": user.Id,
@@ -590,11 +590,11 @@ var _ = Describe("Result", func() {
 	// 		})
 
 	// 		It("returns NO error", func() {
-	// 			user := test.FabricateUser(faker.Email(), faker.Password())
-	// 			otherUser := test.FabricateUser(faker.Email(), faker.Password())
-	// 			test.FabricateResult(user)
-	// 			test.FabricateResult(user)
-	// 			test.FabricateResult(otherUser)
+	// 			user := FabricateUser(faker.Email(), faker.Password())
+	// 			otherUser := FabricateUser(faker.Email(), faker.Password())
+	// 			FabricateResult(user)
+	// 			FabricateResult(user)
+	// 			FabricateResult(otherUser)
 
 	// 			query := map[string]interface{}{
 	// 				"user_id": user.Id,
@@ -606,9 +606,9 @@ var _ = Describe("Result", func() {
 
 	// 	Context("given an invalid user id", func() {
 	// 		It("returns a 0", func() {
-	// 			user := test.FabricateUser(faker.Email(), faker.Password())
-	// 			test.FabricateResult(user)
-	// 			test.FabricateResult(user)
+	// 			user := FabricateUser(faker.Email(), faker.Password())
+	// 			FabricateResult(user)
+	// 			FabricateResult(user)
 
 	// 			query := map[string]interface{}{
 	// 				"user_id": 999,
@@ -622,9 +622,9 @@ var _ = Describe("Result", func() {
 	// 		})
 
 	// 		It("returns NO error", func() {
-	// 			user := test.FabricateUser(faker.Email(), faker.Password())
-	// 			test.FabricateResult(user)
-	// 			test.FabricateResult(user)
+	// 			user := FabricateUser(faker.Email(), faker.Password())
+	// 			FabricateResult(user)
+	// 			FabricateResult(user)
 
 	// 			query := map[string]interface{}{
 	// 				"user_id": 999,
@@ -638,8 +638,8 @@ var _ = Describe("Result", func() {
 	// Describe("#UpdateResultById", func() {
 	// 	Context("given result id exist in the system", func() {
 	// 		It("updates the result with given id", func() {
-	// 			user := test.FabricateUser(faker.Email(), faker.Password())
-	// 			existResult := test.FabricateResult(user)
+	// 			user := FabricateUser(faker.Email(), faker.Password())
+	// 			existResult := FabricateResult(user)
 	// 			existResult.Status = models.ResultStatusPending
 
 	// 			err := models.UpdateResultById(existResult)
@@ -670,8 +670,8 @@ var _ = Describe("Result", func() {
 	Describe("#UpdateResultStatus", func() {
 		Context("given a valid status", func() {
 			It("updates result status to the given status", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
 				if err != nil {
@@ -682,8 +682,8 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, models.ResultStatusCompleted)
 				Expect(err).To(BeNil())
@@ -692,8 +692,8 @@ var _ = Describe("Result", func() {
 
 		Context("given an INVALID status", func() {
 			It("does NOT update the result status", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, "invalid status")
 				Expect(err).NotTo(BeNil())
@@ -701,8 +701,8 @@ var _ = Describe("Result", func() {
 			})
 
 			It("returns the error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResultWithParams(user, "keyword", models.ResultStatusPending)
 
 				err := models.UpdateResultStatus(result, "invalid status")
 				Expect(err.Error()).To(Equal("Invalid result status"))
@@ -711,6 +711,6 @@ var _ = Describe("Result", func() {
 	})
 
 	AfterEach(func() {
-		test.CleanupDatabase([]string{"users", "results"})
+		CleanupDatabase([]string{"users", "results"})
 	})
 })

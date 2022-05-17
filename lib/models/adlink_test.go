@@ -1,9 +1,8 @@
 package models_test
 
 import (
-	"fmt"
 	"go-google-scraper-challenge/lib/models"
-	"go-google-scraper-challenge/test"
+	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
@@ -14,8 +13,8 @@ var _ = Describe("AdLink", func() {
 	Describe("#CreateAdLink", func() {
 		Context("given ad link with valid params", func() {
 			It("returns the ad link ID", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
 				adLink := &models.AdLink{
 					Result:   result,
 					Position: models.AdLinkPositionTop,
@@ -30,8 +29,8 @@ var _ = Describe("AdLink", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
 				adLink := &models.AdLink{
 					Result:   result,
 					Position: models.AdLinkPositionTop,
@@ -50,8 +49,6 @@ var _ = Describe("AdLink", func() {
 
 					adLinkID, err := models.CreateAdLink(adLink)
 
-					fmt.Println("LOG ERROR", err.Error())
-
 					Expect(err.Error()).To(HavePrefix("ERROR: insert or update on table \"ad_links\" violates foreign key constraint \"ad_links_result_id_fkey\""))
 					Expect(adLinkID).To(Equal(int64(0)))
 				})
@@ -62,9 +59,9 @@ var _ = Describe("AdLink", func() {
 	Describe("#GetAdLinkById", func() {
 		Context("given adLink id exist in the system", func() {
 			It("returns adLink with given id", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				existAdLink := test.FabricateAdLink(result)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				existAdLink := FabricateAdLink(result)
 				adLink, err := models.GetAdLinkById(existAdLink.Id)
 				if err != nil {
 					Fail("Failed to get adLink with ID")
@@ -88,13 +85,13 @@ var _ = Describe("AdLink", func() {
 	Describe("#GetAdLinksByResultId", func() {
 		Context("given a valid result id", func() {
 			It("returns adlinks with the given result id", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				otherResult := test.FabricateResult(otherUser)
-				adLink1 := test.FabricateAdLink(result)
-				adLink2 := test.FabricateAdLink(result)
-				otherAdLink := test.FabricateAdLink(otherResult)
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				otherResult := FabricateResult(otherUser)
+				adLink1 := FabricateAdLink(result)
+				adLink2 := FabricateAdLink(result)
+				otherAdLink := FabricateAdLink(otherResult)
 
 				adLinks, err := models.GetAdLinksByResultId(result.Id)
 				if err != nil {
@@ -111,13 +108,13 @@ var _ = Describe("AdLink", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				otherUser := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				otherResult := test.FabricateResult(otherUser)
-				test.FabricateAdLink(result)
-				test.FabricateAdLink(result)
-				test.FabricateAdLink(otherResult)
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				otherResult := FabricateResult(otherUser)
+				FabricateAdLink(result)
+				FabricateAdLink(result)
+				FabricateAdLink(otherResult)
 
 				_, err := models.GetAdLinksByResultId(result.Id)
 				Expect(err).To(BeNil())
@@ -126,10 +123,10 @@ var _ = Describe("AdLink", func() {
 
 		Context("given an invalid result id", func() {
 			It("returns an empty list", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				test.FabricateAdLink(result)
-				test.FabricateAdLink(result)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				FabricateAdLink(result)
+				FabricateAdLink(result)
 
 				results, err := models.GetAdLinksByResultId(999)
 				if err != nil {
@@ -140,10 +137,10 @@ var _ = Describe("AdLink", func() {
 			})
 
 			It("returns NO error", func() {
-				user := test.FabricateUser(faker.Email(), faker.Password())
-				result := test.FabricateResult(user)
-				test.FabricateAdLink(result)
-				test.FabricateAdLink(result)
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				FabricateAdLink(result)
+				FabricateAdLink(result)
 
 				_, err := models.GetAdLinksByResultId(999)
 				Expect(err).To(BeNil())
@@ -152,6 +149,6 @@ var _ = Describe("AdLink", func() {
 	})
 
 	AfterEach(func() {
-		test.CleanupDatabase([]string{"users", "results", "ad_links"})
+		CleanupDatabase([]string{"users", "results", "ad_links"})
 	})
 })
