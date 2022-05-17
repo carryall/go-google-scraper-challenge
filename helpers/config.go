@@ -28,3 +28,15 @@ func GetIntConfig(key string) int {
 func GetStringConfig(key string) string {
 	return viper.GetString(GetConfigPrefix() + key)
 }
+
+func GetAppRunMode() string {
+	runMode := viper.GetString("runmode")
+
+	return runMode
+}
+
+func GetPaginationPerPage() int {
+	perPage := viper.GetInt("PaginationPerPage")
+
+	return perPage
+}

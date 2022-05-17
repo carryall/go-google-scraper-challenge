@@ -20,7 +20,7 @@ func SetupTestEnvironment() {
 
 	bootstrap.LoadConfig()
 
-	bootstrap.InitDatabase()
+	bootstrap.InitDatabase(bootstrap.GetDatabaseURL())
 }
 
 func setRootDir() {

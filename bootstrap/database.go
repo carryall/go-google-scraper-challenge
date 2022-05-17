@@ -13,8 +13,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitDatabase() {
-	db, err := gorm.Open(postgres.Open(getDatabaseURL()), &gorm.Config{})
+var database *gorm.DB
+
+func InitDatabase(databaseURL string) {
+	db, err := gorm.Open(postgres.Open(databaseURL), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to %v database: %v", gin.Mode(), err)
 	} else {
@@ -23,7 +25,15 @@ func InitDatabase() {
 	}
 }
 
-func getDatabaseURL() string {
+func GetDB() *gorm.DB {
+	if database == nil {
+		InitDatabase(GetDatabaseURL())
+	}
+
+	return database
+}
+
+func GetDatabaseURL() string {
 	if gin.Mode() == gin.ReleaseMode {
 		return viper.GetString("DATABASE_URL")
 	}
