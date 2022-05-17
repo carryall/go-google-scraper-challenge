@@ -4,7 +4,7 @@ import (
 	"mime/multipart"
 
 	"go-google-scraper-challenge/helpers"
-	. "go-google-scraper-challenge/test"
+	"go-google-scraper-challenge/test"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -14,7 +14,7 @@ var _ = Describe("File", func() {
 	Describe("#GetFileType", func() {
 		Context("given a CSV file header", func() {
 			It("returns csv file type", func() {
-				csvMIMEHeader := CreateMIMEHaader("valid.csv")
+				csvMIMEHeader := test.CreateMIMEHaader("valid.csv")
 				fileHeader := multipart.FileHeader{
 					Filename: "valid.csv",
 					Header:   csvMIMEHeader,
@@ -28,7 +28,7 @@ var _ = Describe("File", func() {
 
 		Context("given a text file header", func() {
 			It("returns text file type", func() {
-				textMIMEHeader := CreateMIMEHaader("text.txt")
+				textMIMEHeader := test.CreateMIMEHaader("text.txt")
 				fileHeader := multipart.FileHeader{
 					Filename: "text.txt",
 					Header:   textMIMEHeader,
@@ -44,7 +44,7 @@ var _ = Describe("File", func() {
 	Describe("#GetFileContent", func() {
 		Context("given a CSV file", func() {
 			It("returns CSV file content", func() {
-				file, _ := GetMultipartFromFile("test/fixtures/files/valid.csv")
+				file, _ := test.GetMultipartFromFile("test/fixtures/files/valid.csv")
 
 				content, err := helpers.GetFileContent(file)
 				if err != nil {
@@ -55,7 +55,7 @@ var _ = Describe("File", func() {
 			})
 
 			It("does NOT return error", func() {
-				file, _ := GetMultipartFromFile("test/fixtures/files/valid.csv")
+				file, _ := test.GetMultipartFromFile("test/fixtures/files/valid.csv")
 
 				_, err := helpers.GetFileContent(file)
 
@@ -65,7 +65,7 @@ var _ = Describe("File", func() {
 
 		Context("given a blank text file", func() {
 			It("returns an empty array", func() {
-				file, _ := GetMultipartFromFile("test/fixtures/files/text.txt")
+				file, _ := test.GetMultipartFromFile("test/fixtures/files/text.txt")
 
 				content, err := helpers.GetFileContent(file)
 				if err != nil {
@@ -76,7 +76,7 @@ var _ = Describe("File", func() {
 			})
 
 			It("does NOT return error", func() {
-				file, _ := GetMultipartFromFile("test/fixtures/files/text.txt")
+				file, _ := test.GetMultipartFromFile("test/fixtures/files/text.txt")
 
 				_, err := helpers.GetFileContent(file)
 

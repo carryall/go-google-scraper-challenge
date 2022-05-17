@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/lib/api/v1/controllers"
-	. "go-google-scraper-challenge/test"
+	"go-google-scraper-challenge/test"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -13,7 +13,7 @@ import (
 var _ = Describe("HealthController", func() {
 	Describe("GET /health", func() {
 		It("returns status OK", func() {
-			c, resp := CreateGinTestContext()
+			c, resp := test.CreateGinTestContext()
 			healthController := controllers.HealthController{}
 
 			healthController.HealthStatus(c)
@@ -22,7 +22,7 @@ var _ = Describe("HealthController", func() {
 		})
 
 		It("returns correct response body", func() {
-			c, resp := CreateGinTestContext()
+			c, resp := test.CreateGinTestContext()
 			healthController := controllers.HealthController{}
 
 			healthController.HealthStatus(c)
