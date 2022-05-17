@@ -13,7 +13,7 @@ import (
 func main() {
 	bootstrap.LoadConfig()
 
-	bootstrap.InitDatabase()
+	bootstrap.InitDatabase(bootstrap.GetDatabaseURL())
 
 	r := bootstrap.SetupRouter()
 
