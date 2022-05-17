@@ -2,13 +2,14 @@ package bootstrap
 
 import (
 	"fmt"
-	"strings"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,7 +22,9 @@ func InitDatabase(databaseURL string) {
 		log.Fatalf("Failed to connect to %v database: %v", gin.Mode(), err)
 	} else {
 		viper.Set("database", db)
-		log.Println(strings.Title(gin.Mode()) + " database connected successfully.")
+
+		caser := cases.Title(language.English)
+		log.Println(caser.String(gin.Mode()) + " database connected successfully.")
 	}
 }
 
