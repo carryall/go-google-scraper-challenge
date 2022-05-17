@@ -35,10 +35,14 @@ dev:
 
 install-dependencies:
 	go mod tidy
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45
 	go get github.com/cosmtrek/air@v1.15.1
 	go install github.com/pressly/goose/v3/cmd/goose@latest
 	go get github.com/ddollar/forego
 	npm install
+
+lint:
+	golangci-lint run
 
 test:
 	docker-compose -f docker-compose.test.yml up -d
