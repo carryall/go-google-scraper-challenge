@@ -7,7 +7,7 @@ import (
 type Link struct {
 	Base
 
-	ResultId int     `gorm:"not null;"`
+	ResultId int64   `gorm:"not null;"`
 	Result   *Result `gorm:"not null;foreignKey:ResultId"`
 	Link     string  `gorm:"not null;"`
 }

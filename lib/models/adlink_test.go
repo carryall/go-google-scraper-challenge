@@ -71,7 +71,7 @@ var _ = Describe("AdLink", func() {
 				}
 
 				Expect(adLink.Link).To(Equal(existAdLink.Link))
-				Expect(adLink.Result.Id).To(Equal(result.Id))
+				Expect(adLink.ResultId).To(Equal(result.Id))
 			})
 		})
 

@@ -7,7 +7,7 @@ import (
 type AdLink struct {
 	Base
 
-	ResultId int     `gorm:"not null;"`
+	ResultId int64   `gorm:"not null;"`
 	Result   *Result `gorm:"not null;foreignKey:ResultId"`
 	Type     string  `gorm:"not null;"`
 	Position string  `gorm:"not null;"`
