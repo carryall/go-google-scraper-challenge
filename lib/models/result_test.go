@@ -103,7 +103,7 @@ var _ = Describe("Result", func() {
 				}
 
 				Expect(result.Keyword).To(Equal(existResult.Keyword))
-				Expect(result.User.Id).To(Equal(user.Id))
+				Expect(result.UserId).To(Equal(user.Id))
 			})
 		})
 

@@ -64,7 +64,7 @@ var _ = Describe("Link", func() {
 				}
 
 				Expect(link.Link).To(Equal(existLink.Link))
-				Expect(link.Result.Id).To(Equal(result.Id))
+				Expect(link.ResultId).To(Equal(result.Id))
 			})
 		})
 

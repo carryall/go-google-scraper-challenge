@@ -8,7 +8,7 @@ import (
 type Result struct {
 	Base
 
-	UserId  int   `gorm:"not null;"`
+	UserId  int64 `gorm:"not null;"`
 	User    *User `gorm:"not null;foreignKey:UserId"`
 	AdLinks []*AdLink
 	Links   []*Link

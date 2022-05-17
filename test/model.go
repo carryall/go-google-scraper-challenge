@@ -52,7 +52,7 @@ func FabricateResult(user *models.User) (result *models.Result) {
 
 func FabricateResultWithParams(user *models.User, keyword string, status string) (result *models.Result) {
 	result = &models.Result{
-		User:    user,
+		UserId:  int64(user.Id),
 		Keyword: keyword,
 		Status:  status,
 	}
@@ -72,8 +72,8 @@ func FabricateResultWithParams(user *models.User, keyword string, status string)
 
 func FabricateLink(result *models.Result) (link *models.Link) {
 	link = &models.Link{
-		Result: result,
-		Link:   faker.URL(),
+		ResultId: int64(result.Id),
+		Link:     faker.URL(),
 	}
 
 	linkID, err := models.CreateLink(link)
@@ -95,7 +95,7 @@ func FabricateAdLink(result *models.Result) (adLink *models.AdLink) {
 
 func FabricateAdLinkWithParams(result *models.Result, position string) (adLink *models.AdLink) {
 	adLink = &models.AdLink{
-		Result:   result,
+		ResultId: int64(result.Id),
 		Link:     faker.URL(),
 		Position: position,
 		Type:     models.AdLinkTypeLink,
