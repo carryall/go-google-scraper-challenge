@@ -45,7 +45,7 @@ var _ = Describe("Link", func() {
 
 					linkID, err := models.CreateLink(link)
 
-					Expect(err.Error()).To(Equal("ERROR: insert or update field `go-google-scraper-challenge/models.Link.Result` cannot be NULL"))
+					Expect(err.Error()).To(HavePrefix("ERROR: insert or update on table \"links\" violates foreign key constraint \"links_result_id_fkey\""))
 					Expect(linkID).To(Equal(int64(0)))
 				})
 			})

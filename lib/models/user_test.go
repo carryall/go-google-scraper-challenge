@@ -48,7 +48,7 @@ var _ = Describe("User", func() {
 					}
 					userID, err := models.CreateUser(&user)
 
-					Expect(err.Error()).To(Equal(`ERROR: pq: duplicate key value violates unique constraint "user_email_key"`))
+					Expect(err.Error()).To(HavePrefix(`ERROR: duplicate key value violates unique constraint "users_email_key"`))
 					Expect(userID).To(Equal(int64(0)))
 				})
 			})
@@ -119,7 +119,7 @@ var _ = Describe("User", func() {
 				user, err := models.GetUserByEmail(faker.Email())
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
-				Expect(user.Id).To(BeNil())
+				Expect(user.Id).To(Equal(int64(0)))
 			})
 		})
 	})
