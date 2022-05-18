@@ -3,6 +3,11 @@ package models
 import (
 	"errors"
 	database "go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/helpers"
+	"strings"
+
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Result struct {
@@ -77,54 +82,107 @@ func GetOldestPendingResult() (*Result, error) {
 	query := map[string]interface{}{
 		"status": ResultStatusPending,
 	}
-	// query := map[string]interface{}{
-	// 	"status": ResultStatusPending,
-	// 	"order":  "created_at",
-	// }
-	// querySeter := resultQuerySeter(query).RelatedSel()
+
 	result := &Result{}
 	queryResult := database.GetDB().Where(query).Order("created_at").First(&result)
-	// err := querySeter.One(result)
-	// if err != nil {
-	// 	return nil, err
-	// }
 
 	return result, queryResult.Error
 }
 
-// // GetResultsBy retrieves Results with given query. Returns empty list if no records exist
-// // possible query params are order, limit, offset and result property filter
-// func GetResultsBy(query map[string]interface{}) ([]*Result, error) {
-// 	querySeter := resultQuerySeter(query).RelatedSel()
-// 	var results []*Result
-// 	_, err := querySeter.All(&results)
+func ContainKeyword(keyword string) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		return db.Where("keyword ilike ?", "%"+keyword+"%")
+	}
+}
 
-// 	return results, err
-// }
+func query(condition map[string]interface{}, orderBy string, offset int, limit int) (*gorm.DB, []*Result) {
+	// orderClause := clause.OrderByColumn{
+	// 	Column: clause.Column{Name: "created_at"},
+	// 	Desc:   false,
+	// }
+	db := database.GetDB()
 
-// // CountResultsBy count all Results with given query. Returns 0 if no records exist
-// func CountResultsBy(query map[string]interface{}) (int64, error) {
-// 	querySeter := resultQuerySeter(query)
-// 	count, err := querySeter.Count()
+	if len(orderBy) > 0 {
+		orderColumn := orderBy
+		orderDesc := false
 
-// 	return count, err
-// }
+		if strings.HasPrefix(orderColumn, "-") {
+			orderColumn = strings.SplitAfter(orderColumn, "-")[1]
+			orderDesc = true
+		}
 
-// // UpdateResultById updates Result by Id and returns error if the record to be updated doesn't exist
-// func UpdateResultById(result *Result) error {
-// 	_, err := GetResultById(result.Id)
-// 	if err != nil {
-// 		return err
-// 	}
+		orderClause := clause.OrderByColumn{
+			Column: clause.Column{Name: orderColumn},
+			Desc:   orderDesc,
+		}
 
-// 	num, err := ormer.Update(result)
-// 	if err != nil {
-// 		return err
-// 	}
+		db = db.Order(orderClause)
+	}
 
-// 	log.Info("Updated ", num, " results in database")
-// 	return nil
-// }
+	limitClause := limit
+	if limit < 0 {
+		limitClause = helpers.GetPaginationPerPage()
+	}
+	db = db.Limit(limitClause)
+
+	if offset > 0 {
+		db = db.Offset(offset)
+	}
+
+	if len(condition) == 0 {
+		condition = nil
+	}
+
+	if condition["keyword"] != nil {
+		keyword := condition["keyword"].(string)
+		delete(condition, "keyword")
+
+		db = db.Scopes(ContainKeyword(keyword))
+	}
+
+	var results []*Result
+
+	queryResult := db.Find(&results, condition)
+
+	return queryResult, results
+}
+
+// GetResultsBy retrieves Results with given query. Returns empty list if no records exist
+// possible query params are order, limit, offset and result property filter
+func GetResultsBy(condition map[string]interface{}, orderBy string, offset int, limit int) ([]*Result, error) {
+	queryResult, results := query(condition, orderBy, offset, limit)
+
+	if queryResult.Error != nil {
+		return nil, queryResult.Error
+	}
+
+	return results, nil
+}
+
+// CountResultsBy count all Results with given query. Returns 0 if no records exist
+func CountResultsBy(condition map[string]interface{}, orderBy string, offset int, limit int) (int64, error) {
+	count := int64(0)
+	db, _ := query(condition, orderBy, offset, limit)
+	countResult := db.Count(&count)
+
+	if countResult.Error != nil {
+		return count, countResult.Error
+	}
+
+	return count, nil
+}
+
+// UpdateResult updates Result and returns error if the record to be updated doesn't exist
+func UpdateResult(result *Result) error {
+	_, err := GetResultById(result.Id)
+	if err != nil {
+		return err
+	}
+
+	updateResult := database.GetDB().Save(result)
+
+	return updateResult.Error
+}
 
 // UpdateResultStatus updates Result status returns any error from updating
 func UpdateResultStatus(result *Result, status string) error {
