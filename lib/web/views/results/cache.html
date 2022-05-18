@@ -1,0 +1,5 @@
+{{ if .pageCache }}
+    {{ str2html .pageCache }}
+{{ else }}
+    {{ template "results/_not_found.html" }}
+{{ end }}

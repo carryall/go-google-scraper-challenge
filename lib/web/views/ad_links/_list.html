@@ -1,0 +1,18 @@
+{{ range $position, $adLinks := .result.AdLinks }}
+<div class="card card--nested">
+    <div class="card-header">
+        <h3 class="card-title">{{ title_case $position }} ({{ len $adLinks }})</h3>
+    </div>
+    <div class="card-body card-body--list">
+        <dl class="data-list data-list--sm">
+            {{ range $adLink := $adLinks }}
+            <div class="data-item">
+                <dd class="data-item__detail">
+                    <a href="{{ $adLink }}" class="link-result">{{ $adLink }}</a>
+                </dd>
+            </div>
+            {{ end }}
+        </dl>
+    </div>
+</div>
+{{ end }}
