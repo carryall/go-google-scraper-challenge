@@ -155,517 +155,475 @@ var _ = Describe("Result", func() {
 		})
 	})
 
-	// Describe("#GetResultsBy", func() {
-	// 	Context("given valid params", func() {
-	// 		Context("given a valid limit", func() {
-	// 			Context("given limit is > 0", func() {
-	// 				It("returns the results with the given limit", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := FabricateResult(user)
-	// 					result2 := FabricateResult(user)
-	// 					result3 := FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"limit": 2,
-	// 					}
-	// 					results, err := models.GetResultsBy(query)
-	// 					if err != nil {
-	// 						Fail("Failed to get results with User Id")
-	// 					}
-
-	// 					var resultIds []int64
-	// 					for _, r := range results {
-	// 						resultIds = append(resultIds, r.Id)
-	// 					}
-
-	// 					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-	// 					Expect(resultIds).NotTo(ConsistOf(result3.Id))
-	// 				})
-
-	// 				It("returns NO error", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"limit": 2,
-	// 					}
-	// 					_, err := models.GetResultsBy(query)
-	// 					Expect(err).To(BeNil())
-	// 				})
-	// 			})
-
-	// 			Context("given a 0 limit", func() {
-	// 				It("returns the results with no limit", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := FabricateResult(user)
-	// 					result2 := FabricateResult(user)
-	// 					result3 := FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"limit": 0,
-	// 					}
-	// 					results, err := models.GetResultsBy(query)
-	// 					if err != nil {
-	// 						Fail("Failed to get results with User Id")
-	// 					}
-
-	// 					var resultIds []int64
-	// 					for _, r := range results {
-	// 						resultIds = append(resultIds, r.Id)
-	// 					}
-
-	// 					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id, result3.Id))
-	// 				})
-
-	// 				It("returns NO error", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"limit": 0,
-	// 					}
-	// 					_, err := models.GetResultsBy(query)
-	// 					Expect(err).To(BeNil())
-	// 				})
-	// 			})
-	// 		})
-
-	// 		Context("given a valid offset", func() {
-	// 			Context("given offset is > 0", func() {
-	// 				It("returns the results with the given offset", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := FabricateResult(user)
-	// 					result2 := FabricateResult(user)
-	// 					result3 := FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"offset": 1,
-	// 					}
-	// 					results, err := models.GetResultsBy(query)
-	// 					if err != nil {
-	// 						Fail("Failed to get results with User Id")
-	// 					}
-
-	// 					var resultIds []int64
-	// 					for _, r := range results {
-	// 						resultIds = append(resultIds, r.Id)
-	// 					}
-
-	// 					Expect(resultIds).To(ConsistOf(result2.Id, result3.Id))
-	// 					Expect(resultIds).NotTo(ConsistOf(result1.Id))
-	// 				})
-
-	// 				It("returns NO error", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"offset": 0,
-	// 					}
-	// 					_, err := models.GetResultsBy(query)
-	// 					Expect(err).To(BeNil())
-	// 				})
-	// 			})
-
-	// 			Context("given a 0 offset", func() {
-	// 				It("returns the results with no offset", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					result1 := FabricateResult(user)
-	// 					result2 := FabricateResult(user)
-	// 					result3 := FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"offset": 0,
-	// 					}
-	// 					results, err := models.GetResultsBy(query)
-	// 					if err != nil {
-	// 						Fail("Failed to get results with User Id")
-	// 					}
-
-	// 					var resultIds []int64
-	// 					for _, r := range results {
-	// 						resultIds = append(resultIds, r.Id)
-	// 					}
-
-	// 					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id, result3.Id))
-	// 				})
-
-	// 				It("returns NO error", func() {
-	// 					user := FabricateUser(faker.Email(), faker.Password())
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-	// 					FabricateResult(user)
-
-	// 					query := map[string]interface{}{
-	// 						"offset": 0,
-	// 					}
-	// 					_, err := models.GetResultsBy(query)
-	// 					Expect(err).To(BeNil())
-	// 				})
-	// 			})
-	// 		})
-
-	// 		Context("given a valid user id", func() {
-	// 			It("returns all user results", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := FabricateResult(user)
-	// 				result2 := FabricateResult(user)
-	// 				otherUserResult := FabricateResult(otherUser)
-
-	// 				query := map[string]interface{}{
-	// 					"user_id": user.Id,
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				var resultIds []int64
-	// 				for _, r := range results {
-	// 					resultIds = append(resultIds, r.Id)
-	// 				}
-
-	// 				Expect(resultIds).NotTo(ContainElement(otherUserResult.Id))
-	// 				Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-	// 				FabricateResult(otherUser)
-
-	// 				query := map[string]interface{}{
-	// 					"user_id": user.Id,
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-
-	// 		Context("given a valid user id", func() {
-	// 			It("returns all user results", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := FabricateResult(user)
-	// 				result2 := FabricateResult(user)
-	// 				otherUserResult := FabricateResult(otherUser)
-
-	// 				query := map[string]interface{}{
-	// 					"user_id": user.Id,
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				var resultIds []int64
-	// 				for _, r := range results {
-	// 					resultIds = append(resultIds, r.Id)
-	// 				}
-
-	// 				Expect(resultIds).NotTo(ContainElement(otherUserResult.Id))
-	// 				Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				otherUser := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-	// 				FabricateResult(otherUser)
-
-	// 				query := map[string]interface{}{
-	// 					"user_id": user.Id,
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-
-	// 		Context("given a valid keyword query", func() {
-	// 			It("returns the results that match the query", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
-	// 				result2 := FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
-	// 				result3 := FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
-
-	// 				query := map[string]interface{}{
-	// 					"keyword__icontains": "keyword",
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				var resultIds []int64
-	// 				for _, r := range results {
-	// 					resultIds = append(resultIds, r.Id)
-	// 				}
-
-	// 				Expect(resultIds).NotTo(ContainElement(result3.Id))
-	// 				Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
-	// 				FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
-	// 				FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
-
-	// 				query := map[string]interface{}{
-	// 					"keyword__icontains": "keyword",
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-
-	// 		Context("given a valid order", func() {
-	// 			It("returns the results order by the given order", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := FabricateResult(user)
-	// 				result2 := FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"order": "-id",
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				var resultIds []int64
-	// 				for _, r := range results {
-	// 					resultIds = append(resultIds, r.Id)
-	// 				}
-
-	// 				var expectedResultIds = []int64{result2.Id, result1.Id}
-	// 				Expect(resultIds).To(Equal(expectedResultIds))
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"order": "-id",
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-	// 	})
-
-	// 	Context("given invalid params", func() {
-	// 		Context("given a negative limit", func() {
-	// 			It("returns the results with no limit", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := FabricateResult(user)
-	// 				result2 := FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"limit": -1,
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				var resultIds []int64
-	// 				for _, r := range results {
-	// 					resultIds = append(resultIds, r.Id)
-	// 				}
-
-	// 				Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"limit": -1,
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-
-	// 		Context("given a negative offset", func() {
-	// 			It("returns the results with no offset", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				result1 := FabricateResult(user)
-	// 				result2 := FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"offset": -1,
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				var resultIds []int64
-	// 				for _, r := range results {
-	// 					resultIds = append(resultIds, r.Id)
-	// 				}
-
-	// 				Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"offset": -1,
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-
-	// 		Context("given an invalid user id", func() {
-	// 			It("returns an empty list", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"user_id": 999,
-	// 				}
-	// 				results, err := models.GetResultsBy(query)
-	// 				if err != nil {
-	// 					Fail("Failed to get results with User Id")
-	// 				}
-
-	// 				Expect(results).To(BeEmpty())
-	// 			})
-
-	// 			It("returns NO error", func() {
-	// 				user := FabricateUser(faker.Email(), faker.Password())
-	// 				FabricateResult(user)
-	// 				FabricateResult(user)
-
-	// 				query := map[string]interface{}{
-	// 					"user_id": 999,
-	// 				}
-	// 				_, err := models.GetResultsBy(query)
-	// 				Expect(err).To(BeNil())
-	// 			})
-	// 		})
-	// 	})
-	// })
-
-	// Describe("#CountResultsBy", func() {
-	// 	Context("given a valid user id", func() {
-	// 		It("returns the correct number of user results", func() {
-	// 			user := FabricateUser(faker.Email(), faker.Password())
-	// 			otherUser := FabricateUser(faker.Email(), faker.Password())
-	// 			FabricateResult(user)
-	// 			FabricateResult(user)
-	// 			FabricateResult(otherUser)
-
-	// 			query := map[string]interface{}{
-	// 				"user_id": user.Id,
-	// 			}
-	// 			count, err := models.CountResultsBy(query)
-	// 			if err != nil {
-	// 				Fail("Failed to count results with User Id")
-	// 			}
-
-	// 			Expect(count).To(BeEquivalentTo(2))
-	// 		})
-
-	// 		It("returns NO error", func() {
-	// 			user := FabricateUser(faker.Email(), faker.Password())
-	// 			otherUser := FabricateUser(faker.Email(), faker.Password())
-	// 			FabricateResult(user)
-	// 			FabricateResult(user)
-	// 			FabricateResult(otherUser)
-
-	// 			query := map[string]interface{}{
-	// 				"user_id": user.Id,
-	// 			}
-	// 			_, err := models.CountResultsBy(query)
-	// 			Expect(err).To(BeNil())
-	// 		})
-	// 	})
-
-	// 	Context("given an invalid user id", func() {
-	// 		It("returns a 0", func() {
-	// 			user := FabricateUser(faker.Email(), faker.Password())
-	// 			FabricateResult(user)
-	// 			FabricateResult(user)
-
-	// 			query := map[string]interface{}{
-	// 				"user_id": 999,
-	// 			}
-	// 			count, err := models.CountResultsBy(query)
-	// 			if err != nil {
-	// 				Fail("Failed to count results with User Id")
-	// 			}
-
-	// 			Expect(count).To(BeZero())
-	// 		})
-
-	// 		It("returns NO error", func() {
-	// 			user := FabricateUser(faker.Email(), faker.Password())
-	// 			FabricateResult(user)
-	// 			FabricateResult(user)
-
-	// 			query := map[string]interface{}{
-	// 				"user_id": 999,
-	// 			}
-	// 			_, err := models.CountResultsBy(query)
-	// 			Expect(err).To(BeNil())
-	// 		})
-	// 	})
-	// })
-
-	// Describe("#UpdateResultById", func() {
-	// 	Context("given result id exist in the system", func() {
-	// 		It("updates the result with given id", func() {
-	// 			user := FabricateUser(faker.Email(), faker.Password())
-	// 			existResult := FabricateResult(user)
-	// 			existResult.Status = models.ResultStatusPending
-
-	// 			err := models.UpdateResultById(existResult)
-	// 			if err != nil {
-	// 				Fail("Failed to update result with ID")
-	// 			}
-
-	// 			result, err := models.GetResultById(existResult.Id)
-	// 			if err != nil {
-	// 				Fail("Failed to get result with ID")
-	// 			}
-
-	// 			Expect(result.Keyword).To(Equal(existResult.Keyword))
-	// 			Expect(result.Status).To(Equal(models.ResultStatusPending))
-	// 		})
-	// 	})
-
-	// 	Context("given result id does NOT exist in the system", func() {
-	// 		It("returns error", func() {
-	// 			result := &models.Result{Base: models.Base{Id: 999}}
-	// 			err := models.UpdateResultById(result)
-
-	// 			Expect(err.Error()).To(ContainSubstring("record not found"))
-	// 		})
-	// 	})
-	// })
+	Describe("#GetResultsBy", func() {
+		Context("given valid params", func() {
+			Context("given a valid limit", func() {
+				Context("given limit is > 0", func() {
+					It("returns the results with the given limit", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						result1 := FabricateResult(user)
+						result2 := FabricateResult(user)
+						result3 := FabricateResult(user)
+
+						results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 2)
+						if err != nil {
+							Fail("Failed to get results with User Id")
+						}
+
+						var resultIds []int64
+						for _, r := range results {
+							resultIds = append(resultIds, r.Id)
+						}
+
+						Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+						Expect(resultIds).NotTo(ConsistOf(result3.Id))
+					})
+
+					It("returns NO error", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						FabricateResult(user)
+						FabricateResult(user)
+						FabricateResult(user)
+
+						_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 2)
+						Expect(err).To(BeNil())
+					})
+				})
+
+				Context("given a 0 limit", func() {
+					It("returns the results with no limit", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						result1 := FabricateResult(user)
+						result2 := FabricateResult(user)
+						result3 := FabricateResult(user)
+
+						results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						if err != nil {
+							Fail("Failed to get results with User Id")
+						}
+
+						var resultIds []int64
+						for _, r := range results {
+							resultIds = append(resultIds, r.Id)
+						}
+
+						Expect(resultIds).To(ConsistOf(result1.Id, result2.Id, result3.Id))
+					})
+
+					It("returns NO error", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						FabricateResult(user)
+						FabricateResult(user)
+						FabricateResult(user)
+
+						_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						Expect(err).To(BeNil())
+					})
+				})
+			})
+
+			Context("given a valid offset", func() {
+				Context("given offset is > 0", func() {
+					It("returns the results with the given offset", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						result1 := FabricateResult(user)
+						result2 := FabricateResult(user)
+						result3 := FabricateResult(user)
+
+						results, err := models.GetResultsBy(map[string]interface{}{}, "", 1, 0)
+						if err != nil {
+							Fail("Failed to get results with User Id")
+						}
+
+						var resultIds []int64
+						for _, r := range results {
+							resultIds = append(resultIds, r.Id)
+						}
+
+						Expect(resultIds).To(ConsistOf(result2.Id, result3.Id))
+						Expect(resultIds).NotTo(ConsistOf(result1.Id))
+					})
+
+					It("returns NO error", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						FabricateResult(user)
+						FabricateResult(user)
+						FabricateResult(user)
+
+						_, err := models.GetResultsBy(map[string]interface{}{}, "", 1, 0)
+						Expect(err).To(BeNil())
+					})
+				})
+
+				Context("given a 0 offset", func() {
+					It("returns the results with no offset", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						result1 := FabricateResult(user)
+						result2 := FabricateResult(user)
+						result3 := FabricateResult(user)
+
+						results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						if err != nil {
+							Fail("Failed to get results with User Id")
+						}
+
+						var resultIds []int64
+						for _, r := range results {
+							resultIds = append(resultIds, r.Id)
+						}
+
+						Expect(resultIds).To(ConsistOf(result1.Id, result2.Id, result3.Id))
+					})
+
+					It("returns NO error", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						FabricateResult(user)
+						FabricateResult(user)
+						FabricateResult(user)
+
+						_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						Expect(err).To(BeNil())
+					})
+				})
+			})
+
+			Context("given a valid user id", func() {
+				It("returns all user results", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					otherUser := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+					otherUserResult := FabricateResult(otherUser)
+
+					query := map[string]interface{}{
+						"user_id": user.Id,
+					}
+					results, err := models.GetResultsBy(query, "", 0, 0)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					var resultIds []int64
+					for _, r := range results {
+						resultIds = append(resultIds, r.Id)
+					}
+
+					Expect(resultIds).NotTo(ContainElement(otherUserResult.Id))
+					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					otherUser := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+					FabricateResult(otherUser)
+
+					query := map[string]interface{}{
+						"user_id": user.Id,
+					}
+					_, err := models.GetResultsBy(query, "", 0, 0)
+					Expect(err).To(BeNil())
+				})
+			})
+
+			Context("given a valid user id", func() {
+				It("returns all user results", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					otherUser := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+					otherUserResult := FabricateResult(otherUser)
+
+					query := map[string]interface{}{
+						"user_id": user.Id,
+					}
+					results, err := models.GetResultsBy(query, "", 0, 0)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					var resultIds []int64
+					for _, r := range results {
+						resultIds = append(resultIds, r.Id)
+					}
+
+					Expect(resultIds).NotTo(ContainElement(otherUserResult.Id))
+					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					otherUser := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+					FabricateResult(otherUser)
+
+					query := map[string]interface{}{
+						"user_id": user.Id,
+					}
+					_, err := models.GetResultsBy(query, "", 0, 0)
+					Expect(err).To(BeNil())
+				})
+			})
+
+			Context("given a valid keyword query", func() {
+				It("returns the results that match the query", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
+					result2 := FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
+					result3 := FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
+
+					query := map[string]interface{}{
+						"keyword": "keyword",
+					}
+					results, err := models.GetResultsBy(query, "", 0, 0)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					var resultIds []int64
+					for _, r := range results {
+						resultIds = append(resultIds, r.Id)
+					}
+
+					Expect(resultIds).NotTo(ContainElement(result3.Id))
+					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					FabricateResultWithParams(user, "search for Keyword 1", models.ResultStatusPending)
+					FabricateResultWithParams(user, "keyword 2", models.ResultStatusPending)
+					FabricateResultWithParams(user, "some other result", models.ResultStatusPending)
+
+					query := map[string]interface{}{
+						"keyword": "keyword",
+					}
+					_, err := models.GetResultsBy(query, "", 0, 0)
+					Expect(err).To(BeNil())
+				})
+			})
+
+			Context("given a valid order", func() {
+				It("returns the results order by the given order", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+
+					results, err := models.GetResultsBy(map[string]interface{}{}, "-id", 0, 0)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					var resultIds []int64
+					for _, r := range results {
+						resultIds = append(resultIds, r.Id)
+					}
+
+					var expectedResultIds = []int64{result2.Id, result1.Id}
+					Expect(resultIds).To(Equal(expectedResultIds))
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+
+					_, err := models.GetResultsBy(map[string]interface{}{}, "-id", 0, 0)
+					Expect(err).To(BeNil())
+				})
+			})
+		})
+
+		Context("given invalid params", func() {
+			Context("given a negative limit", func() {
+				It("returns the results with no limit", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+
+					results, err := models.GetResultsBy(map[string]interface{}{}, "", -1, 0)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					var resultIds []int64
+					for _, r := range results {
+						resultIds = append(resultIds, r.Id)
+					}
+
+					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+
+					_, err := models.GetResultsBy(map[string]interface{}{}, "", -1, 0)
+					Expect(err).To(BeNil())
+				})
+			})
+
+			Context("given a negative offset", func() {
+				It("returns the results with no offset", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+
+					results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, -1)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					var resultIds []int64
+					for _, r := range results {
+						resultIds = append(resultIds, r.Id)
+					}
+
+					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+
+					_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, -1)
+					Expect(err).To(BeNil())
+				})
+			})
+
+			Context("given an invalid user id", func() {
+				It("returns an empty list", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+
+					query := map[string]interface{}{
+						"user_id": 999,
+					}
+					results, err := models.GetResultsBy(query, "", 0, 0)
+					if err != nil {
+						Fail("Failed to get results with User Id")
+					}
+
+					Expect(results).To(BeEmpty())
+				})
+
+				It("returns NO error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					FabricateResult(user)
+					FabricateResult(user)
+
+					query := map[string]interface{}{
+						"user_id": 999,
+					}
+					_, err := models.GetResultsBy(query, "", 0, 0)
+					Expect(err).To(BeNil())
+				})
+			})
+		})
+	})
+
+	Describe("#CountResultsBy", func() {
+		Context("given a valid user id", func() {
+			It("returns the correct number of user results", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				FabricateResult(user)
+				FabricateResult(user)
+				FabricateResult(otherUser)
+
+				query := map[string]interface{}{
+					"user_id": user.Id,
+				}
+				count, err := models.CountResultsBy(query, "", 0, 0)
+				if err != nil {
+					Fail("Failed to count results with User Id")
+				}
+
+				Expect(count).To(BeEquivalentTo(2))
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				FabricateResult(user)
+				FabricateResult(user)
+				FabricateResult(otherUser)
+
+				query := map[string]interface{}{
+					"user_id": user.Id,
+				}
+				_, err := models.CountResultsBy(query, "", 0, 0)
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given an invalid user id", func() {
+			It("returns a 0", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResult(user)
+				FabricateResult(user)
+
+				query := map[string]interface{}{
+					"user_id": 999,
+				}
+				count, err := models.CountResultsBy(query, "", 0, 0)
+				if err != nil {
+					Fail("Failed to count results with User Id")
+				}
+
+				Expect(count).To(BeZero())
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				FabricateResult(user)
+				FabricateResult(user)
+
+				query := map[string]interface{}{
+					"user_id": 999,
+				}
+				_, err := models.CountResultsBy(query, "", 0, 0)
+				Expect(err).To(BeNil())
+			})
+		})
+	})
+
+	Describe("#UpdateResult", func() {
+		Context("given result id exist in the system", func() {
+			It("updates the result with given id", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				existResult := FabricateResult(user)
+				existResult.Status = models.ResultStatusPending
+
+				err := models.UpdateResult(existResult)
+				if err != nil {
+					Fail("Failed to update result with ID")
+				}
+
+				result, err := models.GetResultById(existResult.Id)
+				if err != nil {
+					Fail("Failed to get result with ID")
+				}
+
+				Expect(result.Keyword).To(Equal(existResult.Keyword))
+				Expect(result.Status).To(Equal(models.ResultStatusPending))
+			})
+		})
+
+		Context("given result id does NOT exist in the system", func() {
+			It("returns error", func() {
+				result := &models.Result{Base: models.Base{Id: 999}}
+				err := models.UpdateResult(result)
+
+				Expect(err.Error()).To(ContainSubstring("record not found"))
+			})
+		})
+	})
 
 	Describe("#UpdateResultStatus", func() {
 		Context("given a valid status", func() {
