@@ -16,4 +16,5 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/api
 
 EXPOSE 8080
 
+RUN chmod +x ./bin/start.sh
 CMD ["./bin/start.sh"]

@@ -10,7 +10,7 @@ goose -dir database/migrations -table "migration_versions" postgres "$DATABASE_U
 ./main &
 api=$!
 
-# TODO: Add woeker later when work on scheduling job
+# TODO: Add worker later when work on scheduling job
 # Start the worker process
 # ./worker &
 # worker=$!
