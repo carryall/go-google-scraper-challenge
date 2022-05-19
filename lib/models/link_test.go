@@ -52,25 +52,25 @@ var _ = Describe("Link", func() {
 		})
 	})
 
-	Describe("#GetLinkById", func() {
+	Describe("#GetLinkByID", func() {
 		Context("given link id exist in the system", func() {
 			It("returns link with given id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				existLink := FabricateLink(result)
-				link, err := models.GetLinkById(existLink.Id)
+				link, err := models.GetLinkByID(existLink.ID)
 				if err != nil {
 					Fail("Failed to get link with ID")
 				}
 
 				Expect(link.Link).To(Equal(existLink.Link))
-				Expect(link.ResultId).To(Equal(result.Id))
+				Expect(link.ResultID).To(Equal(result.ID))
 			})
 		})
 
 		Context("given link id does NOT exist in the system", func() {
 			It("returns false", func() {
-				link, err := models.GetLinkById(999)
+				link, err := models.GetLinkByID(999)
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(link).To(BeNil())
@@ -78,7 +78,7 @@ var _ = Describe("Link", func() {
 		})
 	})
 
-	Describe("#GetLinksByResultId", func() {
+	Describe("#GetLinksByResultID", func() {
 		Context("given a valid result id", func() {
 			It("returns links with the given result id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
@@ -89,18 +89,18 @@ var _ = Describe("Link", func() {
 				link2 := FabricateLink(result)
 				otherLink := FabricateLink(otherResult)
 
-				links, err := models.GetLinksByResultId(result.Id)
+				links, err := models.GetLinksByResultID(result.ID)
 				if err != nil {
 					Fail("Failed to get links with Result Id")
 				}
 
 				var LinkIds []int64
 				for _, a := range links {
-					LinkIds = append(LinkIds, a.Id)
+					LinkIds = append(LinkIds, a.ID)
 				}
 
-				Expect(LinkIds).NotTo(ContainElement(otherLink.Id))
-				Expect(LinkIds).To(ConsistOf(link1.Id, link2.Id))
+				Expect(LinkIds).NotTo(ContainElement(otherLink.ID))
+				Expect(LinkIds).To(ConsistOf(link1.ID, link2.ID))
 			})
 
 			It("returns NO error", func() {
@@ -112,7 +112,7 @@ var _ = Describe("Link", func() {
 				FabricateLink(result)
 				FabricateLink(otherResult)
 
-				_, err := models.GetLinksByResultId(result.Id)
+				_, err := models.GetLinksByResultID(result.ID)
 				Expect(err).To(BeNil())
 			})
 		})
@@ -124,7 +124,7 @@ var _ = Describe("Link", func() {
 				FabricateLink(result)
 				FabricateLink(result)
 
-				results, err := models.GetLinksByResultId(999)
+				results, err := models.GetLinksByResultID(999)
 				if err != nil {
 					Fail("Failed to get results with User Id")
 				}
@@ -138,7 +138,7 @@ var _ = Describe("Link", func() {
 				FabricateLink(result)
 				FabricateLink(result)
 
-				_, err := models.GetLinksByResultId(999)
+				_, err := models.GetLinksByResultID(999)
 				Expect(err).To(BeNil())
 			})
 		})

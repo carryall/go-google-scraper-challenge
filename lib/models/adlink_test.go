@@ -56,25 +56,25 @@ var _ = Describe("AdLink", func() {
 		})
 	})
 
-	Describe("#GetAdLinkById", func() {
+	Describe("#GetAdLinkByID", func() {
 		Context("given adLink id exist in the system", func() {
 			It("returns adLink with given id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				existAdLink := FabricateAdLink(result)
-				adLink, err := models.GetAdLinkById(existAdLink.Id)
+				adLink, err := models.GetAdLinkByID(existAdLink.ID)
 				if err != nil {
 					Fail("Failed to get adLink with ID")
 				}
 
 				Expect(adLink.Link).To(Equal(existAdLink.Link))
-				Expect(adLink.ResultId).To(Equal(result.Id))
+				Expect(adLink.ResultID).To(Equal(result.ID))
 			})
 		})
 
 		Context("given adLink id does NOT exist in the system", func() {
 			It("returns false", func() {
-				adLink, err := models.GetAdLinkById(999)
+				adLink, err := models.GetAdLinkByID(999)
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(adLink).To(BeNil())
@@ -82,7 +82,7 @@ var _ = Describe("AdLink", func() {
 		})
 	})
 
-	Describe("#GetAdLinksByResultId", func() {
+	Describe("#GetAdLinksByResultID", func() {
 		Context("given a valid result id", func() {
 			It("returns adlinks with the given result id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
@@ -93,18 +93,18 @@ var _ = Describe("AdLink", func() {
 				adLink2 := FabricateAdLink(result)
 				otherAdLink := FabricateAdLink(otherResult)
 
-				adLinks, err := models.GetAdLinksByResultId(result.Id)
+				adLinks, err := models.GetAdLinksByResultID(result.ID)
 				if err != nil {
 					Fail("Failed to get adlinks with Result Id")
 				}
 
-				var AdLinkIds []int64
+				var AdLinkIDs []int64
 				for _, a := range adLinks {
-					AdLinkIds = append(AdLinkIds, a.Id)
+					AdLinkIDs = append(AdLinkIDs, a.ID)
 				}
 
-				Expect(AdLinkIds).NotTo(ContainElement(otherAdLink.Id))
-				Expect(AdLinkIds).To(ConsistOf(adLink1.Id, adLink2.Id))
+				Expect(AdLinkIDs).NotTo(ContainElement(otherAdLink.ID))
+				Expect(AdLinkIDs).To(ConsistOf(adLink1.ID, adLink2.ID))
 			})
 
 			It("returns NO error", func() {
@@ -116,7 +116,7 @@ var _ = Describe("AdLink", func() {
 				FabricateAdLink(result)
 				FabricateAdLink(otherResult)
 
-				_, err := models.GetAdLinksByResultId(result.Id)
+				_, err := models.GetAdLinksByResultID(result.ID)
 				Expect(err).To(BeNil())
 			})
 		})
@@ -128,7 +128,7 @@ var _ = Describe("AdLink", func() {
 				FabricateAdLink(result)
 				FabricateAdLink(result)
 
-				results, err := models.GetAdLinksByResultId(999)
+				results, err := models.GetAdLinksByResultID(999)
 				if err != nil {
 					Fail("Failed to get results with User Id")
 				}
@@ -142,7 +142,7 @@ var _ = Describe("AdLink", func() {
 				FabricateAdLink(result)
 				FabricateAdLink(result)
 
-				_, err := models.GetAdLinksByResultId(999)
+				_, err := models.GetAdLinksByResultID(999)
 				Expect(err).To(BeNil())
 			})
 		})

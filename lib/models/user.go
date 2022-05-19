@@ -13,15 +13,15 @@ type User struct {
 	HashedPassword string `gorm:"not null"`
 }
 
-// CreateUser insert a new User into database and returns last inserted Id on success.
+// CreateUser insert a new User into database and returns last inserted ID on success.
 func CreateUser(user *User) (int64, error) {
 	result := database.GetDB().Create(user)
 
-	return user.Id, result.Error
+	return user.ID, result.Error
 }
 
-// GetUserById get a user with given id, return error if user with id does not exist
-func GetUserById(id int64) (*User, error) {
+// GetUserByID get a user with given id, return error if user with ID does not exist
+func GetUserByID(id int64) (*User, error) {
 	user := &User{}
 
 	result := database.GetDB().First(&user, id)

@@ -55,12 +55,12 @@ var _ = Describe("User", func() {
 		})
 	})
 
-	Describe("#GetUserById", func() {
+	Describe("#GetUserByID", func() {
 		Context("given user id exist in the system", func() {
 			It("returns user with given id", func() {
 				existUser := FabricateUser(faker.Email(), faker.Password())
 
-				user, err := models.GetUserById(existUser.Id)
+				user, err := models.GetUserByID(existUser.ID)
 				if err != nil {
 					Fail("Failed to get user with ID")
 				}
@@ -72,7 +72,7 @@ var _ = Describe("User", func() {
 
 		Context("given user email does NOT exist in the system", func() {
 			It("returns false", func() {
-				user, err := models.GetUserById(999)
+				user, err := models.GetUserByID(999)
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(user).To(BeNil())
@@ -110,7 +110,7 @@ var _ = Describe("User", func() {
 					Fail("Failed to find user with given email")
 				}
 
-				Expect(user.Id).To(Equal(existUser.Id))
+				Expect(user.ID).To(Equal(existUser.ID))
 			})
 		})
 
@@ -119,7 +119,7 @@ var _ = Describe("User", func() {
 				user, err := models.GetUserByEmail(faker.Email())
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
-				Expect(user.Id).To(Equal(int64(0)))
+				Expect(user.ID).To(Equal(int64(0)))
 			})
 		})
 	})

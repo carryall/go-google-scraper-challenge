@@ -13,8 +13,8 @@ import (
 type Result struct {
 	Base
 
-	UserId  int64 `gorm:"not null;"`
-	User    *User `gorm:"not null;foreignKey:UserId"`
+	UserID  int64 `gorm:"not null;"`
+	User    *User `gorm:"not null;foreignKey:UserID"`
 	AdLinks []*AdLink
 	Links   []*Link
 
@@ -33,15 +33,15 @@ const (
 
 var ResultStatuses = []string{ResultStatusPending, ResultStatusProcessing, ResultStatusCompleted, ResultStatusFailed}
 
-// CreateResult insert a new Result into database and returns last inserted Id on success.
+// CreateResult insert a new Result into database and returns last inserted ID on success.
 func CreateResult(result *Result) (int64, error) {
 	queryResult := database.GetDB().Create(result)
 
-	return result.Id, queryResult.Error
+	return result.ID, queryResult.Error
 }
 
-// GetResultById retrieves Result by Id. Returns error if Id doesn't exist
-func GetResultById(id int64) (*Result, error) {
+// GetResultByID retrieves Result by ID. Returns error if ID doesn't exist
+func GetResultByID(id int64) (*Result, error) {
 	result := &Result{}
 
 	queryResult := database.GetDB().First(&result, id)
@@ -52,19 +52,19 @@ func GetResultById(id int64) (*Result, error) {
 	return result, nil
 }
 
-// GetResultByIdWithRelations retrieves Result by Id with assigned relations. Returns error if Id doesn't exist
-func GetResultByIdWithRelations(id int64) (*Result, error) {
-	result, err := GetResultById(id)
+// GetResultByIDWithRelations retrieves Result by ID with assigned relations. Returns error if ID doesn't exist
+func GetResultByIDWithRelations(id int64) (*Result, error) {
+	result, err := GetResultByID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	result.Links, err = GetLinksByResultId(result.Id)
+	result.Links, err = GetLinksByResultID(result.ID)
 	if err != nil {
 		return result, err
 	}
 
-	result.AdLinks, err = GetAdLinksByResultId(result.Id)
+	result.AdLinks, err = GetAdLinksByResultID(result.ID)
 	if err != nil {
 		return result, err
 	}
@@ -165,7 +165,7 @@ func CountResultsBy(condition map[string]interface{}, orderBy string, offset int
 
 // UpdateResult updates Result and returns error if the record to be updated doesn't exist
 func UpdateResult(result *Result) error {
-	_, err := GetResultById(result.Id)
+	_, err := GetResultByID(result.ID)
 	if err != nil {
 		return err
 	}
