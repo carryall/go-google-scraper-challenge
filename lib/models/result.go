@@ -91,10 +91,6 @@ func ContainKeyword(keyword string) func(db *gorm.DB) *gorm.DB {
 }
 
 func query(condition map[string]interface{}, orderBy string, offset int, limit int) (*gorm.DB, []*Result) {
-	// orderClause := clause.OrderByColumn{
-	// 	Column: clause.Column{Name: "created_at"},
-	// 	Desc:   false,
-	// }
 	db := database.GetDB()
 
 	if len(orderBy) > 0 {
@@ -190,26 +186,6 @@ func UpdateResultStatus(result *Result, status string) error {
 
 	return updateResult.Error
 }
-
-// func resultQuerySeter(query map[string]interface{}) { //orm.QuerySeter {
-// 	// ormer := orm.NewOrm()
-// 	// querySeter := ormer.QueryTable(Result{})
-
-// 	// for k, v := range query {
-// 	// 	switch k {
-// 	// 	case "limit":
-// 	// 		querySeter = querySeter.Limit(v)
-// 	// 	case "offset":
-// 	// 		querySeter = querySeter.Offset(v)
-// 	// 	case "order":
-// 	// 		querySeter = querySeter.OrderBy(v.(string))
-// 	// 	default:
-// 	// 		querySeter = querySeter.Filter(k, v)
-// 	// 	}
-// 	// }
-
-// 	// return querySeter
-// }
 
 func validResultStatus(status string) bool {
 	valid := false
