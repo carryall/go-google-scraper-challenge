@@ -1,74 +1,20 @@
-FROM  node:14.15-alpine AS assets-builder
+FROM golang:1.18-alpine
 
-RUN apk --no-cache add ca-certificates make
-
-WORKDIR /app
-
-COPY package.json yarn.lock ./
-COPY assets/. ./assets/
-COPY tailwind.config.js ./
-
-ADD .env.example ./.env
-COPY Makefile ./Makefile
-
-RUN yarn
-
-# Prepare all assets
-RUN make assets
-
-
-FROM golang:1.15-alpine AS migration
-
-ARG DATABASE_URL
-
-# Move to working directory /migration
-WORKDIR /migration
-
-# Set necessary environment variables needed for our image
-ENV GO111MODULE=on \
-    CGO_ENABLE=0 \
-    GOOS=linux \
-    GOARCH=amd64
-
-# Copy the code into the container
-COPY . .
-
-# Install command-line tool
-RUN go get github.com/beego/bee/v2
-
-# Migrate database
-RUN bee migrate -driver=postgres -conn=$DATABASE_URL
-
-
-FROM golang:1.15-alpine
-
-# Set necessary environment variables needed for our image
-ENV GO111MODULE=on \
-    CGO_ENABLE=0 \
-    GOOS=linux \
-    GOARCH=amd64
+ENV GIN_MODE=release
 
 WORKDIR /app
 
-# Copy go mod and sum files
+# Install Go dependencies
 COPY go.mod go.sum ./
-
-# Download all dependancies
 RUN go mod download
 
-# Copy ENV file
-ADD .env.example ./.env
-
-# Copy the code into the container
+# Copy codebase
 COPY . .
 
-# Copy assets from assets builder
-COPY --from=assets-builder /app/static/. ./static/
-
-# Build the application
-RUN go build -o main .
+# Build go application
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/api
 
 EXPOSE 8080
 
-# Run the executable
-CMD ["./main"]
+RUN chmod +x ./bin/start.sh
+CMD ["./bin/start.sh"]

@@ -4,7 +4,7 @@ import (
 	"mime/multipart"
 
 	"go-google-scraper-challenge/helpers"
-	. "go-google-scraper-challenge/tests/helpers"
+	. "go-google-scraper-challenge/test"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -17,8 +17,8 @@ var _ = Describe("File", func() {
 				csvMIMEHeader := CreateMIMEHaader("valid.csv")
 				fileHeader := multipart.FileHeader{
 					Filename: "valid.csv",
-					Header: csvMIMEHeader,
-					Size: 0,
+					Header:   csvMIMEHeader,
+					Size:     0,
 				}
 				fileType := helpers.GetFileType(&fileHeader)
 
@@ -31,8 +31,8 @@ var _ = Describe("File", func() {
 				textMIMEHeader := CreateMIMEHaader("text.txt")
 				fileHeader := multipart.FileHeader{
 					Filename: "text.txt",
-					Header: textMIMEHeader,
-					Size: 0,
+					Header:   textMIMEHeader,
+					Size:     0,
 				}
 				fileType := helpers.GetFileType(&fileHeader)
 
@@ -44,7 +44,7 @@ var _ = Describe("File", func() {
 	Describe("#GetFileContent", func() {
 		Context("given a CSV file", func() {
 			It("returns CSV file content", func() {
-				file, _ := GetMultipartFromFile("tests/fixtures/files/valid.csv")
+				file, _ := GetMultipartFromFile("test/fixtures/files/valid.csv")
 
 				content, err := helpers.GetFileContent(file)
 				if err != nil {
@@ -55,7 +55,7 @@ var _ = Describe("File", func() {
 			})
 
 			It("does NOT return error", func() {
-				file, _ := GetMultipartFromFile("tests/fixtures/files/valid.csv")
+				file, _ := GetMultipartFromFile("test/fixtures/files/valid.csv")
 
 				_, err := helpers.GetFileContent(file)
 
@@ -65,7 +65,7 @@ var _ = Describe("File", func() {
 
 		Context("given a blank text file", func() {
 			It("returns an empty array", func() {
-				file, _ := GetMultipartFromFile("tests/fixtures/files/text.txt")
+				file, _ := GetMultipartFromFile("test/fixtures/files/text.txt")
 
 				content, err := helpers.GetFileContent(file)
 				if err != nil {
@@ -76,7 +76,7 @@ var _ = Describe("File", func() {
 			})
 
 			It("does NOT return error", func() {
-				file, _ := GetMultipartFromFile("tests/fixtures/files/text.txt")
+				file, _ := GetMultipartFromFile("test/fixtures/files/text.txt")
 
 				_, err := helpers.GetFileContent(file)
 

@@ -1,0 +1,14 @@
+app_name = "google_scraper"
+app_port = "8080"
+db_host = "0.0.0.0"
+db_password = "postgres"
+db_username = "postgres"
+
+
+[debug]
+db_name = "google_scraper_development"
+db_port = "5432"
+
+[test]
+db_name = "google_scraper_test"
+db_port = "5433"
