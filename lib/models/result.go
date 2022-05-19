@@ -2,9 +2,10 @@ package models
 
 import (
 	"errors"
+	"strings"
+
 	database "go-google-scraper-challenge/bootstrap"
 	"go-google-scraper-challenge/helpers"
-	"strings"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -13,14 +14,14 @@ import (
 type Result struct {
 	Base
 
-	UserID  int64 `gorm:"not null;"`
-	User    *User `gorm:"not null;"`
-	AdLinks []*AdLink
-	Links   []*Link
-
+	UserID    int64  `gorm:"not null;"`
 	Keyword   string `gorm:"not null;"`
 	Status    string `gorm:"not null;default:pending"`
 	PageCache string
+
+	User    *User `gorm:"not null;"`
+	AdLinks []*AdLink
+	Links   []*Link
 }
 
 const (
