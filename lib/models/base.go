@@ -9,7 +9,3 @@ type Base struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
-
-type Tabler interface {
-	TableName() string
-}

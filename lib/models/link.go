@@ -12,11 +12,6 @@ type Link struct {
 	Link     string  `gorm:"not null;"`
 }
 
-// TableName set the custom table name to plural because the default table name is singular
-func (Link) TableName() string {
-	return "links"
-}
-
 // AddLink insert a new Link into database and returns last inserted Id on success.
 func CreateLink(link *Link) (int64, error) {
 	result := database.GetDB().Create(link)
