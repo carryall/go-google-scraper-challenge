@@ -24,11 +24,6 @@ const (
 	AdLinkTypeLink  = "link"
 )
 
-// TableName set the custom table name to plural because the default table name is singular
-func (al *AdLink) TableName() string {
-	return "ad_links"
-}
-
 // CreateAdLink insert a new AdLink into database and returns last inserted Id on success.
 func CreateAdLink(adLink *AdLink) (int64, error) {
 	result := database.GetDB().Create(adLink)

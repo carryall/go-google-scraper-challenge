@@ -33,11 +33,6 @@ const (
 
 var ResultStatuses = []string{ResultStatusPending, ResultStatusProcessing, ResultStatusCompleted, ResultStatusFailed}
 
-// TableName set the custom table name to plural because the default table name is singular
-func (Result) TableName() string {
-	return "results"
-}
-
 // CreateResult insert a new Result into database and returns last inserted Id on success.
 func CreateResult(result *Result) (int64, error) {
 	queryResult := database.GetDB().Create(result)
