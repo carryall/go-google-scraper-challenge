@@ -14,7 +14,7 @@ type Result struct {
 	Base
 
 	UserID  int64 `gorm:"not null;"`
-	User    *User `gorm:"not null;foreignKey:UserID"`
+	User    *User `gorm:"not null;"`
 	AdLinks []*AdLink
 	Links   []*Link
 

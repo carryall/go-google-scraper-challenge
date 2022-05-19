@@ -8,7 +8,7 @@ type AdLink struct {
 	Base
 
 	ResultID int64   `gorm:"not null;"`
-	Result   *Result `gorm:"not null;foreignKey:ResultID"`
+	Result   *Result `gorm:"not null;"`
 	Type     string  `gorm:"not null;"`
 	Position string  `gorm:"not null;"`
 	Link     string  `gorm:"not null;"`
