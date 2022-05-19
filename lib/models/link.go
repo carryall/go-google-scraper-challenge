@@ -7,9 +7,10 @@ import (
 type Link struct {
 	Base
 
-	ResultID int64   `gorm:"not null;"`
-	Result   *Result `gorm:"not null;"`
-	Link     string  `gorm:"not null;"`
+	ResultID int64  `gorm:"not null;"`
+	Link     string `gorm:"not null;"`
+
+	Result *Result `gorm:"not null;"`
 }
 
 // AddLink insert a new Link into database and returns last inserted ID on success.
