@@ -36,9 +36,9 @@ dev:
 install-dependencies:
 	go mod tidy
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45
-	go get github.com/cosmtrek/air@v1.15.1
-	go install github.com/pressly/goose/v3/cmd/goose@latest
-	go get github.com/ddollar/forego
+	go install github.com/cosmtrek/air@v1.29
+	go install github.com/pressly/goose/v3/cmd/goose@v3.5.3
+	go install github.com/ddollar/forego@v0.16.1
 	npm install
 
 lint:
