@@ -89,7 +89,7 @@ func passwordAuthorizationHandler(email string, password string) (userID string,
 	}
 
 	if helpers.CompareHashWithPassword(user.HashedPassword, password) {
-		return fmt.Sprint(user.Id), nil
+		return fmt.Sprint(user.ID), nil
 	}
 	return "", errors.ErrInvalidClient
 }

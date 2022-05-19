@@ -37,7 +37,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to add result: " + err.Error())
 				}
 
-				result, err = models.GetResultById(resultID)
+				result, err = models.GetResultByID(resultID)
 				if err != nil {
 					Fail("Failed to add result: " + err.Error())
 				}
@@ -69,7 +69,7 @@ var _ = Describe("Result", func() {
 						Fail("Failed to add result: " + err.Error())
 					}
 
-					result, err = models.GetResultById(resultID)
+					result, err = models.GetResultByID(resultID)
 					if err != nil {
 						Fail("Failed to add result: " + err.Error())
 					}
@@ -92,24 +92,24 @@ var _ = Describe("Result", func() {
 		})
 	})
 
-	Describe("#GetResultById", func() {
+	Describe("#GetResultByID", func() {
 		Context("given result id exist in the system", func() {
 			It("returns result with given id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				existResult := FabricateResult(user)
-				result, err := models.GetResultById(existResult.Id)
+				result, err := models.GetResultByID(existResult.ID)
 				if err != nil {
 					Fail("Failed to get result with ID")
 				}
 
 				Expect(result.Keyword).To(Equal(existResult.Keyword))
-				Expect(result.UserId).To(Equal(user.Id))
+				Expect(result.UserID).To(Equal(user.ID))
 			})
 		})
 
 		Context("given result id does NOT exist in the system", func() {
 			It("returns false", func() {
-				result, err := models.GetResultById(999)
+				result, err := models.GetResultByID(999)
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(result).To(BeNil())
@@ -132,7 +132,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to get first pending result")
 				}
 
-				Expect(result.Id).To(Equal(pendingResult.Id))
+				Expect(result.ID).To(Equal(pendingResult.ID))
 			})
 
 			It("returns NO error", func() {
@@ -150,7 +150,7 @@ var _ = Describe("Result", func() {
 				result, err := models.GetOldestPendingResult()
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
-				Expect(result.Id).To(Equal((int64(0))))
+				Expect(result.ID).To(Equal((int64(0))))
 			})
 		})
 	})
@@ -170,13 +170,13 @@ var _ = Describe("Result", func() {
 							Fail("Failed to get results with User Id")
 						}
 
-						var resultIds []int64
+						var resultIDs []int64
 						for _, r := range results {
-							resultIds = append(resultIds, r.Id)
+							resultIDs = append(resultIDs, r.ID)
 						}
 
-						Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
-						Expect(resultIds).NotTo(ConsistOf(result3.Id))
+						Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
+						Expect(resultIDs).NotTo(ConsistOf(result3.ID))
 					})
 
 					It("returns NO error", func() {
@@ -202,12 +202,12 @@ var _ = Describe("Result", func() {
 							Fail("Failed to get results with User Id")
 						}
 
-						var resultIds []int64
+						var resultIDs []int64
 						for _, r := range results {
-							resultIds = append(resultIds, r.Id)
+							resultIDs = append(resultIDs, r.ID)
 						}
 
-						Expect(resultIds).To(ConsistOf(result1.Id, result2.Id, result3.Id))
+						Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID, result3.ID))
 					})
 
 					It("returns NO error", func() {
@@ -235,13 +235,13 @@ var _ = Describe("Result", func() {
 							Fail("Failed to get results with User Id")
 						}
 
-						var resultIds []int64
+						var resultIDs []int64
 						for _, r := range results {
-							resultIds = append(resultIds, r.Id)
+							resultIDs = append(resultIDs, r.ID)
 						}
 
-						Expect(resultIds).To(ConsistOf(result2.Id, result3.Id))
-						Expect(resultIds).NotTo(ConsistOf(result1.Id))
+						Expect(resultIDs).To(ConsistOf(result2.ID, result3.ID))
+						Expect(resultIDs).NotTo(ConsistOf(result1.ID))
 					})
 
 					It("returns NO error", func() {
@@ -267,12 +267,12 @@ var _ = Describe("Result", func() {
 							Fail("Failed to get results with User Id")
 						}
 
-						var resultIds []int64
+						var resultIDs []int64
 						for _, r := range results {
-							resultIds = append(resultIds, r.Id)
+							resultIDs = append(resultIDs, r.ID)
 						}
 
-						Expect(resultIds).To(ConsistOf(result1.Id, result2.Id, result3.Id))
+						Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID, result3.ID))
 					})
 
 					It("returns NO error", func() {
@@ -296,20 +296,20 @@ var _ = Describe("Result", func() {
 					otherUserResult := FabricateResult(otherUser)
 
 					query := map[string]interface{}{
-						"user_id": user.Id,
+						"user_id": user.ID,
 					}
 					results, err := models.GetResultsBy(query, "", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
 
-					var resultIds []int64
+					var resultIDs []int64
 					for _, r := range results {
-						resultIds = append(resultIds, r.Id)
+						resultIDs = append(resultIDs, r.ID)
 					}
 
-					Expect(resultIds).NotTo(ContainElement(otherUserResult.Id))
-					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+					Expect(resultIDs).NotTo(ContainElement(otherUserResult.ID))
+					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
 				})
 
 				It("returns NO error", func() {
@@ -320,7 +320,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(otherUser)
 
 					query := map[string]interface{}{
-						"user_id": user.Id,
+						"user_id": user.ID,
 					}
 					_, err := models.GetResultsBy(query, "", 0, 0)
 					Expect(err).To(BeNil())
@@ -336,20 +336,20 @@ var _ = Describe("Result", func() {
 					otherUserResult := FabricateResult(otherUser)
 
 					query := map[string]interface{}{
-						"user_id": user.Id,
+						"user_id": user.ID,
 					}
 					results, err := models.GetResultsBy(query, "", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
 
-					var resultIds []int64
+					var resultIDs []int64
 					for _, r := range results {
-						resultIds = append(resultIds, r.Id)
+						resultIDs = append(resultIDs, r.ID)
 					}
 
-					Expect(resultIds).NotTo(ContainElement(otherUserResult.Id))
-					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+					Expect(resultIDs).NotTo(ContainElement(otherUserResult.ID))
+					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
 				})
 
 				It("returns NO error", func() {
@@ -360,7 +360,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(otherUser)
 
 					query := map[string]interface{}{
-						"user_id": user.Id,
+						"user_id": user.ID,
 					}
 					_, err := models.GetResultsBy(query, "", 0, 0)
 					Expect(err).To(BeNil())
@@ -382,13 +382,13 @@ var _ = Describe("Result", func() {
 						Fail("Failed to get results with User Id")
 					}
 
-					var resultIds []int64
+					var resultIDs []int64
 					for _, r := range results {
-						resultIds = append(resultIds, r.Id)
+						resultIDs = append(resultIDs, r.ID)
 					}
 
-					Expect(resultIds).NotTo(ContainElement(result3.Id))
-					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+					Expect(resultIDs).NotTo(ContainElement(result3.ID))
+					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
 				})
 
 				It("returns NO error", func() {
@@ -416,13 +416,13 @@ var _ = Describe("Result", func() {
 						Fail("Failed to get results with User Id")
 					}
 
-					var resultIds []int64
+					var resultIDs []int64
 					for _, r := range results {
-						resultIds = append(resultIds, r.Id)
+						resultIDs = append(resultIDs, r.ID)
 					}
 
-					var expectedResultIds = []int64{result2.Id, result1.Id}
-					Expect(resultIds).To(Equal(expectedResultIds))
+					var expectedResultIDs = []int64{result2.ID, result1.ID}
+					Expect(resultIDs).To(Equal(expectedResultIDs))
 				})
 
 				It("returns NO error", func() {
@@ -448,12 +448,12 @@ var _ = Describe("Result", func() {
 						Fail("Failed to get results with User Id")
 					}
 
-					var resultIds []int64
+					var resultIDs []int64
 					for _, r := range results {
-						resultIds = append(resultIds, r.Id)
+						resultIDs = append(resultIDs, r.ID)
 					}
 
-					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
 				})
 
 				It("returns NO error", func() {
@@ -477,12 +477,12 @@ var _ = Describe("Result", func() {
 						Fail("Failed to get results with User Id")
 					}
 
-					var resultIds []int64
+					var resultIDs []int64
 					for _, r := range results {
-						resultIds = append(resultIds, r.Id)
+						resultIDs = append(resultIDs, r.ID)
 					}
 
-					Expect(resultIds).To(ConsistOf(result1.Id, result2.Id))
+					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
 				})
 
 				It("returns NO error", func() {
@@ -537,7 +537,7 @@ var _ = Describe("Result", func() {
 				FabricateResult(otherUser)
 
 				query := map[string]interface{}{
-					"user_id": user.Id,
+					"user_id": user.ID,
 				}
 				count, err := models.CountResultsBy(query, "", 0, 0)
 				if err != nil {
@@ -555,7 +555,7 @@ var _ = Describe("Result", func() {
 				FabricateResult(otherUser)
 
 				query := map[string]interface{}{
-					"user_id": user.Id,
+					"user_id": user.ID,
 				}
 				_, err := models.CountResultsBy(query, "", 0, 0)
 				Expect(err).To(BeNil())
@@ -605,7 +605,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to update result with ID")
 				}
 
-				result, err := models.GetResultById(existResult.Id)
+				result, err := models.GetResultByID(existResult.ID)
 				if err != nil {
 					Fail("Failed to get result with ID")
 				}
@@ -617,7 +617,7 @@ var _ = Describe("Result", func() {
 
 		Context("given result id does NOT exist in the system", func() {
 			It("returns error", func() {
-				result := &models.Result{Base: models.Base{Id: 999}}
+				result := &models.Result{Base: models.Base{ID: 999}}
 				err := models.UpdateResult(result)
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))

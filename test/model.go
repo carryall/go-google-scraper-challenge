@@ -28,7 +28,7 @@ func FabricateUser(email string, password string) (user *models.User) {
 		log.Fatal("Failed to add user " + err.Error())
 	}
 
-	user, err = models.GetUserById(userID)
+	user, err = models.GetUserByID(userID)
 	if err != nil {
 		log.Fatal("Failed to get user " + err.Error())
 	}
@@ -52,7 +52,7 @@ func FabricateResult(user *models.User) (result *models.Result) {
 
 func FabricateResultWithParams(user *models.User, keyword string, status string) (result *models.Result) {
 	result = &models.Result{
-		UserId:  int64(user.Id),
+		UserID:  int64(user.ID),
 		Keyword: keyword,
 		Status:  status,
 	}
@@ -62,7 +62,7 @@ func FabricateResultWithParams(user *models.User, keyword string, status string)
 		log.Fatal("Failed to add result " + err.Error())
 	}
 
-	result, err = models.GetResultById(resultID)
+	result, err = models.GetResultByID(resultID)
 	if err != nil {
 		log.Fatal("Failed to get result " + err.Error())
 	}
@@ -72,7 +72,7 @@ func FabricateResultWithParams(user *models.User, keyword string, status string)
 
 func FabricateLink(result *models.Result) (link *models.Link) {
 	link = &models.Link{
-		ResultId: int64(result.Id),
+		ResultID: int64(result.ID),
 		Link:     faker.URL(),
 	}
 
@@ -81,7 +81,7 @@ func FabricateLink(result *models.Result) (link *models.Link) {
 		log.Fatal("Failed to add adLink " + err.Error())
 	}
 
-	link, err = models.GetLinkById(linkID)
+	link, err = models.GetLinkByID(linkID)
 	if err != nil {
 		log.Fatal("Failed to get link " + err.Error())
 	}
@@ -95,7 +95,7 @@ func FabricateAdLink(result *models.Result) (adLink *models.AdLink) {
 
 func FabricateAdLinkWithParams(result *models.Result, position string) (adLink *models.AdLink) {
 	adLink = &models.AdLink{
-		ResultId: int64(result.Id),
+		ResultID: int64(result.ID),
 		Link:     faker.URL(),
 		Position: position,
 		Type:     models.AdLinkTypeLink,
@@ -106,7 +106,7 @@ func FabricateAdLinkWithParams(result *models.Result, position string) (adLink *
 		log.Fatal("Failed to add adLink " + err.Error())
 	}
 
-	adLink, err = models.GetAdLinkById(adLinkID)
+	adLink, err = models.GetAdLinkByID(adLinkID)
 	if err != nil {
 		log.Fatal("Failed to get adLink " + err.Error())
 	}

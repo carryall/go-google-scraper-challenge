@@ -7,20 +7,20 @@ import (
 type Link struct {
 	Base
 
-	ResultId int64   `gorm:"not null;"`
-	Result   *Result `gorm:"not null;foreignKey:ResultId"`
+	ResultID int64   `gorm:"not null;"`
+	Result   *Result `gorm:"not null;foreignKey:ResultID"`
 	Link     string  `gorm:"not null;"`
 }
 
-// AddLink insert a new Link into database and returns last inserted Id on success.
+// AddLink insert a new Link into database and returns last inserted ID on success.
 func CreateLink(link *Link) (int64, error) {
 	result := database.GetDB().Create(link)
 
-	return link.Id, result.Error
+	return link.ID, result.Error
 }
 
-// GetLinkById retrieves Link by Id. Returns error if Id doesn't exist
-func GetLinkById(id int64) (*Link, error) {
+// GetLinkByID retrieves Link by ID. Returns error if ID doesn't exist
+func GetLinkByID(id int64) (*Link, error) {
 	link := &Link{}
 
 	result := database.GetDB().First(&link, id)
@@ -31,11 +31,11 @@ func GetLinkById(id int64) (*Link, error) {
 	return link, nil
 }
 
-// GetLinksByResultId retrieves all Links with Result Id. Returns empty list if no records exist
-func GetLinksByResultId(resultId int64) ([]*Link, error) {
+// GetLinksByResultID retrieves all Links with Result ID. Returns empty list if no records exist
+func GetLinksByResultID(resultID int64) ([]*Link, error) {
 	links := []*Link{}
 
-	result := database.GetDB().Model(&Link{}).Where("result_id = ?", resultId).Find(&links)
+	result := database.GetDB().Model(&Link{}).Where("result_id = ?", resultID).Find(&links)
 
 	return links, result.Error
 }
