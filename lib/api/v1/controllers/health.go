@@ -10,8 +10,8 @@ type HealthController struct {
 	BaseController
 }
 
-func (HealthController) HealthStatus(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
+func (c *HealthController) HealthStatus(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
 		"status": "alive",
 	})
 }

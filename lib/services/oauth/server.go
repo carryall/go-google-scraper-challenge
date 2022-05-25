@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	database "go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"

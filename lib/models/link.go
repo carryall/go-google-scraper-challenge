@@ -1,7 +1,7 @@
 package models
 
 import (
-	database "go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/database"
 )
 
 type Link struct {
