@@ -43,7 +43,7 @@ func UserEmailAlreadyExisted(email string) bool {
 func GetUserByEmail(email string) (*User, error) {
 	user := &User{}
 
-	result := database.GetDB().Where("email = ?", email).First(&user)
+	result := database.GetDB().Where("LOWER(email) = LOWER(?)", email).First(&user)
 
 	return user, result.Error
 }
