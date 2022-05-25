@@ -10,7 +10,6 @@ import (
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4"
 	pg "github.com/vgarvardt/go-oauth2-pg"
 	"github.com/vgarvardt/go-pg-adapter/pgx4adapter"
@@ -66,10 +65,6 @@ func SetUpOauth() {
 
 	oauthServer = authServer
 	clientStore = store
-}
-
-func ValidateRequest(c *gin.Context) (req *server.AuthorizeRequest, err error) {
-	return oauthServer.ValidationAuthorizeRequest(c.Request)
 }
 
 // GenerateToken handle token request, will return error if fail
