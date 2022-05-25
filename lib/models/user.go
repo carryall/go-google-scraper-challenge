@@ -32,8 +32,8 @@ func GetUserByID(id int64) (*User, error) {
 	return user, nil
 }
 
-// UserEmailAlreadyExist retrieves user email and returns true if user with email already exist.
-func UserEmailAlreadyExist(email string) bool {
+// UserEmailAlreadyExisted retrieves user email and returns true if user with email already exist.
+func UserEmailAlreadyExisted(email string) bool {
 	_, err := GetUserByEmail(email)
 
 	return err == nil
@@ -46,4 +46,14 @@ func GetUserByEmail(email string) (*User, error) {
 	result := database.GetDB().Where("email = ?", email).First(&user)
 
 	return user, result.Error
+}
+
+func DeleteUser(userID int64) error {
+	result := database.GetDB().Delete(&User{}, userID)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
