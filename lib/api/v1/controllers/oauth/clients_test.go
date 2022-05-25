@@ -39,4 +39,8 @@ var _ = Describe("OAuthClientsController", func() {
 			Expect(jsonResponse.ClientSecret).NotTo(BeEmpty())
 		})
 	})
+
+	AfterEach(func() {
+		CleanupDatabase([]string{"oauth2_clients", "oauth2_tokens"})
+	})
 })
