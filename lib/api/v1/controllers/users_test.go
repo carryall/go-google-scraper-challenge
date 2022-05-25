@@ -96,7 +96,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDetail).To(Equal("ClientID: cannot be blank."))
+						Expect(jsonResponse.ErrorDescription).To(Equal("ClientID: cannot be blank."))
 					})
 				})
 
@@ -136,7 +136,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
-						Expect(jsonResponse.ErrorDetail).To(Equal(constants.OAuthClientInvalid))
+						Expect(jsonResponse.ErrorDescription).To(Equal(constants.OAuthClientInvalid))
 					})
 				})
 			})
@@ -178,7 +178,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDetail).To(Equal("ClientSecret: cannot be blank."))
+						Expect(jsonResponse.ErrorDescription).To(Equal("ClientSecret: cannot be blank."))
 					})
 				})
 
@@ -218,7 +218,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
-						Expect(jsonResponse.ErrorDetail).To(Equal(constants.OAuthClientInvalid))
+						Expect(jsonResponse.ErrorDescription).To(Equal(constants.OAuthClientInvalid))
 					})
 				})
 			})
@@ -260,7 +260,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDetail).To(Equal("Email: cannot be blank."))
+						Expect(jsonResponse.ErrorDescription).To(Equal("Email: cannot be blank."))
 					})
 				})
 
@@ -300,7 +300,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDetail).To(Equal("Email: must be a valid email address."))
+						Expect(jsonResponse.ErrorDescription).To(Equal("Email: must be a valid email address."))
 					})
 				})
 			})
@@ -342,7 +342,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDetail).To(Equal("Password: cannot be blank."))
+						Expect(jsonResponse.ErrorDescription).To(Equal("Password: cannot be blank."))
 					})
 				})
 
@@ -382,7 +382,7 @@ var _ = Describe("UsersController", func() {
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDetail).To(Equal("Password: the length must be between 6 and 50."))
+						Expect(jsonResponse.ErrorDescription).To(Equal("Password: the length must be between 6 and 50."))
 					})
 				})
 			})
