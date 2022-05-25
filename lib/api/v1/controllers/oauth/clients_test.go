@@ -13,7 +13,7 @@ import (
 )
 
 var _ = Describe("OAuthClientsController", func() {
-	Describe("GET /health", func() {
+	Describe("POST /oauth/clients", func() {
 		It("returns status OK", func() {
 			ctx, response := MakeJSONRequest("POST", "/oauth/clients", nil)
 
