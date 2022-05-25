@@ -2,6 +2,7 @@ package routers
 
 import (
 	"go-google-scraper-challenge/lib/api/v1/controllers"
+	oauth_controllers "go-google-scraper-challenge/lib/api/v1/controllers/oauth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,5 +10,9 @@ import (
 func ComebineRoutes(engine *gin.Engine) {
 	v1 := engine.Group("/api/v1")
 
-	v1.GET("/health", controllers.HealthController{}.HealthStatus)
+	healthController := controllers.HealthController{}
+	oauthClientsController := oauth_controllers.OAuthClientsController{}
+
+	v1.GET("/health", healthController.HealthStatus)
+	v1.POST("/oauth/clients", oauthClientsController.Create)
 }

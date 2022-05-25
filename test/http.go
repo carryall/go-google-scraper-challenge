@@ -7,8 +7,8 @@ import (
 )
 
 func CreateGinTestContext() (*gin.Context, *httptest.ResponseRecorder) {
-	resp := httptest.NewRecorder()
-	c, _ := gin.CreateTestContext(resp)
+	responseRecoder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(responseRecoder)
 
-	return c, resp
+	return c, responseRecoder
 }

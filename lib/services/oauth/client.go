@@ -2,9 +2,9 @@ package oauth
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/google/uuid"
+	"github.com/spf13/viper"
 	"gopkg.in/oauth2.v3/models"
 )
 
@@ -20,7 +20,7 @@ func GenerateClient() (client OAuthClient, err error) {
 	err = clientStore.Create(&models.Client{
 		ID:     clientID,
 		Secret: clientSecret,
-		Domain: fmt.Sprintf("%s:%s", os.Getenv("APP_HOST"), os.Getenv("PORT")),
+		Domain: fmt.Sprintf("%s:%s", viper.GetString("APP_HOST"), viper.GetString("PORT")),
 	})
 	if err != nil {
 		return OAuthClient{}, err

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	database "go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers"
 
 	"gorm.io/gorm"
