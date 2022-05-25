@@ -1,6 +1,8 @@
-package api_helpers
+package helpers
 
 import (
+  "fmt"
+
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
 

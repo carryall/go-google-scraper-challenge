@@ -31,13 +31,7 @@ func CleanupDatabase(tableNames []string) {
 
 	db.Exec(truncateSQL)
 
-	// ormer := orm.NewOrm()
-	// _, err := ormer.Raw(truncateSQL).Exec()
 	if err != nil {
 		log.Warn("FAILED TO TRUNCATE TABLE", tableNames, err.Error())
-		// err := orm.RunSyncdb("default", true, false)
-		// if err != nil {
-		// 	log.Error("Failed to sync database", err)
-		// }
 	}
 }
