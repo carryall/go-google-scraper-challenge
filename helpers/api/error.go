@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+
 	"go-google-scraper-challenge/lib/api/v1/serializers"
 
 	"github.com/gin-gonic/gin"
