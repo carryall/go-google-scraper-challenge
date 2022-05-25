@@ -9,8 +9,8 @@ import (
 
 func ResponseWithError(ctx *gin.Context, code int, err error) {
 	errorResponse := serializers.ErrorResponse{
-		Error:       constants.Errors[code],
-		ErrorDetail: err.Error(),
+		Error:            constants.Errors[code],
+		ErrorDescription: err.Error(),
 	}
 
 	ctx.JSON(code, errorResponse)
