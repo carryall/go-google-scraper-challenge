@@ -6,7 +6,9 @@ import (
 	"runtime"
 
 	"go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers/log"
+	"go-google-scraper-challenge/lib/services/oauth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +22,9 @@ func SetupTestEnvironment() {
 
 	bootstrap.LoadConfig()
 
-	bootstrap.InitDatabase(bootstrap.GetDatabaseURL())
+	database.InitDatabase(database.GetDatabaseURL())
+
+	oauth.SetUpOauth()
 }
 
 func setRootDir() {

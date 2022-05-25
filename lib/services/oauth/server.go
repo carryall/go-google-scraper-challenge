@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	database "go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
@@ -14,6 +14,7 @@ import (
 	"github.com/jackc/pgx/v4"
 	pg "github.com/vgarvardt/go-oauth2-pg"
 	"github.com/vgarvardt/go-pg-adapter/pgx4adapter"
+	"gopkg.in/oauth2.v3"
 	"gopkg.in/oauth2.v3/errors"
 	"gopkg.in/oauth2.v3/manage"
 	"gopkg.in/oauth2.v3/server"

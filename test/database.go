@@ -3,7 +3,7 @@ package test
 import (
 	"fmt"
 
-	database "go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/gin-gonic/gin"
