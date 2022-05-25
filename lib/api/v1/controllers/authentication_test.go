@@ -36,7 +36,6 @@ var _ = Describe("AuthenticationController", func() {
 				authenticationController.Login(ctx)
 
 				Expect(response.Code).To(Equal(http.StatusOK))
-				Expect(responseBody.Error).To(Equal(constants.Errors[http.StatusOK]))
 			})
 
 			It("responses with authentication tokens", func() {
