@@ -58,9 +58,9 @@ var _ = Describe("UsersController", func() {
 			})
 		})
 
-		Context("given invalid params", func() {
-			Context("client id", func() {
-				Context("given no client id", func() {
+		Context("given INVALID params", func() {
+			Context("client ID", func() {
+				Context("given NO client ID", func() {
 					It("response with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -75,7 +75,7 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						Expect(response.Code).To(Equal(http.StatusUnprocessableEntity))
+						Expect(response.Code).To(Equal(http.StatusBadRequest))
 					})
 
 					It("response with the error detail", func() {
@@ -95,12 +95,12 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnprocessableEntity))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
 						Expect(jsonResponse.ErrorDetail).To(Equal("ClientID: cannot be blank."))
 					})
 				})
 
-				Context("given invalid client id", func() {
+				Context("given INVALID client ID", func() {
 					It("response with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -135,14 +135,14 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnauthorized))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
 						Expect(jsonResponse.ErrorDetail).To(Equal(constants.OAuthClientInvalid))
 					})
 				})
 			})
 
 			Context("client secret", func() {
-				Context("given no client secret", func() {
+				Context("given NO client secret", func() {
 					It("response with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -157,7 +157,7 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						Expect(response.Code).To(Equal(http.StatusUnprocessableEntity))
+						Expect(response.Code).To(Equal(http.StatusBadRequest))
 					})
 
 					It("response with the error detail", func() {
@@ -177,12 +177,12 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnprocessableEntity))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
 						Expect(jsonResponse.ErrorDetail).To(Equal("ClientSecret: cannot be blank."))
 					})
 				})
 
-				Context("given invalid client secret", func() {
+				Context("given INVALID client secret", func() {
 					It("response with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -217,14 +217,14 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnauthorized))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
 						Expect(jsonResponse.ErrorDetail).To(Equal(constants.OAuthClientInvalid))
 					})
 				})
 			})
 
 			Context("email", func() {
-				Context("given no email", func() {
+				Context("given NO email", func() {
 					It("responses with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -239,7 +239,7 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						Expect(response.Code).To(Equal(http.StatusUnprocessableEntity))
+						Expect(response.Code).To(Equal(http.StatusBadRequest))
 					})
 
 					It("responses with the error detail", func() {
@@ -259,12 +259,12 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnprocessableEntity))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
 						Expect(jsonResponse.ErrorDetail).To(Equal("Email: cannot be blank."))
 					})
 				})
 
-				Context("given an invalid email", func() {
+				Context("given an INVALID email", func() {
 					It("responses with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -279,7 +279,7 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						Expect(response.Code).To(Equal(http.StatusUnprocessableEntity))
+						Expect(response.Code).To(Equal(http.StatusBadRequest))
 					})
 
 					It("responses with the error detail", func() {
@@ -299,14 +299,14 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnprocessableEntity))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
 						Expect(jsonResponse.ErrorDetail).To(Equal("Email: must be a valid email address."))
 					})
 				})
 			})
 
 			Context("password", func() {
-				Context("given no password", func() {
+				Context("given NO password", func() {
 					It("responses with the error status", func() {
 						authClient := FabricateAuthClient()
 						formData := url.Values{
@@ -321,7 +321,7 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						Expect(response.Code).To(Equal(http.StatusUnprocessableEntity))
+						Expect(response.Code).To(Equal(http.StatusBadRequest))
 					})
 
 					It("responses with the error detail", func() {
@@ -341,7 +341,7 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnprocessableEntity))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
 						Expect(jsonResponse.ErrorDetail).To(Equal("Password: cannot be blank."))
 					})
 				})
@@ -361,7 +361,7 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						Expect(response.Code).To(Equal(http.StatusUnprocessableEntity))
+						Expect(response.Code).To(Equal(http.StatusBadRequest))
 					})
 
 					It("responses with the error detail", func() {
@@ -381,7 +381,7 @@ var _ = Describe("UsersController", func() {
 						jsonResponse := serializers.ErrorResponse{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(http.StatusUnprocessableEntity))
+						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
 						Expect(jsonResponse.ErrorDetail).To(Equal("Password: the length must be between 6 and 50."))
 					})
 				})
