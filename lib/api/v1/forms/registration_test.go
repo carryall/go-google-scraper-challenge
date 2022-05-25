@@ -183,6 +183,6 @@ var _ = Describe("API Registration Form", func() {
 	})
 
 	AfterEach(func() {
-		CleanupDatabase([]string{"users"})
+		CleanupDatabase([]string{"users", "oauth2_clients", "oauth2_tokens"})
 	})
 })

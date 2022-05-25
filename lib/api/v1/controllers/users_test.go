@@ -388,4 +388,8 @@ var _ = Describe("UsersController", func() {
 			})
 		})
 	})
+
+	AfterEach(func() {
+		CleanupDatabase([]string{"users", "oauth2_clients", "oauth2_tokens"})
+	})
 })
