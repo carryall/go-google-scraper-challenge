@@ -32,7 +32,7 @@ func (c *AuthenticationController) Login(ctx *gin.Context) {
 		return
 	}
 
-	err = authenticationForm.Save()
+	err = authenticationForm.ValidateUser()
 	if err != nil {
 		ResponseWithError(ctx, http.StatusUnauthorized, err)
 		return

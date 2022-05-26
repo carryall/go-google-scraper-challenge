@@ -2,7 +2,6 @@ package forms
 
 import (
 	"errors"
-
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/models"
 
@@ -31,25 +30,13 @@ func (f AuthenticationForm) Validate() (valid bool, err error) {
 		return false, err
 	}
 
-	userExisted := models.UserEmailAlreadyExisted(f.Email)
-	if !userExisted {
-		return false, errors.New(constants.UserDoesNotExist)
-	}
-
 	return true, nil
 }
 
-// Save validates authentication form,
-// returns errors if validation failed or user with with the given email does not exist.
-func (f AuthenticationForm) Save() error {
-	_, err := f.Validate()
+func (f AuthenticationForm) ValidateUser() error {
+	_, err := models.GetUserByEmail(f.Email)
 	if err != nil {
-		return err
-	}
-
-	_, err = models.GetUserByEmail(f.Email)
-	if err != nil {
-		return err
+		return errors.New(constants.UserDoesNotExist)
 	}
 
 	return nil
