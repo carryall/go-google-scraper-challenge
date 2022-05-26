@@ -250,6 +250,33 @@ var _ = Describe("AuthenticationController", func() {
 				})
 			})
 
+			Context("given an email that does NOT belongs to any user", func() {
+				It("responses with an unauthorized error", func() {
+					authClient := FabricateAuthClient()
+					password := faker.Password()
+					FabricateUser(faker.Email(), password)
+					formData := url.Values{
+						"username":      {faker.Email()},
+						"password":      {password},
+						"client_id":     {authClient.ClientID},
+						"client_secret": {authClient.ClientSecret},
+						"grant_type":    {"password"},
+					}
+
+					ctx, response := MakeFormRequest("POST", "/login", formData)
+
+					authenticationController := controllers.AuthenticationController{}
+					authenticationController.Login(ctx)
+
+					responseBody := serializers.ErrorResponse{}
+					GetJSONResponseBody(response.Result(), &responseBody)
+
+					Expect(response.Code).To(Equal(http.StatusUnauthorized))
+					Expect(responseBody.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
+					Expect(responseBody.ErrorDescription).To(Equal(constants.UserDoesNotExist))
+				})
+			})
+
 			Context("given a wrong password", func() {
 				It("responses with an unauthorized error", func() {
 					authClient := FabricateAuthClient()

@@ -11,7 +11,7 @@ import (
 )
 
 var _ = Describe("API Authentication Form", func() {
-	Describe("#Save", func() {
+	Describe("Validate", func() {
 		Context("given authentication form with valid params", func() {
 			It("returns NO error", func() {
 				authClient := FabricateAuthClient()
@@ -25,13 +25,14 @@ var _ = Describe("API Authentication Form", func() {
 					GrantType:    "password",
 				}
 
-				err := form.Save()
+				valid, err := form.Validate()
 
+				Expect(valid).To(BeTrue())
 				Expect(err).To(BeNil())
 			})
 		})
 
-		Context("given registration form with INVALID params", func() {
+		Context("given authentication form with INVALID params", func() {
 			Context("authentication client", func() {
 				Context("given NO client id", func() {
 					It("returns an INVALID client ID error", func() {
@@ -46,8 +47,9 @@ var _ = Describe("API Authentication Form", func() {
 							GrantType:    "password",
 						}
 
-						err := form.Save()
+						valid, err := form.Validate()
 
+						Expect(valid).To(BeFalse())
 						Expect(err.Error()).To(Equal("ClientID: cannot be blank."))
 					})
 				})
@@ -65,8 +67,9 @@ var _ = Describe("API Authentication Form", func() {
 							GrantType:    "password",
 						}
 
-						err := form.Save()
+						valid, err := form.Validate()
 
+						Expect(valid).To(BeFalse())
 						Expect(err.Error()).To(Equal("ClientSecret: cannot be blank."))
 					})
 				})
@@ -83,31 +86,15 @@ var _ = Describe("API Authentication Form", func() {
 							Password:     password,
 						}
 
-						err := form.Save()
+						valid, err := form.Validate()
 
+						Expect(valid).To(BeFalse())
 						Expect(err.Error()).To(Equal("GrantType: cannot be blank."))
 					})
 				})
 			})
 
 			Context("email", func() {
-				Context("given email that does NOT belongs to any user", func() {
-					It("returns an record not found error", func() {
-						authClient := FabricateAuthClient()
-						form := forms.AuthenticationForm{
-							ClientID:     authClient.ClientID,
-							ClientSecret: authClient.ClientSecret,
-							Email:        faker.Email(),
-							Password:     faker.Password(),
-							GrantType:    "password",
-						}
-
-						err := form.Save()
-
-						Expect(err.Error()).To(Equal(constants.UserDoesNotExist))
-					})
-				})
-
 				Context("given NO email", func() {
 					It("returns an INVALID email error", func() {
 						authClient := FabricateAuthClient()
@@ -121,8 +108,9 @@ var _ = Describe("API Authentication Form", func() {
 							GrantType:    "password",
 						}
 
-						err := form.Save()
+						valid, err := form.Validate()
 
+						Expect(valid).To(BeFalse())
 						Expect(err.Error()).To(Equal("Email: cannot be blank."))
 					})
 				})
@@ -140,8 +128,9 @@ var _ = Describe("API Authentication Form", func() {
 							GrantType:    "password",
 						}
 
-						err := form.Save()
+						valid, err := form.Validate()
 
+						Expect(valid).To(BeFalse())
 						Expect(err.Error()).To(Equal("Email: must be a valid email address."))
 					})
 				})
@@ -160,11 +149,49 @@ var _ = Describe("API Authentication Form", func() {
 							GrantType:    "password",
 						}
 
-						err := form.Save()
+						valid, err := form.Validate()
 
+						Expect(valid).To(BeFalse())
 						Expect(err.Error()).To(Equal("Password: cannot be blank."))
 					})
 				})
+			})
+		})
+	})
+
+	Describe("#ValidateUser", func() {
+		Context("given email that belongs to a user", func() {
+			It("returns a user does not exist error", func() {
+				authClient := FabricateAuthClient()
+				user := FabricateUser(faker.Email(), faker.Password())
+				form := forms.AuthenticationForm{
+					ClientID:     authClient.ClientID,
+					ClientSecret: authClient.ClientSecret,
+					Email:        user.Email,
+					Password:     faker.Password(),
+					GrantType:    "password",
+				}
+
+				err := form.ValidateUser()
+
+				Expect(err).To(BeNil())
+			})
+		})
+
+		Context("given email that does NOT belongs to any user", func() {
+			It("returns a user does not exist error", func() {
+				authClient := FabricateAuthClient()
+				form := forms.AuthenticationForm{
+					ClientID:     authClient.ClientID,
+					ClientSecret: authClient.ClientSecret,
+					Email:        faker.Email(),
+					Password:     faker.Password(),
+					GrantType:    "password",
+				}
+
+				err := form.ValidateUser()
+
+				Expect(err.Error()).To(Equal(constants.UserDoesNotExist))
 			})
 		})
 	})
