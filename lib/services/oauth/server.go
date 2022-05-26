@@ -10,10 +10,10 @@ import (
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4"
 	pg "github.com/vgarvardt/go-oauth2-pg"
 	"github.com/vgarvardt/go-pg-adapter/pgx4adapter"
+	"gopkg.in/oauth2.v3"
 	"gopkg.in/oauth2.v3/errors"
 	"gopkg.in/oauth2.v3/manage"
 	"gopkg.in/oauth2.v3/server"
@@ -21,6 +21,12 @@ import (
 
 var oauthServer *server.Server
 var clientStore *pg.ClientStore
+
+type TokenRequest struct {
+	ClientID     string
+	ClientSecret string
+	UserID       string
+}
 
 // SetUpOauth setup OAuth server
 func SetUpOauth() {
@@ -54,15 +60,22 @@ func SetUpOauth() {
 	authServer.SetInternalErrorHandler(internalErrorHandler)
 	authServer.SetResponseErrorHandler(responseErrorHandler)
 	authServer.SetPasswordAuthorizationHandler(passwordAuthorizationHandler)
+	authServer.SetAllowedGrantType(oauth2.PasswordCredentials, oauth2.Refreshing)
 	manager.SetRefreshTokenCfg(manage.DefaultRefreshTokenCfg)
 
 	oauthServer = authServer
 	clientStore = store
 }
 
-// GenerateToken handle token request, will return error if request from given context is invalid
-func GenerateToken(c *gin.Context) (err error) {
-	return oauthServer.HandleTokenRequest(c.Writer, c.Request)
+// GenerateToken handle token request, will return error if fail
+func GenerateToken(request *TokenRequest) (tokenInfo oauth2.TokenInfo, err error) {
+	tokenRequest := &oauth2.TokenGenerateRequest{
+		ClientID:     request.ClientID,
+		ClientSecret: request.ClientSecret,
+		UserID:       request.UserID,
+	}
+
+	return oauthServer.GetAccessToken(oauth2.PasswordCredentials, tokenRequest)
 }
 
 // GetClientStore returns OAuth client store
@@ -75,6 +88,7 @@ func internalErrorHandler(err error) (response *errors.Response) {
 
 	response = errors.NewResponse(errors.ErrInvalidClient, errors.StatusCodes[errors.ErrInvalidClient])
 	response.Description = errors.Descriptions[errors.ErrInvalidClient]
+
 	return response
 }
 

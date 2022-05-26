@@ -80,12 +80,12 @@ var _ = Describe("User", func() {
 		})
 	})
 
-	Describe("#UserEmailAlreadyExist", func() {
+	Describe("#UserEmailAlreadyExisted", func() {
 		Context("given user email exist in the system", func() {
 			It("returns true", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 
-				userExist := models.UserEmailAlreadyExist(user.Email)
+				userExist := models.UserEmailAlreadyExisted(user.Email)
 
 				Expect(userExist).To(BeTrue())
 			})
@@ -93,7 +93,7 @@ var _ = Describe("User", func() {
 
 		Context("given user email does NOT exist in the system", func() {
 			It("returns false", func() {
-				userExist := models.UserEmailAlreadyExist(faker.Email())
+				userExist := models.UserEmailAlreadyExisted(faker.Email())
 
 				Expect(userExist).To(BeFalse())
 			})

@@ -12,7 +12,9 @@ func ComebineRoutes(engine *gin.Engine) {
 
 	healthController := controllers.HealthController{}
 	oauthClientsController := oauth_controllers.OAuthClientsController{}
+	registerController := controllers.UsersController{}
 
 	v1.GET("/health", healthController.HealthStatus)
 	v1.POST("/oauth/clients", oauthClientsController.Create)
+	v1.POST("/register", registerController.Register)
 }
