@@ -1,17 +1,15 @@
 name: Deploy
 
-on: push
-
-# on:
-#   workflow_run:
-#     workflows:
-#       - Test
-#     branches:
-#       - main
-#       - develop
-#     types:
-#       - completed
-#   workflow_dispatch:
+on:
+  workflow_run:
+    workflows:
+      - Test
+    branches:
+      - main
+      - develop
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -47,11 +45,6 @@ jobs:
           else
             echo "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" >> $GITHUB_ENV
           fi
-
-      - name: Debug the variables
-        run: |
-          echo $HEROKU_APP_NAME
-          echo $DATABASE_URL
 
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.12
