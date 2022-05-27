@@ -11,6 +11,9 @@ RUN go mod download
 # Copy codebase
 COPY . .
 
+# Copy ENV file
+ADD .env.example ./.env
+
 # Build go application
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/api
 
