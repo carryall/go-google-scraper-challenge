@@ -5,8 +5,9 @@ on:
     workflows:
       - Test
     branches:
-      - main
-      - develop
+      - bug/88-broken-deployment-pipeline
+      # - main
+      # - develop
     types:
       - completed
   workflow_dispatch:
@@ -45,6 +46,9 @@ jobs:
           else
             echo "DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }}" >> $GITHUB_ENV
           fi
+
+      - name: Debug the variables
+        run: echo "App Name = ${{ $HEROKU_APP_NAME }} DB URL ${{ $DATABASE_URL }}"
 
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.12
