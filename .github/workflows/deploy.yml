@@ -32,9 +32,9 @@ jobs:
         run: |
           if [[ $BRANCH_TAG = "latest" ]]
           then
-            echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME_PRODUCTION }}" >> $GITHUB_ENV
+            echo "HEROKU_APP_NAME=${{ secrets.HEROKU_PRODUCTION_APP }}" >> $GITHUB_ENV
           else
-            echo "HEROKU_APP_NAME=${{ secrets.HEROKU_APP_NAME_STAGING }}" >> $GITHUB_ENV
+            echo "HEROKU_APP_NAME=${{ secrets.HEROKU_STAGING_APP }}" >> $GITHUB_ENV
           fi
 
       - name: Set DATABASE_URL
