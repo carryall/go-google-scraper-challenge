@@ -6,8 +6,6 @@ on:
       - Test
     branches:
       - bug/88-broken-deployment-pipeline
-      # - main
-      # - develop
     types:
       - completed
   workflow_dispatch:
