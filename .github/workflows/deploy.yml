@@ -38,7 +38,9 @@ jobs:
           fi
 
       - name: Debug the variables
-        run: echo "App Name = ${{ $HEROKU_APP_NAME }} DB URL ${{ $DATABASE_URL }}"
+        run: |
+          echo $HEROKU_APP_NAME
+          echo $DATABASE_URL
 
       - name: Deploy
         uses: akhileshns/heroku-deploy@v3.12.12
