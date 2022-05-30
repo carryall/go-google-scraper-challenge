@@ -7,6 +7,7 @@ import (
 
 	"go-google-scraper-challenge/constants"
 	. "go-google-scraper-challenge/helpers/api"
+	helpers "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/api/v1/forms"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/lib/models"
@@ -60,5 +61,5 @@ func (c *UsersController) Register(ctx *gin.Context) {
 		RefreshToken: tokenInfo.GetRefresh(),
 	}
 
-	ctx.JSON(http.StatusOK, response)
+	helpers.RenderJSON(ctx, http.StatusOK, response)
 }

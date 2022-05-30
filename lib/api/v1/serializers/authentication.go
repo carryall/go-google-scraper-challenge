@@ -1,6 +1,7 @@
 package serializers
 
 type AuthenticationResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+	ID           string `jsonapi:"primary,authentication"`
+	AccessToken  string `jsonapi:"attr,access_token"`
+	RefreshToken string `jsonapi:"attr,refresh_token"`
 }
