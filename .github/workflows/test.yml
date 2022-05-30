@@ -1,34 +1,52 @@
 name: Test
 
-on:
-  push:
+on: push
 
 jobs:
-  test:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.4
-      
-      - name: Setup Go environment
-        uses: actions/setup-go@v2
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.1
         with:
-          go-version: 1.15.x
+          access_token: ${{ github.token }}
+
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
 
       - name: Go Lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.29
+          version: v1.45
 
-      - name: Copy ENV file
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
+
+      - name: Create .env file
         run: cp ".env.test" ".env"
 
-      - name: Install dependency
-        run: npm install
+      - name: Install dependencies
+        run: make install-dependencies
 
-      - name: Prepare assets
-        run: make assets
-
-      - name: Run test
+      - name: Run tests
         run: make test

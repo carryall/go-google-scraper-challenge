@@ -3,6 +3,9 @@ package helpers
 import (
 	"regexp"
 	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
@@ -29,5 +32,7 @@ func ToSentenceCase(str string) string {
 	sentence = matchKebab.ReplaceAllString(sentence, "${1} ${2}")
 	sentence = strings.ToLower(sentence)
 	words := strings.Split(sentence, " ")
-	return strings.Replace(sentence, words[0], strings.Title(words[0]), 1)
+
+	caser := cases.Title(language.English)
+	return strings.Replace(sentence, words[0], caser.String(words[0]), 1)
 }

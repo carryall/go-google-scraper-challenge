@@ -1,65 +1,54 @@
-# Include variables from ENV file
-ENV =
 include .env
 ifdef ENV
 include .env.$(ENV)
 endif
-export
 
-# Variables
-ASSETS_DIR=assets
-SCSS_DIR=$(ASSETS_DIR)/stylesheets
-JS_DIR=$(ASSETS_DIR)/javascripts
-DIST_DIR=static
-CSS_DIST=$(DIST_DIR)/css
-JS_DIST=$(DIST_DIR)/js
+.PHONY: env-setup env-teardown db/migrate db/rollback migration/create migration/status dev install-dependencies test wait-for-postgres
 
-.PHONY: build-dependencies test-dependency assets assets/css assets/js assets/icon-sprite dev db/setup db/migrate db/rollback lint test test/run
-
-build-dependencies:
-	go get github.com/beego/bee/v2
-	go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.35.2
-	yarn
-
-assets:
-	make assets/css
-	make assets/js
-	make assets/icon-sprite
-
-assets/css:
-	yarn build-scss
-	npx tailwindcss build $(CSS_DIST)/application.css -o $(CSS_DIST)/application.css
-
-assets/js:
-	yarn minify-js
-
-assets/icon-sprite:
-	yarn generate-svg-sprite
-
-dev:
-	make db/migrate
-	bee run
-
-db/setup:
+env-setup:
 	docker-compose -f docker-compose.dev.yml up -d
 
+env-teardown:
+	docker-compose -f docker-compose.dev.yml down
+
 db/migrate:
-	bee migrate -driver=postgres -conn="$(DATABASE_URL)"
-	pg_dump $(DATABASE_URL) --schema-only -f ./database/schema.sql
+	make wait-for-postgres
+	goose -dir database/migrations -table "migration_versions" postgres "$(DATABASE_URL)" up
 
 db/rollback:
-	bee migrate rollback -driver=postgres -conn="$(DATABASE_URL)"
+	make wait-for-postgres
+	goose -dir database/migrations -table "migration_versions" postgres "$(DATABASE_URL)" down
 
-db/tear-down:
-	docker-compose -f docker-compose.dev.yml down
+migration/create:
+ifndef MIGRATION_NAME
+	$(error MIGRATION_NAME is required)
+endif
+	goose -dir database/migrations create $(MIGRATION_NAME) sql
+
+migration/status:
+	goose -dir database/migrations -table "migration_versions" postgres "$(DATABASE_URL)" status
+
+dev:
+	make env-setup
+	make db/migrate
+	forego start -f Procfile.dev
+
+install-dependencies:
+	go mod tidy
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.45
+	go install github.com/cosmtrek/air@v1.29
+	go install github.com/pressly/goose/v3/cmd/goose@v3.5.3
+	go install github.com/ddollar/forego@v0.16.1
+	npm install
 
 lint:
 	golangci-lint run
 
 test:
-	make test/run ENV=test
-
-test/run:
 	docker-compose -f docker-compose.test.yml up -d
-	APP_RUN_MODE=test go test -v -p 1 ./...
+	ENV=test make db/migrate
+	go test -v -p 1 -count=1 ./...
 	docker-compose -f docker-compose.test.yml down
+
+wait-for-postgres:
+	$(shell DATABASE_URL=$(DATABASE_URL) ./bin/wait-for-postgres.sh)
