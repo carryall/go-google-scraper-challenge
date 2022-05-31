@@ -3,6 +3,7 @@ package controllers
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"net/http"
 
 	"go-google-scraper-challenge/constants"
@@ -56,6 +57,7 @@ func (c *UsersController) Register(ctx *gin.Context) {
 	}
 
 	response := &serializers.RegistrationResponse{
+		ID:           int64(rand.Uint64()),
 		UserID:       userID,
 		AccessToken:  tokenInfo.GetAccess(),
 		RefreshToken: tokenInfo.GetRefresh(),

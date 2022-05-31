@@ -1,7 +1,7 @@
 package serializers
 
 type AuthenticationResponse struct {
-	ID           string `jsonapi:"primary,authentications"`
+	ID           int64  `jsonapi:"primary,authentications"`
 	AccessToken  string `jsonapi:"attr,access_token"`
 	RefreshToken string `jsonapi:"attr,refresh_token"`
 	ExpiresIn    int64  `jsonapi:"attr,expires_in"`
@@ -10,7 +10,7 @@ type AuthenticationResponse struct {
 
 type AuthenticationJSONResponse struct {
 	Data struct {
-		ID         string `json:"id"`
+		ID         int64 `json:"id"`
 		Attributes struct {
 			UserID       int64  `json:"user_id"`
 			AccessToken  string `json:"access_token"`

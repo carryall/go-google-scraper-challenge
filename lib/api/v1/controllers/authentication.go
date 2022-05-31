@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"math/rand"
 	"net/http"
 
 	"go-google-scraper-challenge/constants"
@@ -47,6 +48,7 @@ func (c *AuthenticationController) Login(ctx *gin.Context) {
 	}
 
 	response := &serializers.AuthenticationResponse{
+		ID:           int64(rand.Uint64()),
 		AccessToken:  tokenData["access_token"].(string),
 		RefreshToken: tokenData["refresh_token"].(string),
 		ExpiresIn:    tokenData["expires_in"].(int64),

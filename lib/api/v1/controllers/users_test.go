@@ -53,6 +53,7 @@ var _ = Describe("UsersController", func() {
 				jsonResponse := serializers.RegistrationJSONResponse{}
 				test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
+				Expect(jsonResponse.Data.ID).To(BeNumerically(">", 0))
 				Expect(jsonResponse.Data.Attributes.UserID).To(BeNumerically(">", 0))
 				Expect(jsonResponse.Data.Attributes.AccessToken).NotTo(Equal(""))
 				Expect(jsonResponse.Data.Attributes.RefreshToken).NotTo(Equal(""))
