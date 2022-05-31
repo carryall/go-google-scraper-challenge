@@ -35,6 +35,7 @@ var _ = Describe("OAuthClientsController", func() {
 			jsonResponse := serializers.OAuthClientJSONResponse{}
 			test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
+			Expect(jsonResponse.Data.ID).NotTo(BeEmpty())
 			Expect(jsonResponse.Data.Attributes.ClientID).NotTo(BeEmpty())
 			Expect(jsonResponse.Data.Attributes.ClientSecret).NotTo(BeEmpty())
 		})

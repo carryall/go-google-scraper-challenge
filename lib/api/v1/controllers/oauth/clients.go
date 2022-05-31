@@ -24,6 +24,7 @@ func (c *OAuthClientsController) Create(ctx *gin.Context) {
 	}
 
 	response := &serializers.OAuthClientResponse{
+		ID:           oauthClient.ClientID,
 		ClientID:     oauthClient.ClientID,
 		ClientSecret: oauthClient.ClientSecret,
 	}
