@@ -26,19 +26,19 @@ func (c *UsersController) Register(ctx *gin.Context) {
 
 	err := ctx.ShouldBindWith(registrationForm, binding.Form)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err)
+		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_MALFORM_REQUEST)
 		return
 	}
 
 	_, err = registrationForm.Validate()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err)
+		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_INVALID_PARAM)
 		return
 	}
 
 	userID, err := registrationForm.Save()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnprocessableEntity, err)
+		ResponseWithError(ctx, http.StatusUnprocessableEntity, err, constants.ERROR_CODE_INVALID_PARAM)
 		return
 	}
 
@@ -51,11 +51,11 @@ func (c *UsersController) Register(ctx *gin.Context) {
 	tokenInfo, err := oauth.GenerateToken(tokenRequest)
 	if err != nil {
 		_ = models.DeleteUser(userID)
-		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid))
+		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
 		return
 	}
 
-	response := serializers.RegistrationResponse{
+	response := &serializers.RegistrationResponse{
 		UserID:       userID,
 		AccessToken:  tokenInfo.GetAccess(),
 		RefreshToken: tokenInfo.GetRefresh(),

@@ -11,6 +11,7 @@ import (
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
+	"github.com/google/jsonapi"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -49,12 +50,12 @@ var _ = Describe("UsersController", func() {
 				usersController := controllers.UsersController{}
 				usersController.Register(ctx)
 
-				jsonResponse := serializers.RegistrationResponse{}
+				jsonResponse := serializers.RegistrationJSONResponse{}
 				test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-				Expect(jsonResponse.UserID).To(BeNumerically(">", 0))
-				Expect(jsonResponse.AccessToken).NotTo(Equal(""))
-				Expect(jsonResponse.RefreshToken).NotTo(Equal(""))
+				Expect(jsonResponse.Data.Attributes.UserID).To(BeNumerically(">", 0))
+				Expect(jsonResponse.Data.Attributes.AccessToken).NotTo(Equal(""))
+				Expect(jsonResponse.Data.Attributes.RefreshToken).NotTo(Equal(""))
 			})
 		})
 
@@ -92,11 +93,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDescription).To(Equal("ClientID: cannot be blank."))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal("ClientID: cannot be blank."))
 					})
 				})
 
@@ -132,11 +134,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
-						Expect(jsonResponse.ErrorDescription).To(Equal(constants.OAuthClientInvalid))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal(constants.OAuthClientInvalid))
 					})
 				})
 			})
@@ -174,11 +177,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDescription).To(Equal("ClientSecret: cannot be blank."))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal("ClientSecret: cannot be blank."))
 					})
 				})
 
@@ -214,11 +218,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusUnauthorized]))
-						Expect(jsonResponse.ErrorDescription).To(Equal(constants.OAuthClientInvalid))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal(constants.OAuthClientInvalid))
 					})
 				})
 			})
@@ -256,11 +261,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDescription).To(Equal("Email: cannot be blank."))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal("Email: cannot be blank."))
 					})
 				})
 
@@ -296,11 +302,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDescription).To(Equal("Email: must be a valid email address."))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal("Email: must be a valid email address."))
 					})
 				})
 			})
@@ -338,11 +345,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDescription).To(Equal("Password: cannot be blank."))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal("Password: cannot be blank."))
 					})
 				})
 
@@ -378,11 +386,12 @@ var _ = Describe("UsersController", func() {
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
 
-						jsonResponse := serializers.ErrorResponse{}
+						jsonResponse := &jsonapi.ErrorsPayload{}
 						test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-						Expect(jsonResponse.Error).To(Equal(constants.Errors[http.StatusBadRequest]))
-						Expect(jsonResponse.ErrorDescription).To(Equal("Password: the length must be between 6 and 50."))
+						Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
+						Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+						Expect(jsonResponse.Errors[0].Detail).To(Equal("Password: the length must be between 6 and 50."))
 					})
 				})
 			})

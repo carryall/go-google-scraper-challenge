@@ -18,7 +18,7 @@ func (c *OAuthClientsController) Create(ctx *gin.Context) {
 	oauthClient, err := oauth.GenerateClient()
 
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnprocessableEntity, err)
+		ResponseWithError(ctx, http.StatusUnprocessableEntity, err, "")
 	}
 
 	ctx.JSON(http.StatusOK, oauthClient)
