@@ -9,7 +9,7 @@ type RegistrationResponse struct {
 
 type RegistrationJSONResponse struct {
 	Data struct {
-		ID         int64 `json:"id"`
+		ID         string `json:"id"`
 		Attributes struct {
 			UserID       int64  `json:"user_id"`
 			AccessToken  string `json:"access_token"`
