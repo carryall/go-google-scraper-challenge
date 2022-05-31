@@ -22,25 +22,25 @@ func (c *AuthenticationController) Login(ctx *gin.Context) {
 
 	err := ctx.ShouldBindWith(authenticationForm, binding.Form)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err)
+		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_MALFORM_REQUEST)
 		return
 	}
 
 	_, err = authenticationForm.Validate()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err)
+		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_INVALID_PARAM)
 		return
 	}
 
 	err = authenticationForm.ValidateUser()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, err)
+		ResponseWithError(ctx, http.StatusUnauthorized, err, constants.ERROR_CODE_INVALID_CREDENTIALS)
 		return
 	}
 
 	err = oauth.HandleTokenRequest(ctx)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid))
+		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
 		return
 	}
 }

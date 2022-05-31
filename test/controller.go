@@ -1,13 +1,14 @@
 package test
 
 import (
+	"encoding/json"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/jsonapi"
 	"github.com/onsi/ginkgo"
 )
 
@@ -51,8 +52,20 @@ func HTTPRequest(method string, url string, body io.Reader) *http.Request {
 
 // GetJSONResponseBody get response body from response, will fail the test if there is any error
 func GetJSONResponseBody(response *http.Response, v interface{}) {
-	err := jsonapi.UnmarshalPayload(response.Body, v)
+	body := responseBody(response)
+
+	err := json.Unmarshal([]byte(body), v)
+
 	if err != nil {
 		ginkgo.Fail("Failed to unmarshal json response " + err.Error())
 	}
+}
+
+func responseBody(response *http.Response) string {
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		ginkgo.Fail("Failed to read response body")
+	}
+
+	return string(body)
 }
