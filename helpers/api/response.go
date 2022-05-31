@@ -24,7 +24,7 @@ func RenderJSONError(ctx *gin.Context, status_code int, err error, title string,
 	ctx.AbortWithStatusJSON(status_code, payload)
 }
 
-func payloadFromError(err error, title string, code string) *jsonapi.ErrorsPayload {
+func payloadFromError(err error, title string, code string) (errorPayload *jsonapi.ErrorsPayload) {
 	if len(title) == 0 {
 		title = err.Error()
 	}
@@ -35,7 +35,8 @@ func payloadFromError(err error, title string, code string) *jsonapi.ErrorsPaylo
 		Code:   code,
 	}}
 
-	return &jsonapi.ErrorsPayload{
+	errorPayload = &jsonapi.ErrorsPayload{
 		Errors: errorObjs,
 	}
+	return
 }
