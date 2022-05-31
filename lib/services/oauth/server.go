@@ -68,8 +68,19 @@ func SetUpOauth() {
 	clientStore = store
 }
 
-func HandleTokenRequest(ctx *gin.Context) (err error) {
-	return oauthServer.HandleTokenRequest(ctx.Writer, ctx.Request)
+func HandleTokenRequest(ctx *gin.Context) (token_data map[string]interface{}, err error) {
+	gt, tgr, err := oauthServer.ValidationTokenRequest(ctx.Request)
+	if err != nil {
+		return
+	}
+
+	ti, err := oauthServer.GetAccessToken(gt, tgr)
+	if err != nil {
+		return
+	}
+
+	token_data = oauthServer.GetTokenData(ti)
+	return
 }
 
 // GenerateToken handle token request, will return error if fail
