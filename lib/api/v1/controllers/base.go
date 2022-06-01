@@ -1,11 +1,9 @@
 package controllers
 
 import (
-	"go-google-scraper-challenge/constants"
 	. "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/services/oauth"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -18,7 +16,7 @@ type BaseController struct {
 func (b *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) {
 	currentUser, err := b.GetCurrentUser(ctx)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, err, constants.TokenInvalid)
+		RenderOAuthJSONError(ctx, err)
 	}
 
 	b.CurrentUser = currentUser

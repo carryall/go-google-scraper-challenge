@@ -3,6 +3,7 @@ package oauth
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"go-google-scraper-challenge/database"
@@ -22,6 +23,7 @@ import (
 
 var oauthServer *server.Server
 var clientStore *pg.ClientStore
+var tokenStore *pg.TokenStore
 
 type TokenRequest struct {
 	ClientID     string
@@ -41,7 +43,7 @@ func SetUpOauth() {
 
 	// use PostgreSQL token store with pgx.Connection adapter
 	adapter := pgx4adapter.NewConn(pgxConn)
-	tokenStore, err := pg.NewTokenStore(adapter, pg.WithTokenStoreGCInterval(time.Minute))
+	tokenStore, err = pg.NewTokenStore(adapter, pg.WithTokenStoreGCInterval(time.Minute))
 	if err != nil {
 		log.Error("Failed to create the token store: ", err)
 	}
@@ -102,6 +104,11 @@ func GenerateToken(request *TokenRequest) (tokenInfo oauth2.TokenInfo, err error
 // GetClientStore returns OAuth client store
 func GetClientStore() *pg.ClientStore {
 	return clientStore
+}
+
+// GetTokenStore returns OAuth client store
+func GetTokenStore() *pg.TokenStore {
+	return tokenStore
 }
 
 func internalErrorHandler(err error) (response *errors.Response) {
