@@ -2,8 +2,9 @@ package test
 
 import (
 	"fmt"
-	"go-google-scraper-challenge/lib/services/oauth"
 	"time"
+
+	"go-google-scraper-challenge/lib/services/oauth"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/onsi/ginkgo"
