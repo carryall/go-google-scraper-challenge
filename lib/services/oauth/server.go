@@ -70,24 +70,24 @@ func SetUpOauth() {
 	clientStore = store
 }
 
-func ValidateToken(request *http.Request) (tokenInfo oauth2.TokenInfo, err error) {
-	tokenInfo, err = oauthServer.ValidationBearerToken(request)
-	return
+func ValidateToken(request *http.Request) (oauth2.TokenInfo, error) {
+	return oauthServer.ValidationBearerToken(request)
 }
 
-func HandleTokenRequest(ctx *gin.Context) (token_data map[string]interface{}, err error) {
+func HandleTokenRequest(ctx *gin.Context) (tokenData map[string]interface{}, err error) {
 	gt, tgr, err := oauthServer.ValidationTokenRequest(ctx.Request)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	ti, err := oauthServer.GetAccessToken(gt, tgr)
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	token_data = oauthServer.GetTokenData(ti)
-	return
+	tokenData = oauthServer.GetTokenData(ti)
+
+	return tokenData, nil
 }
 
 // GenerateToken handle token request, will return error if fail
