@@ -38,5 +38,6 @@ func payloadFromError(err error, title string, code string) (errorPayload *jsona
 	errorPayload = &jsonapi.ErrorsPayload{
 		Errors: errorObjs,
 	}
+
 	return
 }
