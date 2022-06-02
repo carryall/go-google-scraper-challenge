@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	"errors"
 	"math/rand"
 	"net/http"
 
-	"go-google-scraper-challenge/constants"
+	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers"
 	. "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/api/v1/forms"
@@ -25,31 +24,31 @@ func (c *AuthenticationController) Login(ctx *gin.Context) {
 
 	err := ctx.ShouldBindWith(authenticationForm, binding.Form)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_MALFORM_REQUEST)
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
 		return
 	}
 
 	_, err = authenticationForm.Validate()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_INVALID_PARAM)
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
 		return
 	}
 
 	err = authenticationForm.ValidateUser()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, err, constants.ERROR_CODE_INVALID_CREDENTIALS)
+		RenderJSONError(ctx, errors.ErrInvalidCredentials, err.Error())
 		return
 	}
 
 	tokenData, err := oauth.HandleTokenRequest(ctx)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
+		RenderOAuthJSONError(ctx, err)
 		return
 	}
 
 	tokenInfo, err := GetTokenInfo(tokenData)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
+		RenderJSONError(ctx, errors.ErrInvalidCredentials, err.Error())
 		return
 	}
 
