@@ -26,15 +26,18 @@ func (b *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) {
 func (b *BaseController) GetCurrentUser(ctx *gin.Context) (user *models.User, err error) {
 	tokenInfo, err := oauth.ValidateToken(ctx.Request)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	userID, err := strconv.Atoi(tokenInfo.GetUserID())
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	user, err = models.GetUserByID(int64(userID))
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return user, nil
 }

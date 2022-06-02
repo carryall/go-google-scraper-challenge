@@ -87,5 +87,5 @@ func buildFormRequest(method string, url string, formData url.Values) (request *
 		request.Form = formData
 	}
 
-	return
+	return request
 }
