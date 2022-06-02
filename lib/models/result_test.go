@@ -92,6 +92,126 @@ var _ = Describe("Result", func() {
 		})
 	})
 
+	Describe("#CreateResults", func() {
+		Context("given results with valid params", func() {
+			It("returns the result IDs", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				results := []models.Result{
+					{
+						User:    user,
+						Keyword: "valid keyword",
+					}, {
+						User:    user,
+						Keyword: "valid keyword",
+					},
+				}
+
+				resultIDs, err := models.CreateResults(&results)
+				if err != nil {
+					Fail("Failed to add result: " + err.Error())
+				}
+
+				Expect(resultIDs).To(HaveLen(2))
+				for i := range resultIDs {
+					Expect(resultIDs[i]).To(BeNumerically(">", 0))
+				}
+			})
+
+			It("sets default result status to pending", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				results := &[]models.Result{
+					{
+						User:    user,
+						Keyword: "valid keyword",
+					}, {
+						User:    user,
+						Keyword: "valid keyword",
+					},
+				}
+				resultIDs, err := models.CreateResults(results)
+				if err != nil {
+					Fail("Failed to add result: " + err.Error())
+				}
+
+				results, err = models.GetResultsByIDs(resultIDs)
+				if err != nil {
+					Fail("Failed to add result: " + err.Error())
+				}
+
+				resultList := *results
+				for i := range resultList {
+					Expect(resultList[i].Status).To(Equal(models.ResultStatusPending))
+				}
+			})
+
+			It("returns NO error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				results := []models.Result{
+					{
+						User:    user,
+						Keyword: "valid keyword",
+					}, {
+						User:    user,
+						Keyword: "valid keyword",
+					},
+				}
+				_, err := models.CreateResults(&results)
+
+				Expect(err).To(BeNil())
+			})
+
+			Context("given results with status", func() {
+				It("sets status to given status", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					results := &[]models.Result{
+						{
+							User:    user,
+							Keyword: "valid keyword",
+							Status:  models.ResultStatusProcessing,
+						}, {
+							User:    user,
+							Keyword: "valid keyword",
+							Status:  models.ResultStatusProcessing,
+						},
+					}
+					resultIDs, err := models.CreateResults(results)
+					if err != nil {
+						Fail("Failed to add result: " + err.Error())
+					}
+
+					results, err = models.GetResultsByIDs(resultIDs)
+					if err != nil {
+						Fail("Failed to add result: " + err.Error())
+					}
+
+					resultList := *results
+					for i := range resultList {
+						Expect(resultList[i].Status).To(Equal(models.ResultStatusProcessing))
+					}
+				})
+			})
+		})
+
+		Context("given one result with INVALID params", func() {
+			Context("given NO user and keyword", func() {
+				It("returns an error", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					results := &[]models.Result{
+						{}, {
+							User:    user,
+							Keyword: "valid keyword",
+							Status:  models.ResultStatusProcessing,
+						},
+					}
+					resultIDs, err := models.CreateResults(results)
+
+					Expect(err.Error()).To(HavePrefix("ERROR: insert or update on table \"results\" violates foreign key constraint \"results_user_id_fkey\""))
+					Expect(resultIDs).To(Equal([]int64{}))
+				})
+			})
+		})
+	})
+
 	Describe("#GetResultByID", func() {
 		Context("given result id exist in the system", func() {
 			It("returns result with given id", func() {

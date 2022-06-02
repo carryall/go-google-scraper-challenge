@@ -62,6 +62,18 @@ func GetResultByID(id int64) (*Result, error) {
 	return result, nil
 }
 
+// GetResultsByIDs retrieve multiple Results by IDs. Returns error if ID doesn't exist
+func GetResultsByIDs(id []int64) (*[]Result, error) {
+	results := &[]Result{}
+
+	queryResult := database.GetDB().Take(&results, id)
+	if queryResult.Error != nil {
+		return nil, queryResult.Error
+	}
+
+	return results, nil
+}
+
 // GetResultByIDWithRelations retrieves Result by ID with assigned relations. Returns error if ID doesn't exist
 func GetResultByIDWithRelations(id int64) (*Result, error) {
 	result, err := GetResultByID(id)
