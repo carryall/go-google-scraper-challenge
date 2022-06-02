@@ -1,11 +1,12 @@
 package controllers_test
 
 import (
+	"net/http"
+
 	"go-google-scraper-challenge/errors"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
 	"go-google-scraper-challenge/test"
 	. "go-google-scraper-challenge/test"
-	"net/http"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/google/jsonapi"
