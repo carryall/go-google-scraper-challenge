@@ -43,7 +43,11 @@ func CreateResult(result *Result) (int64, error) {
 
 // CreateResults insert more than one Result into database and returns all inserted ID on success.
 func CreateResults(results *[]Result) ([]int64, error) {
-	queryResult := database.GetDB().Create(results)
+	queryResult := database.GetDB().Create(&results)
+	if queryResult.Error != nil {
+		return nil, queryResult.Error
+	}
+
 	resultIDs := []int64{}
 	queryResult.Pluck("id", &resultIDs)
 
