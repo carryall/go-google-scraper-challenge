@@ -9,9 +9,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("API Result Form", func() {
+var _ = Describe("API Upload Form", func() {
 	Describe("#Validate", func() {
-		Context("given result form with valid params", func() {
+		Context("given upload form with valid params", func() {
 			It("returns NO error", func() {
 				file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
 				user := FabricateUser(faker.Email(), faker.Password())
@@ -45,7 +45,7 @@ var _ = Describe("API Result Form", func() {
 			})
 		})
 
-		Context("given result form with INVALID params", func() {
+		Context("given upload form with INVALID params", func() {
 			Context("given NO user ID", func() {
 				It("returns an error", func() {
 					file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
@@ -132,7 +132,7 @@ var _ = Describe("API Result Form", func() {
 	})
 
 	Describe("#Save", func() {
-		Context("given result form with valid params", func() {
+		Context("given upload form with valid params", func() {
 			It("returns NO error", func() {
 				file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
 				user := FabricateUser(faker.Email(), faker.Password())
@@ -168,7 +168,7 @@ var _ = Describe("API Result Form", func() {
 			})
 		})
 
-		Context("given result form with INVALID params", func() {
+		Context("given upload form with INVALID params", func() {
 			Context("given NO user ID", func() {
 				It("returns an error", func() {
 					file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
