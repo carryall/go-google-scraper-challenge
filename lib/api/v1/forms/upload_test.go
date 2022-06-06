@@ -38,8 +38,9 @@ var _ = Describe("API Upload Form", func() {
 					UserID:     user.ID,
 				}
 
-				form.Validate()
+				_, err := form.Validate()
 
+				Expect(err).To(BeNil())
 				Expect(form.Keywords).To(HaveLen(1))
 				Expect(form.Keywords[0]).To(Equal("ergonomic chair"))
 			})
