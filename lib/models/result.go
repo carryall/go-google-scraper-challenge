@@ -45,7 +45,7 @@ func CreateResult(result *Result) (int64, error) {
 func CreateResults(results *[]Result) ([]int64, error) {
 	queryResult := database.GetDB().Create(&results)
 	if queryResult.Error != nil {
-		return nil, queryResult.Error
+		return []int64{}, queryResult.Error
 	}
 
 	resultIDs := []int64{}
