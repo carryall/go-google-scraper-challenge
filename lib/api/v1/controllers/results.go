@@ -50,6 +50,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 		response = append(response, &serializers.ResultResponse{
 			ID:      result.ID,
 			Keyword: result.Keyword,
+			UserID:  result.UserID,
 		})
 	}
 

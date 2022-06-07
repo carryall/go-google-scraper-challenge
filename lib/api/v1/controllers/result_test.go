@@ -5,6 +5,7 @@ import (
 
 	"go-google-scraper-challenge/errors"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
+	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/test"
 	. "go-google-scraper-challenge/test"
 
@@ -28,6 +29,23 @@ var _ = Describe("ResultsController", func() {
 					resultsController.Create(ctx)
 
 					Expect(response.Code).To(Equal(http.StatusOK))
+				})
+
+				It("returns list of result with the givern keyword", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					header, body := CreateRequestInfoFormFile("test/fixtures/files/valid.csv")
+
+					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+
+					resultsController := controllers.ResultsController{}
+					resultsController.Create(ctx)
+
+					jsonArrayResponse := &serializers.ResultsJSONResponse{}
+					test.GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+
+					Expect(jsonArrayResponse.Data[0].ID).NotTo(BeNil())
+					Expect(jsonArrayResponse.Data[0].Attributes.Keyword).To(Equal("ergonomic chair"))
+					Expect(jsonArrayResponse.Data[0].Attributes.UserID).To(Equal(user.ID))
 				})
 			})
 
