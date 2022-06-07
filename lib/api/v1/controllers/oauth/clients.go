@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
 	helpers "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
@@ -20,7 +21,7 @@ func (c *OAuthClientsController) Create(ctx *gin.Context) {
 	oauthClient, err := oauth.GenerateClient()
 
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnprocessableEntity, err, "")
+		RenderJSONError(ctx, errors.ErrUnProcessableEntity, err.Error())
 	}
 
 	response := &serializers.OAuthClientResponse{

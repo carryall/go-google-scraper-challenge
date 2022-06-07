@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"go-google-scraper-challenge/constants"
+	"go-google-scraper-challenge/errors"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/test"
@@ -88,8 +88,8 @@ var _ = Describe("AuthenticationController", func() {
 					jsonResponse := &jsonapi.ErrorsPayload{}
 					test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-					Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
-					Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
 					Expect(jsonResponse.Errors[0].Detail).To(Equal("GrantType: cannot be blank."))
 				})
 			})
@@ -114,8 +114,8 @@ var _ = Describe("AuthenticationController", func() {
 					jsonResponse := &jsonapi.ErrorsPayload{}
 					test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-					Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
-					Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
 					Expect(jsonResponse.Errors[0].Detail).To(Equal("ClientID: cannot be blank."))
 				})
 			})
@@ -140,8 +140,8 @@ var _ = Describe("AuthenticationController", func() {
 					jsonResponse := &jsonapi.ErrorsPayload{}
 					test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-					Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
-					Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
 					Expect(jsonResponse.Errors[0].Detail).To(Equal("ClientSecret: cannot be blank."))
 				})
 			})
@@ -166,8 +166,8 @@ var _ = Describe("AuthenticationController", func() {
 					jsonResponse := &jsonapi.ErrorsPayload{}
 					test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-					Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
-					Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
 					Expect(jsonResponse.Errors[0].Detail).To(Equal("Email: cannot be blank."))
 				})
 			})
@@ -192,8 +192,8 @@ var _ = Describe("AuthenticationController", func() {
 					jsonResponse := &jsonapi.ErrorsPayload{}
 					test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-					Expect(jsonResponse.Errors[0].Title).To(Equal(constants.Errors[http.StatusBadRequest]))
-					Expect(jsonResponse.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_PARAM))
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
 					Expect(jsonResponse.Errors[0].Detail).To(Equal("Password: cannot be blank."))
 				})
 			})
@@ -222,9 +222,9 @@ var _ = Describe("AuthenticationController", func() {
 					GetJSONResponseBody(response.Result(), &responseBody)
 
 					Expect(response.Code).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
-					Expect(responseBody.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
-					Expect(responseBody.Errors[0].Detail).To(Equal(constants.OAuthClientInvalid))
+					Expect(responseBody.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidCredentials]))
+					Expect(responseBody.Errors[0].Code).To(Equal(errors.ErrInvalidCredentials.Error()))
+					Expect(responseBody.Errors[0].Detail).To(Equal(errors.Descriptions[errors.ErrInvalidCredentials]))
 				})
 			})
 
@@ -250,9 +250,9 @@ var _ = Describe("AuthenticationController", func() {
 					GetJSONResponseBody(response.Result(), &responseBody)
 
 					Expect(response.Code).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
-					Expect(responseBody.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
-					Expect(responseBody.Errors[0].Detail).To(Equal(constants.OAuthClientInvalid))
+					Expect(responseBody.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidCredentials]))
+					Expect(responseBody.Errors[0].Code).To(Equal(errors.ErrInvalidCredentials.Error()))
+					Expect(responseBody.Errors[0].Detail).To(Equal("Client authentication failed"))
 				})
 			})
 
@@ -278,9 +278,9 @@ var _ = Describe("AuthenticationController", func() {
 					GetJSONResponseBody(response.Result(), &responseBody)
 
 					Expect(response.Code).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
-					Expect(responseBody.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
-					Expect(responseBody.Errors[0].Detail).To(Equal(constants.UserDoesNotExist))
+					Expect(responseBody.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidCredentials]))
+					Expect(responseBody.Errors[0].Code).To(Equal(errors.ErrInvalidCredentials.Error()))
+					Expect(responseBody.Errors[0].Detail).To(Equal("User with this email does not exist"))
 				})
 			})
 
@@ -305,9 +305,9 @@ var _ = Describe("AuthenticationController", func() {
 					GetJSONResponseBody(response.Result(), &responseBody)
 
 					Expect(response.Code).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
-					Expect(responseBody.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
-					Expect(responseBody.Errors[0].Detail).To(Equal(constants.OAuthClientInvalid))
+					Expect(responseBody.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidCredentials]))
+					Expect(responseBody.Errors[0].Code).To(Equal(errors.ErrInvalidCredentials.Error()))
+					Expect(responseBody.Errors[0].Detail).To(Equal("Client authentication failed"))
 				})
 			})
 
@@ -333,9 +333,9 @@ var _ = Describe("AuthenticationController", func() {
 					GetJSONResponseBody(response.Result(), &responseBody)
 
 					Expect(response.Code).To(Equal(http.StatusUnauthorized))
-					Expect(responseBody.Errors[0].Title).To(Equal(constants.Errors[http.StatusUnauthorized]))
-					Expect(responseBody.Errors[0].Code).To(Equal(constants.ERROR_CODE_INVALID_CREDENTIALS))
-					Expect(responseBody.Errors[0].Detail).To(Equal(constants.OAuthClientInvalid))
+					Expect(responseBody.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidCredentials]))
+					Expect(responseBody.Errors[0].Code).To(Equal(errors.ErrInvalidCredentials.Error()))
+					Expect(responseBody.Errors[0].Detail).To(Equal("The authorization grant type is not supported by the authorization server"))
 				})
 			})
 		})

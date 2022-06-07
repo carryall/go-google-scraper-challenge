@@ -1,37 +1,53 @@
 package helpers
 
 import (
+	"go-google-scraper-challenge/errors"
 	"net/http"
-
-	"go-google-scraper-challenge/constants"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/jsonapi"
+	oauth_errors "gopkg.in/oauth2.v3/errors"
 )
 
-func RenderJSON(ctx *gin.Context, status_code int, data interface{}) {
+func RenderJSON(ctx *gin.Context, statusCode int, data interface{}) {
 	payload, err := jsonapi.Marshal(data)
 	if err != nil {
-		RenderJSONError(ctx, http.StatusInternalServerError, err, constants.Errors[http.StatusInternalServerError], "")
+		RenderJSONError(ctx, errors.ErrServerError, err.Error())
 	}
 
-	ctx.JSON(status_code, payload)
+	ctx.JSON(statusCode, payload)
 }
 
-func RenderJSONError(ctx *gin.Context, status_code int, err error, title string, code string) {
-	payload := payloadFromError(err, title, code)
+func RenderOAuthJSONError(ctx *gin.Context, err error) {
+	detail := oauth_errors.Descriptions[err]
 
-	ctx.AbortWithStatusJSON(status_code, payload)
+	payload := payloadFromError(errors.ErrInvalidCredentials, "", detail, "")
+
+	ctx.AbortWithStatusJSON(http.StatusUnauthorized, payload)
 }
 
-func payloadFromError(err error, title string, code string) (errorPayload *jsonapi.ErrorsPayload) {
+func RenderJSONError(ctx *gin.Context, err error, detail string) {
+	payload := payloadFromError(err, "", detail, "")
+
+	ctx.AbortWithStatusJSON(errors.StatusCodes[err], payload)
+}
+
+func payloadFromError(err error, title string, detail string, code string) (errorPayload *jsonapi.ErrorsPayload) {
 	if len(title) == 0 {
-		title = err.Error()
+		title = errors.Titles[err]
+	}
+
+	if len(detail) == 0 {
+		detail = errors.Descriptions[err]
+	}
+
+	if len(code) == 0 {
+		code = err.Error()
 	}
 
 	errorObjs := []*jsonapi.ErrorObject{{
 		Title:  title,
-		Detail: err.Error(),
+		Detail: detail,
 		Code:   code,
 	}}
 

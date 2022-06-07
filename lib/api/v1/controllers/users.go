@@ -1,14 +1,12 @@
 package controllers
 
 import (
-	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
 
-	"go-google-scraper-challenge/constants"
+	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
-	helpers "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/api/v1/forms"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/lib/models"
@@ -27,19 +25,19 @@ func (c *UsersController) Register(ctx *gin.Context) {
 
 	err := ctx.ShouldBindWith(registrationForm, binding.Form)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_MALFORM_REQUEST)
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
 		return
 	}
 
 	_, err = registrationForm.Validate()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_INVALID_PARAM)
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
 		return
 	}
 
 	userID, err := registrationForm.Save()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnprocessableEntity, err, constants.ERROR_CODE_INVALID_PARAM)
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
 		return
 	}
 
@@ -52,7 +50,7 @@ func (c *UsersController) Register(ctx *gin.Context) {
 	tokenInfo, err := oauth.GenerateToken(tokenRequest)
 	if err != nil {
 		_ = models.DeleteUser(userID)
-		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
+		RenderOAuthJSONError(ctx, err)
 		return
 	}
 
@@ -63,5 +61,5 @@ func (c *UsersController) Register(ctx *gin.Context) {
 		RefreshToken: tokenInfo.GetRefresh(),
 	}
 
-	helpers.RenderJSON(ctx, http.StatusOK, response)
+	RenderJSON(ctx, http.StatusOK, response)
 }
