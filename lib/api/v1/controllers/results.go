@@ -11,5 +11,5 @@ type ResultsController struct {
 func (c *ResultsController) Create(ctx *gin.Context) {
 	c.EnsureAuthenticatedUser(ctx)
 
-	// TODO: Work on file upload in anotehr PR
+	// TODO: Work on file upload in another PR
 }
