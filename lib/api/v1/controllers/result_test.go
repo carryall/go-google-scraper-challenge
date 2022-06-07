@@ -70,6 +70,27 @@ var _ = Describe("ResultsController", func() {
 				})
 			})
 
+			Context("given a file with too many keywords", func() {
+				It("returns status bad request", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					header, body := CreateRequestInfoFormFile("test/fixtures/files/invalid.csv")
+
+					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+
+					resultsController := controllers.ResultsController{}
+					resultsController.Create(ctx)
+
+					Expect(response.Code).To(Equal(http.StatusBadRequest))
+
+					jsonResponse := &jsonapi.ErrorsPayload{}
+					test.GetJSONResponseBody(response.Result(), &jsonResponse)
+
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
+					Expect(jsonResponse.Errors[0].Detail).To(Equal("Keywords: the length must be between 1 and 1000."))
+				})
+			})
+
 			Context("given an INVALID file type", func() {
 				It("returns status bad request", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
