@@ -2,11 +2,14 @@ package controllers
 
 import (
 	"errors"
+	"math/rand"
 	"net/http"
 
 	"go-google-scraper-challenge/constants"
+	. "go-google-scraper-challenge/helpers"
 	. "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/api/v1/forms"
+	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/lib/services/oauth"
 
 	"github.com/gin-gonic/gin"
@@ -22,25 +25,41 @@ func (c *AuthenticationController) Login(ctx *gin.Context) {
 
 	err := ctx.ShouldBindWith(authenticationForm, binding.Form)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err)
+		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_MALFORM_REQUEST)
 		return
 	}
 
 	_, err = authenticationForm.Validate()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusBadRequest, err)
+		ResponseWithError(ctx, http.StatusBadRequest, err, constants.ERROR_CODE_INVALID_PARAM)
 		return
 	}
 
 	err = authenticationForm.ValidateUser()
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, err)
+		ResponseWithError(ctx, http.StatusUnauthorized, err, constants.ERROR_CODE_INVALID_CREDENTIALS)
 		return
 	}
 
-	err = oauth.HandleTokenRequest(ctx)
+	tokenData, err := oauth.HandleTokenRequest(ctx)
 	if err != nil {
-		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid))
+		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
 		return
 	}
+
+	tokenInfo, err := GetTokenInfo(tokenData)
+	if err != nil {
+		ResponseWithError(ctx, http.StatusUnauthorized, errors.New(constants.OAuthClientInvalid), constants.ERROR_CODE_INVALID_CREDENTIALS)
+		return
+	}
+
+	response := &serializers.AuthenticationResponse{
+		ID:           int64(rand.Uint64()),
+		AccessToken:  tokenInfo.AccessToken,
+		RefreshToken: tokenInfo.RefreshToken,
+		ExpiresIn:    tokenInfo.ExpiresIn,
+		TokenType:    tokenInfo.TokenType,
+	}
+
+	RenderJSON(ctx, http.StatusOK, response)
 }

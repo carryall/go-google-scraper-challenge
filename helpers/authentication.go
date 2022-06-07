@@ -1,7 +1,9 @@
 package helpers
 
 import (
+	"encoding/json"
 	"go-google-scraper-challenge/helpers/log"
+	"go-google-scraper-challenge/lib/api/v1/serializers"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -28,4 +30,16 @@ func CompareHashWithPassword(hashedPassword string, password string) bool {
 	}
 
 	return true
+}
+
+func GetTokenInfo(tokenData map[string]interface{}) (tokenInfo *serializers.AuthenticationToken, err error) {
+	tokenInfo = &serializers.AuthenticationToken{}
+	tokenDataString, err := json.Marshal(tokenData)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(tokenDataString, tokenInfo)
+
+	return
 }

@@ -50,22 +50,22 @@ func HTTPRequest(method string, url string, body io.Reader) *http.Request {
 	return request
 }
 
-// GetResponseBody get response body from response, will fail the test if there is any error
-func GetResponseBody(response *http.Response) string {
+// GetJSONResponseBody get response body from response, will fail the test if there is any error
+func GetJSONResponseBody(response *http.Response, v interface{}) {
+	body := responseBody(response)
+
+	err := json.Unmarshal([]byte(body), v)
+
+	if err != nil {
+		ginkgo.Fail("Failed to unmarshal json response " + err.Error())
+	}
+}
+
+func responseBody(response *http.Response) string {
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		ginkgo.Fail("Failed to read response body")
 	}
 
 	return string(body)
-}
-
-// GetJSONResponseBody get response body from response, will fail the test if there is any error
-func GetJSONResponseBody(response *http.Response, v interface{}) {
-	body := GetResponseBody(response)
-
-	err := json.Unmarshal([]byte(body), v)
-	if err != nil {
-		ginkgo.Fail("Failed to unmarshal json response " + err.Error())
-	}
 }
