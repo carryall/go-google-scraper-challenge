@@ -2,9 +2,10 @@ package forms
 
 import (
 	"errors"
+	"mime/multipart"
+
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
-	"mime/multipart"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 )
@@ -19,15 +20,10 @@ type UploadForm struct {
 func (f *UploadForm) Validate() (valid bool, err error) {
 	err = validation.ValidateStruct(f,
 		validation.Field(&f.File, validation.Required),
-		validation.Field(&f.FileHeader, validation.Required),
+		validation.Field(&f.FileHeader, validation.Required, validation.By(f.validateFileType())),
 		validation.Field(&f.UserID, validation.Required),
 	)
 
-	if err != nil {
-		return false, err
-	}
-
-	_, err = f.validateFileType()
 	if err != nil {
 		return false, err
 	}
@@ -69,23 +65,23 @@ func (f *UploadForm) Save() ([]int64, error) {
 	return resultIDs, nil
 }
 
-func (f UploadForm) validateFileType() (ok bool, err error) {
-	fileType := helpers.GetFileType(f.FileHeader)
+func (f UploadForm) validateFileType() validation.RuleFunc {
+	return func(value interface{}) error {
+		fileHeader, _ := value.(*multipart.FileHeader)
+		fileType := helpers.GetFileType(fileHeader)
 
-	if fileType != "text/csv" {
-		// TODO: Update this once the PR about improving the error merged
-		return false, errors.New("File: wrong file type")
+		if fileType != "text/csv" {
+			return errors.New("invalid file type")
+		}
+		return nil
 	}
-
-	return true, nil
 }
 
 func (f UploadForm) validateFileReadability() (keywords []string, err error) {
 	keywords, err = helpers.GetFileContent(f.File)
 
 	if err != nil {
-		// TODO: Update this once the PR about improving the error merged
-		return []string{}, errors.New("File: is unreadable")
+		return []string{}, err
 	}
 
 	return keywords, nil
