@@ -108,7 +108,7 @@ var _ = Describe("API Upload Form", func() {
 					valid, err := form.Validate()
 
 					Expect(valid).To(BeFalse())
-					Expect(err.Error()).To(Equal("File: wrong file type"))
+					Expect(err.Error()).To(Equal("FileHeader: invalid file type."))
 				})
 			})
 
@@ -229,7 +229,7 @@ var _ = Describe("API Upload Form", func() {
 					resultIDs, err := form.Save()
 
 					Expect(resultIDs).To(BeEmpty())
-					Expect(err.Error()).To(Equal("File: wrong file type"))
+					Expect(err.Error()).To(Equal("FileHeader: invalid file type."))
 				})
 			})
 

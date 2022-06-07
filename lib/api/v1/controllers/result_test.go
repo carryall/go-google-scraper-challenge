@@ -108,7 +108,7 @@ var _ = Describe("ResultsController", func() {
 
 					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
 					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
-					Expect(jsonResponse.Errors[0].Detail).To(Equal("File: wrong file type"))
+					Expect(jsonResponse.Errors[0].Detail).To(Equal("FileHeader: invalid file type."))
 				})
 			})
 		})
