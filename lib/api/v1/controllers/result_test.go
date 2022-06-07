@@ -17,21 +17,68 @@ import (
 var _ = Describe("ResultsController", func() {
 	Describe("POST /results", func() {
 		Context("given an authenticated request", func() {
-			It("returns status OK", func() {
-				user := FabricateUser(faker.Email(), faker.Password())
+			Context("given a valid file", func() {
+				It("returns status OK", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					header, body := CreateRequestInfoFormFile("test/fixtures/files/valid.csv")
 
-				ctx, response := MakeAuthenticatedFormRequest("POST", "/results", nil, user)
+					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
 
-				resultsController := controllers.ResultsController{}
-				resultsController.Create(ctx)
+					resultsController := controllers.ResultsController{}
+					resultsController.Create(ctx)
 
-				Expect(response.Code).To(Equal(http.StatusOK))
+					Expect(response.Code).To(Equal(http.StatusOK))
+				})
+			})
+
+			Context("given an empty file", func() {
+				It("returns status bad request", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					header, body := CreateRequestInfoFormFile("test/fixtures/files/empty.csv")
+
+					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+
+					resultsController := controllers.ResultsController{}
+					resultsController.Create(ctx)
+
+					Expect(response.Code).To(Equal(http.StatusBadRequest))
+
+					jsonResponse := &jsonapi.ErrorsPayload{}
+					test.GetJSONResponseBody(response.Result(), &jsonResponse)
+
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
+					Expect(jsonResponse.Errors[0].Detail).To(Equal("Keywords: cannot be blank."))
+				})
+			})
+
+			Context("given an INVALID file type", func() {
+				It("returns status bad request", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					header, body := CreateRequestInfoFormFile("test/fixtures/files/text.txt")
+
+					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+
+					resultsController := controllers.ResultsController{}
+					resultsController.Create(ctx)
+
+					Expect(response.Code).To(Equal(http.StatusBadRequest))
+
+					jsonResponse := &jsonapi.ErrorsPayload{}
+					test.GetJSONResponseBody(response.Result(), &jsonResponse)
+
+					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
+					Expect(jsonResponse.Errors[0].Detail).To(Equal("File: wrong file type"))
+				})
 			})
 		})
 
 		Context("given an unauthenticated request", func() {
 			It("returns status Unauthorized", func() {
-				ctx, response := MakeFormRequest("POST", "/results", nil)
+				header, body := CreateRequestInfoFormFile("test/fixtures/files/valid.csv")
+
+				ctx, response := MakeUploadRequest("POST", "/results", header, body, nil)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Create(ctx)
@@ -41,9 +88,9 @@ var _ = Describe("ResultsController", func() {
 				jsonResponse := &jsonapi.ErrorsPayload{}
 				test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidCredentials]))
-				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidCredentials.Error()))
-				Expect(jsonResponse.Errors[0].Detail).To(Equal(errors.Descriptions[errors.ErrInvalidCredentials]))
+				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrUnauthorizedUser]))
+				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrUnauthorizedUser.Error()))
+				Expect(jsonResponse.Errors[0].Detail).To(Equal("invalid access token"))
 			})
 		})
 	})

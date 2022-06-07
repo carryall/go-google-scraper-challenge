@@ -19,7 +19,7 @@ type Result struct {
 	Status    string `gorm:"not null;default:pending"`
 	PageCache string
 
-	User    *User `gorm:"not null;"`
+	User    *User
 	AdLinks []*AdLink
 	Links   []*Link
 }
@@ -49,7 +49,9 @@ func CreateResults(results *[]Result) ([]int64, error) {
 	}
 
 	resultIDs := []int64{}
-	queryResult.Pluck("id", &resultIDs)
+	for _, result := range *results {
+		resultIDs = append(resultIDs, result.ID)
+	}
 
 	return resultIDs, queryResult.Error
 }

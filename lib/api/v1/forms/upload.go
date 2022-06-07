@@ -55,8 +55,10 @@ func (f *UploadForm) Save() ([]int64, error) {
 
 	results := []models.Result{}
 	for i := range keywords {
-		result := models.Result{Keyword: keywords[i], UserID: f.UserID}
-		results = append(results, result)
+		results = append(results, models.Result{
+			Keyword: keywords[i],
+			UserID:  f.UserID,
+		})
 	}
 
 	resultIDs, err := models.CreateResults(&results)
