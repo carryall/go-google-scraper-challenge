@@ -228,11 +228,55 @@ var _ = Describe("Result", func() {
 		})
 
 		Context("given result id does NOT exist in the system", func() {
-			It("returns false", func() {
+			It("returns the error", func() {
 				result, err := models.GetResultByID(999)
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(result).To(BeNil())
+			})
+		})
+	})
+
+	Describe("#GetResultsByIDs", func() {
+		Context("given result IDs exist in the system", func() {
+			It("returns results with the given ID", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				result2 := FabricateResult(user)
+				expectedResults := []*models.Result{result, result2}
+
+				results, err := models.GetResultsByIDs([]int64{result.ID, result2.ID})
+
+				Expect(err).To(BeNil())
+				for i, result := range *results {
+					Expect(result.Keyword).To(Equal(expectedResults[i].Keyword))
+					Expect(result.UserID).To(Equal(user.ID))
+				}
+			})
+		})
+
+		Context("given at least one result ID that exist in the system", func() {
+			It("returns the existing result", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				existResult := FabricateResult(user)
+
+				results, err := models.GetResultsByIDs([]int64{existResult.ID, 999})
+
+				Expect(err).To(BeNil())
+				Expect(*results).To(HaveLen(1))
+				for _, result := range *results {
+					Expect(result.Keyword).To(Equal(existResult.Keyword))
+					Expect(result.UserID).To(Equal(user.ID))
+				}
+			})
+		})
+
+		Context("given NO result ID exist in the system", func() {
+			It("returns the error", func() {
+				results, err := models.GetResultsByIDs([]int64{888, 999})
+
+				Expect(*results).To(HaveLen(0))
+				Expect(err.Error()).To(ContainSubstring("record not found"))
 			})
 		})
 	})

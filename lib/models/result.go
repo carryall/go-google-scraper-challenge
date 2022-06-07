@@ -74,7 +74,7 @@ func GetResultsByIDs(id []int64) (*[]Result, error) {
 
 	queryResult := database.GetDB().Take(&results, id)
 	if queryResult.Error != nil {
-		return nil, queryResult.Error
+		return results, queryResult.Error
 	}
 
 	return results, nil
