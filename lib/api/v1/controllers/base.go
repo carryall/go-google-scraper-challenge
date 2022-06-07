@@ -3,6 +3,7 @@ package controllers
 import (
 	"strconv"
 
+	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/services/oauth"
@@ -14,13 +15,17 @@ type BaseController struct {
 	CurrentUser *models.User
 }
 
-func (b *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) {
+func (b *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) error {
 	currentUser, err := b.GetCurrentUser(ctx)
 	if err != nil {
-		RenderOAuthJSONError(ctx, err)
+		RenderJSONError(ctx, errors.ErrUnauthorizedUser, err.Error())
+
+		return err
 	}
 
 	b.CurrentUser = currentUser
+
+	return nil
 }
 
 func (b *BaseController) GetCurrentUser(ctx *gin.Context) (user *models.User, err error) {
