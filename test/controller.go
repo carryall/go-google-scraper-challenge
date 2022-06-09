@@ -37,6 +37,18 @@ func MakeAuthenticatedFormRequest(method string, url string, formData url.Values
 	return MakeRequest(request)
 }
 
+func MakeAuthenticatedJSONRequest(method string, url string, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
+	request := HTTPRequest(method, url, body)
+	request.Header.Add("Content-Type", "application/json")
+
+	if user != nil {
+		accessToken := FabricateAuthToken(user.ID)
+		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	}
+
+	return MakeRequest(request)
+}
+
 func MakeFormRequest(method string, url string, formData url.Values) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildFormRequest(method, url, nil, formData)
 
