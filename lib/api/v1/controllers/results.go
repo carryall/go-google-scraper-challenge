@@ -24,6 +24,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
+
 		return
 	}
 
@@ -36,12 +37,14 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 	resultIDs, err := uploadForm.Save()
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
+
 		return
 	}
 
 	results, err := models.GetResultsByIDs(resultIDs)
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
+
 		return
 	}
 

@@ -15,7 +15,7 @@ type BaseController struct {
 	CurrentUser *models.User
 }
 
-func (b *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) error {
+func (b *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) (err error) {
 	currentUser, err := b.GetCurrentUser(ctx)
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrUnauthorizedUser, err.Error())
