@@ -329,7 +329,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 2)
+						results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, 2)
 						if err != nil {
 							Fail("Failed to get results with User Id")
 						}
@@ -349,7 +349,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 2)
+						_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, 2)
 						Expect(err).To(BeNil())
 					})
 				})
@@ -361,7 +361,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, 0)
 						if err != nil {
 							Fail("Failed to get results with User Id")
 						}
@@ -380,7 +380,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, 0)
 						Expect(err).To(BeNil())
 					})
 				})
@@ -394,7 +394,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						results, err := models.GetResultsBy(map[string]interface{}{}, "", 1, 0)
+						results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 1, 0)
 						if err != nil {
 							Fail("Failed to get results with User Id")
 						}
@@ -414,7 +414,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						_, err := models.GetResultsBy(map[string]interface{}{}, "", 1, 0)
+						_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 1, 0)
 						Expect(err).To(BeNil())
 					})
 				})
@@ -426,7 +426,7 @@ var _ = Describe("Result", func() {
 						result2 := FabricateResult(user)
 						result3 := FabricateResult(user)
 
-						results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, 0)
 						if err != nil {
 							Fail("Failed to get results with User Id")
 						}
@@ -445,7 +445,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(user)
 
-						_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, 0)
+						_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, 0)
 						Expect(err).To(BeNil())
 					})
 				})
@@ -462,7 +462,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"user_id": user.ID,
 					}
-					results, err := models.GetResultsBy(query, "", 0, 0)
+					results, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -486,7 +486,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"user_id": user.ID,
 					}
-					_, err := models.GetResultsBy(query, "", 0, 0)
+					_, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -502,7 +502,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"user_id": user.ID,
 					}
-					results, err := models.GetResultsBy(query, "", 0, 0)
+					results, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -526,7 +526,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"user_id": user.ID,
 					}
-					_, err := models.GetResultsBy(query, "", 0, 0)
+					_, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -541,7 +541,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"keyword": "keyword",
 					}
-					results, err := models.GetResultsBy(query, "", 0, 0)
+					results, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -564,7 +564,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"keyword": "keyword",
 					}
-					_, err := models.GetResultsBy(query, "", 0, 0)
+					_, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -575,7 +575,7 @@ var _ = Describe("Result", func() {
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 
-					results, err := models.GetResultsBy(map[string]interface{}{}, "-id", 0, 0)
+					results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "-id", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -594,7 +594,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					_, err := models.GetResultsBy(map[string]interface{}{}, "-id", 0, 0)
+					_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "-id", 0, 0)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -607,7 +607,7 @@ var _ = Describe("Result", func() {
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 
-					results, err := models.GetResultsBy(map[string]interface{}{}, "", -1, 0)
+					results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", -1, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -625,7 +625,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					_, err := models.GetResultsBy(map[string]interface{}{}, "", -1, 0)
+					_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", -1, 0)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -636,7 +636,7 @@ var _ = Describe("Result", func() {
 					result1 := FabricateResult(user)
 					result2 := FabricateResult(user)
 
-					results, err := models.GetResultsBy(map[string]interface{}{}, "", 0, -1)
+					results, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, -1)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -654,7 +654,7 @@ var _ = Describe("Result", func() {
 					FabricateResult(user)
 					FabricateResult(user)
 
-					_, err := models.GetResultsBy(map[string]interface{}{}, "", 0, -1)
+					_, err := models.GetResultsBy(map[string]interface{}{}, []string{}, "", 0, -1)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -668,7 +668,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"user_id": 999,
 					}
-					results, err := models.GetResultsBy(query, "", 0, 0)
+					results, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					if err != nil {
 						Fail("Failed to get results with User Id")
 					}
@@ -684,7 +684,7 @@ var _ = Describe("Result", func() {
 					query := map[string]interface{}{
 						"user_id": 999,
 					}
-					_, err := models.GetResultsBy(query, "", 0, 0)
+					_, err := models.GetResultsBy(query, []string{}, "", 0, 0)
 					Expect(err).To(BeNil())
 				})
 			})
@@ -703,7 +703,7 @@ var _ = Describe("Result", func() {
 				query := map[string]interface{}{
 					"user_id": user.ID,
 				}
-				count, err := models.CountResultsBy(query, "", 0, 0)
+				count, err := models.CountResultsBy(query, []string{}, "", 0, 0)
 				if err != nil {
 					Fail("Failed to count results with User Id")
 				}
@@ -721,7 +721,7 @@ var _ = Describe("Result", func() {
 				query := map[string]interface{}{
 					"user_id": user.ID,
 				}
-				_, err := models.CountResultsBy(query, "", 0, 0)
+				_, err := models.CountResultsBy(query, []string{}, "", 0, 0)
 				Expect(err).To(BeNil())
 			})
 		})
@@ -735,7 +735,7 @@ var _ = Describe("Result", func() {
 				query := map[string]interface{}{
 					"user_id": 999,
 				}
-				count, err := models.CountResultsBy(query, "", 0, 0)
+				count, err := models.CountResultsBy(query, []string{}, "", 0, 0)
 				if err != nil {
 					Fail("Failed to count results with User Id")
 				}
@@ -751,7 +751,7 @@ var _ = Describe("Result", func() {
 				query := map[string]interface{}{
 					"user_id": 999,
 				}
-				_, err := models.CountResultsBy(query, "", 0, 0)
+				_, err := models.CountResultsBy(query, []string{}, "", 0, 0)
 				Expect(err).To(BeNil())
 			})
 		})

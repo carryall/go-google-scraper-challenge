@@ -60,7 +60,7 @@ func CreateResults(results *[]Result) ([]int64, error) {
 func GetResultByID(id int64) (*Result, error) {
 	result := &Result{}
 
-	queryResult := database.GetDB().First(&result, id)
+	queryResult := database.GetDB().Preload("User").First(&result, id)
 	if queryResult.Error != nil {
 		return nil, queryResult.Error
 	}
@@ -118,8 +118,12 @@ func ContainKeyword(keyword string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func query(condition map[string]interface{}, orderBy string, offset int, limit int) (*gorm.DB, []*Result) {
+func query(condition map[string]interface{}, preloadRelations []string, orderBy string, offset int, limit int) (*gorm.DB, []*Result) {
 	db := database.GetDB()
+
+	for _, relation := range preloadRelations {
+		db = db.Preload(relation)
+	}
 
 	if len(orderBy) > 0 {
 		orderColumn := orderBy
@@ -168,8 +172,8 @@ func query(condition map[string]interface{}, orderBy string, offset int, limit i
 
 // GetResultsBy retrieves Results with given query. Returns empty list if no records exist
 // possible query params are order, limit, offset and result property filter
-func GetResultsBy(condition map[string]interface{}, orderBy string, offset int, limit int) ([]*Result, error) {
-	queryResult, results := query(condition, orderBy, offset, limit)
+func GetResultsBy(condition map[string]interface{}, preloadRelations []string, orderBy string, offset int, limit int) ([]*Result, error) {
+	queryResult, results := query(condition, preloadRelations, orderBy, offset, limit)
 
 	if queryResult.Error != nil {
 		return nil, queryResult.Error
@@ -179,9 +183,9 @@ func GetResultsBy(condition map[string]interface{}, orderBy string, offset int, 
 }
 
 // CountResultsBy count all Results with given query. Returns 0 if no records exist
-func CountResultsBy(condition map[string]interface{}, orderBy string, offset int, limit int) (int64, error) {
+func CountResultsBy(condition map[string]interface{}, preloadRelations []string, orderBy string, offset int, limit int) (int64, error) {
 	count := int64(0)
-	db, _ := query(condition, orderBy, offset, limit)
+	db, _ := query(condition, preloadRelations, orderBy, offset, limit)
 	countResult := db.Count(&count)
 
 	if countResult.Error != nil {
