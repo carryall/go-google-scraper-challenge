@@ -2,25 +2,32 @@ package test
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 
+	"go-google-scraper-challenge/lib/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/onsi/ginkgo"
 )
 
-func MakeFormRequest(method string, url string, formData url.Values) (*gin.Context, *httptest.ResponseRecorder) {
-	request := HTTPRequest(method, url, nil)
-	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+func MakeAuthenticatedFormRequest(method string, url string, formData url.Values, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
+	request := buildFormRequest(method, url, formData)
 
-	if method == "POST" {
-		request.PostForm = formData
-	} else {
-		request.Form = formData
+	if user != nil {
+		accessToken := FabricateAuthToken(user.ID)
+		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 	}
+
+	return MakeRequest(request)
+}
+
+func MakeFormRequest(method string, url string, formData url.Values) (*gin.Context, *httptest.ResponseRecorder) {
+	request := buildFormRequest(method, url, formData)
 
 	return MakeRequest(request)
 }
@@ -68,4 +75,17 @@ func responseBody(response *http.Response) string {
 	}
 
 	return string(body)
+}
+
+func buildFormRequest(method string, url string, formData url.Values) (request *http.Request) {
+	request = HTTPRequest(method, url, nil)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	if method == "POST" {
+		request.PostForm = formData
+	} else {
+		request.Form = formData
+	}
+
+	return request
 }

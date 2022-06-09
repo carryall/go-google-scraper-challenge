@@ -36,10 +36,13 @@ func GetTokenInfo(tokenData map[string]interface{}) (tokenInfo *serializers.Auth
 	tokenInfo = &serializers.AuthenticationToken{}
 	tokenDataString, err := json.Marshal(tokenData)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	err = json.Unmarshal(tokenDataString, tokenInfo)
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	return tokenInfo, nil
 }

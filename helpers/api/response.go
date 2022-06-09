@@ -55,5 +55,5 @@ func payloadFromError(err error, title string, detail string, code string) (erro
 		Errors: errorObjs,
 	}
 
-	return
+	return errorPayload
 }
