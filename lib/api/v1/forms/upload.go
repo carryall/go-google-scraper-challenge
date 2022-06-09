@@ -13,7 +13,7 @@ import (
 type UploadForm struct {
 	File       multipart.File
 	FileHeader *multipart.FileHeader
-	UserID     int64
+	User       *models.User
 	Keywords   []string
 }
 
@@ -21,7 +21,7 @@ func (f *UploadForm) Validate() (valid bool, err error) {
 	err = validation.ValidateStruct(f,
 		validation.Field(&f.File, validation.Required),
 		validation.Field(&f.FileHeader, validation.Required, validation.By(f.validateFileType())),
-		validation.Field(&f.UserID, validation.Required),
+		validation.Field(&f.User, validation.Required, validation.By(f.validateUser())),
 	)
 
 	if err != nil {
@@ -53,7 +53,7 @@ func (f *UploadForm) Save() ([]int64, error) {
 	for i := range keywords {
 		results = append(results, models.Result{
 			Keyword: keywords[i],
-			UserID:  f.UserID,
+			User:    f.User,
 		})
 	}
 
@@ -63,6 +63,17 @@ func (f *UploadForm) Save() ([]int64, error) {
 	}
 
 	return resultIDs, nil
+}
+
+func (f UploadForm) validateUser() validation.RuleFunc {
+	return func(value interface{}) error {
+		_, err := models.GetUserByID(f.User.ID)
+
+		if err != nil {
+			return err
+		}
+		return nil
+	}
 }
 
 func (f UploadForm) validateFileType() validation.RuleFunc {

@@ -2,6 +2,7 @@ package forms_test
 
 import (
 	"go-google-scraper-challenge/lib/api/v1/forms"
+	"go-google-scraper-challenge/lib/models"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
@@ -19,7 +20,7 @@ var _ = Describe("API Upload Form", func() {
 				form := forms.UploadForm{
 					File:       file,
 					FileHeader: fileHeader,
-					UserID:     user.ID,
+					User:       user,
 				}
 
 				valid, err := form.Validate()
@@ -35,7 +36,7 @@ var _ = Describe("API Upload Form", func() {
 				form := forms.UploadForm{
 					File:       file,
 					FileHeader: fileHeader,
-					UserID:     user.ID,
+					User:       user,
 				}
 
 				_, err := form.Validate()
@@ -47,7 +48,7 @@ var _ = Describe("API Upload Form", func() {
 		})
 
 		Context("given upload form with INVALID params", func() {
-			Context("given NO user ID", func() {
+			Context("given NO user", func() {
 				It("returns an error", func() {
 					file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
 					form := forms.UploadForm{
@@ -58,7 +59,7 @@ var _ = Describe("API Upload Form", func() {
 					valid, err := form.Validate()
 
 					Expect(valid).To(BeFalse())
-					Expect(err.Error()).To(Equal("UserID: cannot be blank."))
+					Expect(err.Error()).To(Equal("User: cannot be blank."))
 				})
 			})
 
@@ -66,7 +67,7 @@ var _ = Describe("API Upload Form", func() {
 				It("returns an error", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					form := forms.UploadForm{
-						UserID: user.ID,
+						User: user,
 					}
 
 					valid, err := form.Validate()
@@ -84,7 +85,7 @@ var _ = Describe("API Upload Form", func() {
 					form := forms.UploadForm{
 						File:       file,
 						FileHeader: fileHeader,
-						UserID:     user.ID,
+						User:       user,
 					}
 
 					valid, err := form.Validate()
@@ -102,7 +103,7 @@ var _ = Describe("API Upload Form", func() {
 					form := forms.UploadForm{
 						File:       file,
 						FileHeader: fileHeader,
-						UserID:     user.ID,
+						User:       user,
 					}
 
 					valid, err := form.Validate()
@@ -120,7 +121,7 @@ var _ = Describe("API Upload Form", func() {
 					form := forms.UploadForm{
 						File:       file,
 						FileHeader: fileHeader,
-						UserID:     user.ID,
+						User:       user,
 					}
 
 					valid, err := form.Validate()
@@ -141,7 +142,7 @@ var _ = Describe("API Upload Form", func() {
 				form := forms.UploadForm{
 					File:       file,
 					FileHeader: fileHeader,
-					UserID:     user.ID,
+					User:       user,
 				}
 
 				_, err := form.Save()
@@ -156,7 +157,7 @@ var _ = Describe("API Upload Form", func() {
 				form := &forms.UploadForm{
 					File:       file,
 					FileHeader: fileHeader,
-					UserID:     user.ID,
+					User:       user,
 				}
 
 				resultIDs, err := form.Save()
@@ -170,7 +171,7 @@ var _ = Describe("API Upload Form", func() {
 		})
 
 		Context("given upload form with INVALID params", func() {
-			Context("given NO user ID", func() {
+			Context("given NO user", func() {
 				It("returns an error", func() {
 					file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
 					form := forms.UploadForm{
@@ -181,7 +182,24 @@ var _ = Describe("API Upload Form", func() {
 					resultIDs, err := form.Save()
 
 					Expect(resultIDs).To(BeEmpty())
-					Expect(err.Error()).To(Equal("UserID: cannot be blank."))
+					Expect(err.Error()).To(Equal("User: cannot be blank."))
+				})
+			})
+
+			Context("given an INVALID user", func() {
+				It("returns an error", func() {
+					file, fileHeader := GetMultipartFromFile("test/fixtures/files/valid.csv")
+					invalidUser := models.User{}
+					form := forms.UploadForm{
+						File:       file,
+						FileHeader: fileHeader,
+						User:       &invalidUser,
+					}
+
+					resultIDs, err := form.Save()
+
+					Expect(resultIDs).To(BeEmpty())
+					Expect(err.Error()).To(Equal("User: record not found."))
 				})
 			})
 
@@ -189,7 +207,7 @@ var _ = Describe("API Upload Form", func() {
 				It("returns an error", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					form := forms.UploadForm{
-						UserID: user.ID,
+						User: user,
 					}
 
 					resultIDs, err := form.Save()
@@ -206,7 +224,7 @@ var _ = Describe("API Upload Form", func() {
 					form := forms.UploadForm{
 						File:       file,
 						FileHeader: fileHeader,
-						UserID:     user.ID,
+						User:       user,
 					}
 
 					resultIDs, err := form.Save()
@@ -223,7 +241,7 @@ var _ = Describe("API Upload Form", func() {
 					form := forms.UploadForm{
 						File:       file,
 						FileHeader: fileHeader,
-						UserID:     user.ID,
+						User:       user,
 					}
 
 					resultIDs, err := form.Save()
@@ -240,7 +258,7 @@ var _ = Describe("API Upload Form", func() {
 					form := forms.UploadForm{
 						File:       file,
 						FileHeader: fileHeader,
-						UserID:     user.ID,
+						User:       user,
 					}
 
 					resultIDs, err := form.Save()
