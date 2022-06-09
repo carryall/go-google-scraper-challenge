@@ -31,7 +31,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 	uploadForm := &forms.UploadForm{
 		File:       file,
 		FileHeader: fileHeader,
-		UserID:     c.CurrentUser.ID,
+		User:       c.CurrentUser,
 	}
 
 	resultIDs, err := uploadForm.Save()
