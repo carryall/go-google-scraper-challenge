@@ -747,7 +747,14 @@ var _ = Describe("Result", func() {
 		})
 
 		Context("given invalid params", func() {
+			Context("given an INVALID user ID", func() {
+				It("returns a blank array of result", func() {
+					results, err := models.GetUserResults(999, []string{})
 
+					Expect(err).To(BeNil())
+					Expect(results).To(HaveLen(0))
+				})
+			})
 		})
 	})
 
