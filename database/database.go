@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/config"
 	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/gin-gonic/gin"
@@ -46,7 +46,7 @@ func GetDatabaseURL() string {
 		viper.GetString("db_username"),
 		viper.GetString("db_password"),
 		viper.GetString("db_host"),
-		helpers.GetStringConfig("db_port"),
-		helpers.GetStringConfig("db_name"),
+		config.GetStringConfig("db_port"),
+		config.GetStringConfig("db_name"),
 	)
 }
