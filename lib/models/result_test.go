@@ -691,6 +691,66 @@ var _ = Describe("Result", func() {
 		})
 	})
 
+	Describe("#GetUserResults", func() {
+		Context("given valid params", func() {
+			Context("given user ID with results", func() {
+				It("returns a list of results that belongs to the user", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					anotherUser := FabricateUser(faker.Email(), faker.Password())
+					result1 := FabricateResult(user)
+					result2 := FabricateResult(user)
+					result3 := FabricateResult(anotherUser)
+
+					results, err := models.GetUserResults(user.ID, []string{})
+
+					Expect(err).To(BeNil())
+
+					var resultIDs []int64
+					for _, r := range results {
+						resultIDs = append(resultIDs, r.ID)
+					}
+
+					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
+					Expect(resultIDs).NotTo(ConsistOf(result3.ID))
+				})
+
+				Context("given an array of preload relations", func() {
+					It("returns an array of results with relations", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						anotherUser := FabricateUser(faker.Email(), faker.Password())
+						FabricateResult(user)
+						FabricateResult(user)
+						FabricateResult(anotherUser)
+
+						results, err := models.GetUserResults(user.ID, []string{"User"})
+
+						Expect(err).To(BeNil())
+
+						for _, r := range results {
+							Expect(r.User).ToNot(BeNil())
+							Expect(r.User.ID).To(Equal(user.ID))
+						}
+					})
+				})
+			})
+
+			Context("given user ID without results", func() {
+				It("returns a blank array of result", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+
+					results, err := models.GetUserResults(user.ID, []string{})
+
+					Expect(err).To(BeNil())
+					Expect(results).To(HaveLen(0))
+				})
+			})
+		})
+
+		Context("given invalid params", func() {
+
+		})
+	})
+
 	Describe("#CountResultsBy", func() {
 		Context("given a valid user id", func() {
 			It("returns the correct number of user results", func() {
