@@ -21,10 +21,7 @@ func (c *ResultsController) List(ctx *gin.Context) {
 		return
 	}
 
-	query := map[string]interface{}{
-		"user_id": c.CurrentUser.ID,
-	}
-	results, err := models.GetResultsBy(query, []string{"User", "AdLinks", "Links"}, "", 0, 100)
+	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"})
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrServerError, err.Error())
 

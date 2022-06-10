@@ -80,24 +80,21 @@ func GetResultsByIDs(id []int64) (*[]Result, error) {
 	return results, nil
 }
 
-// GetResultByIDWithRelations retrieves Result by ID with assigned relations. Returns error if ID doesn't exist
-func GetResultByIDWithRelations(id int64) (*Result, error) {
-	result, err := GetResultByID(id)
-	if err != nil {
-		return nil, err
+func GetUserResults(userID int64, preloadRelations []string) (results []*Result, err error) {
+	query := map[string]interface{}{
+		"user_id": userID,
 	}
 
-	result.Links, err = GetLinksByResultID(result.ID)
-	if err != nil {
-		return result, err
+	db := database.GetDB()
+
+	for _, relation := range preloadRelations {
+		db = db.Preload(relation)
 	}
 
-	result.AdLinks, err = GetAdLinksByResultID(result.ID)
-	if err != nil {
-		return result, err
-	}
+	queryResult := db.Find(&results, query)
+	err = queryResult.Error
 
-	return result, nil
+	return results, err
 }
 
 // GetOldestPendingResult retrieves Result with pending status. Return err if no pending result
