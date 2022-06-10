@@ -60,7 +60,7 @@ func CreateResults(results *[]Result) ([]int64, error) {
 func GetResultByID(id int64) (*Result, error) {
 	result := &Result{}
 
-	queryResult := database.GetDB().Preload("User").First(&result, id)
+	queryResult := database.GetDB().First(&result, id)
 	if queryResult.Error != nil {
 		return nil, queryResult.Error
 	}
