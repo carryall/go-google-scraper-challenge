@@ -30,17 +30,7 @@ func (c *ResultsController) List(ctx *gin.Context) {
 
 	response := []*serializers.ResultResponse{}
 	for _, result := range results {
-		response = append(response, &serializers.ResultResponse{
-			ID:        result.ID,
-			Keyword:   result.Keyword,
-			UserID:    result.UserID,
-			Status:    result.Status,
-			PageCache: result.PageCache,
-			User: &serializers.UserResponse{
-				ID:    result.User.ID,
-				Email: result.User.Email,
-			},
-		})
+		response = append(response, serializers.ResultSerializer{Result: result}.Response())
 	}
 
 	RenderJSON(ctx, http.StatusOK, response)
@@ -80,11 +70,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 
 	response := []*serializers.ResultResponse{}
 	for _, result := range *results {
-		response = append(response, &serializers.ResultResponse{
-			ID:      result.ID,
-			Keyword: result.Keyword,
-			UserID:  result.UserID,
-		})
+		response = append(response, serializers.ResultSerializer{Result: &result}.Response())
 	}
 
 	RenderJSON(ctx, http.StatusOK, response)

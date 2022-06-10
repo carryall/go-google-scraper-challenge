@@ -1,5 +1,7 @@
 package serializers
 
+import "go-google-scraper-challenge/lib/models"
+
 type ResultsResponse struct {
 	Results ResultResponse
 }
@@ -41,4 +43,24 @@ type ResultsJSONResponse struct {
 		Type       string                 `json:"type"`
 		Attributes map[string]interface{} `json:"attributes"`
 	} `json:"included"`
+}
+
+type ResultSerializer struct {
+	Result *models.Result
+}
+
+func (s ResultSerializer) Response() (response *ResultResponse) {
+	response = &ResultResponse{
+		ID:        s.Result.ID,
+		Keyword:   s.Result.Keyword,
+		UserID:    s.Result.UserID,
+		Status:    s.Result.Status,
+		PageCache: s.Result.PageCache,
+	}
+
+	if s.Result.User != nil {
+		response.User = UserSerializer{User: s.Result.User}.Response()
+	}
+
+	return response
 }
