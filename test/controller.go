@@ -15,8 +15,19 @@ import (
 	"github.com/onsi/ginkgo"
 )
 
+func MakeUploadRequest(method string, url string, header http.Header, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
+	request := buildRequest(method, url, header, body)
+
+	if user != nil {
+		accessToken := FabricateAuthToken(user.ID)
+		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	}
+
+	return MakeRequest(request)
+}
+
 func MakeAuthenticatedFormRequest(method string, url string, formData url.Values, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
-	request := buildFormRequest(method, url, formData)
+	request := buildFormRequest(method, url, nil, formData)
 
 	if user != nil {
 		accessToken := FabricateAuthToken(user.ID)
@@ -27,7 +38,7 @@ func MakeAuthenticatedFormRequest(method string, url string, formData url.Values
 }
 
 func MakeFormRequest(method string, url string, formData url.Values) (*gin.Context, *httptest.ResponseRecorder) {
-	request := buildFormRequest(method, url, formData)
+	request := buildFormRequest(method, url, nil, formData)
 
 	return MakeRequest(request)
 }
@@ -77,8 +88,12 @@ func responseBody(response *http.Response) string {
 	return string(body)
 }
 
-func buildFormRequest(method string, url string, formData url.Values) (request *http.Request) {
+func buildFormRequest(method string, url string, header http.Header, formData url.Values) (request *http.Request) {
 	request = HTTPRequest(method, url, nil)
+
+	if header != nil {
+		request.Header = header
+	}
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	if method == "POST" {
@@ -86,6 +101,17 @@ func buildFormRequest(method string, url string, formData url.Values) (request *
 	} else {
 		request.Form = formData
 	}
+
+	return request
+}
+
+func buildRequest(method string, url string, header http.Header, body io.Reader) (request *http.Request) {
+	request = HTTPRequest(method, url, body)
+
+	if header != nil {
+		request.Header = header
+	}
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	return request
 }

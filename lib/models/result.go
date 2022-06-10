@@ -19,7 +19,7 @@ type Result struct {
 	Status    string `gorm:"not null;default:pending"`
 	PageCache string
 
-	User    *User `gorm:"not null;"`
+	User    *User
 	AdLinks []*AdLink
 	Links   []*Link
 }
@@ -41,6 +41,21 @@ func CreateResult(result *Result) (int64, error) {
 	return result.ID, queryResult.Error
 }
 
+// CreateResults insert more than one Result into database and returns all inserted ID on success.
+func CreateResults(results *[]Result) ([]int64, error) {
+	queryResult := database.GetDB().Create(&results)
+	if queryResult.Error != nil {
+		return []int64{}, queryResult.Error
+	}
+
+	resultIDs := []int64{}
+	for _, result := range *results {
+		resultIDs = append(resultIDs, result.ID)
+	}
+
+	return resultIDs, queryResult.Error
+}
+
 // GetResultByID retrieves Result by ID. Returns error if ID doesn't exist
 func GetResultByID(id int64) (*Result, error) {
 	result := &Result{}
@@ -51,6 +66,18 @@ func GetResultByID(id int64) (*Result, error) {
 	}
 
 	return result, nil
+}
+
+// GetResultsByIDs retrieve multiple Results by IDs. Returns error if ID doesn't exist
+func GetResultsByIDs(id []int64) (*[]Result, error) {
+	results := &[]Result{}
+
+	queryResult := database.GetDB().Take(&results, id)
+	if queryResult.Error != nil {
+		return results, queryResult.Error
+	}
+
+	return results, nil
 }
 
 // GetResultByIDWithRelations retrieves Result by ID with assigned relations. Returns error if ID doesn't exist
