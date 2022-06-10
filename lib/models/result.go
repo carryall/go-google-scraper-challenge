@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strings"
 
+	"go-google-scraper-challenge/config"
 	"go-google-scraper-challenge/database"
-	"go-google-scraper-challenge/helpers"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -92,7 +92,9 @@ func GetUserResults(userID int64, preloadRelations []string) (results []*Result,
 	}
 
 	queryResult := db.Find(&results, query)
-	err = queryResult.Error
+	if queryResult.Error != nil {
+		return []*Result{}, queryResult.Error
+	}
 
 	return results, err
 }
@@ -141,7 +143,7 @@ func query(condition map[string]interface{}, preloadRelations []string, orderBy 
 
 	limitClause := limit
 	if limit < 0 {
-		limitClause = helpers.GetPaginationPerPage()
+		limitClause = config.GetPaginationPerPage()
 	}
 	db = db.Limit(limitClause)
 
