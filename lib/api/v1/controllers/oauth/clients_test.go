@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	controllers "go-google-scraper-challenge/lib/api/v1/controllers/oauth"
-	"go-google-scraper-challenge/lib/services/oauth"
+	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/test"
 	. "go-google-scraper-challenge/test"
 
@@ -20,7 +20,7 @@ var _ = Describe("OAuthClientsController", func() {
 			oauthClientsController := controllers.OAuthClientsController{}
 			oauthClientsController.Create(ctx)
 
-			jsonResponse := oauth.OAuthClient{}
+			jsonResponse := serializers.OAuthClientJSONResponse{}
 			test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
 			Expect(response.Code).To(Equal(http.StatusOK))
@@ -32,11 +32,12 @@ var _ = Describe("OAuthClientsController", func() {
 			oauthClientsController := controllers.OAuthClientsController{}
 			oauthClientsController.Create(ctx)
 
-			jsonResponse := oauth.OAuthClient{}
+			jsonResponse := serializers.OAuthClientJSONResponse{}
 			test.GetJSONResponseBody(response.Result(), &jsonResponse)
 
-			Expect(jsonResponse.ClientID).NotTo(BeEmpty())
-			Expect(jsonResponse.ClientSecret).NotTo(BeEmpty())
+			Expect(jsonResponse.Data.ID).NotTo(BeEmpty())
+			Expect(jsonResponse.Data.Attributes.ClientID).NotTo(BeEmpty())
+			Expect(jsonResponse.Data.Attributes.ClientSecret).NotTo(BeEmpty())
 		})
 	})
 
