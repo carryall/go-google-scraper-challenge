@@ -1,7 +1,7 @@
-package helpers_test
+package config_test
 
 import (
-	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/config"
 
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo"
@@ -16,7 +16,7 @@ var _ = Describe("Config", func() {
 				gin.SetMode(gin.ReleaseMode)
 				defer gin.SetMode(gin.TestMode)
 
-				result := helpers.GetConfigPrefix()
+				result := config.GetConfigPrefix()
 
 				Expect(result).To(BeEmpty())
 			})
@@ -27,7 +27,7 @@ var _ = Describe("Config", func() {
 				gin.SetMode(gin.DebugMode)
 				defer gin.SetMode(gin.TestMode)
 
-				result := helpers.GetConfigPrefix()
+				result := config.GetConfigPrefix()
 
 				Expect(result).To(Equal("debug."))
 			})
@@ -38,7 +38,7 @@ var _ = Describe("Config", func() {
 				gin.SetMode(gin.TestMode)
 				defer gin.SetMode(gin.TestMode)
 
-				result := helpers.GetConfigPrefix()
+				result := config.GetConfigPrefix()
 
 				Expect(result).To(Equal("test."))
 			})
@@ -50,7 +50,7 @@ var _ = Describe("Config", func() {
 			It("returns true", func() {
 				viper.Set("test.bool_config", true)
 
-				result := helpers.GetBoolConfig("bool_config")
+				result := config.GetBoolConfig("bool_config")
 
 				Expect(result).To(BeTrue())
 			})
@@ -60,7 +60,7 @@ var _ = Describe("Config", func() {
 			It("returns false", func() {
 				viper.Set("test.bool_config", true)
 
-				result := helpers.GetBoolConfig("invalid")
+				result := config.GetBoolConfig("invalid")
 
 				Expect(result).To(BeFalse())
 			})
@@ -72,7 +72,7 @@ var _ = Describe("Config", func() {
 			It("returns correct config value", func() {
 				viper.Set("test.float_config", 1.0)
 
-				result := helpers.GetFloatConfig("float_config")
+				result := config.GetFloatConfig("float_config")
 
 				Expect(result).To(Equal(1.0))
 			})
@@ -82,7 +82,7 @@ var _ = Describe("Config", func() {
 			It("returns zero", func() {
 				viper.Set("test.float_config", 1.0)
 
-				result := helpers.GetFloatConfig("invalid")
+				result := config.GetFloatConfig("invalid")
 
 				Expect(result).To(BeZero())
 			})
@@ -94,7 +94,7 @@ var _ = Describe("Config", func() {
 			It("returns correct config value", func() {
 				viper.Set("test.int_config", 1)
 
-				result := helpers.GetIntConfig("int_config")
+				result := config.GetIntConfig("int_config")
 
 				Expect(result).To(Equal(1))
 			})
@@ -104,7 +104,7 @@ var _ = Describe("Config", func() {
 			It("returns zero", func() {
 				viper.Set("test.int_config", 1)
 
-				result := helpers.GetIntConfig("invalid")
+				result := config.GetIntConfig("invalid")
 
 				Expect(result).To(BeZero())
 			})
@@ -116,7 +116,7 @@ var _ = Describe("Config", func() {
 			It("returns correct config value", func() {
 				viper.Set("test.string_config", "some string")
 
-				result := helpers.GetStringConfig("string_config")
+				result := config.GetStringConfig("string_config")
 
 				Expect(result).To(Equal("some string"))
 			})
@@ -126,7 +126,7 @@ var _ = Describe("Config", func() {
 			It("returns empty config value", func() {
 				viper.Set("test.string_config", "some string")
 
-				result := helpers.GetStringConfig("invalid")
+				result := config.GetStringConfig("invalid")
 
 				Expect(result).To(BeEmpty())
 			})

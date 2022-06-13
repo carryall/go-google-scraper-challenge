@@ -16,6 +16,26 @@ type ResultsController struct {
 	BaseController
 }
 
+func (c *ResultsController) List(ctx *gin.Context) {
+	if c.EnsureAuthenticatedUser(ctx) != nil {
+		return
+	}
+
+	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"})
+	if err != nil {
+		RenderJSONError(ctx, errors.ErrServerError, err.Error())
+
+		return
+	}
+
+	response := []*serializers.ResultResponse{}
+	for _, result := range results {
+		response = append(response, serializers.ResultSerializer{Result: result}.Response())
+	}
+
+	RenderJSON(ctx, http.StatusOK, response)
+}
+
 func (c *ResultsController) Create(ctx *gin.Context) {
 	if c.EnsureAuthenticatedUser(ctx) != nil {
 		return
@@ -50,11 +70,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 
 	response := []*serializers.ResultResponse{}
 	for _, result := range *results {
-		response = append(response, &serializers.ResultResponse{
-			ID:      result.ID,
-			Keyword: result.Keyword,
-			UserID:  result.UserID,
-		})
+		response = append(response, serializers.ResultSerializer{Result: &result}.Response())
 	}
 
 	RenderJSON(ctx, http.StatusOK, response)
