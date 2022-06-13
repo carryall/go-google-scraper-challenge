@@ -21,7 +21,7 @@ var _ = Describe("ResultsController", func() {
 		Context("given an authenticated request", func() {
 			It("returns status OK", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
-				ctx, response := test.MakeAuthenticatedJSONRequest("GET", "/results", nil, user)
+				ctx, response := test.MakeJSONRequest("GET", "/results", nil, nil, user)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.List(ctx)
@@ -34,7 +34,7 @@ var _ = Describe("ResultsController", func() {
 				anotherUser := FabricateUser(faker.Email(), faker.Password())
 				expectedResult := FabricateResult(user)
 				FabricateResult(anotherUser)
-				ctx, response := test.MakeAuthenticatedJSONRequest("GET", "/results", nil, user)
+				ctx, response := test.MakeJSONRequest("GET", "/results", nil, nil, user)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.List(ctx)
@@ -56,7 +56,7 @@ var _ = Describe("ResultsController", func() {
 
 		Context("given an unauthenticated request", func() {
 			It("returns status Unauthorized", func() {
-				ctx, response := test.MakeAuthenticatedJSONRequest("GET", "/results", nil, nil)
+				ctx, response := test.MakeJSONRequest("GET", "/results", nil, nil, nil)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.List(ctx)
@@ -80,7 +80,7 @@ var _ = Describe("ResultsController", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					header, body := CreateRequestInfoFormFile("test/fixtures/files/valid.csv")
 
-					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+					ctx, response := MakeJSONRequest("POST", "/results", header, body, user)
 
 					resultsController := controllers.ResultsController{}
 					resultsController.Create(ctx)
@@ -92,7 +92,7 @@ var _ = Describe("ResultsController", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					header, body := CreateRequestInfoFormFile("test/fixtures/files/valid.csv")
 
-					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+					ctx, response := MakeJSONRequest("POST", "/results", header, body, user)
 
 					resultsController := controllers.ResultsController{}
 					resultsController.Create(ctx)
@@ -111,7 +111,7 @@ var _ = Describe("ResultsController", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					header, body := CreateRequestInfoFormFile("test/fixtures/files/empty.csv")
 
-					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+					ctx, response := MakeJSONRequest("POST", "/results", header, body, user)
 
 					resultsController := controllers.ResultsController{}
 					resultsController.Create(ctx)
@@ -132,7 +132,7 @@ var _ = Describe("ResultsController", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					header, body := CreateRequestInfoFormFile("test/fixtures/files/invalid.csv")
 
-					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+					ctx, response := MakeJSONRequest("POST", "/results", header, body, user)
 
 					resultsController := controllers.ResultsController{}
 					resultsController.Create(ctx)
@@ -153,7 +153,7 @@ var _ = Describe("ResultsController", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 					header, body := CreateRequestInfoFormFile("test/fixtures/files/text.txt")
 
-					ctx, response := MakeUploadRequest("POST", "/results", header, body, user)
+					ctx, response := MakeJSONRequest("POST", "/results", header, body, user)
 
 					resultsController := controllers.ResultsController{}
 					resultsController.Create(ctx)
@@ -174,7 +174,7 @@ var _ = Describe("ResultsController", func() {
 			It("returns status Unauthorized", func() {
 				header, body := CreateRequestInfoFormFile("test/fixtures/files/valid.csv")
 
-				ctx, response := MakeUploadRequest("POST", "/results", header, body, nil)
+				ctx, response := MakeJSONRequest("POST", "/results", header, body, nil)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Create(ctx)
