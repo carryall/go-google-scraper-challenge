@@ -1,6 +1,8 @@
 package serializers
 
-import "go-google-scraper-challenge/lib/models"
+import (
+	"go-google-scraper-challenge/lib/models"
+)
 
 type ResultsResponse struct {
 	Results ResultResponse
