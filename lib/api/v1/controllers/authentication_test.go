@@ -31,7 +31,7 @@ var _ = Describe("AuthenticationController", func() {
 					"grant_type":    {"password"},
 				}
 
-				ctx, response := MakeFormRequest("POST", "/login", formData)
+				ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 				authenticationController := controllers.AuthenticationController{}
 				authenticationController.Login(ctx)
@@ -51,7 +51,7 @@ var _ = Describe("AuthenticationController", func() {
 					"grant_type":    {"password"},
 				}
 
-				ctx, response := MakeFormRequest("POST", "/login", formData)
+				ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 				authenticationController := controllers.AuthenticationController{}
 				authenticationController.Login(ctx)
@@ -80,7 +80,7 @@ var _ = Describe("AuthenticationController", func() {
 						"client_secret": {authClient.ClientSecret},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -106,7 +106,7 @@ var _ = Describe("AuthenticationController", func() {
 						"client_secret": {authClient.ClientSecret},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -132,7 +132,7 @@ var _ = Describe("AuthenticationController", func() {
 						"client_id":  {authClient.ClientID},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -158,7 +158,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"password"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -184,7 +184,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"password"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -213,7 +213,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"password"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -241,7 +241,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"password"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -269,7 +269,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"password"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -296,7 +296,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"password"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)
@@ -324,7 +324,7 @@ var _ = Describe("AuthenticationController", func() {
 						"grant_type":    {"invalid grant type"},
 					}
 
-					ctx, response := MakeFormRequest("POST", "/login", formData)
+					ctx, response := MakeFormRequest("POST", "/login", formData, nil)
 
 					authenticationController := controllers.AuthenticationController{}
 					authenticationController.Login(ctx)

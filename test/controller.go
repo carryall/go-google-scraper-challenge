@@ -15,30 +15,8 @@ import (
 	"github.com/onsi/ginkgo"
 )
 
-func MakeUploadRequest(method string, url string, header http.Header, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
+func MakeJSONRequest(method string, url string, header http.Header, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildRequest(method, url, header, body)
-
-	if user != nil {
-		accessToken := FabricateAuthToken(user.ID)
-		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-	}
-
-	return MakeRequest(request)
-}
-
-func MakeAuthenticatedFormRequest(method string, url string, formData url.Values, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
-	request := buildFormRequest(method, url, nil, formData)
-
-	if user != nil {
-		accessToken := FabricateAuthToken(user.ID)
-		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-	}
-
-	return MakeRequest(request)
-}
-
-func MakeAuthenticatedJSONRequest(method string, url string, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
-	request := HTTPRequest(method, url, body)
 	request.Header.Add("Content-Type", "application/json")
 
 	if user != nil {
@@ -49,15 +27,8 @@ func MakeAuthenticatedJSONRequest(method string, url string, body io.Reader, use
 	return MakeRequest(request)
 }
 
-func MakeFormRequest(method string, url string, formData url.Values) (*gin.Context, *httptest.ResponseRecorder) {
+func MakeFormRequest(method string, url string, formData url.Values, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildFormRequest(method, url, nil, formData)
-
-	return MakeRequest(request)
-}
-
-func MakeJSONRequest(method string, url string, body io.Reader) (*gin.Context, *httptest.ResponseRecorder) {
-	request := HTTPRequest(method, url, body)
-	request.Header.Add("Content-Type", "application/json")
 
 	return MakeRequest(request)
 }
