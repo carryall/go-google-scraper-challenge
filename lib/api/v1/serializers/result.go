@@ -4,10 +4,6 @@ import (
 	"go-google-scraper-challenge/lib/models"
 )
 
-type ResultsResponse struct {
-	Results ResultResponse
-}
-
 type ResultResponse struct {
 	ID        int64             `jsonapi:"primary,result"`
 	Keyword   string            `jsonapi:"attr,keyword"`
@@ -30,13 +26,13 @@ type ResultsJSONResponse struct {
 		} `json:"attributes"`
 		Relationships struct {
 			User struct {
-				Data RelationshipData
+				Data RelationshipData `json:"data"`
 			} `json:"user"`
 			AdLinks struct {
-				Data RelationshipData
+				Data []RelationshipData `json:"data"`
 			} `json:"ad_links"`
 			Links struct {
-				Data RelationshipData
+				Data []RelationshipData `json:"data"`
 			} `json:"links"`
 		}
 	} `json:"data"`
@@ -62,6 +58,24 @@ func (s ResultSerializer) Response() (response *ResultResponse) {
 
 	if s.Result.User != nil {
 		response.User = UserSerializer{User: s.Result.User}.Response()
+	}
+
+	if s.Result.AdLinks != nil {
+		adLinks := []*AdLinkResponse{}
+		for _, adLink := range s.Result.AdLinks {
+			adLinks = append(adLinks, AdLinkSerializer{AdLink: adLink}.Response())
+		}
+
+		response.AdLinks = adLinks
+	}
+
+	if s.Result.Links != nil {
+		Links := []*LinkResponse{}
+		for _, Link := range s.Result.Links {
+			Links = append(Links, LinkSerializer{Link: Link}.Response())
+		}
+
+		response.Links = Links
 	}
 
 	return response

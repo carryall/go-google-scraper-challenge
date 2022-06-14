@@ -52,6 +52,30 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonArrayResponse.Included[0].ID).To(Equal(fmt.Sprint(user.ID)))
 				Expect(jsonArrayResponse.Included[0].Attributes["email"]).To(Equal(user.Email))
 			})
+
+			It("returns relations of results", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				adLink := FabricateAdLink(result)
+				link := FabricateLink(result)
+				ctx, response := test.MakeAuthenticatedJSONRequest("GET", "/results", nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.List(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusOK))
+
+				jsonArrayResponse := &serializers.ResultsJSONResponse{}
+				test.GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+
+				Expect(jsonArrayResponse.Data).To(HaveLen(1))
+				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data).To(HaveLen(1))
+				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data[0].ID).To(Equal(fmt.Sprint(adLink.ID)))
+				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data[0].Type).To(Equal("ad_link"))
+				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data).To(HaveLen(1))
+				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data[0].ID).To(Equal(fmt.Sprint(link.ID)))
+				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data[0].Type).To(Equal("link"))
+			})
 		})
 
 		Context("given an unauthenticated request", func() {
@@ -189,5 +213,9 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonResponse.Errors[0].Detail).To(Equal("invalid access token"))
 			})
 		})
+	})
+
+	AfterEach(func() {
+		CleanupDatabase([]string{"users", "results", "ad_links", "links"})
 	})
 })
