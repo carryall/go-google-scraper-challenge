@@ -9,8 +9,6 @@ import (
 	"github.com/go-co-op/gocron"
 )
 
-const CronExpression = "0/30 * * * *"
-
 var scheduler *gocron.Scheduler
 
 func InitCron() {
