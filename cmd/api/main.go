@@ -21,6 +21,8 @@ func main() {
 
 	oauth.SetUpOauth()
 
+	bootstrap.InitCron()
+
 	err := r.Run(getAppPort())
 	if err != nil {
 		log.Fatal("Failed to start server: ", err)
