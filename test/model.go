@@ -62,7 +62,7 @@ func FabricateResultWithParams(user *models.User, keyword string, status string)
 		log.Fatal("Failed to add result " + err.Error())
 	}
 
-	result, err = models.GetResultByID(resultID)
+	result, err = models.GetResultByID(resultID, []string{})
 	if err != nil {
 		log.Fatal("Failed to get result " + err.Error())
 	}
