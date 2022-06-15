@@ -225,6 +225,27 @@ var _ = Describe("Result", func() {
 				Expect(result.Keyword).To(Equal(existResult.Keyword))
 				Expect(result.UserID).To(Equal(user.ID))
 			})
+
+			Context("given preload relations", func() {
+				It("returns result with the given relations", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result := FabricateResult(user)
+					adLink := FabricateAdLink(result)
+					link := FabricateLink(result)
+					result, err := models.GetResultByID(result.ID, []string{"User", "AdLinks", "Links"})
+					if err != nil {
+						Fail("Failed to get result with ID")
+					}
+
+					Expect(result.Keyword).To(Equal(result.Keyword))
+					Expect(result.UserID).To(Equal(result.UserID))
+					Expect(result.User.ID).To(Equal(result.UserID))
+					Expect(result.AdLinks).To(HaveLen(1))
+					Expect(result.AdLinks[0].ID).To(Equal(adLink.ID))
+					Expect(result.Links).To(HaveLen(1))
+					Expect(result.Links[0].ID).To(Equal(link.ID))
+				})
+			})
 		})
 
 		Context("given result id does NOT exist in the system", func() {
