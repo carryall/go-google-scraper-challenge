@@ -10,6 +10,7 @@ import (
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
+	"github.com/gin-gonic/gin"
 	"github.com/google/jsonapi"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -101,6 +102,7 @@ var _ = Describe("ResultsController", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: fmt.Sprint(result.ID)})
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Show(ctx)
@@ -112,6 +114,7 @@ var _ = Describe("ResultsController", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: fmt.Sprint(result.ID)})
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Show(ctx)
@@ -136,6 +139,7 @@ var _ = Describe("ResultsController", func() {
 				adLink := FabricateAdLink(result)
 				link := FabricateLink(result)
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: fmt.Sprint(result.ID)})
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Show(ctx)
