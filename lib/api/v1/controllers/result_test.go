@@ -52,11 +52,12 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonArrayResponse.Included[0].Attributes["email"]).To(Equal(user.Email))
 			})
 
-			It("returns relations of results", func() {
+			It("returns number of result relations", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
-				adLink := FabricateAdLink(result)
-				link := FabricateLink(result)
+				FabricateLink(result)
+				FabricateAdLink(result)
+				FabricateAdLink(result)
 				ctx, response := MakeJSONRequest("GET", "/results", nil, nil, user)
 
 				resultsController := controllers.ResultsController{}
@@ -68,12 +69,8 @@ var _ = Describe("ResultsController", func() {
 				GetJSONResponseBody(response.Result(), &jsonArrayResponse)
 
 				Expect(jsonArrayResponse.Data).To(HaveLen(1))
-				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data).To(HaveLen(1))
-				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data[0].ID).To(Equal(fmt.Sprint(adLink.ID)))
-				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data[0].Type).To(Equal("ad_link"))
-				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data).To(HaveLen(1))
-				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data[0].ID).To(Equal(fmt.Sprint(link.ID)))
-				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data[0].Type).To(Equal("link"))
+				Expect(jsonArrayResponse.Data[0].Attributes.AdLinkCount).To(Equal(2))
+				Expect(jsonArrayResponse.Data[0].Attributes.LinkCount).To(Equal(1))
 			})
 		})
 
@@ -126,6 +123,8 @@ var _ = Describe("ResultsController", func() {
 					Expect(jsonArrayResponse.Data[0].ID).NotTo(BeNil())
 					Expect(jsonArrayResponse.Data[0].Attributes.Keyword).To(Equal("ergonomic chair"))
 					Expect(jsonArrayResponse.Data[0].Attributes.UserID).To(Equal(user.ID))
+					Expect(jsonArrayResponse.Data[0].Attributes.CreatedAt).To(BeNumerically(">", 0))
+					Expect(jsonArrayResponse.Data[0].Attributes.UpdatedAt).To(BeNumerically(">", 0))
 				})
 			})
 
