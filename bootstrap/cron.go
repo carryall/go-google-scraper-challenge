@@ -12,10 +12,12 @@ import (
 
 var scheduler *gocron.Scheduler
 
+const intervalTime = "30s"
+
 func InitCron() {
 	scheduler = gocron.NewScheduler(time.UTC)
 
-	_, err := scheduler.Every(30).Seconds().Do(performScrape)
+	_, err := scheduler.Every(intervalTime).Do(performScrape)
 	if err != nil {
 		log.Errorln("Fail to setup cron ", err.Error())
 
