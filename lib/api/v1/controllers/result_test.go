@@ -95,6 +95,91 @@ var _ = Describe("ResultsController", func() {
 		})
 	})
 
+	Describe("GET /results/:id", func() {
+		Context("given valid result ID", func() {
+			It("returns status ok", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.Show(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusOK))
+			})
+
+			It("returns result detail", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.Show(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusOK))
+
+				jsonResponse := &serializers.ResultDetailJSONResponse{}
+				GetJSONResponseBody(response.Result(), &jsonResponse)
+
+				Expect(jsonResponse.Data.ID).To(Equal(fmt.Sprint(result.ID)))
+				Expect(jsonResponse.Data.Attributes.CreatedAt).To(Equal(result.CreatedAt.Unix()))
+				Expect(jsonResponse.Data.Attributes.UpdatedAt).To(Equal(result.UpdatedAt.Unix()))
+				Expect(jsonResponse.Data.Attributes.Keyword).To(Equal(result.Keyword))
+				Expect(jsonResponse.Data.Attributes.PageCache).To(Equal(result.PageCache))
+				Expect(jsonResponse.Data.Attributes.Status).To(Equal(result.Status))
+				Expect(jsonResponse.Data.Attributes.UserID).To(Equal(result.UserID))
+			})
+
+			It("returns result relations", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				adLink := FabricateAdLink(result)
+				link := FabricateLink(result)
+				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.Show(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusOK))
+
+				jsonResponse := &serializers.ResultDetailJSONResponse{}
+				GetJSONResponseBody(response.Result(), &jsonResponse)
+
+				Expect(jsonResponse.Data.ID).To(Equal(fmt.Sprint(result.ID)))
+				Expect(jsonResponse.Data.Relationships.AdLinks.Data).To(HaveLen(1))
+				Expect(jsonResponse.Data.Relationships.AdLinks.Data[0].ID).To(Equal(fmt.Sprint(adLink.ID)))
+				Expect(jsonResponse.Data.Relationships.AdLinks.Data[0].Type).To(Equal("ad_link"))
+				Expect(jsonResponse.Data.Relationships.Links.Data).To(HaveLen(1))
+				Expect(jsonResponse.Data.Relationships.Links.Data[0].ID).To(Equal(fmt.Sprint(link.ID)))
+				Expect(jsonResponse.Data.Relationships.Links.Data[0].Type).To(Equal("link"))
+			})
+		})
+
+		Context("given INVALID result ID", func() {
+			It("returns not found error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", 999), nil, nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.Show(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusBadRequest))
+			})
+		})
+
+		Context("given NO result ID", func() {
+			It("returns not found", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%s", "invalid"), nil, nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.Show(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusBadRequest))
+			})
+		})
+	})
+
 	Describe("POST /results", func() {
 		Context("given an authenticated request", func() {
 			Context("given a valid file", func() {
