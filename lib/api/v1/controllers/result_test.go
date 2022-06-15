@@ -159,27 +159,42 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 
-		Context("given INVALID result ID", func() {
+		Context("given result ID dose NOT exist", func() {
 			It("returns not found error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", 999), nil, nil, user)
+				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: "999"})
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Show(ctx)
 
-				Expect(response.Code).To(Equal(http.StatusBadRequest))
+				Expect(response.Code).To(Equal(http.StatusNotFound))
+
+				jsonResponse := &jsonapi.ErrorsPayload{}
+				GetJSONResponseBody(response.Result(), &jsonResponse)
+
+				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrNotFound]))
+				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrNotFound.Error()))
+				Expect(jsonResponse.Errors[0].Detail).To(Equal("record not found"))
 			})
 		})
 
-		Context("given NO result ID", func() {
+		Context("given INVALID result ID", func() {
 			It("returns not found", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%s", "invalid"), nil, nil, user)
+				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: "invalid"})
 
 				resultsController := controllers.ResultsController{}
 				resultsController.Show(ctx)
 
 				Expect(response.Code).To(Equal(http.StatusBadRequest))
+
+				jsonResponse := &jsonapi.ErrorsPayload{}
+				GetJSONResponseBody(response.Result(), &jsonResponse)
+
+				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
+				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
 			})
 		})
 	})
