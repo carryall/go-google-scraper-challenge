@@ -7,18 +7,20 @@ import (
 
 type ResultResponse struct {
 	ID          int64         `jsonapi:"primary,result"`
+	CreatedAt   time.Time     `jsonapi:"attr,created_at"`
+	UpdatedAt   time.Time     `jsonapi:"attr,updated_at"`
 	Keyword     string        `jsonapi:"attr,keyword"`
 	UserID      int64         `jsonapi:"attr,user_id"`
 	Status      string        `jsonapi:"attr,status"`
 	AdLinkCount int           `jsonapi:"attr,ad_link_count"`
 	LinkCount   int           `jsonapi:"attr,link_count"`
 	User        *UserResponse `jsonapi:"relation,user,omitempty"`
-	CreatedAt   time.Time     `jsonapi:"attr,created_at"`
-	UpdatedAt   time.Time     `jsonapi:"attr,updated_at"`
 }
 
 type ResultDetailResponse struct {
 	ID        int64             `jsonapi:"primary,result"`
+	CreatedAt time.Time         `jsonapi:"attr,created_at"`
+	UpdatedAt time.Time         `jsonapi:"attr,updated_at"`
 	Keyword   string            `jsonapi:"attr,keyword"`
 	UserID    int64             `jsonapi:"attr,user_id"`
 	Status    string            `jsonapi:"attr,status"`
@@ -61,6 +63,8 @@ type ResultDetailJSONResponse struct {
 			UserID    int64  `json:"user_id"`
 			Status    string `json:"status"`
 			PageCache string `json:"page_cache"`
+			CreatedAt int64  `json:"created_at"`
+			UpdatedAt int64  `json:"updated_at"`
 		} `json:"attributes"`
 		Relationships struct {
 			User struct {
@@ -88,11 +92,11 @@ type ResultSerializer struct {
 func (s ResultSerializer) Response() (response *ResultResponse) {
 	response = &ResultResponse{
 		ID:        s.Result.ID,
+		CreatedAt: s.Result.CreatedAt,
+		UpdatedAt: s.Result.UpdatedAt,
 		Keyword:   s.Result.Keyword,
 		UserID:    s.Result.UserID,
 		Status:    s.Result.Status,
-		CreatedAt: s.Result.CreatedAt,
-		UpdatedAt: s.Result.UpdatedAt,
 	}
 
 	if s.Result.User != nil {
@@ -117,6 +121,8 @@ func (s ResultSerializer) Response() (response *ResultResponse) {
 func (s ResultSerializer) DetailResponse() (response *ResultDetailResponse) {
 	response = &ResultDetailResponse{
 		ID:        s.Result.ID,
+		CreatedAt: s.Result.CreatedAt,
+		UpdatedAt: s.Result.UpdatedAt,
 		Keyword:   s.Result.Keyword,
 		UserID:    s.Result.UserID,
 		Status:    s.Result.Status,

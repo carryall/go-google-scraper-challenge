@@ -37,6 +37,29 @@ func (c *ResultsController) List(ctx *gin.Context) {
 	RenderJSON(ctx, http.StatusOK, response)
 }
 
+func (c *ResultsController) Show(ctx *gin.Context) {
+	if c.EnsureAuthenticatedUser(ctx) != nil {
+		return
+	}
+
+	resultID, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
+
+		return
+	}
+
+	result, err := models.GetResultByID(int64(resultID), []string{"User", "AdLinks", "Links"})
+	if err != nil {
+		RenderJSONError(ctx, errors.ErrNotFound, err.Error())
+
+		return
+	}
+
+	response := serializers.ResultSerializer{Result: result}
+	RenderJSON(ctx, http.StatusOK, response.DetailResponse())
+}
+
 func (c *ResultsController) Create(ctx *gin.Context) {
 	if c.EnsureAuthenticatedUser(ctx) != nil {
 		return
@@ -75,34 +98,4 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 	}
 
 	RenderJSON(ctx, http.StatusOK, response)
-}
-
-func (c *ResultsController) Show(ctx *gin.Context) {
-	if c.EnsureAuthenticatedUser(ctx) != nil {
-		return
-	}
-
-	resultIDStr, ok := ctx.Params.Get("id")
-	if !ok {
-		RenderJSONError(ctx, errors.ErrInvalidRequest, "")
-
-		return
-	}
-
-	resultID, err := strconv.ParseInt(resultIDStr, 10, 64)
-	if err != nil {
-		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
-
-		return
-	}
-
-	result, err := models.GetResultByID(resultID, []string{"User", "AdLinks", "Links"})
-	if err != nil {
-		RenderJSONError(ctx, errors.ErrNotFound, err.Error())
-
-		return
-	}
-
-	response := serializers.ResultSerializer{Result: result}
-	RenderJSON(ctx, http.StatusOK, response.DetailResponse())
 }
