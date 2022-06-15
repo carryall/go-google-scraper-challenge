@@ -15,7 +15,7 @@ import (
 var _ = Describe("OAuthClientsController", func() {
 	Describe("POST /oauth/clients", func() {
 		It("returns status OK", func() {
-			ctx, response := MakeJSONRequest("POST", "/oauth/clients", nil)
+			ctx, response := MakeJSONRequest("POST", "/oauth/clients", nil, nil, nil)
 
 			oauthClientsController := controllers.OAuthClientsController{}
 			oauthClientsController.Create(ctx)
@@ -27,7 +27,7 @@ var _ = Describe("OAuthClientsController", func() {
 		})
 
 		It("returns correct response body", func() {
-			ctx, response := MakeJSONRequest("POST", "/oauth/clients", nil)
+			ctx, response := MakeJSONRequest("POST", "/oauth/clients", nil, nil, nil)
 
 			oauthClientsController := controllers.OAuthClientsController{}
 			oauthClientsController.Create(ctx)

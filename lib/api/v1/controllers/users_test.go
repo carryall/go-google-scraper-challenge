@@ -28,7 +28,7 @@ var _ = Describe("UsersController", func() {
 					"client_secret": {authClient.ClientSecret},
 				}
 
-				ctx, response := MakeFormRequest("POST", "/register", formData)
+				ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 				usersController := controllers.UsersController{}
 				usersController.Register(ctx)
@@ -45,7 +45,7 @@ var _ = Describe("UsersController", func() {
 					"client_secret": {authClient.ClientSecret},
 				}
 
-				ctx, response := MakeFormRequest("POST", "/register", formData)
+				ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 				usersController := controllers.UsersController{}
 				usersController.Register(ctx)
@@ -72,7 +72,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -89,7 +89,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -113,7 +113,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -130,7 +130,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -156,7 +156,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {""},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -173,7 +173,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {""},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -197,7 +197,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {"invalid secret"},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -214,7 +214,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {"invalid secret"},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -240,7 +240,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -257,7 +257,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -281,7 +281,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -298,7 +298,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -324,7 +324,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -341,7 +341,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -365,7 +365,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
@@ -382,7 +382,7 @@ var _ = Describe("UsersController", func() {
 							"client_secret": {authClient.ClientSecret},
 						}
 
-						ctx, response := MakeFormRequest("POST", "/register", formData)
+						ctx, response := MakeFormRequest("POST", "/register", formData, nil)
 
 						usersController := controllers.UsersController{}
 						usersController.Register(ctx)
