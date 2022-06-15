@@ -11,6 +11,7 @@ var (
 	ErrInvalidAuthClient   = errors.New("invalid_authentication_client")
 	ErrUnauthorizedUser    = errors.New("unauthorized_user")
 	ErrUnProcessableEntity = errors.New("unprocessable_entity")
+	ErrNotFound            = errors.New("not_found")
 	ErrServerError         = errors.New("server_error")
 )
 
@@ -20,6 +21,7 @@ var Titles = map[error]string{
 	ErrInvalidAuthClient:   "Invalid Authentication Client",
 	ErrUnauthorizedUser:    "Unauthorized User",
 	ErrUnProcessableEntity: "Unprocessable Entity",
+	ErrNotFound:            "Not Found",
 	ErrServerError:         "Internal Server Error",
 }
 
@@ -29,6 +31,7 @@ var Descriptions = map[error]string{
 	ErrInvalidAuthClient:   "Authentication client is invalid",
 	ErrUnauthorizedUser:    "The user is not authorized",
 	ErrUnProcessableEntity: "The request is unprocessable",
+	ErrNotFound:            "Cannot find the resource you are looking for",
 	ErrServerError:         "Something went wrong",
 }
 
@@ -38,5 +41,6 @@ var StatusCodes = map[error]int{
 	ErrInvalidAuthClient:   http.StatusUnauthorized,
 	ErrUnauthorizedUser:    http.StatusUnauthorized,
 	ErrUnProcessableEntity: http.StatusUnprocessableEntity,
+	ErrNotFound:            http.StatusNotFound,
 	ErrServerError:         http.StatusInternalServerError,
 }
