@@ -1,10 +1,11 @@
 package bootstrap
 
 import (
+	"time"
+
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/services/scraper"
-	"time"
 
 	"github.com/go-co-op/gocron"
 )
