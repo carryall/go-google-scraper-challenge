@@ -37,8 +37,8 @@ type ResultsJSONResponse struct {
 			Status      string `json:"status"`
 			AdLinkCount int    `json:"ad_link_count"`
 			LinkCount   int    `json:"link_count"`
-			CreatedAt   int    `json:"created_at"`
-			UpdatedAt   int    `json:"updated_at"`
+			CreatedAt   int64  `json:"created_at"`
+			UpdatedAt   int64  `json:"updated_at"`
 		} `json:"attributes"`
 		Relationships struct {
 			User struct {

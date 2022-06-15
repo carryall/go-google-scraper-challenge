@@ -47,6 +47,8 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonArrayResponse.Data[0].ID).To(Equal(fmt.Sprint(expectedResult.ID)))
 				Expect(jsonArrayResponse.Data[0].Attributes.Keyword).To(Equal(expectedResult.Keyword))
 				Expect(jsonArrayResponse.Data[0].Attributes.UserID).To(Equal(user.ID))
+				Expect(jsonArrayResponse.Data[0].Attributes.CreatedAt).To(Equal(expectedResult.CreatedAt.Unix()))
+				Expect(jsonArrayResponse.Data[0].Attributes.UpdatedAt).To(Equal(expectedResult.UpdatedAt.Unix()))
 				Expect(jsonArrayResponse.Included[0].Type).To(Equal("user"))
 				Expect(jsonArrayResponse.Included[0].ID).To(Equal(fmt.Sprint(user.ID)))
 				Expect(jsonArrayResponse.Included[0].Attributes["email"]).To(Equal(user.Email))
