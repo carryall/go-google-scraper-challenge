@@ -24,7 +24,7 @@ func (c *ResultsController) List(ctx *gin.Context) {
 	}
 
 	resultSearchForm := &forms.ResultSearchForm{}
-	ctx.ShouldBindWith(resultSearchForm, binding.JSON)
+	_ = ctx.ShouldBindWith(resultSearchForm, binding.JSON)
 
 	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"}, resultSearchForm.Keyword)
 	if err != nil {
