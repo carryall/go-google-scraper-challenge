@@ -723,7 +723,7 @@ var _ = Describe("Result", func() {
 					result2 := FabricateResult(user)
 					result3 := FabricateResult(anotherUser)
 
-					results, err := models.GetUserResults(user.ID, []string{})
+					results, err := models.GetUserResults(user.ID, []string{}, "")
 
 					Expect(err).To(BeNil())
 
@@ -744,7 +744,7 @@ var _ = Describe("Result", func() {
 						FabricateResult(user)
 						FabricateResult(anotherUser)
 
-						results, err := models.GetUserResults(user.ID, []string{"User"})
+						results, err := models.GetUserResults(user.ID, []string{"User"}, "")
 
 						Expect(err).To(BeNil())
 
@@ -754,13 +754,28 @@ var _ = Describe("Result", func() {
 						}
 					})
 				})
+
+				Context("given the search keyword", func() {
+					It("returns the results that contain the keyword", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						expectedResult := FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
+						FabricateResultWithParams(user, "non related", models.ResultStatusCompleted)
+
+						results, err := models.GetUserResults(user.ID, []string{"User"}, "word")
+
+						Expect(err).To(BeNil())
+						Expect(results).To(HaveLen(1))
+						Expect(results[0].ID).To(Equal(expectedResult.ID))
+						Expect(results[0].Keyword).To(Equal(expectedResult.Keyword))
+					})
+				})
 			})
 
 			Context("given user ID without results", func() {
 				It("returns a blank array of result", func() {
 					user := FabricateUser(faker.Email(), faker.Password())
 
-					results, err := models.GetUserResults(user.ID, []string{})
+					results, err := models.GetUserResults(user.ID, []string{}, "")
 
 					Expect(err).To(BeNil())
 					Expect(results).To(HaveLen(0))
@@ -771,7 +786,7 @@ var _ = Describe("Result", func() {
 		Context("given invalid params", func() {
 			Context("given an INVALID user ID", func() {
 				It("returns a blank array of result", func() {
-					results, err := models.GetUserResults(999, []string{})
+					results, err := models.GetUserResults(999, []string{}, "")
 
 					Expect(err).To(BeNil())
 					Expect(results).To(HaveLen(0))

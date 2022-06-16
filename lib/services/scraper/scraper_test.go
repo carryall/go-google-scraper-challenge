@@ -35,7 +35,7 @@ var _ = Describe("Scraper", func() {
 					Fail("Failed to run scraper service")
 				}
 
-				userResults, err := models.GetUserResults(user.ID, []string{"User", "AdLinks", "Links"})
+				userResults, err := models.GetUserResults(user.ID, []string{"User", "AdLinks", "Links"}, "")
 				if err != nil {
 					Fail("Failed to get user results")
 				}
