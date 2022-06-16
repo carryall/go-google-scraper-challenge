@@ -86,7 +86,7 @@ func GetResultByID(id int64, user *User, preloadRelations []string) (*Result, er
 func GetResultsByIDs(id []int64) (*[]Result, error) {
 	results := &[]Result{}
 
-	queryResult := database.GetDB().Take(&results, id)
+	queryResult := database.GetDB().Find(&results, id)
 	if queryResult.Error != nil {
 		return results, queryResult.Error
 	}
