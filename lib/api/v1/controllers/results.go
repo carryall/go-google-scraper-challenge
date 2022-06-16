@@ -22,9 +22,9 @@ func (c *ResultsController) List(ctx *gin.Context) {
 		return
 	}
 
-	filterKeyword := ctx.Query("keyword")
+	keyword := ctx.Query("keyword")
 
-	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"}, filterKeyword)
+	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"}, keyword)
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrServerError, err.Error())
 
