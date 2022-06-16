@@ -269,6 +269,7 @@ var _ = Describe("Result", func() {
 				results, err := models.GetResultsByIDs([]int64{result.ID, result2.ID})
 
 				Expect(err).To(BeNil())
+				Expect(*results).To(HaveLen(2))
 				for i, result := range *results {
 					Expect(result.Keyword).To(Equal(expectedResults[i].Keyword))
 					Expect(result.UserID).To(Equal(user.ID))
@@ -293,11 +294,11 @@ var _ = Describe("Result", func() {
 		})
 
 		Context("given NO result ID exist in the system", func() {
-			It("returns the error", func() {
+			It("returns a blank array", func() {
 				results, err := models.GetResultsByIDs([]int64{888, 999})
 
 				Expect(*results).To(HaveLen(0))
-				Expect(err.Error()).To(ContainSubstring("record not found"))
+				Expect(err).To(BeNil())
 			})
 		})
 	})

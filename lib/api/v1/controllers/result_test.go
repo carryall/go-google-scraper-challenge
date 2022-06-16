@@ -248,11 +248,13 @@ var _ = Describe("ResultsController", func() {
 					jsonArrayResponse := &serializers.ResultsJSONResponse{}
 					GetJSONResponseBody(response.Result(), &jsonArrayResponse)
 
+					Expect(jsonArrayResponse.Data).To(HaveLen(2))
 					Expect(jsonArrayResponse.Data[0].ID).NotTo(BeNil())
 					Expect(jsonArrayResponse.Data[0].Attributes.Keyword).To(Equal("ergonomic chair"))
 					Expect(jsonArrayResponse.Data[0].Attributes.UserID).To(Equal(user.ID))
-					Expect(jsonArrayResponse.Data[0].Attributes.CreatedAt).To(BeNumerically(">", 0))
-					Expect(jsonArrayResponse.Data[0].Attributes.UpdatedAt).To(BeNumerically(">", 0))
+					Expect(jsonArrayResponse.Data[1].ID).NotTo(BeNil())
+					Expect(jsonArrayResponse.Data[1].Attributes.Keyword).To(Equal("mechanical keyboard"))
+					Expect(jsonArrayResponse.Data[1].Attributes.UserID).To(Equal(user.ID))
 				})
 			})
 
