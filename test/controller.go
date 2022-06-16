@@ -1,6 +1,7 @@
 package test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -49,6 +50,15 @@ func HTTPRequest(method string, url string, body io.Reader) *http.Request {
 	}
 
 	return request
+}
+
+func GenerateRequestBody(params map[string]interface{}) *bytes.Buffer {
+	queryParams, err := json.Marshal(params)
+	if err != nil {
+		ginkgo.Fail("Cannot parse the request body")
+	}
+
+	return bytes.NewBuffer(queryParams)
 }
 
 // GetJSONResponseBody get response body from response, will fail the test if there is any error

@@ -11,6 +11,7 @@ import (
 	"go-google-scraper-challenge/lib/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 type ResultsController struct {
@@ -22,9 +23,10 @@ func (c *ResultsController) List(ctx *gin.Context) {
 		return
 	}
 
-	keyword := ctx.Query("keyword")
+	resultSearchForm := &forms.ResultSearchForm{}
+	ctx.ShouldBindWith(resultSearchForm, binding.JSON)
 
-	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"}, keyword)
+	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"}, resultSearchForm.Keyword)
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrServerError, err.Error())
 
