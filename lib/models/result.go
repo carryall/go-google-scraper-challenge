@@ -94,7 +94,7 @@ func GetResultsByIDs(id []int64) (*[]Result, error) {
 	return results, nil
 }
 
-func GetUserResults(userID int64, preloadRelations []string) (results []*Result, err error) {
+func GetUserResults(userID int64, preloadRelations []string, keyword string) (results []*Result, err error) {
 	query := map[string]interface{}{
 		"user_id": userID,
 	}
@@ -103,6 +103,10 @@ func GetUserResults(userID int64, preloadRelations []string) (results []*Result,
 
 	for _, relation := range preloadRelations {
 		db = db.Preload(relation)
+	}
+
+	if len(keyword) > 0 {
+		db = db.Where("keyword ILIKE '%' || ? || '%'", keyword)
 	}
 
 	queryResult := db.Find(&results, query)
