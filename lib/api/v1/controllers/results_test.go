@@ -7,6 +7,7 @@ import (
 	"go-google-scraper-challenge/errors"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
+	"go-google-scraper-challenge/lib/models"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
@@ -74,6 +75,54 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonArrayResponse.Data).To(HaveLen(1))
 				Expect(jsonArrayResponse.Data[0].Attributes.AdLinkCount).To(Equal(2))
 				Expect(jsonArrayResponse.Data[0].Attributes.LinkCount).To(Equal(1))
+			})
+
+			Context("given a keyword param", func() {
+				It("returns the results that contain the keyword", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result := FabricateResultWithParams(user, "mechanical keyboard", models.ResultStatusCompleted)
+					FabricateResultWithParams(user, "Khao Yai Hotel", models.ResultStatusCompleted)
+
+					requestBody := GenerateRequestBody(map[string]interface{}{
+						"keyword": "key",
+					})
+					ctx, response := MakeJSONRequest("GET", "/results", nil, requestBody, user)
+
+					resultsController := controllers.ResultsController{}
+					resultsController.List(ctx)
+
+					Expect(response.Code).To(Equal(http.StatusOK))
+
+					jsonArrayResponse := &serializers.ResultsJSONResponse{}
+					GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+
+					Expect(jsonArrayResponse.Data).To(HaveLen(1))
+					Expect(jsonArrayResponse.Data[0].ID).To(Equal(fmt.Sprint(result.ID)))
+					Expect(jsonArrayResponse.Data[0].Attributes.Keyword).To(Equal(result.Keyword))
+				})
+
+				Context("given no result match the keyword", func() {
+					It("returns an empty array", func() {
+						user := FabricateUser(faker.Email(), faker.Password())
+						FabricateResultWithParams(user, "mechanical keyboard", models.ResultStatusCompleted)
+						FabricateResultWithParams(user, "Khao Yai Hotel", models.ResultStatusCompleted)
+
+						requestBody := GenerateRequestBody(map[string]interface{}{
+							"keyword": "other",
+						})
+						ctx, response := MakeJSONRequest("GET", "/results", nil, requestBody, user)
+
+						resultsController := controllers.ResultsController{}
+						resultsController.List(ctx)
+
+						Expect(response.Code).To(Equal(http.StatusOK))
+
+						jsonArrayResponse := &serializers.ResultsJSONResponse{}
+						GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+
+						Expect(jsonArrayResponse.Data).To(HaveLen(0))
+					})
+				})
 			})
 		})
 
