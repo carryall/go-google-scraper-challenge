@@ -97,5 +97,5 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 		response = append(response, serializers.ResultSerializer{Result: &result}.Response())
 	}
 
-	RenderJSON(ctx, http.StatusOK, response)
+	RenderJSON(ctx, http.StatusCreated, response)
 }
