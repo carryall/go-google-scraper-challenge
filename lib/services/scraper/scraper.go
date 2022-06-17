@@ -4,14 +4,25 @@ import (
 	"fmt"
 	"net/url"
 
+	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
 
 	"github.com/gocolly/colly"
+	"gorm.io/gorm"
 )
 
 type Scraper struct {
-	Result *models.Result
+	Result     *models.Result
+	NonAdLinks []string
+	AdLinks    []AdLink
+	PageCache  string
+}
+
+type AdLink struct {
+	Type      string
+	Postition string
+	Link      string
 }
 
 var selectors = map[string]string{
@@ -39,26 +50,37 @@ func (s *Scraper) startScraping(url string) error {
 	collector.OnResponse(s.responseHandler)
 	collector.OnError(s.errorHandler)
 
-	collector.OnHTML(selectors["wholePage"], s.wholePageCollector)
+	collector.OnHTML(selectors["wholePage"], func(e *colly.HTMLElement) {
+		s.PageCache = string(e.Response.Body)
+	})
 
 	collector.OnHTML(selectors["nonAds"], func(e *colly.HTMLElement) {
-		s.addNonAdLinkToResult(e)
+		url := e.Attr("href")
+		s.NonAdLinks = append(s.NonAdLinks, url)
 	})
 
 	collector.OnHTML(selectors["topImageAds"], func(e *colly.HTMLElement) {
-		s.addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionTop, e)
+		link := e.Attr("href")
+		newAdLink := AdLink{models.AdLinkTypeImage, models.AdLinkPositionTop, link}
+		s.AdLinks = append(s.AdLinks, newAdLink)
 	})
 
 	collector.OnHTML(selectors["topLinkAds"], func(e *colly.HTMLElement) {
-		s.addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionTop, e)
+		link := e.Attr("href")
+		newAdLink := AdLink{models.AdLinkTypeLink, models.AdLinkPositionTop, link}
+		s.AdLinks = append(s.AdLinks, newAdLink)
 	})
 
 	collector.OnHTML(selectors["sideImageAds"], func(e *colly.HTMLElement) {
-		s.addAdLinkToResult(models.AdLinkTypeImage, models.AdLinkPositionSide, e)
+		link := e.Attr("href")
+		newAdLink := AdLink{models.AdLinkTypeImage, models.AdLinkPositionSide, link}
+		s.AdLinks = append(s.AdLinks, newAdLink)
 	})
 
 	collector.OnHTML(selectors["bottomAds"], func(e *colly.HTMLElement) {
-		s.addAdLinkToResult(models.AdLinkTypeLink, models.AdLinkPositionBottom, e)
+		link := e.Attr("href")
+		newAdLink := AdLink{models.AdLinkTypeLink, models.AdLinkPositionBottom, link}
+		s.AdLinks = append(s.AdLinks, newAdLink)
 	})
 
 	collector.OnScraped(s.finishScrapingHandler)
@@ -97,52 +119,85 @@ func (s *Scraper) errorHandler(response *colly.Response, errResponse error) {
 	log.Error("Failed to scrap result ID:", result.ID, " URL:", response.Request.URL, " with response:", response, "\nError:", errResponse.Error())
 }
 
-func (s *Scraper) wholePageCollector(e *colly.HTMLElement) {
+func (s *Scraper) savePageCache() error {
 	result := s.Result
-	result.PageCache = string(e.Response.Body)
+	result.PageCache = string(s.PageCache)
 	err := models.UpdateResult(result)
 	if err != nil {
 		log.Error("Failed to update result page cache:", err.Error())
+
+		return err
 	}
+
+	return nil
 }
 
-func (s *Scraper) addNonAdLinkToResult(element *colly.HTMLElement) {
-	link := element.Attr("href")
+func (s *Scraper) addNonAdLinksToResult() error {
+	for _, link := range s.NonAdLinks {
+		if len(link) > 0 {
+			link := &models.Link{
+				Result: s.Result,
+				Link:   link,
+			}
+			_, err := models.CreateLink(link)
+			if err != nil {
+				log.Error("Failed to add link:", err.Error())
 
-	if len(link) > 0 {
-		link := &models.Link{
-			Result: s.Result,
-			Link:   link,
-		}
-		_, err := models.CreateLink(link)
-		if err != nil {
-			log.Error("Failed to add link:", err.Error())
+				return err
+			}
 		}
 	}
+
+	return nil
 }
 
-func (s *Scraper) addAdLinkToResult(linkType string, linkPosition string, element *colly.HTMLElement) {
-	link := element.Attr("href")
+func (s *Scraper) addAdLinksToResult() error {
+	for _, adLink := range s.AdLinks {
+		if len(adLink.Link) > 0 {
+			adLink := &models.AdLink{
+				Result:   s.Result,
+				Type:     adLink.Type,
+				Position: adLink.Postition,
+				Link:     adLink.Link,
+			}
+			_, err := models.CreateAdLink(adLink)
+			if err != nil {
+				log.Error("Failed to add adLink:", err.Error())
 
-	if len(link) > 0 {
-		adLink := &models.AdLink{
-			Result:   s.Result,
-			Type:     linkType,
-			Position: linkPosition,
-			Link:     link,
-		}
-		_, err := models.CreateAdLink(adLink)
-		if err != nil {
-			log.Error("Failed to add adLink:", err.Error())
+				return err
+			}
 		}
 	}
+
+	return nil
 }
 
 func (s *Scraper) finishScrapingHandler(_ *colly.Response) {
-	result := s.Result
-	err := models.UpdateResultStatus(s.Result, models.ResultStatusCompleted)
-	if err != nil {
-		log.Error("Failed to complete result:", err.Error())
-	}
-	log.Info("Finished scraping for keyword:", result.Keyword)
+	db := database.GetDB()
+	db.Transaction(func(tx *gorm.DB) error {
+		err := s.savePageCache()
+		if err != nil {
+			return err
+		}
+
+		err = s.addNonAdLinksToResult()
+		if err != nil {
+			return err
+		}
+
+		err = s.addAdLinksToResult()
+		if err != nil {
+			return err
+		}
+
+		result := s.Result
+		err = models.UpdateResultStatus(result, models.ResultStatusCompleted)
+		if err != nil {
+			log.Error("Failed to complete result:", err.Error())
+			return err
+		}
+		log.Info("Finished scraping for keyword:", result.Keyword)
+
+		return nil
+	})
 }
