@@ -9,9 +9,3 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "5433:5432"
-
-  redis:
-    image: redis:6.2.7
-    container_name: google_scraper_redis_test
-    ports:
-      - "6380:6379"
