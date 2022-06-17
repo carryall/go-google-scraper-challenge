@@ -55,7 +55,7 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonArrayResponse.Included[0].Attributes["email"]).To(Equal(user.Email))
 			})
 
-			It("returns number of result relations", func() {
+			It("returns the number of result relations", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				FabricateLink(result)
@@ -97,7 +97,7 @@ var _ = Describe("ResultsController", func() {
 	})
 
 	Describe("GET /results/:id", func() {
-		Context("given valid result ID", func() {
+		Context("given a valid result ID", func() {
 			It("returns status ok", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
@@ -110,7 +110,7 @@ var _ = Describe("ResultsController", func() {
 				Expect(response.Code).To(Equal(http.StatusOK))
 			})
 
-			It("returns result detail", func() {
+			It("returns the result detail", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
@@ -133,7 +133,7 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonResponse.Data.Attributes.UserID).To(Equal(result.UserID))
 			})
 
-			It("returns result relations", func() {
+			It("returns the result relations", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 				adLink := FabricateAdLink(result)
@@ -159,8 +159,8 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 
-		Context("given result ID that does NOT belong to the authenticated user", func() {
-			It("returns not found error", func() {
+		Context("given a result ID that does NOT belong to the authenticated user", func() {
+			It("returns error not found", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				anotherUser := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(anotherUser)
@@ -181,8 +181,8 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 
-		Context("given result ID dose NOT exist", func() {
-			It("returns not found error", func() {
+		Context("given non-existing result ID", func() {
+			It("returns error not found", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", 999), nil, nil, user)
 				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: "999"})
@@ -201,8 +201,8 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 
-		Context("given INVALID result ID", func() {
-			It("returns not found", func() {
+		Context("given an INVALID result ID", func() {
+			It("returns error bad request", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%s", "invalid"), nil, nil, user)
 				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: "invalid"})
