@@ -98,11 +98,6 @@ func (s *Scraper) requestHandler(request *colly.Request) {
 	request.Headers.Set("User-Agent", userAgent)
 
 	log.Info("Visiting ", request.URL)
-
-	err := models.UpdateResultStatus(s.Result, models.ResultStatusProcessing)
-	if err != nil {
-		log.Error("Failed to process result:", err.Error())
-	}
 }
 
 func (s *Scraper) responseHandler(response *colly.Response) {
