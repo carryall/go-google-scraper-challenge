@@ -169,7 +169,7 @@ func (s *Scraper) addAdLinksToResult() error {
 
 func (s *Scraper) finishScrapingHandler(_ *colly.Response) {
 	db := database.GetDB()
-	db.Transaction(func(tx *gorm.DB) error {
+	err := db.Transaction(func(tx *gorm.DB) error {
 		err := s.savePageCache()
 		if err != nil {
 			return err
@@ -195,4 +195,8 @@ func (s *Scraper) finishScrapingHandler(_ *colly.Response) {
 
 		return nil
 	})
+
+	if err != nil {
+		log.Info("Fail to complete DB transaction", err.Error())
+	}
 }
