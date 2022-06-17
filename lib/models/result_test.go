@@ -37,7 +37,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to add result: " + err.Error())
 				}
 
-				result, err = models.GetResultByID(resultID, []string{})
+				result, err = models.GetResultByID(resultID, nil, []string{})
 				if err != nil {
 					Fail("Failed to add result: " + err.Error())
 				}
@@ -69,7 +69,7 @@ var _ = Describe("Result", func() {
 						Fail("Failed to add result: " + err.Error())
 					}
 
-					result, err = models.GetResultByID(resultID, []string{})
+					result, err = models.GetResultByID(resultID, nil, []string{})
 					if err != nil {
 						Fail("Failed to add result: " + err.Error())
 					}
@@ -217,7 +217,7 @@ var _ = Describe("Result", func() {
 			It("returns result with given id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				existResult := FabricateResult(user)
-				result, err := models.GetResultByID(existResult.ID, []string{})
+				result, err := models.GetResultByID(existResult.ID, nil, []string{})
 				if err != nil {
 					Fail("Failed to get result with ID")
 				}
@@ -232,7 +232,7 @@ var _ = Describe("Result", func() {
 					result := FabricateResult(user)
 					adLink := FabricateAdLink(result)
 					link := FabricateLink(result)
-					result, err := models.GetResultByID(result.ID, []string{"User", "AdLinks", "Links"})
+					result, err := models.GetResultByID(result.ID, nil, []string{"User", "AdLinks", "Links"})
 					if err != nil {
 						Fail("Failed to get result with ID")
 					}
@@ -250,7 +250,7 @@ var _ = Describe("Result", func() {
 
 		Context("given result id does NOT exist in the system", func() {
 			It("returns the error", func() {
-				result, err := models.GetResultByID(999, []string{})
+				result, err := models.GetResultByID(999, nil, []string{})
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(result).To(BeNil())
@@ -857,7 +857,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to update result with ID")
 				}
 
-				result, err := models.GetResultByID(existResult.ID, []string{})
+				result, err := models.GetResultByID(existResult.ID, nil, []string{})
 				if err != nil {
 					Fail("Failed to get result with ID")
 				}

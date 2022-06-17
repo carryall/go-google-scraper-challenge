@@ -159,6 +159,28 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 
+		Context("given result ID that does NOT belong to the authenticated user", func() {
+			It("returns not found error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				anotherUser := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(anotherUser)
+				ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results/%d", result.ID), nil, nil, user)
+				ctx.Params = append(ctx.Params, gin.Param{Key: "id", Value: fmt.Sprint(result.ID)})
+
+				resultsController := controllers.ResultsController{}
+				resultsController.Show(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusNotFound))
+
+				jsonResponse := &jsonapi.ErrorsPayload{}
+				GetJSONResponseBody(response.Result(), &jsonResponse)
+
+				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrNotFound]))
+				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrNotFound.Error()))
+				Expect(jsonResponse.Errors[0].Detail).To(Equal("record not found"))
+			})
+		})
+
 		Context("given result ID dose NOT exist", func() {
 			It("returns not found error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())

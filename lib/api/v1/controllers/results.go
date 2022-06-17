@@ -49,7 +49,7 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 		return
 	}
 
-	result, err := models.GetResultByID(int64(resultID), []string{"User", "AdLinks", "Links"})
+	result, err := models.GetResultByID(int64(resultID), c.CurrentUser, []string{"User", "AdLinks", "Links"})
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrNotFound, err.Error())
 
