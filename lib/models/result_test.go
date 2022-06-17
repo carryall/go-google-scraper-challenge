@@ -37,7 +37,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to add result: " + err.Error())
 				}
 
-				result, err = models.GetResultByID(resultID)
+				result, err = models.GetResultByID(resultID, nil, []string{})
 				if err != nil {
 					Fail("Failed to add result: " + err.Error())
 				}
@@ -69,7 +69,7 @@ var _ = Describe("Result", func() {
 						Fail("Failed to add result: " + err.Error())
 					}
 
-					result, err = models.GetResultByID(resultID)
+					result, err = models.GetResultByID(resultID, nil, []string{})
 					if err != nil {
 						Fail("Failed to add result: " + err.Error())
 					}
@@ -217,7 +217,7 @@ var _ = Describe("Result", func() {
 			It("returns result with given id", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				existResult := FabricateResult(user)
-				result, err := models.GetResultByID(existResult.ID)
+				result, err := models.GetResultByID(existResult.ID, nil, []string{})
 				if err != nil {
 					Fail("Failed to get result with ID")
 				}
@@ -225,11 +225,32 @@ var _ = Describe("Result", func() {
 				Expect(result.Keyword).To(Equal(existResult.Keyword))
 				Expect(result.UserID).To(Equal(user.ID))
 			})
+
+			Context("given preload relations", func() {
+				It("returns result with the given relations", func() {
+					user := FabricateUser(faker.Email(), faker.Password())
+					result := FabricateResult(user)
+					adLink := FabricateAdLink(result)
+					link := FabricateLink(result)
+					result, err := models.GetResultByID(result.ID, nil, []string{"User", "AdLinks", "Links"})
+					if err != nil {
+						Fail("Failed to get result with ID")
+					}
+
+					Expect(result.Keyword).To(Equal(result.Keyword))
+					Expect(result.UserID).To(Equal(result.UserID))
+					Expect(result.User.ID).To(Equal(result.UserID))
+					Expect(result.AdLinks).To(HaveLen(1))
+					Expect(result.AdLinks[0].ID).To(Equal(adLink.ID))
+					Expect(result.Links).To(HaveLen(1))
+					Expect(result.Links[0].ID).To(Equal(link.ID))
+				})
+			})
 		})
 
 		Context("given result id does NOT exist in the system", func() {
 			It("returns the error", func() {
-				result, err := models.GetResultByID(999)
+				result, err := models.GetResultByID(999, nil, []string{})
 
 				Expect(err.Error()).To(ContainSubstring("record not found"))
 				Expect(result).To(BeNil())
@@ -836,7 +857,7 @@ var _ = Describe("Result", func() {
 					Fail("Failed to update result with ID")
 				}
 
-				result, err := models.GetResultByID(existResult.ID)
+				result, err := models.GetResultByID(existResult.ID, nil, []string{})
 				if err != nil {
 					Fail("Failed to get result with ID")
 				}

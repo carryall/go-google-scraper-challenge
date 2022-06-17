@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
@@ -34,6 +35,29 @@ func (c *ResultsController) List(ctx *gin.Context) {
 	}
 
 	RenderJSON(ctx, http.StatusOK, response)
+}
+
+func (c *ResultsController) Show(ctx *gin.Context) {
+	if c.EnsureAuthenticatedUser(ctx) != nil {
+		return
+	}
+
+	resultID, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		RenderJSONError(ctx, errors.ErrInvalidRequest, err.Error())
+
+		return
+	}
+
+	result, err := models.GetResultByID(int64(resultID), c.CurrentUser, []string{"User", "AdLinks", "Links"})
+	if err != nil {
+		RenderJSONError(ctx, errors.ErrNotFound, err.Error())
+
+		return
+	}
+
+	response := serializers.ResultSerializer{Result: result}
+	RenderJSON(ctx, http.StatusOK, response.DetailResponse())
 }
 
 func (c *ResultsController) Create(ctx *gin.Context) {

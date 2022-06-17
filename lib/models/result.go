@@ -57,10 +57,24 @@ func CreateResults(results *[]Result) ([]int64, error) {
 }
 
 // GetResultByID retrieves Result by ID. Returns error if ID doesn't exist
-func GetResultByID(id int64) (*Result, error) {
+func GetResultByID(id int64, user *User, preloadRelations []string) (*Result, error) {
 	result := &Result{}
 
-	queryResult := database.GetDB().First(&result, id)
+	db := database.GetDB()
+
+	if user != nil {
+		query := map[string]interface{}{
+			"user_id": user.ID,
+		}
+
+		db = db.Where(query)
+	}
+
+	for _, relation := range preloadRelations {
+		db = db.Preload(relation)
+	}
+
+	queryResult := db.First(&result, id)
 	if queryResult.Error != nil {
 		return nil, queryResult.Error
 	}
@@ -196,7 +210,7 @@ func CountResultsBy(condition map[string]interface{}, preloadRelations []string,
 
 // UpdateResult updates Result and returns error if the record to be updated doesn't exist
 func UpdateResult(result *Result) error {
-	_, err := GetResultByID(result.ID)
+	_, err := GetResultByID(result.ID, nil, []string{})
 	if err != nil {
 		return err
 	}
