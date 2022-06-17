@@ -83,10 +83,7 @@ var _ = Describe("ResultsController", func() {
 					result := FabricateResultWithParams(user, "mechanical keyboard", models.ResultStatusCompleted)
 					FabricateResultWithParams(user, "Khao Yai Hotel", models.ResultStatusCompleted)
 
-					requestBody := GenerateRequestBody(map[string]interface{}{
-						"keyword": "key",
-					})
-					ctx, response := MakeJSONRequest("GET", "/results", nil, requestBody, user)
+					ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results?keyword=%s", "key"), nil, nil, user)
 
 					resultsController := controllers.ResultsController{}
 					resultsController.List(ctx)
@@ -107,10 +104,7 @@ var _ = Describe("ResultsController", func() {
 						FabricateResultWithParams(user, "mechanical keyboard", models.ResultStatusCompleted)
 						FabricateResultWithParams(user, "Khao Yai Hotel", models.ResultStatusCompleted)
 
-						requestBody := GenerateRequestBody(map[string]interface{}{
-							"keyword": "other",
-						})
-						ctx, response := MakeJSONRequest("GET", "/results", nil, requestBody, user)
+						ctx, response := MakeJSONRequest("GET", fmt.Sprintf("/results?keyword=%s", "other"), nil, nil, user)
 
 						resultsController := controllers.ResultsController{}
 						resultsController.List(ctx)
