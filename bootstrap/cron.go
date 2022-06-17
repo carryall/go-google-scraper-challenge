@@ -40,6 +40,8 @@ func performScrape() error {
 	err = models.UpdateResultStatus(result, models.ResultStatusProcessing)
 	if err != nil {
 		log.Error("Failed to update result status:", err.Error())
+
+		return err
 	}
 
 	scraperService := scraper.Scraper{
