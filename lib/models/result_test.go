@@ -755,7 +755,7 @@ var _ = Describe("Result", func() {
 					})
 				})
 
-				Context("given the search keyword", func() {
+				Context("given an existing search keyword", func() {
 					It("returns the results that contain the keyword", func() {
 						user := FabricateUser(faker.Email(), faker.Password())
 						expectedResult := FabricateResultWithParams(user, "keyword", models.ResultStatusCompleted)
