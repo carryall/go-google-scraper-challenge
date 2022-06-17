@@ -7,7 +7,6 @@ import (
 	"go-google-scraper-challenge/errors"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
-	"go-google-scraper-challenge/test"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
@@ -21,7 +20,7 @@ var _ = Describe("ResultsController", func() {
 		Context("given an authenticated request", func() {
 			It("returns status OK", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
-				ctx, response := test.MakeJSONRequest("GET", "/results", nil, nil, user)
+				ctx, response := MakeJSONRequest("GET", "/results", nil, nil, user)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.List(ctx)
@@ -34,7 +33,7 @@ var _ = Describe("ResultsController", func() {
 				anotherUser := FabricateUser(faker.Email(), faker.Password())
 				expectedResult := FabricateResult(user)
 				FabricateResult(anotherUser)
-				ctx, response := test.MakeJSONRequest("GET", "/results", nil, nil, user)
+				ctx, response := MakeJSONRequest("GET", "/results", nil, nil, user)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.List(ctx)
@@ -42,7 +41,7 @@ var _ = Describe("ResultsController", func() {
 				Expect(response.Code).To(Equal(http.StatusOK))
 
 				jsonArrayResponse := &serializers.ResultsJSONResponse{}
-				test.GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+				GetJSONResponseBody(response.Result(), &jsonArrayResponse)
 
 				Expect(jsonArrayResponse.Data).To(HaveLen(1))
 				Expect(jsonArrayResponse.Data[0].ID).To(Equal(fmt.Sprint(expectedResult.ID)))
@@ -52,11 +51,35 @@ var _ = Describe("ResultsController", func() {
 				Expect(jsonArrayResponse.Included[0].ID).To(Equal(fmt.Sprint(user.ID)))
 				Expect(jsonArrayResponse.Included[0].Attributes["email"]).To(Equal(user.Email))
 			})
+
+			It("returns relations of results", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				adLink := FabricateAdLink(result)
+				link := FabricateLink(result)
+				ctx, response := MakeJSONRequest("GET", "/results", nil, nil, user)
+
+				resultsController := controllers.ResultsController{}
+				resultsController.List(ctx)
+
+				Expect(response.Code).To(Equal(http.StatusOK))
+
+				jsonArrayResponse := &serializers.ResultsJSONResponse{}
+				GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+
+				Expect(jsonArrayResponse.Data).To(HaveLen(1))
+				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data).To(HaveLen(1))
+				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data[0].ID).To(Equal(fmt.Sprint(adLink.ID)))
+				Expect(jsonArrayResponse.Data[0].Relationships.AdLinks.Data[0].Type).To(Equal("ad_link"))
+				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data).To(HaveLen(1))
+				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data[0].ID).To(Equal(fmt.Sprint(link.ID)))
+				Expect(jsonArrayResponse.Data[0].Relationships.Links.Data[0].Type).To(Equal("link"))
+			})
 		})
 
 		Context("given an unauthenticated request", func() {
 			It("returns status Unauthorized", func() {
-				ctx, response := test.MakeJSONRequest("GET", "/results", nil, nil, nil)
+				ctx, response := MakeJSONRequest("GET", "/results", nil, nil, nil)
 
 				resultsController := controllers.ResultsController{}
 				resultsController.List(ctx)
@@ -64,7 +87,7 @@ var _ = Describe("ResultsController", func() {
 				Expect(response.Code).To(Equal(http.StatusUnauthorized))
 
 				jsonResponse := &jsonapi.ErrorsPayload{}
-				test.GetJSONResponseBody(response.Result(), &jsonResponse)
+				GetJSONResponseBody(response.Result(), &jsonResponse)
 
 				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrUnauthorizedUser]))
 				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrUnauthorizedUser.Error()))
@@ -98,7 +121,7 @@ var _ = Describe("ResultsController", func() {
 					resultsController.Create(ctx)
 
 					jsonArrayResponse := &serializers.ResultsJSONResponse{}
-					test.GetJSONResponseBody(response.Result(), &jsonArrayResponse)
+					GetJSONResponseBody(response.Result(), &jsonArrayResponse)
 
 					Expect(jsonArrayResponse.Data[0].ID).NotTo(BeNil())
 					Expect(jsonArrayResponse.Data[0].Attributes.Keyword).To(Equal("ergonomic chair"))
@@ -119,7 +142,7 @@ var _ = Describe("ResultsController", func() {
 					Expect(response.Code).To(Equal(http.StatusBadRequest))
 
 					jsonResponse := &jsonapi.ErrorsPayload{}
-					test.GetJSONResponseBody(response.Result(), &jsonResponse)
+					GetJSONResponseBody(response.Result(), &jsonResponse)
 
 					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
 					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
@@ -140,7 +163,7 @@ var _ = Describe("ResultsController", func() {
 					Expect(response.Code).To(Equal(http.StatusBadRequest))
 
 					jsonResponse := &jsonapi.ErrorsPayload{}
-					test.GetJSONResponseBody(response.Result(), &jsonResponse)
+					GetJSONResponseBody(response.Result(), &jsonResponse)
 
 					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
 					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
@@ -161,7 +184,7 @@ var _ = Describe("ResultsController", func() {
 					Expect(response.Code).To(Equal(http.StatusBadRequest))
 
 					jsonResponse := &jsonapi.ErrorsPayload{}
-					test.GetJSONResponseBody(response.Result(), &jsonResponse)
+					GetJSONResponseBody(response.Result(), &jsonResponse)
 
 					Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrInvalidRequest]))
 					Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrInvalidRequest.Error()))
@@ -182,12 +205,16 @@ var _ = Describe("ResultsController", func() {
 				Expect(response.Code).To(Equal(http.StatusUnauthorized))
 
 				jsonResponse := &jsonapi.ErrorsPayload{}
-				test.GetJSONResponseBody(response.Result(), &jsonResponse)
+				GetJSONResponseBody(response.Result(), &jsonResponse)
 
 				Expect(jsonResponse.Errors[0].Title).To(Equal(errors.Titles[errors.ErrUnauthorizedUser]))
 				Expect(jsonResponse.Errors[0].Code).To(Equal(errors.ErrUnauthorizedUser.Error()))
 				Expect(jsonResponse.Errors[0].Detail).To(Equal("invalid access token"))
 			})
 		})
+	})
+
+	AfterEach(func() {
+		CleanupDatabase([]string{"users", "results", "ad_links", "links"})
 	})
 })
