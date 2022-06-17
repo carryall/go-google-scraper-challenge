@@ -233,7 +233,7 @@ var _ = Describe("ResultsController", func() {
 					resultsController := controllers.ResultsController{}
 					resultsController.Create(ctx)
 
-					Expect(response.Code).To(Equal(http.StatusOK))
+					Expect(response.Code).To(Equal(http.StatusCreated))
 				})
 
 				It("returns list of result with the givern keyword", func() {
