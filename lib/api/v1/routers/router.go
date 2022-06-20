@@ -21,4 +21,6 @@ func ComebineRoutes(engine *gin.Engine) {
 	v1.POST("/register", registerController.Register)
 	v1.POST("/login", authenticationController.Login)
 	v1.POST("/results", resultsController.Create)
+	v1.GET("/results", resultsController.List)
+	v1.GET("/results/:id", resultsController.Show)
 }

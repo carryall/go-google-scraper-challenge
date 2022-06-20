@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strings"
 
+	"go-google-scraper-challenge/config"
 	"go-google-scraper-challenge/database"
-	"go-google-scraper-challenge/helpers"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -57,10 +57,24 @@ func CreateResults(results *[]Result) ([]int64, error) {
 }
 
 // GetResultByID retrieves Result by ID. Returns error if ID doesn't exist
-func GetResultByID(id int64) (*Result, error) {
+func GetResultByID(id int64, user *User, preloadRelations []string) (*Result, error) {
 	result := &Result{}
 
-	queryResult := database.GetDB().First(&result, id)
+	db := database.GetDB()
+
+	if user != nil {
+		query := map[string]interface{}{
+			"user_id": user.ID,
+		}
+
+		db = db.Where(query)
+	}
+
+	for _, relation := range preloadRelations {
+		db = db.Preload(relation)
+	}
+
+	queryResult := db.First(&result, id)
 	if queryResult.Error != nil {
 		return nil, queryResult.Error
 	}
@@ -72,7 +86,7 @@ func GetResultByID(id int64) (*Result, error) {
 func GetResultsByIDs(id []int64) (*[]Result, error) {
 	results := &[]Result{}
 
-	queryResult := database.GetDB().Take(&results, id)
+	queryResult := database.GetDB().Find(&results, id)
 	if queryResult.Error != nil {
 		return results, queryResult.Error
 	}
@@ -80,24 +94,27 @@ func GetResultsByIDs(id []int64) (*[]Result, error) {
 	return results, nil
 }
 
-// GetResultByIDWithRelations retrieves Result by ID with assigned relations. Returns error if ID doesn't exist
-func GetResultByIDWithRelations(id int64) (*Result, error) {
-	result, err := GetResultByID(id)
-	if err != nil {
-		return nil, err
+func GetUserResults(userID int64, preloadRelations []string, keyword string) (results []*Result, err error) {
+	query := map[string]interface{}{
+		"user_id": userID,
 	}
 
-	result.Links, err = GetLinksByResultID(result.ID)
-	if err != nil {
-		return result, err
+	db := database.GetDB()
+
+	for _, relation := range preloadRelations {
+		db = db.Preload(relation)
 	}
 
-	result.AdLinks, err = GetAdLinksByResultID(result.ID)
-	if err != nil {
-		return result, err
+	if len(keyword) > 0 {
+		db = db.Where("keyword ILIKE '%' || ? || '%'", keyword)
 	}
 
-	return result, nil
+	queryResult := db.Find(&results, query)
+	if queryResult.Error != nil {
+		return []*Result{}, queryResult.Error
+	}
+
+	return results, err
 }
 
 // GetOldestPendingResult retrieves Result with pending status. Return err if no pending result
@@ -118,8 +135,12 @@ func ContainKeyword(keyword string) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func query(condition map[string]interface{}, orderBy string, offset int, limit int) (*gorm.DB, []*Result) {
+func query(condition map[string]interface{}, preloadRelations []string, orderBy string, offset int, limit int) (*gorm.DB, []*Result) {
 	db := database.GetDB()
+
+	for _, relation := range preloadRelations {
+		db = db.Preload(relation)
+	}
 
 	if len(orderBy) > 0 {
 		orderColumn := orderBy
@@ -140,7 +161,7 @@ func query(condition map[string]interface{}, orderBy string, offset int, limit i
 
 	limitClause := limit
 	if limit < 0 {
-		limitClause = helpers.GetPaginationPerPage()
+		limitClause = config.GetPaginationPerPage()
 	}
 	db = db.Limit(limitClause)
 
@@ -168,8 +189,8 @@ func query(condition map[string]interface{}, orderBy string, offset int, limit i
 
 // GetResultsBy retrieves Results with given query. Returns empty list if no records exist
 // possible query params are order, limit, offset and result property filter
-func GetResultsBy(condition map[string]interface{}, orderBy string, offset int, limit int) ([]*Result, error) {
-	queryResult, results := query(condition, orderBy, offset, limit)
+func GetResultsBy(condition map[string]interface{}, preloadRelations []string, orderBy string, offset int, limit int) ([]*Result, error) {
+	queryResult, results := query(condition, preloadRelations, orderBy, offset, limit)
 
 	if queryResult.Error != nil {
 		return nil, queryResult.Error
@@ -179,9 +200,9 @@ func GetResultsBy(condition map[string]interface{}, orderBy string, offset int, 
 }
 
 // CountResultsBy count all Results with given query. Returns 0 if no records exist
-func CountResultsBy(condition map[string]interface{}, orderBy string, offset int, limit int) (int64, error) {
+func CountResultsBy(condition map[string]interface{}, preloadRelations []string, orderBy string, offset int, limit int) (int64, error) {
 	count := int64(0)
-	db, _ := query(condition, orderBy, offset, limit)
+	db, _ := query(condition, preloadRelations, orderBy, offset, limit)
 	countResult := db.Count(&count)
 
 	if countResult.Error != nil {
@@ -193,7 +214,7 @@ func CountResultsBy(condition map[string]interface{}, orderBy string, offset int
 
 // UpdateResult updates Result and returns error if the record to be updated doesn't exist
 func UpdateResult(result *Result) error {
-	_, err := GetResultByID(result.ID)
+	_, err := GetResultByID(result.ID, nil, []string{})
 	if err != nil {
 		return err
 	}

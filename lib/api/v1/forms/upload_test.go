@@ -42,8 +42,9 @@ var _ = Describe("API Upload Form", func() {
 				_, err := form.Validate()
 
 				Expect(err).To(BeNil())
-				Expect(form.Keywords).To(HaveLen(1))
+				Expect(form.Keywords).To(HaveLen(2))
 				Expect(form.Keywords[0]).To(Equal("ergonomic chair"))
+				Expect(form.Keywords[1]).To(Equal("mechanical keyboard"))
 			})
 		})
 
@@ -163,7 +164,7 @@ var _ = Describe("API Upload Form", func() {
 				resultIDs, err := form.Save()
 
 				Expect(err).To(BeNil())
-				Expect(resultIDs).To(HaveLen(1))
+				Expect(resultIDs).To(HaveLen(2))
 				for i := range resultIDs {
 					Expect(resultIDs[i]).To(BeNumerically(">", 0))
 				}
