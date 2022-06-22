@@ -1,4 +1,4 @@
-https://github.com/carryall/go-google-scraper-challenge/issues/
+Resolves https://github.com/carryall/go-google-scraper-challenge/issues/
 
 ## What happened 👀
 
