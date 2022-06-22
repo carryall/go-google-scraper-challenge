@@ -1,8 +1,12 @@
-[![Build Status](CI_BADGE_URL goes here)](REPO_URL goes here)
+![Staging test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=develop)![Staging deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=develop)![Staging](https://pyheroku-badge.herokuapp.com/?app=google-scraper-staging&style=flat)
+![Production test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=main)![Production deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=main)![Production](https://pyheroku-badge.herokuapp.com/?app=google-scraper-staging&style=flat)
 
 ## Introduction
 
-> *App introduction goes here ...*
+A project for Nimble Go Internal Certification on Web
+
+[Staging](https://google-scraper-staging.herokuapp.com)
+[Production](https://google-scraper-web.herokuapp.com)
 
 ## Project Setup
 
