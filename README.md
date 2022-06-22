@@ -1,6 +1,6 @@
 ![Staging test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=develop)![Staging deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=develop)![Staging](https://pyheroku-badge.herokuapp.com/?app=google-scraper-staging&style=flat)
 
-![Production test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=main)![Production deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=main)![Production](https://pyheroku-badge.herokuapp.com/?app=google-scraper-staging&style=flat)
+![Production test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=main)![Production deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=main)![Production](https://pyheroku-badge.herokuapp.com/?app=google-scraper-web&style=flat)
 
 ## Introduction
 
