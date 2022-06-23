@@ -33,6 +33,8 @@ To start the development server, `.env` file must be created.
 
 - [`forego`](https://github.com/ddollar/forego) manages Procfile-based applications.
 
+- [`goview`](https://github.com/foolin/goview) is used for the front-end part
+
 They need to be built as a binary file in `$GOPATH`.
 
 ```make
