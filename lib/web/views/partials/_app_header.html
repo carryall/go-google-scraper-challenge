@@ -1,7 +1,15 @@
 {{ define "appHeader" }}
-<header>
-  <a href="/">
-    <img src="assets/images/logo.svg" alt="Logo" />
-  </a>
-</header>
+  <div class="app-header">
+    <a href="" class="app-header__logo">
+      Home
+    </a>
+    <span>
+        <span class="app-header__profile">
+            <!-- Hi, {{ .CurrentUser.Email }} -->
+        </span>
+        <a href="" class="app-header__link">
+            Sign out
+        </a>
+    </span>
+  </div>
 {{ end }}
