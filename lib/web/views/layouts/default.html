@@ -5,27 +5,13 @@
     <title>Google Scraper</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link
-      href="static/vendors/tailwind/index.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="/static/stylesheets/application.css"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="static/vendors/tailwind/index.css" rel="stylesheet" type="text/css" />
+    <link href="static/stylesheets/application.css" rel="stylesheet" type="text/css" />
   </head>
   <body class="{{.ControllerName}} {{.ActionName}}">
-    <div class="icon-sprite" hidden="true">
-      {{ renderFile "static/symbol/svg/sprite.symbol.svg" }}
-    </div>
-
     {{ template "appHeader" }}
 
     <div class="app-content">
-      {{ renderFile "static/images/icons/search.svg" }}
-      {{ renderIcon "search" "icon--sm" }}
       {{ template "content" . }}
     </div>
   </body>
