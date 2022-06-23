@@ -1,26 +1,15 @@
 package routers
 
 import (
-	"html/template"
-	"net/url"
-
 	"go-google-scraper-challenge/lib/web/controllers"
 
 	"github.com/gin-gonic/gin"
-	eztemplate "github.com/michelloworld/ez-gin-template"
 )
 
-func ComebineRoutes(engine *gin.Engine) {
-	// Register HTML renderer
-	htmlRender := eztemplate.New()
-	htmlRender.Debug = gin.IsDebugging()
-	htmlRender.TemplatesDir = "lib/web/views/"
-	htmlRender.Layout = "layouts/application"
-	htmlRender.TemplateFuncMap = template.FuncMap{
-		"isActive": isActive,
-	}
-	engine.HTMLRender = htmlRender.Init()
+const ROOT_VIEW_PATH = "lib/web/views"
+const PARTIAL_PATH = ROOT_VIEW_PATH + "/partials"
 
+func ComebineRoutes(engine *gin.Engine) {
 	// Assets
 	router := engine.Group("/")
 	router.Static("/static", "./static")
@@ -28,8 +17,4 @@ func ComebineRoutes(engine *gin.Engine) {
 
 	// Routes
 	router.GET("/", controllers.HomeController{}.Index)
-}
-
-func isActive(currentPath *url.URL, path string) bool {
-	return currentPath.String() == path
 }
