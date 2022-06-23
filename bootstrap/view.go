@@ -14,6 +14,7 @@ import (
 
 const ROOT_VIEW_PATH = "lib/web/views"
 const PARTIAL_PATH = ROOT_VIEW_PATH + "/partials"
+const ICON_PATH = "static/images/icons/"
 
 func SetupView() {
 	gv := goview.New(goview.Config{
@@ -63,9 +64,8 @@ func renderFile(path string) template.HTML {
 }
 
 func renderIcon(iconName string, classNames string) template.HTML {
-	iconTemplate := `<svg class="icon ` + classNames + `" viewBox="0 0 20 20">
-		<use xlink:href="/svg/sprite.symbol.svg#` + iconName + `" />
-	</svg>`
+	iconPath := ICON_PATH + iconName + ".svg"
+	iconTemplate := `<svg class="icon ` + classNames + `" viewBox="0 0 20 20">` + string(renderFile(iconPath)) + `</svg>`
 
 	return template.HTML(iconTemplate)
 }
