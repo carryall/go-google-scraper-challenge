@@ -22,6 +22,7 @@ func main() {
 	oauth.SetUpOauth()
 
 	bootstrap.InitCron()
+	bootstrap.SetupView()
 
 	err := r.Run(getAppPort())
 	if err != nil {
