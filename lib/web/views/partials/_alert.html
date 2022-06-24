@@ -1,17 +1,19 @@
-{{ range $flashType, $flashMessage := .flash }}
-  {{ if $flashMessage }}
-    <div class="alert alert--{{$flashType}}">
-      <div class="alert__icon">
-        {{ $flashType }}
-      </div>
-      <div class="alert__body">
-        <h3 class="alert__title">
+{{ define "alert" }}
+  {{ range $flashType, $flashMessage := .flash }}
+    {{ if $flashMessage }}
+      <div class="alert alert--{{$flashType}}">
+        <div class="alert__icon">
           {{ $flashType }}
-        </h3>
-        <p class="alert__message">
-          {{ $flashMessage }}
-        </p>
+        </div>
+        <div class="alert__body">
+          <h3 class="alert__title">
+            {{ $flashType }}
+          </h3>
+          <p class="alert__message">
+            {{ $flashMessage }}
+          </p>
+        </div>
       </div>
-    </div>
+    {{ end }}
   {{ end }}
 {{ end }}

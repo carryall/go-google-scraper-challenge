@@ -1,4 +1,4 @@
-package bootstrap
+package view
 
 import (
 	"fmt"
@@ -16,8 +16,50 @@ const ROOT_VIEW_PATH = "lib/web/views"
 const PARTIAL_PATH = ROOT_VIEW_PATH + "/partials"
 const ICON_PATH = "static/images/icons/"
 
+var viewEngines = map[string]*goview.ViewEngine{}
+
+// var defaultConfig = goview.Config{
+// 	Root:      ROOT_VIEW_PATH,
+// 	Extension: ".html",
+// 	Master:    "layouts/default",
+// 	Partials:  getPartialList(),
+// 	Funcs: template.FuncMap{
+// 		"assetsCSS":  assetsCSS,
+// 		"isActive":   isActive,
+// 		"renderFile": renderFile,
+// 		"renderIcon": renderIcon,
+// 		"urlFor":     urlFor,
+// 	},
+// }
+
 func SetupView() {
-	gv := goview.New(goview.Config{
+	defaultEngine := goview.New(getDefaultConfig())
+	viewEngines["default"] = defaultEngine
+	viewEngines["authentication"] = setupNewEngine("authentication")
+
+	goview.Use(defaultEngine)
+}
+
+func SetLayout(layoutName string) {
+	engine := viewEngines[layoutName]
+
+	if engine != nil {
+		engine = setupNewEngine(layoutName)
+	}
+
+	viewEngines[layoutName] = engine
+	goview.Use(engine)
+}
+
+func setupNewEngine(layoutName string) *goview.ViewEngine {
+	newConfig := getDefaultConfig()
+	newConfig.Master = "layouts/" + layoutName
+
+	return goview.New(newConfig)
+}
+
+func getDefaultConfig() goview.Config {
+	return goview.Config{
 		Root:      ROOT_VIEW_PATH,
 		Extension: ".html",
 		Master:    "layouts/default",
@@ -27,10 +69,9 @@ func SetupView() {
 			"isActive":   isActive,
 			"renderFile": renderFile,
 			"renderIcon": renderIcon,
+			"urlFor":     urlFor,
 		},
-	})
-
-	goview.Use(gv)
+	}
 }
 
 func getPartialList() []string {
@@ -75,4 +116,8 @@ func renderIcon(iconName string, classNames string) template.HTML {
 	iconTemplate := `<svg class="icon ` + classNames + `" viewBox="0 0 20 20">` + string(renderFile(iconPath)) + `</svg>`
 
 	return template.HTML(iconTemplate)
+}
+
+func urlFor(controller string, action string) string {
+	return ""
 }
