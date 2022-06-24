@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
-	"net/url"
 	"path/filepath"
 
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 
 	"github.com/foolin/goview"
@@ -14,7 +14,6 @@ import (
 
 const ROOT_VIEW_PATH = "lib/web/views"
 const PARTIAL_PATH = ROOT_VIEW_PATH + "/partials"
-const ICON_PATH = "static/images/icons/"
 
 var viewEngines = map[string]*goview.ViewEngine{}
 
@@ -51,11 +50,12 @@ func getDefaultConfig() goview.Config {
 		Master:    "layouts/default",
 		Partials:  getPartialList(),
 		Funcs: template.FuncMap{
-			"assetsCSS":  assetsCSS,
-			"isActive":   isActive,
-			"renderFile": renderFile,
-			"renderIcon": renderIcon,
-			"urlFor":     urlFor,
+			"assetsCSS":  helpers.AssetsCSS,
+			"isActive":   helpers.IsActive,
+			"renderFile": helpers.RenderFile,
+			"renderIcon": helpers.RenderIcon,
+			"urlFor":     helpers.UrlFor,
+			"toKebab":    helpers.ToKebabCase,
 		},
 	}
 }
@@ -74,36 +74,4 @@ func getPartialList() []string {
 	}
 
 	return partials
-}
-
-func assetsCSS(path string) template.HTML {
-	linkHTML := `<link href="static/stylesheets/` + path + `" rel="stylesheet" type="text/css" />`
-
-	return template.HTML(linkHTML)
-}
-
-func isActive(currentPath *url.URL, path string) bool {
-	return currentPath.String() == path
-}
-
-func renderFile(path string) template.HTML {
-	content, err := ioutil.ReadFile(path)
-	if err != nil {
-		log.Error(err.Error())
-
-		return template.HTML("")
-	}
-
-	return template.HTML(string(content))
-}
-
-func renderIcon(iconName string, classNames string) template.HTML {
-	iconPath := ICON_PATH + iconName + ".svg"
-	iconTemplate := `<svg class="icon ` + classNames + `" viewBox="0 0 20 20">` + string(renderFile(iconPath)) + `</svg>`
-
-	return template.HTML(iconTemplate)
-}
-
-func urlFor(controller string, action string) string {
-	return ""
 }
