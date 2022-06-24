@@ -10,14 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type HomeController struct {
+type SessionsController struct {
 	BaseWebController
 }
 
-func (c HomeController) Index(ctx *gin.Context) {
-	view.SetLayout("default")
+func (c SessionsController) New(ctx *gin.Context) {
+	view.SetLayout("authentication")
 
-	err := goview.Render(ctx.Writer, http.StatusOK, "home/index", c.Data(ctx, gin.H{}))
+	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", c.Data(ctx, gin.H{"Title": "Sign In"}))
 	if err != nil {
 		log.Info("Error", err.Error())
 	}

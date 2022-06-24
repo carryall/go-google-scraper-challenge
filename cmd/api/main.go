@@ -7,6 +7,7 @@ import (
 	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/services/oauth"
+	"go-google-scraper-challenge/view"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -22,6 +23,7 @@ func main() {
 	oauth.SetUpOauth()
 
 	bootstrap.InitCron()
+	view.SetupView()
 
 	err := r.Run(getAppPort())
 	if err != nil {

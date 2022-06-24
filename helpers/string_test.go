@@ -47,4 +47,24 @@ var _ = Describe("String", func() {
 			})
 		})
 	})
+
+	Describe("#ToSnakeCase", func() {
+		Context("given a camel case string", func() {
+			It("returns a snake case string", func() {
+				Expect(helpers.ToSnakeCase("CamelCaseString")).To(Equal("camel_case_string"))
+			})
+		})
+
+		Context("given a kebab case string", func() {
+			It("returns a snake case string", func() {
+				Expect(helpers.ToSnakeCase("kebab-case-string")).To(Equal("kebab_case_string"))
+			})
+		})
+
+		Context("given a sentence case string", func() {
+			It("returns a snake case string", func() {
+				Expect(helpers.ToSnakeCase("Sentence case string")).To(Equal("sentence_case_string"))
+			})
+		})
+	})
 })
