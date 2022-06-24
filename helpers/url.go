@@ -1,12 +1,15 @@
 package helpers
 
-import "net/url"
+import (
+	"net/url"
+
+	"go-google-scraper-challenge/constants"
+)
 
 func IsActive(currentPath *url.URL, path string) bool {
 	return currentPath.String() == path
 }
 
-func UrlFor(controller string, action string) string {
-	// TODO: Implement this when all routes are added
-	return ""
+func UrlFor(controllerName string, actionName string) string {
+	return constants.WebRoutes[controllerName][actionName]
 }
