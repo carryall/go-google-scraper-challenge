@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	"net/http"
+
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/view"
-	"net/http"
 
 	"github.com/foolin/goview"
 	"github.com/gin-gonic/gin"

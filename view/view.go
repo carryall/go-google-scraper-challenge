@@ -18,20 +18,6 @@ const ICON_PATH = "static/images/icons/"
 
 var viewEngines = map[string]*goview.ViewEngine{}
 
-// var defaultConfig = goview.Config{
-// 	Root:      ROOT_VIEW_PATH,
-// 	Extension: ".html",
-// 	Master:    "layouts/default",
-// 	Partials:  getPartialList(),
-// 	Funcs: template.FuncMap{
-// 		"assetsCSS":  assetsCSS,
-// 		"isActive":   isActive,
-// 		"renderFile": renderFile,
-// 		"renderIcon": renderIcon,
-// 		"urlFor":     urlFor,
-// 	},
-// }
-
 func SetupView() {
 	defaultEngine := goview.New(getDefaultConfig())
 	viewEngines["default"] = defaultEngine
