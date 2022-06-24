@@ -7,5 +7,6 @@ func IsActive(currentPath *url.URL, path string) bool {
 }
 
 func UrlFor(controller string, action string) string {
+	// TODO: Implement this when all routes are added
 	return ""
 }
