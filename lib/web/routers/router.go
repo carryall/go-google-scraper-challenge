@@ -6,6 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var webRoutes = map[string]map[string]string{
+	"home": {
+		"index": "/",
+	},
+	"session": {
+		"new": "/signin",
+	},
+}
+
 func ComebineRoutes(engine *gin.Engine) {
 	// Assets
 	router := engine.Group("/")
@@ -13,5 +22,6 @@ func ComebineRoutes(engine *gin.Engine) {
 	router.Static("/assets/images", "./lib/web/assets/images")
 
 	// Routes
-	router.GET("/", controllers.HomeController{}.Index)
+	router.GET(webRoutes["home"]["index"], controllers.HomeController{}.Index)
+	router.GET(webRoutes["session"]["new"], controllers.SessionsController{}.New)
 }
