@@ -20,7 +20,6 @@ func (c DummyController) DummyAction(ctx *gin.Context) gin.H {
 }
 
 var _ = Describe("BaseWebController", func() {
-
 	Describe("#Data", func() {
 		It("returns the request URL as current path", func() {
 			expectedURL := &url.URL{Path: "/url"}
@@ -33,7 +32,7 @@ var _ = Describe("BaseWebController", func() {
 			Expect(data["CurrentPath"]).To(Equal(expectedURL))
 		})
 
-		It("returns the correct controller and and action name", func() {
+		It("returns the correct controller and action name", func() {
 			c, _ := CreateGinTestContext()
 			dummyController := DummyController{}
 
