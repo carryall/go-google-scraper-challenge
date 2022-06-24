@@ -4,6 +4,7 @@ import (
 	"runtime"
 	"strings"
 
+	"go-google-scraper-challenge/helpers"
 	api_controllers "go-google-scraper-challenge/lib/api/v1/controllers"
 
 	"github.com/gin-gonic/gin"
@@ -16,8 +17,8 @@ type BaseWebController struct {
 func (c BaseWebController) Data(ctx *gin.Context, data gin.H) gin.H {
 	data["CurrentPath"] = ctx.Request.URL
 	controllerName, actionName := getControllerAndActionName()
-	data["ControllerName"] = strings.ToLower(controllerName)
-	data["ActionName"] = strings.ToLower(actionName)
+	data["ControllerName"] = helpers.ToSnakeCase(controllerName)
+	data["ActionName"] = helpers.ToSnakeCase(actionName)
 
 	return data
 }
