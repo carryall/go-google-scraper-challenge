@@ -1,6 +1,6 @@
 module.exports = {
-  purge: [],
   darkMode: false, // or "media" or "class"
+  content: ["lib/web/views/**/*.html"],
   theme: {
     extend: {
       colors: {
