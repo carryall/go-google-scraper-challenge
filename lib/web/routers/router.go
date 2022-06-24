@@ -6,9 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const ROOT_VIEW_PATH = "lib/web/views"
-const PARTIAL_PATH = ROOT_VIEW_PATH + "/partials"
-
 func ComebineRoutes(engine *gin.Engine) {
 	// Assets
 	router := engine.Group("/")

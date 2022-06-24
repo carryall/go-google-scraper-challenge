@@ -23,6 +23,7 @@ func SetupView() {
 		Master:    "layouts/default",
 		Partials:  getPartialList(),
 		Funcs: template.FuncMap{
+			"assetsCSS":  assetsCSS,
 			"isActive":   isActive,
 			"renderFile": renderFile,
 			"renderIcon": renderIcon,
@@ -46,6 +47,12 @@ func getPartialList() []string {
 	}
 
 	return partials
+}
+
+func assetsCSS(path string) template.HTML {
+	linkHTML := `<link href="static/stylesheets/` + path + `" rel="stylesheet" type="text/css" />`
+
+	return template.HTML(linkHTML)
 }
 
 func isActive(currentPath *url.URL, path string) bool {
