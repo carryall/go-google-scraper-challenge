@@ -12,7 +12,7 @@ import (
 var _ = Describe("URL Helpers", func() {
 	Describe("#IsActive", func() {
 		Context("given the URL and the path are the same", func() {
-			It("returns the given file content", func() {
+			It("returns true", func() {
 				currentpath := &url.URL{Path: "/path"}
 
 				Expect(helpers.IsActive(currentpath, "/path")).To(BeTrue())
@@ -20,7 +20,7 @@ var _ = Describe("URL Helpers", func() {
 		})
 
 		Context("given the URL and the path are NOT the same", func() {
-			It("returns the given file content", func() {
+			It("returns false", func() {
 				currentpath := &url.URL{Path: "/path"}
 
 				Expect(helpers.IsActive(currentpath, "/another_path")).To(BeFalse())
