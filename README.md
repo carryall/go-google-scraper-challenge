@@ -1,8 +1,13 @@
-[![Build Status](CI_BADGE_URL goes here)](REPO_URL goes here)
+Staging ![Staging test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=develop)![Staging deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=develop)![Staging](https://pyheroku-badge.herokuapp.com/?app=google-scraper-staging&style=flat)
+
+Production ![Production test](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/test.yml/badge.svg?branch=main)![Production deployment](https://github.com/carryall/go-google-scraper-challenge/actions/workflows/deploy.yml/badge.svg?branch=main)![Production](https://pyheroku-badge.herokuapp.com/?app=google-scraper-web&style=flat)
 
 ## Introduction
 
-> *App introduction goes here ...*
+A project for Nimble Go Internal Certification on Web
+
+[Staging](https://google-scraper-staging.herokuapp.com)
+[Production](https://google-scraper-web.herokuapp.com)
 
 ## Project Setup
 
@@ -27,6 +32,8 @@ To start the development server, `.env` file must be created.
 - [`goose`](https://github.com/pressly/goose) is used for database migration.
 
 - [`forego`](https://github.com/ddollar/forego) manages Procfile-based applications.
+
+- [`goview`](https://github.com/foolin/goview) is used for the front-end part
 
 They need to be built as a binary file in `$GOPATH`.
 

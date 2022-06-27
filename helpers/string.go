@@ -36,3 +36,12 @@ func ToSentenceCase(str string) string {
 	caser := cases.Title(language.English)
 	return strings.Replace(sentence, words[0], caser.String(words[0]), 1)
 }
+
+func ToSnakeCase(str string) string {
+	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
+	snake = matchAllCap.ReplaceAllString(snake, "${1}_${2}")
+	snake = matchKebab.ReplaceAllString(snake, "${1} ${2}")
+	snake = matchSentence.ReplaceAllString(snake, "${1}_${2}")
+
+	return strings.ToLower(snake)
+}
