@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"go-google-scraper-challenge/helpers"
+	web_helpers "go-google-scraper-challenge/helpers/web"
 	api_controllers "go-google-scraper-challenge/lib/api/v1/controllers"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,23 @@ import (
 
 type BaseWebController struct {
 	api_controllers.BaseController
+}
+
+func (c *BaseWebController) EnsureGuestUser(ctx *gin.Context) {
+	currentUser := helpers.GetCurrentUser(ctx)
+
+	if currentUser != nil {
+		web_helpers.RedirectToDashboard(ctx)
+	}
+}
+
+func (c *BaseWebController) EnsureAuthenticatedUser(ctx *gin.Context) {
+	currentUser := helpers.GetCurrentUser(ctx)
+
+	if currentUser == nil {
+		actionName := c.Data(ctx, gin.H{})["ActionName"].(string)
+		web_helpers.HandleUnauthorizeRequest(ctx, actionName)
+	}
 }
 
 func (c *BaseWebController) Data(ctx *gin.Context, data gin.H) gin.H {
