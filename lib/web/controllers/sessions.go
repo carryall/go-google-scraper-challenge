@@ -1,4 +1,4 @@
-package controllers
+package webcontrollers
 
 import (
 	"net/http"
@@ -11,7 +11,7 @@ import (
 )
 
 type SessionsController struct {
-	BaseWebController
+	BaseController
 }
 
 func (c *SessionsController) New(ctx *gin.Context) {

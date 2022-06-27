@@ -1,4 +1,4 @@
-package controllers
+package webcontrollers
 
 import (
 	"runtime"
@@ -11,11 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type BaseWebController struct {
+type BaseController struct {
 	api_controllers.BaseController
 }
 
-func (c *BaseWebController) EnsureGuestUser(ctx *gin.Context) {
+func (c *BaseController) EnsureGuestUser(ctx *gin.Context) {
 	currentUser := helpers.GetCurrentUser(ctx)
 
 	if currentUser != nil {
@@ -23,7 +23,7 @@ func (c *BaseWebController) EnsureGuestUser(ctx *gin.Context) {
 	}
 }
 
-func (c *BaseWebController) EnsureAuthenticatedUser(ctx *gin.Context) {
+func (c *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) {
 	currentUser := helpers.GetCurrentUser(ctx)
 
 	if currentUser == nil {
@@ -32,7 +32,7 @@ func (c *BaseWebController) EnsureAuthenticatedUser(ctx *gin.Context) {
 	}
 }
 
-func (c *BaseWebController) Data(ctx *gin.Context, data gin.H) gin.H {
+func (c *BaseController) Data(ctx *gin.Context, data gin.H) gin.H {
 	data["CurrentPath"] = ctx.Request.URL
 	controllerName, actionName := getControllerAndActionName()
 	data["ControllerName"] = helpers.ToSnakeCase(controllerName)
