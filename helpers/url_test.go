@@ -36,8 +36,8 @@ var _ = Describe("URL Helpers", func() {
 		})
 
 		Context("given an INVALID controller and action name", func() {
-			It("returns the given file content", func() {
-				Expect(helpers.UrlFor("unknown", "unknown")).To(BeNil())
+			It("returns blank", func() {
+				Expect(helpers.UrlFor("unknown", "unknown")).To(BeEmpty())
 			})
 		})
 	})

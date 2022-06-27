@@ -11,5 +11,15 @@ func IsActive(currentPath *url.URL, path string) bool {
 }
 
 func UrlFor(controllerName string, actionName string) string {
-	return constants.WebRoutes[controllerName][actionName]
+	controllerRoutes, ok := constants.WebRoutes[controllerName]
+	if !ok {
+		return ""
+	}
+
+	url, ok := controllerRoutes[actionName]
+	if !ok {
+		return ""
+	}
+
+	return url
 }
