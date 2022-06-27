@@ -23,3 +23,7 @@ func (c *UsersController) New(ctx *gin.Context) {
 		log.Info("Error", err.Error())
 	}
 }
+
+func (c UsersController) Create(ctx *gin.Context) {
+	c.EnsureGuestUser(ctx)
+}
