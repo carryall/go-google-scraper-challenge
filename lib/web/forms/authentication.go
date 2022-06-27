@@ -3,6 +3,7 @@ package webforms
 import (
 	"errors"
 	"go-google-scraper-challenge/constants"
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
 	validation "github.com/go-ozzo/ozzo-validation"
@@ -27,11 +28,16 @@ func (f AuthenticationForm) Validate() (valid bool, err error) {
 	return true, nil
 }
 
-func (f AuthenticationForm) ValidateUser() error {
-	_, err := models.GetUserByEmail(f.Email)
+func (f AuthenticationForm) Save() (*models.User, error) {
+	user, err := models.GetUserByEmail(f.Email)
 	if err != nil {
-		return errors.New(constants.UserDoesNotExist)
+		return nil, errors.New(constants.SignInFail)
 	}
 
-	return nil
+	validPassword := helpers.CompareHashWithPassword(user.HashedPassword, f.Password)
+	if !validPassword {
+		return nil, errors.New(constants.SignInFail)
+	}
+
+	return user, nil
 }
