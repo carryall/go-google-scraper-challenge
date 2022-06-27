@@ -1,9 +1,9 @@
-package controllers_test
+package webcontrollers_test
 
 import (
 	"net/url"
 
-	"go-google-scraper-challenge/lib/web/controllers"
+	webcontrollers "go-google-scraper-challenge/lib/web/controllers"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/gin-gonic/gin"
@@ -12,22 +12,22 @@ import (
 )
 
 type DummyController struct {
-	controllers.BaseWebController
+	webcontrollers.BaseController
 }
 
 func (c DummyController) DummyAction(ctx *gin.Context) gin.H {
 	return c.Data(ctx, gin.H{})
 }
 
-var _ = Describe("BaseWebController", func() {
+var _ = Describe("BaseController", func() {
 	Describe("#Data", func() {
 		It("returns the request URL as current path", func() {
 			expectedURL := &url.URL{Path: "/url"}
 			c, _ := CreateGinTestContext()
 			c.Request.URL = expectedURL
-			baseWebController := controllers.BaseWebController{}
+			baseController := webcontrollers.BaseController{}
 
-			data := baseWebController.Data(c, gin.H{})
+			data := baseController.Data(c, gin.H{})
 
 			Expect(data["CurrentPath"]).To(Equal(expectedURL))
 		})
