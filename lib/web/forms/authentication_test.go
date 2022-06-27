@@ -78,35 +78,57 @@ var _ = Describe("API Authentication Form", func() {
 						Expect(err.Error()).To(Equal("Password: cannot be blank."))
 					})
 				})
+
 			})
 		})
 	})
 
-	Describe("#ValidateUser", func() {
-		Context("given email that belongs to a user", func() {
-			It("returns a user does not exist error", func() {
-				user := FabricateUser(faker.Email(), faker.Password())
+	Describe("Save", func() {
+		Context("given valid email and password", func() {
+			It("returns the user", func() {
+				password := faker.Password()
+				user := FabricateUser(faker.Email(), password)
 				form := webforms.AuthenticationForm{
 					Email:    user.Email,
-					Password: faker.Password(),
+					Password: password,
 				}
 
-				err := form.ValidateUser()
+				returnUser, err := form.Save()
 
+				Expect(returnUser).NotTo(BeNil())
+				Expect(returnUser.ID).To(Equal(user.ID))
 				Expect(err).To(BeNil())
 			})
 		})
 
-		Context("given email that does NOT belongs to any user", func() {
-			It("returns a user does not exist error", func() {
+		Context("given the user email does NOT exist", func() {
+			It("returns the sign in error", func() {
+				password := faker.Password()
+				FabricateUser(faker.Email(), password)
 				form := webforms.AuthenticationForm{
-					Email:    faker.Email(),
-					Password: faker.Password(),
+					Email:    "invalid@email.com",
+					Password: password,
 				}
 
-				err := form.ValidateUser()
+				user, err := form.Save()
 
-				Expect(err.Error()).To(Equal(constants.UserDoesNotExist))
+				Expect(user).To(BeNil())
+				Expect(err.Error()).To(Equal(constants.SignInFail))
+			})
+		})
+
+		Context("given a wrong password", func() {
+			It("returns the sign in error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				form := webforms.AuthenticationForm{
+					Email:    user.Email,
+					Password: "wrong",
+				}
+
+				user, err := form.Save()
+
+				Expect(user).To(BeNil())
+				Expect(err.Error()).To(Equal(constants.SignInFail))
 			})
 		})
 	})
