@@ -7,11 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter() *gin.Engine {
-	r := gin.Default()
+func SetupRouter(engine *gin.Engine) *gin.Engine {
+	apiv1router.ComebineRoutes(engine)
+	webrouter.ComebineRoutes(engine)
 
-	apiv1router.ComebineRoutes(r)
-	webrouter.ComebineRoutes(r)
-
-	return r
+	return engine
 }
