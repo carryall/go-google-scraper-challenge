@@ -22,7 +22,12 @@ func (c *SessionsController) New(ctx *gin.Context) {
 	c.EnsureGuestUser(ctx)
 	view.SetLayout("authentication")
 
-	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", c.Data(ctx, gin.H{"Title": "Sign In"}))
+	data := c.Data(ctx, gin.H{
+		"Title":   "Sign In",
+		"flashes": helpers.GetFlash(ctx),
+	})
+
+	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", data)
 	if err != nil {
 		log.Info("Error", err.Error())
 	}
@@ -32,26 +37,25 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 	c.EnsureGuestUser(ctx)
 
 	authenticationForm := &webforms.AuthenticationForm{}
+	redirectURL := constants.WebRoutes["sessions"]["new"]
 
 	err := ctx.ShouldBindWith(authenticationForm, binding.Form)
 	if err != nil {
-		// TODO: Display error
-		return
+		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
 	}
 
 	_, err = authenticationForm.Validate()
 	if err != nil {
-		// TODO: Display error
-		return
+		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
 	}
 
 	user, err := authenticationForm.Save()
 	if err != nil {
-		// TODO: Display error
-		return
+		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
+	} else {
+		helpers.SetCurrentUser(ctx, user.ID)
+		redirectURL = constants.WebRoutes["result"]["index"]
 	}
 
-	helpers.SetCurrentUser(ctx, user.ID)
-
-	ctx.Redirect(http.StatusFound, constants.WebRoutes["result"]["index"])
+	ctx.Redirect(http.StatusFound, redirectURL)
 }

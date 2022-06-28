@@ -45,3 +45,7 @@ func ToSnakeCase(str string) string {
 
 	return strings.ToLower(snake)
 }
+
+func ToTitleCase(str string) string {
+	return strings.ToTitle(str)
+}

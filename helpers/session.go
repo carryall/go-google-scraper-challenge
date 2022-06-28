@@ -9,6 +9,16 @@ import (
 )
 
 const CURRENT_USER_KEY = "CURRENT_USER_ID"
+const (
+	FlashTypeSuccess = "success"
+	FlashTypeInfo    = "info"
+	FlashTypeError   = "error"
+)
+
+type Flash struct {
+	Type    string
+	Message string
+}
 
 func GetCurrentUser(ctx *gin.Context) *models.User {
 	session := sessions.Default(ctx)
@@ -34,6 +44,32 @@ func SetCurrentUser(ctx *gin.Context, userID int64) {
 	if err != nil {
 		log.Error("Fail to set current user", err.Error())
 	}
+}
+
+func SetFlash(ctx *gin.Context, flashType string, flashMessage string) {
+	session := sessions.Default(ctx)
+	session.AddFlash(flashMessage, flashType)
+
+	err := session.Save()
+	if err != nil {
+		log.Error(err)
+	}
+}
+
+func GetFlash(ctx *gin.Context) map[string]interface{} {
+	session := sessions.Default(ctx)
+
+	flashes := map[string]interface{}{}
+	flashes[FlashTypeInfo] = session.Flashes(FlashTypeInfo)
+	flashes[FlashTypeError] = session.Flashes(FlashTypeError)
+	flashes[FlashTypeSuccess] = session.Flashes(FlashTypeSuccess)
+
+	err := session.Save()
+	if err != nil {
+		log.Error(err)
+	}
+
+	return flashes
 }
 
 func Clear(ctx *gin.Context) {
