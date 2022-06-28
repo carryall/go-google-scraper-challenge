@@ -9,7 +9,7 @@ import (
 func SetupSession(engine *gin.Engine) *gin.Engine {
 	store := cookie.NewStore([]byte("secret"))
 	store.Options(sessions.Options{MaxAge: 60 * 60 * 24 * 3})
-	engine.Use(sessions.Sessions("mysession", store))
+	engine.Use(sessions.Sessions("google_scraper_session", store))
 
 	return engine
 }

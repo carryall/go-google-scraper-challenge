@@ -1,17 +1,16 @@
 {{ define "alert" }}
-  {{ range $flashType, $flashMessage := .flash }}
-    {{ if $flashMessage }}
+  {{ range $flashType, $flashMessages := .flashes }}
+    {{ if $flashMessages }}
       <div class="alert alert--{{$flashType}}">
-        <div class="alert__icon">
-          {{ $flashType }}
-        </div>
         <div class="alert__body">
           <h3 class="alert__title">
-            {{ $flashType }}
+            {{ toTitle $flashType }}
           </h3>
-          <p class="alert__message">
-            {{ $flashMessage }}
-          </p>
+          {{ range $flashMessage := $flashMessages }}
+            <p class="alert__message">
+              {{ $flashMessage }}
+            </p>
+          {{ end }}
         </div>
       </div>
     {{ end }}
