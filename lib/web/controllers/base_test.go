@@ -24,6 +24,7 @@ var _ = Describe("BaseController", func() {
 		It("returns the request URL as current path", func() {
 			expectedURL := &url.URL{Path: "/url"}
 			c, _ := CreateGinTestContext()
+			c.Request = HTTPRequest("GET", "/url", nil)
 			c.Request.URL = expectedURL
 			baseController := webcontrollers.BaseController{}
 
@@ -34,6 +35,8 @@ var _ = Describe("BaseController", func() {
 
 		It("returns the correct controller and action name", func() {
 			c, _ := CreateGinTestContext()
+			c.Request = HTTPRequest("GET", "/url", nil)
+			c.Request.URL = &url.URL{Path: "/url"}
 			dummyController := DummyController{}
 
 			data := dummyController.DummyAction(c)
