@@ -19,7 +19,7 @@ func HandleUnauthorizeRequest(ctx *gin.Context, actionName string) {
 	}
 
 	if isGetMethod {
-		signInPath := constants.WebRoutes["session"]["new"]
+		signInPath := constants.WebRoutes["sessions"]["new"]
 		ctx.Redirect(http.StatusFound, signInPath)
 	} else {
 		ctx.AbortWithStatus(http.StatusMethodNotAllowed)
