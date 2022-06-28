@@ -14,7 +14,7 @@ type BaseWebController struct {
 	api_controllers.BaseController
 }
 
-func (c BaseWebController) Data(ctx *gin.Context, data gin.H) gin.H {
+func (c *BaseWebController) Data(ctx *gin.Context, data gin.H) gin.H {
 	data["CurrentPath"] = ctx.Request.URL
 	controllerName, actionName := getControllerAndActionName()
 	data["ControllerName"] = helpers.ToSnakeCase(controllerName)
