@@ -15,6 +15,6 @@ func ComebineRoutes(engine *gin.Engine) {
 
 	// Routes
 	router.GET(constants.WebRoutes["home"]["index"], controllers.HomeController{}.Index)
-	router.GET(constants.WebRoutes["session"]["new"], controllers.SessionsController{}.New)
+	router.GET(constants.WebRoutes["sessions"]["new"], controllers.SessionsController{}.New)
 	router.GET(constants.WebRoutes["users"]["new"], controllers.UsersController{}.New)
 }

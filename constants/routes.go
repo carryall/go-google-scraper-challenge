@@ -1,7 +1,7 @@
 package constants
 
 var WebRoutes = map[string]map[string]string{
-	"session": {
+	"sessions": {
 		"new":    "/signin",
 		"create": "/sessions",
 		"delete": "/signout",
