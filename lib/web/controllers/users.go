@@ -10,14 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SessionsController struct {
+type UsersController struct {
 	BaseWebController
 }
 
-func (c *SessionsController) New(ctx *gin.Context) {
+func (c *UsersController) New(ctx *gin.Context) {
 	view.SetLayout("authentication")
 
-	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", c.Data(ctx, gin.H{"Title": "Sign In"}))
+	err := goview.Render(ctx.Writer, http.StatusOK, "users/new", c.Data(ctx, gin.H{"Title": "Sign Up"}))
 	if err != nil {
 		log.Info("Error", err.Error())
 	}

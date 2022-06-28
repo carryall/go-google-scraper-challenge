@@ -27,4 +27,18 @@ var _ = Describe("URL Helpers", func() {
 			})
 		})
 	})
+
+	Describe("#UrlFor", func() {
+		Context("given a valid controller and action name", func() {
+			It("returns the correct path", func() {
+				Expect(helpers.UrlFor("users", "new")).To(Equal("/signup"))
+			})
+		})
+
+		Context("given an INVALID controller and action name", func() {
+			It("returns blank", func() {
+				Expect(helpers.UrlFor("unknown", "unknown")).To(BeEmpty())
+			})
+		})
+	})
 })
