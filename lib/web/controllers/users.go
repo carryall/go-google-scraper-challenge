@@ -14,7 +14,7 @@ type UsersController struct {
 	BaseWebController
 }
 
-func (c UsersController) New(ctx *gin.Context) {
+func (c *UsersController) New(ctx *gin.Context) {
 	view.SetLayout("authentication")
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "users/new", c.Data(ctx, gin.H{"Title": "Sign Up"}))
