@@ -16,6 +16,14 @@ import (
 	"github.com/onsi/ginkgo"
 )
 
+func GetCurrentPath(response *http.Response) string {
+	url, err := response.Location()
+	if err != nil {
+		ginkgo.Fail("Failed to get current path: " + err.Error())
+	}
+	return url.Path
+}
+
 func MakeJSONRequest(method string, url string, header http.Header, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildRequest(method, url, header, body)
 	request.Header.Add("Content-Type", "application/json")
@@ -40,6 +48,26 @@ func MakeRequest(request *http.Request) (*gin.Context, *httptest.ResponseRecorde
 	ctx.Request = request
 
 	return ctx, responseRecorder
+}
+
+func MakeWebRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
+	request := HTTPRequest(method, url, body)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	responseRecorder := httptest.NewRecorder()
+
+	Engine.ServeHTTP(responseRecorder, request)
+
+	return responseRecorder.Result()
+}
+
+func GetResponseBody(response *http.Response) string {
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		ginkgo.Fail("Failed to read response body")
+	}
+
+	return string(body)
 }
 
 // HTTPRequest initiate new HTTP request and handle the error, will fail the test if there is any error

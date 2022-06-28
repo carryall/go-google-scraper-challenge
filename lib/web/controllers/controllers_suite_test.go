@@ -9,7 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestControllers(t *testing.T) {
+func TestWebControllers(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Web Controllers Suite")
 }
