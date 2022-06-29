@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const CURRENT_USER_KEY = "CURRENT_USER_ID"
+const CurrentUserKey = "CURRENT_USER_ID"
 const (
 	FlashTypeSuccess = "success"
 	FlashTypeInfo    = "info"
@@ -22,7 +22,7 @@ type Flash struct {
 
 func GetCurrentUser(ctx *gin.Context) *models.User {
 	session := sessions.Default(ctx)
-	currentUserID := session.Get(CURRENT_USER_KEY)
+	currentUserID := session.Get(CurrentUserKey)
 	if currentUserID == nil {
 		return nil
 	}
@@ -39,7 +39,7 @@ func GetCurrentUser(ctx *gin.Context) *models.User {
 
 func SetCurrentUser(ctx *gin.Context, userID int64) {
 	session := sessions.Default(ctx)
-	session.Set(CURRENT_USER_KEY, userID)
+	session.Set(CurrentUserKey, userID)
 	err := session.Save()
 	if err != nil {
 		log.Error("Fail to set current user", err.Error())
