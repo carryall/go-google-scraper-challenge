@@ -10,9 +10,12 @@ import (
 	"net/http/httptest"
 	"net/url"
 
+	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/securecookie"
 	"github.com/onsi/ginkgo"
 )
 
@@ -51,8 +54,29 @@ func MakeRequest(request *http.Request) (*gin.Context, *httptest.ResponseRecorde
 }
 
 func MakeWebRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
-	request := HTTPRequest(method, url, body)
+	request := buildRequest(method, url, nil, body)
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	if user != nil {
+		cookie := FabricateAuthUserCookie(user.ID)
+		request.Header.Set("Cookie", cookie.Name+"="+cookie.Value)
+	}
+
+	responseRecorder := httptest.NewRecorder()
+
+	Engine.ServeHTTP(responseRecorder, request)
+
+	return responseRecorder.Result()
+}
+
+func MakeWebFormRequest(method string, url string, formData url.Values, user *models.User) *http.Response {
+	request := buildFormRequest(method, url, nil, formData)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	if user != nil {
+		cookie := FabricateAuthUserCookie(user.ID)
+		request.Header.Set("Cookie", cookie.Name+"="+cookie.Value)
+	}
 
 	responseRecorder := httptest.NewRecorder()
 
@@ -68,6 +92,71 @@ func GetResponseBody(response *http.Response) string {
 	}
 
 	return string(body)
+}
+
+func GetSessionUserID(cookies []*http.Cookie) interface{} {
+	for _, c := range cookies {
+		if c.Name == "google_scraper_session" {
+			decodedCookie := decodeCookieString(c.Value)
+
+			if decodedCookie[helpers.CurrentUserKey] != nil {
+				return fmt.Sprint(decodedCookie[helpers.CurrentUserKey])
+			}
+		}
+	}
+
+	return nil
+}
+
+func GetFlashMessage(cookies []*http.Cookie) map[string][]string {
+	flashes := map[string][]string{}
+	for _, c := range cookies {
+		if c.Name == "google_scraper_session" {
+			decodedCookie := decodeCookieString(c.Value)
+
+			if decodedCookie[helpers.FlashTypeSuccess] != nil {
+				flashes[helpers.FlashTypeSuccess] = decodedCookie[helpers.FlashTypeSuccess].([]string)
+			}
+
+			if decodedCookie[helpers.FlashTypeInfo] != nil {
+				flashes[helpers.FlashTypeInfo] = decodedCookie[helpers.FlashTypeInfo].([]string)
+			}
+
+			if decodedCookie[helpers.FlashTypeError] != nil {
+				flashes[helpers.FlashTypeError] = decodedCookie[helpers.FlashTypeError].([]string)
+			}
+		}
+	}
+
+	return flashes
+}
+
+func decodeCookieString(encodedString string) map[string]interface{} {
+	codecs := securecookie.CodecsFromPairs([]byte("secret"))
+	data := map[interface{}]interface{}{}
+	err := securecookie.DecodeMulti("google_scraper_session", encodedString, &data, codecs...)
+	if err != nil {
+		log.Errorln(err.Error())
+
+		return nil
+	}
+
+	decodedCookie := map[string]interface{}{}
+	for key, value := range data {
+		log.Infoln("KEY:", key, "VALUE:", value)
+		strKey := fmt.Sprint(key)
+		if strKey != helpers.CurrentUserKey && value != nil {
+			messages := []string{}
+			for _, value := range value.([]interface{}) {
+				messages = append(messages, fmt.Sprint(value))
+			}
+			decodedCookie[strKey] = messages
+		} else {
+			decodedCookie[strKey] = fmt.Sprint(value)
+		}
+	}
+
+	return decodedCookie
 }
 
 // HTTPRequest initiate new HTTP request and handle the error, will fail the test if there is any error
