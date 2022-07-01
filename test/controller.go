@@ -97,7 +97,7 @@ func GetResponseBody(response *http.Response) string {
 func GetSessionUserID(cookies []*http.Cookie) interface{} {
 	for _, c := range cookies {
 		if c.Name == "google_scraper_session" {
-			decodedCookie := decodeCookieString(c.Value)
+			decodedCookie := DecodeCookieString(c.Value)
 
 			if decodedCookie[helpers.CurrentUserKey] != nil {
 				return fmt.Sprint(decodedCookie[helpers.CurrentUserKey])
@@ -112,7 +112,7 @@ func GetFlashMessage(cookies []*http.Cookie) map[string][]string {
 	flashes := map[string][]string{}
 	for _, c := range cookies {
 		if c.Name == "google_scraper_session" {
-			decodedCookie := decodeCookieString(c.Value)
+			decodedCookie := DecodeCookieString(c.Value)
 
 			if decodedCookie[helpers.FlashTypeSuccess] != nil {
 				flashes[helpers.FlashTypeSuccess] = decodedCookie[helpers.FlashTypeSuccess].([]string)
@@ -131,7 +131,7 @@ func GetFlashMessage(cookies []*http.Cookie) map[string][]string {
 	return flashes
 }
 
-func decodeCookieString(encodedString string) map[string]interface{} {
+func DecodeCookieString(encodedString string) map[string]interface{} {
 	codecs := securecookie.CodecsFromPairs([]byte("secret"))
 	data := map[interface{}]interface{}{}
 	err := securecookie.DecodeMulti("google_scraper_session", encodedString, &data, codecs...)
@@ -143,7 +143,6 @@ func decodeCookieString(encodedString string) map[string]interface{} {
 
 	decodedCookie := map[string]interface{}{}
 	for key, value := range data {
-		log.Infoln("KEY:", key, "VALUE:", value)
 		strKey := fmt.Sprint(key)
 		if strKey != helpers.CurrentUserKey && value != nil {
 			messages := []string{}
