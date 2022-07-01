@@ -10,7 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("API Authentication Form", func() {
+var _ = Describe("Web Authentication Form", func() {
 	Describe("Validate", func() {
 		Context("given authentication form with valid params", func() {
 			It("returns NO error", func() {
