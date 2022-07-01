@@ -264,4 +264,8 @@ var _ = Describe("SessionsController", func() {
 			})
 		})
 	})
+
+	AfterEach(func() {
+		CleanupDatabase([]string{"users"})
+	})
 })
