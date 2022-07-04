@@ -14,7 +14,7 @@ type HomeController struct {
 	BaseWebController
 }
 
-func (c HomeController) Index(ctx *gin.Context) {
+func (c *HomeController) Index(ctx *gin.Context) {
 	view.SetLayout("default")
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "home/index", c.Data(ctx, gin.H{}))
