@@ -10,7 +10,7 @@ import (
 
 var ActionsWithGetMethod = []string{"index", "new", "show", "edit", "delete", "cache"}
 
-func HandleUnauthorizeRequest(ctx *gin.Context, actionName string) {
+func HandleUnauthorizedRequest(ctx *gin.Context, actionName string) {
 	isGetMethod := false
 	for _, action := range ActionsWithGetMethod {
 		if action == actionName {
