@@ -28,7 +28,7 @@ func (c *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) {
 
 	if currentUser == nil {
 		actionName := c.Data(ctx, gin.H{})["ActionName"].(string)
-		web_helpers.HandleUnauthorizeRequest(ctx, actionName)
+		web_helpers.HandleUnauthorizedRequest(ctx, actionName)
 	}
 }
 
