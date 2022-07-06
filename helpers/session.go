@@ -49,7 +49,6 @@ func SetCurrentUser(ctx *gin.Context, userID int64) {
 func SetFlash(ctx *gin.Context, flashType string, flashMessage string) {
 	session := sessions.Default(ctx)
 	session.AddFlash(flashMessage, flashType)
-
 	err := session.Save()
 	if err != nil {
 		log.Error(err)
