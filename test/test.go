@@ -9,11 +9,12 @@ import (
 	"go-google-scraper-challenge/database"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/services/oauth"
+	"go-google-scraper-challenge/view"
 
 	"github.com/gin-gonic/gin"
 )
 
-var Router *gin.Engine
+var Engine *gin.Engine
 
 func SetupTestEnvironment() {
 	gin.SetMode(gin.TestMode)
@@ -24,7 +25,13 @@ func SetupTestEnvironment() {
 
 	database.InitDatabase(database.GetDatabaseURL())
 
+	engine := gin.Default()
+	engine = bootstrap.SetupSession(engine)
+	engine = bootstrap.SetupRouter(engine)
+	Engine = engine
+
 	oauth.SetUpOauth()
+	view.SetupView()
 }
 
 func setRootDir() {

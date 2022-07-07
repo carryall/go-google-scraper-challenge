@@ -1,4 +1,4 @@
-package controllers
+package webcontrollers
 
 import (
 	"net/http"
@@ -11,14 +11,19 @@ import (
 )
 
 type UsersController struct {
-	BaseWebController
+	BaseController
 }
 
 func (c *UsersController) New(ctx *gin.Context) {
+	c.EnsureGuestUser(ctx)
 	view.SetLayout("authentication")
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "users/new", c.Data(ctx, gin.H{"Title": "Sign Up"}))
 	if err != nil {
 		log.Info("Error", err.Error())
 	}
+}
+
+func (c UsersController) Create(ctx *gin.Context) {
+	c.EnsureGuestUser(ctx)
 }

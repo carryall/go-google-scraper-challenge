@@ -56,6 +56,7 @@ func getDefaultConfig() goview.Config {
 			"renderIcon": helpers.RenderIcon,
 			"urlFor":     helpers.UrlFor,
 			"toKebab":    helpers.ToKebabCase,
+			"toTitle":    helpers.ToTitleCase,
 		},
 	}
 }
