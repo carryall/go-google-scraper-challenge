@@ -14,14 +14,14 @@ import (
 type RegistrationForm struct {
 	Email                string `form:"email"`
 	Password             string `form:"password"`
-	PasswordConfirmation string `form:"passwordConfirmation"`
+	PasswordConfirmation string `form:"password_confirmation"`
 }
 
 func (f RegistrationForm) Validate() (valid bool, err error) {
 	err = validation.ValidateStruct(&f,
 		validation.Field(&f.Email, validation.Required, is.Email),
 		validation.Field(&f.Password, validation.Required),
-		validation.Field(&f.PasswordConfirmation, validation.Required, validation.By(f.validatePasswordConfirmation())),
+		validation.Field(&f.PasswordConfirmation, validation.Required, validation.By(f.validatePasswordConfirmation(f.Password))),
 	)
 
 	if err != nil {
@@ -31,11 +31,12 @@ func (f RegistrationForm) Validate() (valid bool, err error) {
 	return true, nil
 }
 
-func (f RegistrationForm) validatePasswordConfirmation() validation.RuleFunc {
+func (f RegistrationForm) validatePasswordConfirmation(password string) validation.RuleFunc {
 	return func(value interface{}) error {
-		if f.Password != f.PasswordConfirmation {
+		if value.(string) != password {
 			return errors.New("does not match the password")
 		}
+
 		return nil
 	}
 }
