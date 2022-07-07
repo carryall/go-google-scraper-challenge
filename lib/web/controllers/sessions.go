@@ -42,11 +42,19 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindWith(authenticationForm, binding.Form)
 	if err != nil {
 		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
+
+		ctx.Redirect(http.StatusFound, redirectURL)
+
+		return
 	}
 
 	_, err = authenticationForm.Validate()
 	if err != nil {
 		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
+
+		ctx.Redirect(http.StatusFound, redirectURL)
+
+		return
 	}
 
 	user, err := authenticationForm.Save()
