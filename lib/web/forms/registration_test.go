@@ -78,6 +78,21 @@ var _ = Describe("Web Registration Form", func() {
 						Expect(err.Error()).To(ContainSubstring("Password: cannot be blank"))
 					})
 				})
+
+				Context("given password length is less than 8", func() {
+					It("returns an INVALID password error", func() {
+						form := webforms.RegistrationForm{
+							Email:                faker.Email(),
+							Password:             "short",
+							PasswordConfirmation: "short",
+						}
+
+						valid, err := form.Validate()
+
+						Expect(valid).To(BeFalse())
+						Expect(err.Error()).To(ContainSubstring("Password: the length must be no less than 8."))
+					})
+				})
 			})
 
 			Context("password confirmation", func() {
