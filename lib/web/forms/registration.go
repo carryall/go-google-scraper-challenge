@@ -7,8 +7,8 @@ import (
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
-	validation "github.com/go-ozzo/ozzo-validation"
-	"github.com/go-ozzo/ozzo-validation/is"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 )
 
 type RegistrationForm struct {
@@ -19,9 +19,9 @@ type RegistrationForm struct {
 
 func (f RegistrationForm) Validate() (valid bool, err error) {
 	err = validation.ValidateStruct(&f,
-		validation.Field(&f.Email, validation.Required, is.Email),
+		validation.Field(&f.Email, validation.Required, is.EmailFormat),
 		validation.Field(&f.Password, validation.Required),
-		validation.Field(&f.PasswordConfirmation, validation.Required, validation.By(f.validatePasswordConfirmation(f.Password))),
+		validation.Field(&f.PasswordConfirmation, validation.Required.When(f.Password != ""), validation.By(f.validatePasswordConfirmation(f.Password))),
 	)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (f RegistrationForm) Validate() (valid bool, err error) {
 
 func (f RegistrationForm) validatePasswordConfirmation(password string) validation.RuleFunc {
 	return func(value interface{}) error {
-		if value.(string) != password {
+		if value.(string) != password && len(password) > 0 {
 			return errors.New("does not match the password")
 		}
 
