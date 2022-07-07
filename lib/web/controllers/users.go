@@ -62,7 +62,7 @@ func (c UsersController) Create(ctx *gin.Context) {
 		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
 	} else {
 		helpers.SetCurrentUser(ctx, user.ID)
-		helpers.SetFlash(ctx, helpers.FlashTypeSuccess, "Successfully signed in")
+		helpers.SetFlash(ctx, helpers.FlashTypeSuccess, "Successfully signed up")
 		redirectURL = constants.WebRoutes["result"]["index"]
 	}
 
