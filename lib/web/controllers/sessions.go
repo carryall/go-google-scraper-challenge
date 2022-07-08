@@ -5,8 +5,8 @@ import (
 
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/helpers/log"
+	"go-google-scraper-challenge/lib/sessions"
 	webforms "go-google-scraper-challenge/lib/web/forms"
-	"go-google-scraper-challenge/sessions"
 	"go-google-scraper-challenge/view"
 
 	"github.com/foolin/goview"

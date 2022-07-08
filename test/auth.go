@@ -7,7 +7,7 @@ import (
 
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/services/oauth"
-	"go-google-scraper-challenge/sessions"
+	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/gorilla/securecookie"

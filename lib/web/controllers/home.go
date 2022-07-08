@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/helpers/log"
-	"go-google-scraper-challenge/sessions"
+	"go-google-scraper-challenge/lib/sessions"
 	"go-google-scraper-challenge/view"
 
 	"github.com/foolin/goview"
