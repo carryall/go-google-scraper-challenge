@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"

@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 	webforms "go-google-scraper-challenge/lib/web/forms"
+	"go-google-scraper-challenge/sessions"
 	"go-google-scraper-challenge/view"
 
 	"github.com/foolin/goview"
@@ -24,7 +24,7 @@ func (c *SessionsController) New(ctx *gin.Context) {
 
 	data := c.Data(ctx, gin.H{
 		"Title":   "Sign In",
-		"flashes": helpers.GetFlash(ctx),
+		"flashes": sessions.GetFlash(ctx),
 	})
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", data)
@@ -41,7 +41,7 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 
 	err := ctx.ShouldBindWith(authenticationForm, binding.Form)
 	if err != nil {
-		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
 
 		ctx.Redirect(http.StatusFound, redirectURL)
 
@@ -50,7 +50,7 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 
 	_, err = authenticationForm.Validate()
 	if err != nil {
-		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
 
 		ctx.Redirect(http.StatusFound, redirectURL)
 
@@ -59,10 +59,10 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 
 	user, err := authenticationForm.Save()
 	if err != nil {
-		helpers.SetFlash(ctx, helpers.FlashTypeError, err.Error())
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
 	} else {
-		helpers.SetCurrentUser(ctx, user.ID)
-		helpers.SetFlash(ctx, helpers.FlashTypeSuccess, "Successfully signed in")
+		sessions.SetCurrentUser(ctx, user.ID)
+		sessions.SetFlash(ctx, sessions.FlashTypeSuccess, "Successfully signed in")
 		redirectURL = constants.WebRoutes["result"]["index"]
 	}
 

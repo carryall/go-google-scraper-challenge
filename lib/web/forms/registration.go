@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -41,20 +40,15 @@ func (f RegistrationForm) validatePasswordConfirmation(password string) validati
 	}
 }
 
-func (f RegistrationForm) Save() (*models.User, error) {
+func (f RegistrationForm) Save() (*int64, error) {
 	existingUser, err := models.GetUserByEmail(f.Email)
 	if err == nil && existingUser != nil {
 		return nil, errors.New(constants.UserAlreadyExist)
 	}
 
-	hashedPassword, err := helpers.HashPassword(f.Password)
-	if err != nil {
-		return nil, err
-	}
-
 	user := &models.User{
-		Email:          f.Email,
-		HashedPassword: hashedPassword,
+		Email:    f.Email,
+		Password: f.Password,
 	}
 
 	userID, err := models.CreateUser(user)

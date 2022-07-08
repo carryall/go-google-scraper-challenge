@@ -1,4 +1,4 @@
-package helpers_test
+package sessions_test
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"go-google-scraper-challenge/bootstrap"
-	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/sessions"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
@@ -17,13 +17,13 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Session Helpers", func() {
+var _ = Describe("Sessions", func() {
 	engine := gin.Default()
 	engine = bootstrap.SetupSession(engine)
 
 	Describe("#GetCurrentUser", func() {
 		engine.GET("/test-get-current-user", func(ctx *gin.Context) {
-			returnUser := helpers.GetCurrentUser(ctx)
+			returnUser := sessions.GetCurrentUser(ctx)
 
 			if returnUser != nil {
 				ctx.String(http.StatusOK, fmt.Sprint(returnUser.ID))
@@ -94,7 +94,7 @@ var _ = Describe("Session Helpers", func() {
 				ctx.String(http.StatusBadRequest, userIDStr)
 			}
 
-			helpers.SetCurrentUser(ctx, int64(userID))
+			sessions.SetCurrentUser(ctx, int64(userID))
 
 			ctx.String(http.StatusOK, "")
 		})
@@ -119,7 +119,7 @@ var _ = Describe("Session Helpers", func() {
 				decodedCookie := DecodeCookieString(encodedSession)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
-				Expect(decodedCookie[helpers.CurrentUserKey]).To(Equal(fmt.Sprint(user.ID)))
+				Expect(decodedCookie[sessions.CurrentUserKey]).To(Equal(fmt.Sprint(user.ID)))
 			})
 		})
 	})
@@ -129,14 +129,14 @@ var _ = Describe("Session Helpers", func() {
 			flashType, _ := ctx.GetQuery("type")
 			flashMessage, _ := ctx.GetQuery("message")
 
-			helpers.SetFlash(ctx, flashType, flashMessage)
+			sessions.SetFlash(ctx, flashType, flashMessage)
 
 			ctx.String(http.StatusOK, "")
 		})
 
 		Context("given flashes", func() {
 			It("sets flashes to the session", func() {
-				flashType := helpers.FlashTypeError
+				flashType := sessions.FlashTypeError
 				flashMessage := "ERRORMSG"
 				responseRecorder := httptest.NewRecorder()
 				request, err := http.NewRequest("GET", fmt.Sprintf("/test-set-flash?type=%s&message=%s", flashType, flashMessage), nil)
@@ -156,14 +156,14 @@ var _ = Describe("Session Helpers", func() {
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 				Expect(decodedCookie).To(HaveKey(flashType))
-				Expect(decodedCookie[helpers.FlashTypeError]).To(ConsistOf(flashMessage))
+				Expect(decodedCookie[sessions.FlashTypeError]).To(ConsistOf(flashMessage))
 			})
 		})
 	})
 
 	Describe("#GetFlash", func() {
 		engine.GET("/test-get-flash", func(ctx *gin.Context) {
-			flashes := helpers.GetFlash(ctx)
+			flashes := sessions.GetFlash(ctx)
 
 			ctx.JSON(http.StatusOK, flashes)
 		})
@@ -171,9 +171,9 @@ var _ = Describe("Session Helpers", func() {
 		Context("given the session with flashes", func() {
 			It("returns the flashes", func() {
 				flashes := map[string]interface{}{}
-				flashes[helpers.FlashTypeError] = []interface{}{"Error Message"}
-				flashes[helpers.FlashTypeInfo] = []interface{}{"Info Message"}
-				flashes[helpers.FlashTypeSuccess] = []interface{}{"Success Message"}
+				flashes[sessions.FlashTypeError] = []interface{}{"Error Message"}
+				flashes[sessions.FlashTypeInfo] = []interface{}{"Info Message"}
+				flashes[sessions.FlashTypeSuccess] = []interface{}{"Success Message"}
 				expectedFlashes, _ := json.Marshal(flashes)
 				cookie := FabricateCookieWithFlashes(flashes)
 

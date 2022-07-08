@@ -3,8 +3,8 @@ package webcontrollers
 import (
 	"net/http"
 
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
+	"go-google-scraper-challenge/sessions"
 	"go-google-scraper-challenge/view"
 
 	"github.com/foolin/goview"
@@ -19,7 +19,7 @@ func (c *HomeController) Index(ctx *gin.Context) {
 	view.SetLayout("default")
 
 	data := c.Data(ctx, gin.H{
-		"flashes": helpers.GetFlash(ctx),
+		"flashes": sessions.GetFlash(ctx),
 	})
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "home/index", data)
