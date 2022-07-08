@@ -1,4 +1,4 @@
-package helpers
+package sessions
 
 import (
 	"go-google-scraper-challenge/helpers/log"

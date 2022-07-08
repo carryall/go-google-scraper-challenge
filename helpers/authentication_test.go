@@ -1,12 +1,12 @@
 package helpers_test
 
 import (
+	"go-google-scraper-challenge/helpers"
+
 	"github.com/bxcodec/faker/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"golang.org/x/crypto/bcrypt"
-
-	"go-google-scraper-challenge/helpers"
 )
 
 var _ = Describe("Authentication", func() {

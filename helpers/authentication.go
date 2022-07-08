@@ -2,11 +2,18 @@ package helpers
 
 import (
 	"encoding/json"
+
 	"go-google-scraper-challenge/helpers/log"
-	"go-google-scraper-challenge/lib/api/v1/serializers"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+type AuthenticationToken struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	ExpiresIn    int64  `json:"expires_in"`
+	TokenType    string `json:"token_type"`
+}
 
 // HashPassword hash given password, returns hashed password and error
 func HashPassword(password string) (string, error) {
@@ -32,8 +39,8 @@ func CompareHashWithPassword(hashedPassword string, password string) bool {
 	return true
 }
 
-func GetTokenInfo(tokenData map[string]interface{}) (tokenInfo *serializers.AuthenticationToken, err error) {
-	tokenInfo = &serializers.AuthenticationToken{}
+func GetTokenInfo(tokenData map[string]interface{}) (tokenInfo *AuthenticationToken, err error) {
+	tokenInfo = &AuthenticationToken{}
 	tokenDataString, err := json.Marshal(tokenData)
 	if err != nil {
 		return nil, err

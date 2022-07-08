@@ -7,6 +7,7 @@ import (
 	"go-google-scraper-challenge/helpers"
 	web_helpers "go-google-scraper-challenge/helpers/web"
 	api_controllers "go-google-scraper-challenge/lib/api/v1/controllers"
+	"go-google-scraper-challenge/sessions"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +17,7 @@ type BaseController struct {
 }
 
 func (c *BaseController) EnsureGuestUser(ctx *gin.Context) {
-	currentUser := helpers.GetCurrentUser(ctx)
+	currentUser := sessions.GetCurrentUser(ctx)
 
 	if currentUser != nil {
 		web_helpers.RedirectToDashboard(ctx)
@@ -24,7 +25,7 @@ func (c *BaseController) EnsureGuestUser(ctx *gin.Context) {
 }
 
 func (c *BaseController) EnsureAuthenticatedUser(ctx *gin.Context) {
-	currentUser := helpers.GetCurrentUser(ctx)
+	currentUser := sessions.GetCurrentUser(ctx)
 
 	if currentUser == nil {
 		actionName := c.Data(ctx, gin.H{})["ActionName"].(string)
