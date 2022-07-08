@@ -142,11 +142,9 @@ var _ = Describe("Web Registration Form", func() {
 					PasswordConfirmation: password,
 				}
 
-				returnUser, err := form.Save()
+				userID, err := form.Save()
 
-				Expect(returnUser).NotTo(BeNil())
-				Expect(returnUser.ID).To(BeNumerically(">", 0))
-				Expect(returnUser.Email).To(Equal(email))
+				Expect(*userID).To(BeNumerically(">", 0))
 				Expect(err).To(BeNil())
 			})
 		})
@@ -161,9 +159,9 @@ var _ = Describe("Web Registration Form", func() {
 					PasswordConfirmation: password,
 				}
 
-				user, err := form.Save()
+				userID, err := form.Save()
 
-				Expect(user).To(BeNil())
+				Expect(userID).To(BeNil())
 				Expect(err.Error()).To(Equal(constants.UserAlreadyExist))
 			})
 		})

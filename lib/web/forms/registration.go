@@ -56,10 +56,5 @@ func (f RegistrationForm) Save() (*int64, error) {
 		return nil, err
 	}
 
-	user, err = models.GetUserByID(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
+	return &userID, nil
 }

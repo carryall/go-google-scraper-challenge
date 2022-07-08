@@ -49,14 +49,14 @@ func (c *UsersController) Register(ctx *gin.Context) {
 
 	tokenInfo, err := oauth.GenerateToken(tokenRequest)
 	if err != nil {
-		_ = models.DeleteUser(userID)
+		_ = models.DeleteUser(*userID)
 		RenderOAuthJSONError(ctx, err)
 		return
 	}
 
 	response := &serializers.RegistrationResponse{
 		ID:           int64(rand.Uint64()),
-		UserID:       userID,
+		UserID:       *userID,
 		AccessToken:  tokenInfo.GetAccess(),
 		RefreshToken: tokenInfo.GetRefresh(),
 	}

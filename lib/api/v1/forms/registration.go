@@ -39,26 +39,21 @@ func (f RegistrationForm) Validate() (valid bool, err error) {
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (f RegistrationForm) Save() (int64, error) {
+func (f RegistrationForm) Save() (*int64, error) {
 	_, err := f.Validate()
 	if err != nil {
-		return -1, err
-	}
-
-	hashedPassword, err := helpers.HashPassword(f.Password)
-	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
 	user := &models.User{
-		Email:          f.Email,
-		HashedPassword: hashedPassword,
+		Email:    f.Email,
+		Password: f.Password,
 	}
 
 	userID, err := models.CreateUser(user)
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
-	return userID, nil
+	return &userID, nil
 }
