@@ -7,7 +7,7 @@ import (
 	"go-google-scraper-challenge/helpers"
 	web_helpers "go-google-scraper-challenge/helpers/web"
 	api_controllers "go-google-scraper-challenge/lib/api/v1/controllers"
-	"go-google-scraper-challenge/sessions"
+	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/gin-gonic/gin"
 )

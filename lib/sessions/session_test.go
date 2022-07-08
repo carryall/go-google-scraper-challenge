@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"go-google-scraper-challenge/bootstrap"
-	"go-google-scraper-challenge/sessions"
+	"go-google-scraper-challenge/lib/sessions"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
