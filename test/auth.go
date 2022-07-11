@@ -2,11 +2,15 @@ package test
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
+	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/services/oauth"
+	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/bxcodec/faker/v3"
+	"github.com/gorilla/securecookie"
 	"github.com/onsi/ginkgo"
 	"gopkg.in/oauth2.v3/models"
 )
@@ -39,4 +43,21 @@ func FabricateAuthToken(userID int64) string {
 	}
 
 	return tokenInfo.GetAccess()
+}
+
+func FabricateAuthUserCookie(userID int64) *http.Cookie {
+	codecs := securecookie.CodecsFromPairs([]byte("secret"))
+	data := make(map[interface{}]interface{})
+	data[sessions.CurrentUserKey] = userID
+	encoded, err := securecookie.EncodeMulti("google_scraper_session", data, codecs...)
+	if err != nil {
+		log.Error("Failed to encode multi: ", err)
+	}
+
+	cookie := http.Cookie{
+		Name:  "google_scraper_session",
+		Value: encoded,
+	}
+
+	return &cookie
 }

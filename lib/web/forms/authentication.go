@@ -1,8 +1,10 @@
-package forms
+package webforms
 
 import (
 	"errors"
+
 	"go-google-scraper-challenge/constants"
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -10,20 +12,14 @@ import (
 )
 
 type AuthenticationForm struct {
-	ClientID     string `form:"client_id"`
-	ClientSecret string `form:"client_secret"`
-	Email        string `form:"username"`
-	Password     string `form:"password"`
-	GrantType    string `form:"grant_type"`
+	Email    string `form:"email"`
+	Password string `form:"password"`
 }
 
 func (f AuthenticationForm) Validate() (valid bool, err error) {
 	err = validation.ValidateStruct(&f,
-		validation.Field(&f.ClientID, validation.Required),
-		validation.Field(&f.ClientSecret, validation.Required),
 		validation.Field(&f.Email, validation.Required, is.EmailFormat),
 		validation.Field(&f.Password, validation.Required),
-		validation.Field(&f.GrantType, validation.Required),
 	)
 
 	if err != nil {
@@ -33,11 +29,16 @@ func (f AuthenticationForm) Validate() (valid bool, err error) {
 	return true, nil
 }
 
-func (f AuthenticationForm) ValidateUser() error {
-	_, err := models.GetUserByEmail(f.Email)
+func (f AuthenticationForm) Save() (*models.User, error) {
+	user, err := models.GetUserByEmail(f.Email)
 	if err != nil {
-		return errors.New(constants.UserDoesNotExist)
+		return nil, errors.New(constants.SignInFail)
 	}
 
-	return nil
+	validPassword := helpers.CompareHashWithPassword(user.HashedPassword, f.Password)
+	if !validPassword {
+		return nil, errors.New(constants.SignInFail)
+	}
+
+	return user, nil
 }

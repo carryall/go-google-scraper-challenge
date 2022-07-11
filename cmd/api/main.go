@@ -18,14 +18,15 @@ func main() {
 
 	database.InitDatabase(database.GetDatabaseURL())
 
-	r := bootstrap.SetupRouter()
+	engine := gin.Default()
+	engine = bootstrap.SetupSession(engine)
+	engine = bootstrap.SetupRouter(engine)
 
 	oauth.SetUpOauth()
-
 	bootstrap.InitCron()
 	view.SetupView()
 
-	err := r.Run(getAppPort())
+	err := engine.Run(getAppPort())
 	if err != nil {
 		log.Fatal("Failed to start server: ", err)
 	}

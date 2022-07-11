@@ -2,7 +2,7 @@ package routers
 
 import (
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/lib/web/controllers"
+	webcontrollers "go-google-scraper-challenge/lib/web/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,12 +13,14 @@ func ComebineRoutes(engine *gin.Engine) {
 	router.Static("/static", "./static")
 	router.Static("/assets/images", "./lib/web/assets/images")
 
-	homeController := controllers.HomeController{}
-	sessionsController := controllers.SessionsController{}
-	usersController := controllers.UsersController{}
+	homeController := webcontrollers.HomeController{}
+	sessionsController := webcontrollers.SessionsController{}
+	usersController := webcontrollers.UsersController{}
 
 	// Routes
 	router.GET(constants.WebRoutes["home"]["index"], homeController.Index)
 	router.GET(constants.WebRoutes["sessions"]["new"], sessionsController.New)
+	router.POST(constants.WebRoutes["sessions"]["create"], sessionsController.Create)
 	router.GET(constants.WebRoutes["users"]["new"], usersController.New)
+	router.POST(constants.WebRoutes["users"]["create"], usersController.Create)
 }

@@ -28,9 +28,9 @@ var _ = Describe("API Registration Form", func() {
 					Fail("Failed to save form")
 				}
 
-				Expect(userID).To(BeNumerically(">", 0))
+				Expect(*userID).To(BeNumerically(">", 0))
 
-				user, err := models.GetUserByID(userID)
+				user, err := models.GetUserByID(*userID)
 				if err != nil {
 					Fail("Failed to find the user")
 				}
@@ -67,7 +67,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal("ClientID: cannot be blank."))
 					})
 				})
@@ -84,7 +84,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal("ClientSecret: cannot be blank."))
 					})
 				})
@@ -104,7 +104,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal(constants.UserAlreadyExist))
 					})
 				})
@@ -121,7 +121,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal("Email: cannot be blank."))
 					})
 				})
@@ -138,7 +138,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal("Email: must be a valid email address."))
 					})
 				})
@@ -157,7 +157,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal("Password: cannot be blank."))
 					})
 				})
@@ -174,7 +174,7 @@ var _ = Describe("API Registration Form", func() {
 
 						userID, err := form.Save()
 
-						Expect(userID).To(BeNumerically("==", -1))
+						Expect(userID).To(BeNil())
 						Expect(err.Error()).To(Equal("Password: the length must be between 6 and 50."))
 					})
 				})

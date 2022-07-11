@@ -1,6 +1,7 @@
 package models_test
 
 import (
+	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 	. "go-google-scraper-challenge/test"
 
@@ -14,8 +15,8 @@ var _ = Describe("User", func() {
 		Context("given user with valid params", func() {
 			It("returns the user ID", func() {
 				user := models.User{
-					Email:          faker.Email(),
-					HashedPassword: faker.Password(),
+					Email:    faker.Email(),
+					Password: faker.Password(),
 				}
 				userID, err := models.CreateUser(&user)
 				if err != nil {
@@ -25,10 +26,31 @@ var _ = Describe("User", func() {
 				Expect(userID).To(BeNumerically(">", 0))
 			})
 
+			It("sets the hashed password", func() {
+				password := faker.Password()
+				user := models.User{
+					Email:    faker.Email(),
+					Password: password,
+				}
+				userID, err := models.CreateUser(&user)
+				if err != nil {
+					Fail("Failed to add user: " + err.Error())
+				}
+
+				createdUser, err := models.GetUserByID(userID)
+				if err != nil {
+					Fail("Failed to get user: " + err.Error())
+				}
+
+				isHashedFromPassword := helpers.CompareHashWithPassword(createdUser.HashedPassword, password)
+
+				Expect(isHashedFromPassword).To(BeTrue())
+			})
+
 			It("returns NO error", func() {
 				user := models.User{
-					Email:          faker.Email(),
-					HashedPassword: faker.Password(),
+					Email:    faker.Email(),
+					Password: faker.Password(),
 				}
 				_, err := models.CreateUser(&user)
 
@@ -43,8 +65,8 @@ var _ = Describe("User", func() {
 					existingUser := FabricateUser(faker.Email(), password)
 
 					user := models.User{
-						Email:          existingUser.Email,
-						HashedPassword: password,
+						Email:    existingUser.Email,
+						Password: password,
 					}
 					userID, err := models.CreateUser(&user)
 

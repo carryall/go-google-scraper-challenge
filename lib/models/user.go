@@ -2,6 +2,9 @@ package models
 
 import (
 	"go-google-scraper-challenge/database"
+	"go-google-scraper-challenge/helpers"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -11,6 +14,18 @@ type User struct {
 
 	Email          string `gorm:"not null;unique;size:128"`
 	HashedPassword string `gorm:"not null"`
+	Password       string `gorm:"-:all"`
+}
+
+func (user *User) BeforeCreate(tx *gorm.DB) error {
+	hashedPassword, err := helpers.HashPassword(user.Password)
+	if err != nil {
+		return err
+	}
+
+	user.HashedPassword = hashedPassword
+
+	return nil
 }
 
 // CreateUser insert a new User into database and returns last inserted ID on success.
