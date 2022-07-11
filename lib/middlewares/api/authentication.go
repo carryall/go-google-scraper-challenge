@@ -15,18 +15,24 @@ func CurrentUser(ctx *gin.Context) {
 	if err != nil {
 		ctx.Set("CurrentUser", nil)
 		ctx.Next()
+
+		return
 	}
 
 	userID, err := strconv.Atoi(tokenInfo.GetUserID())
 	if err != nil {
 		ctx.Set("CurrentUser", nil)
 		ctx.Next()
+
+		return
 	}
 
 	user, err := models.GetUserByID(int64(userID))
 	if err != nil {
 		ctx.Set("CurrentUser", nil)
 		ctx.Next()
+
+		return
 	}
 
 	ctx.Set("CurrentUser", user)
