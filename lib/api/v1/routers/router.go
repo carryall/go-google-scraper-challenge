@@ -10,6 +10,7 @@ import (
 
 func ComebineRoutes(engine *gin.Engine) {
 	engine.Use(middlewares.CurrentUser)
+
 	v1 := engine.Group("/api/v1")
 
 	healthController := controllers.HealthController{}
