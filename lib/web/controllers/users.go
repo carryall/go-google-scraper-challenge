@@ -33,7 +33,7 @@ func (c *UsersController) New(ctx *gin.Context) {
 	}
 }
 
-func (c UsersController) Create(ctx *gin.Context) {
+func (c *UsersController) Create(ctx *gin.Context) {
 	c.EnsureGuestUser(ctx)
 
 	registrationForm := &webforms.RegistrationForm{}
