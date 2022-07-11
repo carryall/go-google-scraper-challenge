@@ -19,6 +19,7 @@ func CurrentUser(ctx *gin.Context) {
 		user, err := models.GetUserByID(*currentUserID)
 		if err != nil {
 			ctx.Set("CurrentUser", nil)
+			ctx.Next()
 		}
 
 		ctx.Set("CurrentUser", user)
