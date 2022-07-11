@@ -24,18 +24,19 @@ func MakeJSONRequest(method string, url string, header http.Header, body io.Read
 		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 	}
 
-	return makeAPIRequest(request)
+	return makeAPIRequest(request, user)
 }
 
 func MakeFormRequest(method string, url string, formData url.Values, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildFormRequest(method, url, nil, formData)
 
-	return makeAPIRequest(request)
+	return makeAPIRequest(request, user)
 }
 
-func makeAPIRequest(request *http.Request) (*gin.Context, *httptest.ResponseRecorder) {
+func makeAPIRequest(request *http.Request, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	ctx, responseRecorder := CreateGinTestContext()
 	ctx.Request = request
+	ctx.Set("CurrentUser", user)
 
 	return ctx, responseRecorder
 }
