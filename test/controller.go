@@ -5,27 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 
-	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
-	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/securecookie"
 	"github.com/onsi/ginkgo"
 )
-
-func GetCurrentPath(response *http.Response) string {
-	url, err := response.Location()
-	if err != nil {
-		ginkgo.Fail("Failed to get current path: " + err.Error())
-	}
-	return url.Path
-}
 
 func MakeJSONRequest(method string, url string, header http.Header, body io.Reader, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildRequest(method, url, header, body)
@@ -36,17 +24,16 @@ func MakeJSONRequest(method string, url string, header http.Header, body io.Read
 		request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 	}
 
-	return MakeRequest(request)
+	return makeAPIRequest(request)
 }
 
 func MakeFormRequest(method string, url string, formData url.Values, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	request := buildFormRequest(method, url, nil, formData)
 
-	return MakeRequest(request)
+	return makeAPIRequest(request)
 }
 
-// MakeRequest make a HTTP request and return response
-func MakeRequest(request *http.Request) (*gin.Context, *httptest.ResponseRecorder) {
+func makeAPIRequest(request *http.Request) (*gin.Context, *httptest.ResponseRecorder) {
 	ctx, responseRecorder := CreateGinTestContext()
 	ctx.Request = request
 
@@ -85,79 +72,6 @@ func MakeWebFormRequest(method string, url string, formData url.Values, user *mo
 	return responseRecorder.Result()
 }
 
-func GetResponseBody(response *http.Response) string {
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		ginkgo.Fail("Failed to read response body")
-	}
-
-	return string(body)
-}
-
-func GetSessionUserID(cookies []*http.Cookie) interface{} {
-	for _, c := range cookies {
-		if c.Name == "google_scraper_session" {
-			decodedCookie := DecodeCookieString(c.Value)
-
-			if decodedCookie[sessions.CurrentUserKey] != nil {
-				return fmt.Sprint(decodedCookie[sessions.CurrentUserKey])
-			}
-		}
-	}
-
-	return nil
-}
-
-func GetFlashMessage(cookies []*http.Cookie) map[string][]string {
-	flashes := map[string][]string{}
-	for _, c := range cookies {
-		if c.Name == "google_scraper_session" {
-			decodedCookie := DecodeCookieString(c.Value)
-
-			if decodedCookie[sessions.FlashTypeSuccess] != nil {
-				flashes[sessions.FlashTypeSuccess] = decodedCookie[sessions.FlashTypeSuccess].([]string)
-			}
-
-			if decodedCookie[sessions.FlashTypeInfo] != nil {
-				flashes[sessions.FlashTypeInfo] = decodedCookie[sessions.FlashTypeInfo].([]string)
-			}
-
-			if decodedCookie[sessions.FlashTypeError] != nil {
-				flashes[sessions.FlashTypeError] = decodedCookie[sessions.FlashTypeError].([]string)
-			}
-		}
-	}
-
-	return flashes
-}
-
-func DecodeCookieString(encodedString string) map[string]interface{} {
-	codecs := securecookie.CodecsFromPairs([]byte("secret"))
-	data := map[interface{}]interface{}{}
-	err := securecookie.DecodeMulti("google_scraper_session", encodedString, &data, codecs...)
-	if err != nil {
-		log.Errorln(err.Error())
-
-		return nil
-	}
-
-	decodedCookie := map[string]interface{}{}
-	for key, value := range data {
-		strKey := fmt.Sprint(key)
-		if strKey != sessions.CurrentUserKey && value != nil {
-			messages := []string{}
-			for _, value := range value.([]interface{}) {
-				messages = append(messages, fmt.Sprint(value))
-			}
-			decodedCookie[strKey] = messages
-		} else {
-			decodedCookie[strKey] = fmt.Sprint(value)
-		}
-	}
-
-	return decodedCookie
-}
-
 // HTTPRequest initiate new HTTP request and handle the error, will fail the test if there is any error
 func HTTPRequest(method string, url string, body io.Reader) *http.Request {
 	request, err := http.NewRequest(method, url, body)
@@ -175,26 +89,6 @@ func GenerateRequestBody(params map[string]interface{}) *bytes.Buffer {
 	}
 
 	return bytes.NewBuffer(queryParams)
-}
-
-// GetJSONResponseBody get response body from response, will fail the test if there is any error
-func GetJSONResponseBody(response *http.Response, v interface{}) {
-	body := responseBody(response)
-
-	err := json.Unmarshal([]byte(body), v)
-
-	if err != nil {
-		ginkgo.Fail("Failed to unmarshal json response " + err.Error())
-	}
-}
-
-func responseBody(response *http.Response) string {
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		ginkgo.Fail("Failed to read response body")
-	}
-
-	return string(body)
 }
 
 func buildFormRequest(method string, url string, header http.Header, formData url.Values) (request *http.Request) {
