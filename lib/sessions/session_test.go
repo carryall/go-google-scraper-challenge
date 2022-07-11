@@ -21,19 +21,19 @@ var _ = Describe("Sessions", func() {
 	engine := gin.Default()
 	engine = bootstrap.SetupSession(engine)
 
-	Describe("#GetCurrentUser", func() {
+	Describe("#GetCurrentUserID", func() {
 		engine.GET("/test-get-current-user", func(ctx *gin.Context) {
-			returnUser := sessions.GetCurrentUser(ctx)
+			returnUserID := sessions.GetCurrentUserID(ctx)
 
-			if returnUser != nil {
-				ctx.String(http.StatusOK, fmt.Sprint(returnUser.ID))
+			if returnUserID != nil {
+				ctx.String(http.StatusOK, fmt.Sprint(returnUserID))
 			} else {
 				ctx.String(http.StatusNotFound, "")
 			}
 		})
 
 		Context("given session have the user ID", func() {
-			It("returns the user with the ID", func() {
+			It("returns the user ID", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				cookie := FabricateAuthUserCookie(user.ID)
 				responseRecorder := httptest.NewRecorder()
@@ -48,24 +48,6 @@ var _ = Describe("Sessions", func() {
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 				Expect(responseBody).To(Equal(fmt.Sprint(user.ID)))
-			})
-
-			Context("given user ID does NOT exist in the database", func() {
-				It("returns nil", func() {
-					cookie := FabricateAuthUserCookie(999)
-					responseRecorder := httptest.NewRecorder()
-					request, err := http.NewRequest("GET", "/test-get-current-user", nil)
-					request.Header.Set("Cookie", cookie.Name+"="+cookie.Value)
-					if err != nil {
-						Fail("Fail to test the session " + err.Error())
-					}
-					engine.ServeHTTP(responseRecorder, request)
-					response := responseRecorder.Result()
-					responseBody := GetResponseBody(response)
-
-					Expect(response.StatusCode).To(Equal(http.StatusNotFound))
-					Expect(responseBody).To(BeEmpty())
-				})
 			})
 		})
 
