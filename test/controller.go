@@ -10,9 +10,9 @@ import (
 	"net/http/httptest"
 	"net/url"
 
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
+	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/securecookie"
@@ -99,8 +99,8 @@ func GetSessionUserID(cookies []*http.Cookie) interface{} {
 		if c.Name == "google_scraper_session" {
 			decodedCookie := DecodeCookieString(c.Value)
 
-			if decodedCookie[helpers.CurrentUserKey] != nil {
-				return fmt.Sprint(decodedCookie[helpers.CurrentUserKey])
+			if decodedCookie[sessions.CurrentUserKey] != nil {
+				return fmt.Sprint(decodedCookie[sessions.CurrentUserKey])
 			}
 		}
 	}
@@ -114,16 +114,16 @@ func GetFlashMessage(cookies []*http.Cookie) map[string][]string {
 		if c.Name == "google_scraper_session" {
 			decodedCookie := DecodeCookieString(c.Value)
 
-			if decodedCookie[helpers.FlashTypeSuccess] != nil {
-				flashes[helpers.FlashTypeSuccess] = decodedCookie[helpers.FlashTypeSuccess].([]string)
+			if decodedCookie[sessions.FlashTypeSuccess] != nil {
+				flashes[sessions.FlashTypeSuccess] = decodedCookie[sessions.FlashTypeSuccess].([]string)
 			}
 
-			if decodedCookie[helpers.FlashTypeInfo] != nil {
-				flashes[helpers.FlashTypeInfo] = decodedCookie[helpers.FlashTypeInfo].([]string)
+			if decodedCookie[sessions.FlashTypeInfo] != nil {
+				flashes[sessions.FlashTypeInfo] = decodedCookie[sessions.FlashTypeInfo].([]string)
 			}
 
-			if decodedCookie[helpers.FlashTypeError] != nil {
-				flashes[helpers.FlashTypeError] = decodedCookie[helpers.FlashTypeError].([]string)
+			if decodedCookie[sessions.FlashTypeError] != nil {
+				flashes[sessions.FlashTypeError] = decodedCookie[sessions.FlashTypeError].([]string)
 			}
 		}
 	}
@@ -144,7 +144,7 @@ func DecodeCookieString(encodedString string) map[string]interface{} {
 	decodedCookie := map[string]interface{}{}
 	for key, value := range data {
 		strKey := fmt.Sprint(key)
-		if strKey != helpers.CurrentUserKey && value != nil {
+		if strKey != sessions.CurrentUserKey && value != nil {
 			messages := []string{}
 			for _, value := range value.([]interface{}) {
 				messages = append(messages, fmt.Sprint(value))

@@ -8,19 +8,13 @@ import (
 	"go-google-scraper-challenge/lib/services/oauth"
 
 	"github.com/bxcodec/faker/v3"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // FabricateUser create a user with given email and password, will fail the test when there is any error
 func FabricateUser(email string, password string) (user *models.User) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		log.Fatal("failed to generate hashed password " + err.Error())
-	}
-
 	user = &models.User{
-		Email:          email,
-		HashedPassword: string(hashedPassword),
+		Email:    email,
+		Password: password,
 	}
 
 	userID, err := models.CreateUser(user)

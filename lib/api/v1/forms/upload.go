@@ -7,7 +7,7 @@ import (
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
-	validation "github.com/go-ozzo/ozzo-validation"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type UploadForm struct {

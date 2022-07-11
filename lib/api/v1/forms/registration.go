@@ -4,11 +4,10 @@ import (
 	"errors"
 
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/lib/models"
 
-	validation "github.com/go-ozzo/ozzo-validation"
-	"github.com/go-ozzo/ozzo-validation/is"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 )
 
 type RegistrationForm struct {
@@ -22,7 +21,7 @@ func (f RegistrationForm) Validate() (valid bool, err error) {
 	err = validation.ValidateStruct(&f,
 		validation.Field(&f.ClientID, validation.Required),
 		validation.Field(&f.ClientSecret, validation.Required),
-		validation.Field(&f.Email, validation.Required, is.Email),
+		validation.Field(&f.Email, validation.Required, is.EmailFormat),
 		validation.Field(&f.Password, validation.Required, validation.Length(6, 50)),
 	)
 
@@ -40,26 +39,21 @@ func (f RegistrationForm) Validate() (valid bool, err error) {
 
 // Save validates registration form and adds a new User with email and password from the form,
 // returns errors if validation failed or cannot add the user to database.
-func (f RegistrationForm) Save() (int64, error) {
+func (f RegistrationForm) Save() (*int64, error) {
 	_, err := f.Validate()
 	if err != nil {
-		return -1, err
-	}
-
-	hashedPassword, err := helpers.HashPassword(f.Password)
-	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
 	user := &models.User{
-		Email:          f.Email,
-		HashedPassword: hashedPassword,
+		Email:    f.Email,
+		Password: f.Password,
 	}
 
 	userID, err := models.CreateUser(user)
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
-	return userID, nil
+	return &userID, nil
 }

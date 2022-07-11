@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/services/oauth"
+	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/gorilla/securecookie"
@@ -48,7 +48,7 @@ func FabricateAuthToken(userID int64) string {
 func FabricateAuthUserCookie(userID int64) *http.Cookie {
 	codecs := securecookie.CodecsFromPairs([]byte("secret"))
 	data := make(map[interface{}]interface{})
-	data[helpers.CurrentUserKey] = userID
+	data[sessions.CurrentUserKey] = userID
 	encoded, err := securecookie.EncodeMulti("google_scraper_session", data, codecs...)
 	if err != nil {
 		log.Error("Failed to encode multi: ", err)
