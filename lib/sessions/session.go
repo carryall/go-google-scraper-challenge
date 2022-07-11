@@ -19,16 +19,16 @@ type Flash struct {
 	Message string
 }
 
-func GetCurrentUserID(ctx *gin.Context) *int64 {
+func GetCurrentUserID(ctx *gin.Context) (int64, bool) {
 	session := sessions.Default(ctx)
 	currentUserID := session.Get(CurrentUserKey)
 	if currentUserID == nil {
-		return nil
+		return 0, false
 	}
 
 	userID := currentUserID.(int64)
 
-	return &userID
+	return userID, true
 }
 
 func SetCurrentUser(ctx *gin.Context, userID int64) {

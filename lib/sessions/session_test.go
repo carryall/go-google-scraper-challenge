@@ -23,17 +23,17 @@ var _ = Describe("Sessions", func() {
 
 	Describe("#GetCurrentUserID", func() {
 		engine.GET("/test-get-current-user", func(ctx *gin.Context) {
-			returnUserID := sessions.GetCurrentUserID(ctx)
+			returnUserID, ok := sessions.GetCurrentUserID(ctx)
 
-			if returnUserID != nil {
+			if ok {
 				ctx.String(http.StatusOK, fmt.Sprint(returnUserID))
 			} else {
-				ctx.String(http.StatusNotFound, "")
+				ctx.String(http.StatusNotFound, fmt.Sprint(returnUserID))
 			}
 		})
 
 		Context("given session have the user ID", func() {
-			It("returns the user ID", func() {
+			It("returns the user ID and true", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				cookie := FabricateAuthUserCookie(user.ID)
 				responseRecorder := httptest.NewRecorder()
@@ -52,7 +52,7 @@ var _ = Describe("Sessions", func() {
 		})
 
 		Context("given session does NOT have the user ID", func() {
-			It("returns nil", func() {
+			It("returns 0 and false", func() {
 				responseRecorder := httptest.NewRecorder()
 				request, err := http.NewRequest("GET", "/test-get-current-user", nil)
 				if err != nil {
@@ -63,7 +63,7 @@ var _ = Describe("Sessions", func() {
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusNotFound))
-				Expect(responseBody).To(BeEmpty())
+				Expect(responseBody).To(Equal("0"))
 			})
 		})
 	})

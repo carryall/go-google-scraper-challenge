@@ -11,20 +11,19 @@ import (
 )
 
 func CurrentUser(ctx *gin.Context) {
-	currentUserID := sessions.GetCurrentUserID(ctx)
-
-	if currentUserID == nil {
+	currentUserID, ok := sessions.GetCurrentUserID(ctx)
+	if !ok {
 		ctx.Set("CurrentUser", nil)
-	} else {
-		user, err := models.GetUserByID(*currentUserID)
-		if err != nil {
-			ctx.Set("CurrentUser", nil)
-			ctx.Next()
-		}
-
-		ctx.Set("CurrentUser", user)
+		ctx.Next()
 	}
 
+	user, err := models.GetUserByID(currentUserID)
+	if err != nil {
+		ctx.Set("CurrentUser", nil)
+		ctx.Next()
+	}
+
+	ctx.Set("CurrentUser", user)
 	ctx.Next()
 }
 
