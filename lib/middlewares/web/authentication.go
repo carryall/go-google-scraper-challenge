@@ -5,7 +5,7 @@ import (
 
 	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/models"
-	"go-google-scraper-challenge/sessions"
+	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/gin-gonic/gin"
 )
