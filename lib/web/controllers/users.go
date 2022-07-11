@@ -19,7 +19,6 @@ type UsersController struct {
 }
 
 func (c *UsersController) New(ctx *gin.Context) {
-	c.EnsureGuestUser(ctx)
 	view.SetLayout("authentication")
 
 	data := c.Data(ctx, gin.H{
@@ -34,8 +33,6 @@ func (c *UsersController) New(ctx *gin.Context) {
 }
 
 func (c *UsersController) Create(ctx *gin.Context) {
-	c.EnsureGuestUser(ctx)
-
 	registrationForm := &webforms.RegistrationForm{}
 	redirectURL := constants.WebRoutes["users"]["new"]
 

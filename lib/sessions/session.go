@@ -2,7 +2,6 @@ package sessions
 
 import (
 	"go-google-scraper-challenge/helpers/log"
-	"go-google-scraper-challenge/lib/models"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -20,21 +19,16 @@ type Flash struct {
 	Message string
 }
 
-func GetCurrentUser(ctx *gin.Context) *models.User {
+func GetCurrentUserID(ctx *gin.Context) *int64 {
 	session := sessions.Default(ctx)
 	currentUserID := session.Get(CurrentUserKey)
 	if currentUserID == nil {
 		return nil
 	}
 
-	user, err := models.GetUserByID(currentUserID.(int64))
-	if err != nil {
-		log.Error("Fail to get current user", err.Error())
+	userID := currentUserID.(int64)
 
-		return nil
-	}
-
-	return user
+	return &userID
 }
 
 func SetCurrentUser(ctx *gin.Context, userID int64) {
