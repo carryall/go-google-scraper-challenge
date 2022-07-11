@@ -38,7 +38,7 @@ var _ = Describe("UsersController", func() {
 	})
 
 	Describe("POST /users", func() {
-		Context("given user not signed in", func() {
+		Context("given an unauthenticated user", func() {
 			Context("given valid params", func() {
 				It("redirects to root path", func() {
 					password := faker.Password()
