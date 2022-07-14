@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 
 	"go-google-scraper-challenge/bootstrap"
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/errors"
 	apimiddlewares "go-google-scraper-challenge/lib/middlewares/api"
 	"go-google-scraper-challenge/lib/models"
@@ -25,7 +26,7 @@ var _ = Describe("Middleware", func() {
 		engine.Use(apimiddlewares.CurrentUser)
 
 		engine.GET("/test-current-user", func(ctx *gin.Context) {
-			currentUser, ok := ctx.Get("CurrentUser")
+			currentUser, ok := ctx.Get(constants.ContextCurrentUser)
 			if !ok {
 				ctx.String(http.StatusNotFound, "")
 

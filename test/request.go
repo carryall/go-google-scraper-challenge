@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/models"
 
 	"github.com/gin-gonic/gin"
@@ -36,7 +37,7 @@ func MakeFormRequest(method string, url string, formData url.Values, user *model
 func makeAPIRequest(request *http.Request, user *models.User) (*gin.Context, *httptest.ResponseRecorder) {
 	ctx, responseRecorder := CreateGinTestContext()
 	ctx.Request = request
-	ctx.Set("CurrentUser", user)
+	ctx.Set(constants.ContextCurrentUser, user)
 
 	return ctx, responseRecorder
 }

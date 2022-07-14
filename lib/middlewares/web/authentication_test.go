@@ -24,7 +24,7 @@ var _ = Describe("Middleware", func() {
 		engine.Use(webmiddlewares.CurrentUser)
 
 		engine.GET("/test-current-user", func(ctx *gin.Context) {
-			currentUser, ok := ctx.Get("CurrentUser")
+			currentUser, ok := ctx.Get(constants.ContextCurrentUser)
 			if !ok {
 				ctx.String(http.StatusNotFound, "")
 

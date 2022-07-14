@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/api/v1/forms"
@@ -19,7 +20,7 @@ type ResultsController struct {
 
 func (c *ResultsController) List(ctx *gin.Context) {
 	keyword := ctx.Query("keyword")
-	user := ctx.MustGet("CurrentUser").(*models.User)
+	user := ctx.MustGet(constants.ContextCurrentUser).(*models.User)
 
 	results, err := models.GetUserResults(user.ID, []string{"User", "AdLinks", "Links"}, keyword)
 	if err != nil {
@@ -37,7 +38,7 @@ func (c *ResultsController) List(ctx *gin.Context) {
 }
 
 func (c *ResultsController) Show(ctx *gin.Context) {
-	user := ctx.MustGet("CurrentUser").(*models.User)
+	user := ctx.MustGet(constants.ContextCurrentUser).(*models.User)
 
 	resultID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -58,7 +59,7 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 }
 
 func (c *ResultsController) Create(ctx *gin.Context) {
-	user := ctx.MustGet("CurrentUser").(*models.User)
+	user := ctx.MustGet(constants.ContextCurrentUser).(*models.User)
 
 	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
