@@ -1,11 +1,12 @@
 package apimiddlewares
 
 import (
+	"strconv"
+
 	"go-google-scraper-challenge/errors"
 	helpers "go-google-scraper-challenge/helpers/api"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/services/oauth"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
