@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/errors"
 	"go-google-scraper-challenge/lib/api/v1/controllers"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
@@ -22,7 +23,7 @@ var _ = Describe("ResultsController", func() {
 		It("returns status OK", func() {
 			user := FabricateUser(faker.Email(), faker.Password())
 			ctx, response := MakeJSONRequest("GET", "/results", nil, nil, user)
-			ctx.Set("CurrentUser", user)
+			ctx.Set(constants.ContextCurrentUser, user)
 
 			resultsController := controllers.ResultsController{}
 			resultsController.List(ctx)

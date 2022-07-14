@@ -13,7 +13,7 @@ import (
 func CurrentUser(ctx *gin.Context) {
 	currentUserID, ok := sessions.GetCurrentUserID(ctx)
 	if !ok {
-		ctx.Set("CurrentUser", nil)
+		ctx.Set(constants.ContextCurrentUser, nil)
 		ctx.Next()
 
 		return
@@ -21,18 +21,18 @@ func CurrentUser(ctx *gin.Context) {
 
 	user, err := models.GetUserByID(currentUserID)
 	if err != nil {
-		ctx.Set("CurrentUser", nil)
+		ctx.Set(constants.ContextCurrentUser, nil)
 		ctx.Next()
 
 		return
 	}
 
-	ctx.Set("CurrentUser", user)
+	ctx.Set(constants.ContextCurrentUser, user)
 	ctx.Next()
 }
 
 func EnsureGuestUser(ctx *gin.Context) {
-	currentUser := ctx.MustGet("CurrentUser")
+	currentUser := ctx.MustGet(constants.ContextCurrentUser)
 
 	if currentUser != nil {
 		dashboardPath := constants.WebRoutes["results"]["index"]
@@ -42,7 +42,7 @@ func EnsureGuestUser(ctx *gin.Context) {
 }
 
 func EnsureAuthenticatedUser(ctx *gin.Context) {
-	currentUser := ctx.MustGet("CurrentUser")
+	currentUser := ctx.MustGet(constants.ContextCurrentUser)
 
 	requestMethod := ctx.Request.Method
 
