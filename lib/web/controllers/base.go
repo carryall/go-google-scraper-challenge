@@ -2,6 +2,7 @@ package webcontrollers
 
 import (
 	"net/http"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -37,12 +38,15 @@ func (c *BaseController) Data(ctx *gin.Context, data gin.H) gin.H {
 func getControllerAndActionName() (controllerName string, actionName string) {
 	// Get the second caller program on the stack e.g. the controller that call the Data()
 	programCounter, _, _, _ := runtime.Caller(2)
-	// Get the caller name, it wll be in format go-google-scraper-challenge/lib/web/controllers.SessionsController.New
+	// Get the caller name, it wll be in format go-google-scraper-challenge/lib/web/controllers.(*SessionsController).New
 	callerName := runtime.FuncForPC(programCounter).Name()
 	callerHierarchy := strings.Split(callerName, "/")
 	previousCallerName := callerHierarchy[len(callerHierarchy)-1]
 	callerElements := strings.Split(previousCallerName, ".")
-	controllerName = strings.Replace(callerElements[1], "Controller", "", 1)
+
+	re := regexp.MustCompile(`\(\*(.*)Controller\)`)
+	controllerNameParts := re.FindStringSubmatch(callerElements[1])
+	controllerName = controllerNameParts[1]
 	actionName = callerElements[2]
 
 	return controllerName, actionName
