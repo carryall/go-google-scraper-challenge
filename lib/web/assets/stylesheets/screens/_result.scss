@@ -1,4 +1,4 @@
-.result {
+.results {
   .card-upload,
   .card-not-found {
     @apply sm:max-w-lg;
@@ -32,11 +32,11 @@
   }
 
   .table-wrapper {
-    @apply flex flex-wrap justify-around;
+    @apply flex flex-wrap justify-center;
   }
 
   .table-result {
-    @apply max-w-lg w-1/3;
+    @apply max-w-full;
 
     .table-data {
       @apply whitespace-normal;
