@@ -3,7 +3,6 @@ package webcontrollers
 import (
 	"net/http"
 
-	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/sessions"
 	"go-google-scraper-challenge/view"
@@ -22,7 +21,7 @@ func (c *ResultsController) Index(ctx *gin.Context) {
 	currentUser := c.GetCurrentUser(ctx)
 	results, err := models.GetUserResults(currentUser.ID, []string{}, "")
 	if err != nil {
-		goview.Render(ctx.Writer, http.StatusOK, "shared/error", gin.H{"Message": err.Error()})
+		c.RenderError(ctx, err.Error())
 		ctx.Abort()
 	}
 
@@ -33,6 +32,7 @@ func (c *ResultsController) Index(ctx *gin.Context) {
 
 	err = goview.Render(ctx.Writer, http.StatusOK, "results/index", data)
 	if err != nil {
-		log.Info("Error", err.Error())
+		c.RenderError(ctx, err.Error())
+		ctx.Abort()
 	}
 }
