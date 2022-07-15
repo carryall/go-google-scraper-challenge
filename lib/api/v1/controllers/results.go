@@ -18,13 +18,10 @@ type ResultsController struct {
 }
 
 func (c *ResultsController) List(ctx *gin.Context) {
-	if c.EnsureAuthenticatedUser(ctx) != nil {
-		return
-	}
-
 	keyword := ctx.Query("keyword")
+	user := c.GetCurrentUser(ctx)
 
-	results, err := models.GetUserResults(c.CurrentUser.ID, []string{"User", "AdLinks", "Links"}, keyword)
+	results, err := models.GetUserResults(user.ID, []string{"User", "AdLinks", "Links"}, keyword)
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrServerError, err.Error())
 
@@ -40,9 +37,7 @@ func (c *ResultsController) List(ctx *gin.Context) {
 }
 
 func (c *ResultsController) Show(ctx *gin.Context) {
-	if c.EnsureAuthenticatedUser(ctx) != nil {
-		return
-	}
+	user := c.GetCurrentUser(ctx)
 
 	resultID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -51,7 +46,7 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 		return
 	}
 
-	result, err := models.GetResultByID(int64(resultID), c.CurrentUser, []string{"User", "AdLinks", "Links"})
+	result, err := models.GetResultByID(int64(resultID), user, []string{"User", "AdLinks", "Links"})
 	if err != nil {
 		RenderJSONError(ctx, errors.ErrNotFound, err.Error())
 
@@ -63,9 +58,7 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 }
 
 func (c *ResultsController) Create(ctx *gin.Context) {
-	if c.EnsureAuthenticatedUser(ctx) != nil {
-		return
-	}
+	user := c.GetCurrentUser(ctx)
 
 	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
@@ -77,7 +70,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 	uploadForm := &forms.UploadForm{
 		File:       file,
 		FileHeader: fileHeader,
-		User:       c.CurrentUser,
+		User:       user,
 	}
 
 	resultIDs, err := uploadForm.Save()

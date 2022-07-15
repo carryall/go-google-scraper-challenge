@@ -61,3 +61,17 @@ func FabricateAuthUserCookie(userID int64) *http.Cookie {
 
 	return &cookie
 }
+
+func GetSessionUserID(cookies []*http.Cookie) interface{} {
+	for _, c := range cookies {
+		if c.Name == "google_scraper_session" {
+			decodedCookie := DecodeCookieString(c.Value)
+
+			if decodedCookie[sessions.CurrentUserKey] != nil {
+				return fmt.Sprint(decodedCookie[sessions.CurrentUserKey])
+			}
+		}
+	}
+
+	return nil
+}
