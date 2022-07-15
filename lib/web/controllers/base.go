@@ -1,17 +1,27 @@
 package webcontrollers
 
 import (
+	"net/http"
 	"runtime"
 	"strings"
 
 	"go-google-scraper-challenge/helpers"
+	"go-google-scraper-challenge/helpers/log"
 	api_controllers "go-google-scraper-challenge/lib/api/v1/controllers"
 
+	"github.com/foolin/goview"
 	"github.com/gin-gonic/gin"
 )
 
 type BaseController struct {
 	api_controllers.BaseController
+}
+
+func (c *BaseController) RenderError(ctx *gin.Context, errorMessage string) {
+	err := goview.Render(ctx.Writer, http.StatusOK, "shared/error", gin.H{"Message": errorMessage})
+	if err != nil {
+		log.Info("Error", err.Error())
+	}
 }
 
 func (c *BaseController) Data(ctx *gin.Context, data gin.H) gin.H {
