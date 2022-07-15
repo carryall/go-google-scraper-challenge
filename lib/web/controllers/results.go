@@ -11,11 +11,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type HomeController struct {
+type ResultsController struct {
 	BaseController
 }
 
-func (c *HomeController) Index(ctx *gin.Context) {
+func (c *ResultsController) Index(ctx *gin.Context) {
 	view.SetLayout("default")
 
 	data := c.Data(ctx, gin.H{
