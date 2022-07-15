@@ -1,10 +1,10 @@
 package view
 
 import (
-	"fmt"
 	"html/template"
-	"io/ioutil"
+	"io/fs"
 	"path/filepath"
+	"strings"
 
 	"go-google-scraper-challenge/helpers"
 	"go-google-scraper-challenge/helpers/log"
@@ -12,8 +12,7 @@ import (
 	"github.com/foolin/goview"
 )
 
-const ROOT_VIEW_PATH = "lib/web/views"
-const PARTIAL_PATH = ROOT_VIEW_PATH + "/partials"
+const ROOT_VIEW_PATH = "lib/web/views/"
 
 var viewEngines = map[string]*goview.ViewEngine{}
 
@@ -63,15 +62,28 @@ func getDefaultConfig() goview.Config {
 
 func getPartialList() []string {
 	partials := []string{}
-	files, err := ioutil.ReadDir(PARTIAL_PATH)
+
+	err := filepath.Walk(ROOT_VIEW_PATH, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() {
+			fileName := info.Name()
+			fileExtension := filepath.Ext(fileName)
+
+			if fileExtension == ".html" && strings.HasPrefix(fileName, "_") {
+				filePath := strings.Split(path, ROOT_VIEW_PATH)[1]
+				filePathWithoutExt := filePath[:len(filePath)-len(fileExtension)]
+				partials = append(partials, filePathWithoutExt)
+			}
+		}
+
+		return nil
+	})
+
 	if err != nil {
 		log.Info("Fail to get partial files", err.Error())
-	}
-
-	for _, file := range files {
-		fileName := file.Name()
-		fileName = fileName[:len(fileName)-len(filepath.Ext(fileName))]
-		partials = append(partials, fmt.Sprintf(`partials/%s`, fileName))
 	}
 
 	return partials
