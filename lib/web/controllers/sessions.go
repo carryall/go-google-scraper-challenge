@@ -23,7 +23,7 @@ func (c *SessionsController) New(ctx *gin.Context) {
 
 	data := c.Data(ctx, gin.H{
 		"Title":   "Sign In",
-		"flashes": sessions.GetFlash(ctx),
+		"Flashes": sessions.GetFlash(ctx),
 	})
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", data)

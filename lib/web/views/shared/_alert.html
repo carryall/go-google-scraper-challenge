@@ -1,5 +1,5 @@
 {{ define "alert" }}
-  {{ range $flashType, $flashMessages := .flashes }}
+  {{ range $flashType, $flashMessages := .Flashes }}
     {{ if $flashMessages }}
       <div class="alert alert--{{$flashType}}">
         <div class="alert__body">

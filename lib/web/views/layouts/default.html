@@ -8,7 +8,7 @@
     {{ assetsCSS "application.css" }}
   </head>
   <body class="{{.ControllerName}} {{.ActionName}}">
-    {{ template "appHeader" }}
+    {{ template "appHeader" . }}
 
     <div class="app-content">
       {{ template "content" . }}

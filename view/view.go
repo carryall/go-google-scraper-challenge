@@ -54,6 +54,7 @@ func getDefaultConfig() goview.Config {
 			"renderFile":     helpers.RenderFile,
 			"renderIcon":     helpers.RenderIcon,
 			"urlFor":         helpers.UrlFor,
+			"urlForID":       helpers.UrlForID,
 			"toKebab":        helpers.ToKebabCase,
 			"toTitle":        helpers.ToTitleCase,
 			"formatDateTime": helpers.FormatDateTime,
