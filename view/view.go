@@ -49,13 +49,14 @@ func getDefaultConfig() goview.Config {
 		Master:    "layouts/default",
 		Partials:  getPartialList(),
 		Funcs: template.FuncMap{
-			"assetsCSS":  helpers.AssetsCSS,
-			"isActive":   helpers.IsActive,
-			"renderFile": helpers.RenderFile,
-			"renderIcon": helpers.RenderIcon,
-			"urlFor":     helpers.UrlFor,
-			"toKebab":    helpers.ToKebabCase,
-			"toTitle":    helpers.ToTitleCase,
+			"assetsCSS":      helpers.AssetsCSS,
+			"isActive":       helpers.IsActive,
+			"renderFile":     helpers.RenderFile,
+			"renderIcon":     helpers.RenderIcon,
+			"urlFor":         helpers.UrlFor,
+			"toKebab":        helpers.ToKebabCase,
+			"toTitle":        helpers.ToTitleCase,
+			"formatDateTime": helpers.FormatDateTime,
 		},
 	}
 }
