@@ -16,6 +16,7 @@ type BaseController struct {
 
 func (c *BaseController) Data(ctx *gin.Context, data gin.H) gin.H {
 	data["CurrentPath"] = ctx.Request.URL
+	data["CurrentUser"] = c.GetCurrentUser(ctx)
 	controllerName, actionName := getControllerAndActionName()
 	data["ControllerName"] = helpers.ToSnakeCase(controllerName)
 	data["ActionName"] = helpers.ToSnakeCase(actionName)

@@ -23,7 +23,7 @@ func (c *UsersController) New(ctx *gin.Context) {
 
 	data := c.Data(ctx, gin.H{
 		"Title":   "Sign Up",
-		"flashes": sessions.GetFlash(ctx),
+		"Flashes": sessions.GetFlash(ctx),
 	})
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "users/new", data)
