@@ -175,6 +175,38 @@ var _ = Describe("Sessions", func() {
 		})
 	})
 
+	Describe("#Clear", func() {
+		engine.GET("/test-clear", func(ctx *gin.Context) {
+			sessions.Clear(ctx)
+			returnUserID, ok := sessions.GetCurrentUserID(ctx)
+
+			if ok {
+				ctx.String(http.StatusOK, fmt.Sprint(returnUserID))
+			} else {
+				ctx.String(http.StatusNotFound, fmt.Sprint(returnUserID))
+			}
+		})
+
+		Context("given session have the user ID", func() {
+			It("clears the user ID in session", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				cookie := FabricateAuthUserCookie(user.ID)
+				responseRecorder := httptest.NewRecorder()
+				request, err := http.NewRequest("GET", "/test-clear", nil)
+				request.Header.Set("Cookie", cookie.Name+"="+cookie.Value)
+				if err != nil {
+					Fail("Fail to test the session " + err.Error())
+				}
+				engine.ServeHTTP(responseRecorder, request)
+				response := responseRecorder.Result()
+				responseBody := GetResponseBody(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusNotFound))
+				Expect(responseBody).To(Equal("0"))
+			})
+		})
+	})
+
 	AfterEach(func() {
 		CleanupDatabase([]string{"users"})
 	})
