@@ -1,27 +1,26 @@
-
-<table class="table table-result">
-  <thead class="table__head">
-    <tr>
-      <th scope="col" class="table-header">Created At</th>
-      <th scope="col" class="table-header">Keyword</th>
-      <th scope="col" class="table-header">Status</th>
-      <th scope="col" class="table-header"></th>
-    </tr>
-  </thead>
-  <tbody class="table__body">
-    {{ range $result := .Results }}
-    <tr id="{{ $result.ID }}">
-      <td class="table-data table-result__date">{{ formatDateTime $result.CreatedAt }}</td>
-      <td class="table-data">{{ $result.Keyword }}</td>
-      <td class="table-data table-data--unwrap"><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
-      <td class="table-data">
-        <a href="{{ urlForID `results` `show` $result.ID }}">{{ renderIcon "report" "icon" }}</a>
-      </td>
-    </tr>
-    {{ end }}
-  </tbody>
-</table>
-
 {{ if eq (len .Results) 0 }}
   {{ template "results/_no_result" }}
+{{ else }}
+  <table class="table table-result">
+    <thead class="table__head">
+      <tr>
+        <th scope="col" class="table-header">Created At</th>
+        <th scope="col" class="table-header">Keyword</th>
+        <th scope="col" class="table-header">Status</th>
+        <th scope="col" class="table-header"></th>
+      </tr>
+    </thead>
+    <tbody class="table__body">
+      {{ range $result := .Results }}
+      <tr id="{{ $result.ID }}">
+        <td class="table-data table-result__date">{{ formatDateTime $result.CreatedAt }}</td>
+        <td class="table-data">{{ $result.Keyword }}</td>
+        <td class="table-data table-data--unwrap"><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
+        <td class="table-data">
+          <a href="{{ urlForID `results` `show` $result.ID }}">{{ renderIcon "report" "icon" }}</a>
+        </td>
+      </tr>
+      {{ end }}
+    </tbody>
+  </table>
 {{ end }}
