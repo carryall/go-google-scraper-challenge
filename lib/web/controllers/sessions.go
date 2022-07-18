@@ -19,7 +19,6 @@ type SessionsController struct {
 }
 
 func (c *SessionsController) New(ctx *gin.Context) {
-	c.EnsureGuestUser(ctx)
 	view.SetLayout("authentication")
 
 	data := c.Data(ctx, gin.H{
@@ -34,8 +33,6 @@ func (c *SessionsController) New(ctx *gin.Context) {
 }
 
 func (c *SessionsController) Create(ctx *gin.Context) {
-	c.EnsureGuestUser(ctx)
-
 	authenticationForm := &webforms.AuthenticationForm{}
 	redirectURL := constants.WebRoutes["sessions"]["new"]
 

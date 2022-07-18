@@ -3,12 +3,14 @@ package routers
 import (
 	"go-google-scraper-challenge/lib/api/v1/controllers"
 	oauth_controllers "go-google-scraper-challenge/lib/api/v1/controllers/oauth"
+	. "go-google-scraper-challenge/lib/middlewares/api"
 
 	"github.com/gin-gonic/gin"
 )
 
 func ComebineRoutes(engine *gin.Engine) {
 	v1 := engine.Group("/api/v1")
+	v1.Use(CurrentUser)
 
 	healthController := controllers.HealthController{}
 	oauthClientsController := oauth_controllers.OAuthClientsController{}
@@ -16,11 +18,15 @@ func ComebineRoutes(engine *gin.Engine) {
 	authenticationController := controllers.AuthenticationController{}
 	resultsController := controllers.ResultsController{}
 
-	v1.GET("/health", healthController.HealthStatus)
-	v1.POST("/oauth/clients", oauthClientsController.Create)
-	v1.POST("/register", registerController.Register)
-	v1.POST("/login", authenticationController.Login)
-	v1.POST("/results", resultsController.Create)
-	v1.GET("/results", resultsController.List)
-	v1.GET("/results/:id", resultsController.Show)
+	publicRoutes := v1.Group("/")
+	publicRoutes.GET("/health", healthController.HealthStatus)
+	publicRoutes.POST("/oauth/clients", oauthClientsController.Create)
+	publicRoutes.POST("/register", registerController.Register)
+	publicRoutes.POST("/login", authenticationController.Login)
+
+	privateRoutes := v1.Group("/")
+	privateRoutes.Use(EnsureAuthenticatedUser)
+	privateRoutes.POST("/results", resultsController.Create)
+	privateRoutes.GET("/results", resultsController.List)
+	privateRoutes.GET("/results/:id", resultsController.Show)
 }
