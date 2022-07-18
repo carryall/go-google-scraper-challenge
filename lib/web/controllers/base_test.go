@@ -17,7 +17,7 @@ type DummyController struct {
 	webcontrollers.BaseController
 }
 
-func (c DummyController) DummyAction(ctx *gin.Context) gin.H {
+func (c *DummyController) DummyAction(ctx *gin.Context) gin.H {
 	return c.Data(ctx, gin.H{})
 }
 
