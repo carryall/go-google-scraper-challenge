@@ -46,7 +46,9 @@ func getControllerAndActionName() (controllerName string, actionName string) {
 
 	re := regexp.MustCompile(`\(\*(.*)Controller\)`)
 	controllerNameParts := re.FindStringSubmatch(callerElements[1])
-	controllerName = controllerNameParts[1]
+	if len(controllerNameParts) > 0 {
+		controllerName = controllerNameParts[1]
+	}
 	actionName = callerElements[2]
 
 	return controllerName, actionName
