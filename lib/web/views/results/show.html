@@ -1,0 +1,7 @@
+{{ define "content" }}
+  {{ if eq .Result nil }}
+    {{ template "results/_not_found" }}
+  {{ else }}
+    {{ template "results/_card" . }}
+  {{ end }}
+{{ end }}

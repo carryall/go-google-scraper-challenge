@@ -1,5 +1,0 @@
-{{ if .result }}
-    {{ template "results/_card.html" . }}
-{{ else }}
-    {{ template "results/_not_found.html" }}
-{{ end }}
