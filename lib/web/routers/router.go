@@ -29,5 +29,6 @@ func ComebineRoutes(engine *gin.Engine) {
 
 	privateRoutes := router.Group("/")
 	privateRoutes.Use(EnsureAuthenticatedUser)
-	privateRoutes.GET(constants.WebRoutes["home"]["index"], homeController.Index)
+	privateRoutes.GET(constants.WebRoutes["results"]["index"], homeController.Index)
+	privateRoutes.POST(constants.WebRoutes["sessions"]["delete"], sessionsController.Delete)
 }
