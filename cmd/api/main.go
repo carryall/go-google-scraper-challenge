@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"go-google-scraper-challenge/bootstrap"
 	"go-google-scraper-challenge/database"
@@ -15,6 +16,7 @@ import (
 
 func main() {
 	bootstrap.LoadConfig()
+	os.Setenv("TZ", "Asia/Bangkok")
 
 	database.InitDatabase(database.GetDatabaseURL())
 
