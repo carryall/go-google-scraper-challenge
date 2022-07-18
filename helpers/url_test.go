@@ -41,4 +41,18 @@ var _ = Describe("URL Helpers", func() {
 			})
 		})
 	})
+
+	Describe("#UrlForID", func() {
+		Context("given a valid controller and action name", func() {
+			It("returns the correct path", func() {
+				Expect(helpers.UrlForID("results", "show", 99)).To(Equal("/results/99"))
+			})
+		})
+
+		Context("given an INVALID controller and action name", func() {
+			It("returns blank", func() {
+				Expect(helpers.UrlForID("unknown", "unknown", 99)).To(BeEmpty())
+			})
+		})
+	})
 })
