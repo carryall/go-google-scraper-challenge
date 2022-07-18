@@ -12,7 +12,16 @@ import (
 
 var _ = Describe("ResultsController", func() {
 	Describe("GET /", func() {
-		Context("given user is not signed in", func() {
+		Context("given user already signed in", func() {
+			It("renders with status 200", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				response := MakeWebRequest("GET", "/", nil, user)
+
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+			})
+		})
+
+		Context("given user is NOT signed in", func() {
 			It("redirects to signin path", func() {
 				response := MakeWebRequest("GET", "/", nil, nil)
 
@@ -20,15 +29,6 @@ var _ = Describe("ResultsController", func() {
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
 				Expect(currentPath).To(Equal("/signin"))
-			})
-		})
-
-		Context("given user already signed in", func() {
-			It("renders with status 200", func() {
-				user := FabricateUser(faker.Email(), faker.Password())
-				response := MakeWebRequest("GET", "/", nil, user)
-
-				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 		})
 	})
