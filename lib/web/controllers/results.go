@@ -1,8 +1,11 @@
 package webcontrollers
 
 import (
+	"log"
 	"net/http"
+	"strconv"
 
+	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/sessions"
 	"go-google-scraper-challenge/view"
@@ -31,6 +34,35 @@ func (c *ResultsController) Index(ctx *gin.Context) {
 	})
 
 	err = goview.Render(ctx.Writer, http.StatusOK, "results/index", data)
+	if err != nil {
+		c.RenderError(ctx, err.Error())
+		ctx.Abort()
+	}
+}
+
+func (c *ResultsController) Show(ctx *gin.Context) {
+	view.SetLayout("default")
+
+	resultIDStr := ctx.Param("id")
+	resultID, err := strconv.ParseInt(resultIDStr, 10, 0)
+	if err != nil {
+		c.RenderError(ctx, constants.ResultNotFound)
+		ctx.Abort()
+	}
+
+	currentUser := c.GetCurrentUser(ctx)
+	result, err := models.GetResultByID(resultID, currentUser, []string{"User", "AdLinks", "Links"})
+	log.Println("result", result)
+	if err != nil {
+		c.RenderError(ctx, err.Error())
+		ctx.Abort()
+	}
+
+	data := c.Data(ctx, gin.H{
+		"Result": result,
+	})
+
+	err = goview.Render(ctx.Writer, http.StatusOK, "results/show", data)
 	if err != nil {
 		c.RenderError(ctx, err.Error())
 		ctx.Abort()

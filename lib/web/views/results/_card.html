@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      {{ .Result.Keyword }}
+    </h3>
+  </div>
+  <div class="card-body card-body--list">
+    <dl class="data-list data-list--with-title">
+      <div class="data-item">
+        <dt class="data-item__title">
+          Status
+        </dt>
+        <dd class="data-item__detail">
+          <span class="badge badge--{{.Result.Status}}">{{ .Result.Status }}</span>
+        </dd>
+      </div>
+      <div class="data-item">
+        <dt class="data-item__title">
+          Total Links
+        </dt>
+        <dd class="data-item__detail">
+          {{ .Result.TotalLinkCount }} links
+        </dd>
+      </div>
+      <div class="data-item">
+        <dt class="data-item__title">
+          Adwords links ({{ .Result.AdLinkCount }})
+        </dt>
+        <dd class="data-item__detail">
+          {{ template "ad_links/_list" . }}
+        </dd>
+      </div>
+      <div class="data-item">
+        <dt class="data-item__title">
+          Non-Adwords links ({{ .Result.NonAdLinkCount }})
+        </dt>
+        <dd class="data-item__detail">
+          {{ template "links/_card" . }}
+        </dd>
+      </div>
+      <div class="data-item">
+        <dt class="data-item__title">
+          Page Cache
+        </dt>
+        <dd class="data-item__detail">
+          <a href="/results/{{.Result.Id}}/cache" target="_blank">{{ renderIcon "eye" "icon" }}</a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
