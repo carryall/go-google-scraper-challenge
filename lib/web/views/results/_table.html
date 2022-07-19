@@ -1,22 +1,22 @@
 {{ if eq (len .Results) 0 }}
   {{ template "results/_no_result" }}
 {{ else }}
-  <table class="table table-result">
-    <thead class="table__head">
+  <table class="table-result">
+    <thead>
       <tr>
-        <th scope="col" class="table-header">Created At</th>
-        <th scope="col" class="table-header">Keyword</th>
-        <th scope="col" class="table-header">Status</th>
-        <th scope="col" class="table-header"></th>
+        <th scope="col">Created At</th>
+        <th scope="col">Keyword</th>
+        <th scope="col">Status</th>
+        <th scope="col"></th>
       </tr>
     </thead>
-    <tbody class="table__body">
+    <tbody>
       {{ range $result := .Results }}
       <tr id="{{ $result.ID }}">
-        <td class="table-data table-result__date">{{ formatDateTime $result.CreatedAt }}</td>
-        <td class="table-data">{{ $result.Keyword }}</td>
-        <td class="table-data table-data--unwrap"><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
-        <td class="table-data">
+        <td class="table-result__date">{{ formatDateTime $result.CreatedAt }}</td>
+        <td>{{ $result.Keyword }}</td>
+        <td><span class="badge badge--{{$result.Status}}">{{ $result.Status }}</span></td>
+        <td>
           <a href="{{ urlForID `results` `show` $result.ID }}">{{ renderIcon "report" "icon" }}</a>
         </td>
       </tr>
