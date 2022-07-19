@@ -32,7 +32,7 @@ var _ = Describe("Sessions", func() {
 			}
 		})
 
-		Context("given session have the user ID", func() {
+		Context("given session that has the user ID", func() {
 			It("returns the user ID and true", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				cookie := FabricateAuthUserCookie(user.ID)
@@ -187,7 +187,7 @@ var _ = Describe("Sessions", func() {
 			}
 		})
 
-		Context("given session have the user ID", func() {
+		Context("given session that has the user ID", func() {
 			It("clears the user ID in session", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				cookie := FabricateAuthUserCookie(user.ID)

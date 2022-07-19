@@ -248,7 +248,7 @@ var _ = Describe("SessionsController", func() {
 			})
 		})
 
-		Context("given user is already signed in", func() {
+		Context("given a user is already signed in", func() {
 			It("redirects to root path", func() {
 				password := faker.Password()
 				user := FabricateUser(faker.Email(), password)
@@ -266,7 +266,7 @@ var _ = Describe("SessionsController", func() {
 	})
 
 	Describe("POST /signout", func() {
-		Context("given user is already signed in", func() {
+		Context("given a user is already signed in", func() {
 			It("redirects to sign in screen", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeWebFormRequest("POST", "/signout", nil, user)
