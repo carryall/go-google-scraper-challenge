@@ -12,7 +12,7 @@ import (
 
 var _ = Describe("ResultsController", func() {
 	Describe("GET /", func() {
-		Context("given user already signed in", func() {
+		Context("given a user is already signed in", func() {
 			It("renders with status 200", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeWebRequest("GET", "/", nil, user)
@@ -21,7 +21,7 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 
-		Context("given user is NOT signed in", func() {
+		Context("given NO user is signed in", func() {
 			It("redirects to signin path", func() {
 				response := MakeWebRequest("GET", "/", nil, nil)
 

@@ -12,7 +12,7 @@ import (
 var _ = Describe("Date", func() {
 	Describe("#FormatDateTime", func() {
 		Context("given a date time", func() {
-			It("returns a formatted date time in string", func() {
+			It("returns the formatted date time in string", func() {
 				dateTime := time.Date(2022, time.Month(5), 20, 7, 30, 35, 0, time.UTC)
 				htmlDate := helpers.FormatDateTime(dateTime)
 
