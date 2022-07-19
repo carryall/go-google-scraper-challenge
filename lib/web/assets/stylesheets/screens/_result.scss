@@ -38,11 +38,11 @@
   .table-result {
     @apply max-w-full;
 
-    .table-data {
+    td {
       @apply whitespace-normal;
     }
 
-    .table-data.table-result__date {
+    td.table-result__date {
       @apply text-sm text-gray-500;
     }
   }
