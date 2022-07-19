@@ -65,3 +65,9 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 
 	ctx.Redirect(http.StatusFound, redirectURL)
 }
+
+func (c *SessionsController) Delete(ctx *gin.Context) {
+	sessions.Clear(ctx)
+
+	ctx.Redirect(http.StatusFound, constants.WebRoutes["sessions"]["new"])
+}

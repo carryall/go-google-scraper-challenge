@@ -248,7 +248,7 @@ var _ = Describe("SessionsController", func() {
 			})
 		})
 
-		Context("given user is already signed in", func() {
+		Context("given a user is already signed in", func() {
 			It("redirects to root path", func() {
 				password := faker.Password()
 				user := FabricateUser(faker.Email(), password)
@@ -261,6 +261,19 @@ var _ = Describe("SessionsController", func() {
 
 				Expect(response.StatusCode).To(Equal(http.StatusFound))
 				Expect(currentPath).To(Equal("/"))
+			})
+		})
+	})
+
+	Describe("POST /signout", func() {
+		Context("given a user is already signed in", func() {
+			It("redirects to sign in screen", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				response := MakeWebFormRequest("POST", "/signout", nil, user)
+				currentPath := GetCurrentPath(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusFound))
+				Expect(currentPath).To(Equal(constants.WebRoutes["sessions"]["new"]))
 			})
 		})
 	})
