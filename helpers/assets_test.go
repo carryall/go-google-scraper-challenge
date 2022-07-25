@@ -13,7 +13,7 @@ var _ = Describe("Assets", func() {
 			It("returns a html string", func() {
 				htmlStr := helpers.AssetsCSS("file_name")
 
-				Expect(string(htmlStr)).To(Equal(`<link href="static/stylesheets/file_name" rel="stylesheet" type="text/css" />`))
+				Expect(string(htmlStr)).To(Equal(`<link href="../static/stylesheets/file_name" rel="stylesheet" type="text/css" />`))
 			})
 		})
 	})
