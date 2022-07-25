@@ -98,4 +98,8 @@ var _ = Describe("ResultsController", func() {
 			})
 		})
 	})
+
+	AfterEach(func() {
+		CleanupDatabase([]string{"users", "results", "ad_links", "links"})
+	})
 })
