@@ -43,7 +43,7 @@
           Page Cache
         </dt>
         <dd class="data-item__detail">
-          <a href="/results/{{.Result.Id}}/cache" target="_blank">{{ renderIcon "eye" "icon" }}</a>
+          <a href="{{ urlForID `results` `cache` .Result.ID}}" target="_blank">{{ renderIcon "eye" "icon" }}</a>
         </dd>
       </div>
     </dl>
