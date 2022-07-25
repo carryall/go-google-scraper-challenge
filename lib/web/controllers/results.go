@@ -52,7 +52,7 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 	currentUser := c.GetCurrentUser(ctx)
 	result, err := models.GetResultByID(resultID, currentUser, []string{"User", "AdLinks", "Links"})
 	if err != nil {
-		c.RenderError(ctx, err.Error())
+		c.RenderError(ctx, constants.ResultNotFound)
 		ctx.Abort()
 	}
 
