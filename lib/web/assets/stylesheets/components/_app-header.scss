@@ -13,7 +13,11 @@
     @apply border-r-2 border-nude-100 px-2 mr-2;
   }
 
+  &__form-signout {
+    @apply inline-flex;
+  }
+
   &__link {
-    @apply text-nude-700;
+    @apply text-nude-700 font-bold;
   }
 }

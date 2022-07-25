@@ -23,8 +23,7 @@ var _ = Describe("UsersController", func() {
 			})
 		})
 
-		// TODO: Test this when work on the result list screen
-		XContext("given user already signed in", func() {
+		Context("given user already signed in", func() {
 			It("redirects to root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				response := MakeWebRequest("GET", "/signup", nil, user)

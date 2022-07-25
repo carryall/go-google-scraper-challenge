@@ -23,7 +23,7 @@ func (c *SessionsController) New(ctx *gin.Context) {
 
 	data := c.Data(ctx, gin.H{
 		"Title":   "Sign In",
-		"flashes": sessions.GetFlash(ctx),
+		"Flashes": sessions.GetFlash(ctx),
 	})
 
 	err := goview.Render(ctx.Writer, http.StatusOK, "sessions/new", data)
@@ -64,4 +64,10 @@ func (c *SessionsController) Create(ctx *gin.Context) {
 	}
 
 	ctx.Redirect(http.StatusFound, redirectURL)
+}
+
+func (c *SessionsController) Delete(ctx *gin.Context) {
+	sessions.Clear(ctx)
+
+	ctx.Redirect(http.StatusFound, constants.WebRoutes["sessions"]["new"])
 }
