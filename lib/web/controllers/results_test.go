@@ -98,6 +98,59 @@ var _ = Describe("ResultsController", func() {
 		})
 	})
 
+	Describe("GET /results/:id/cache", func() {
+		Context("given a valid result ID", func() {
+			It("renders the result page cache", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+
+				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d/cache`, result.ID), nil, user)
+				responseBody := GetResponseBody(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+				Expect(responseBody).To(ContainSubstring(result.PageCache))
+			})
+		})
+
+		Context("given a non numberic result ID", func() {
+			It("renders not found error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+
+				response := MakeWebRequest("GET", "/results/invalid_id/cache", nil, user)
+				responseBody := GetResponseBody(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+				Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
+			})
+		})
+
+		Context("given a result ID does NOT exist", func() {
+			It("renders not found error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+
+				response := MakeWebRequest("GET", "/results/999/cache", nil, user)
+				responseBody := GetResponseBody(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+				Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
+			})
+		})
+
+		Context("given a result ID that does NOT belong to the user", func() {
+			It("renders not found error", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				otherUser := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(otherUser)
+
+				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d/cache`, result.ID), nil, user)
+				responseBody := GetResponseBody(response)
+
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+				Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
+			})
+		})
+	})
+
 	AfterEach(func() {
 		CleanupDatabase([]string{"users", "results", "ad_links", "links"})
 	})
