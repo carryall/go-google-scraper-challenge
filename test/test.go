@@ -18,6 +18,7 @@ var Engine *gin.Engine
 
 func SetupTestEnvironment() {
 	gin.SetMode(gin.TestMode)
+	os.Setenv("TZ", "Asia/Bangkok")
 
 	setRootDir()
 

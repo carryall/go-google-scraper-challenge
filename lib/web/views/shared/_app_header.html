@@ -5,7 +5,7 @@
     </a>
     <span>
         <span class="app-header__profile">
-            <!-- Hi, {{ .CurrentUser.Email }} -->
+            Hi, {{ .CurrentUser.Email }}
         </span>
         <form action="{{ urlFor `sessions` `delete` }}" method="post" class="app-header__form-signout">
           <button type="submit" class="app-header__link">
