@@ -1,6 +1,7 @@
 package webcontrollers
 
 import (
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -64,6 +65,32 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 	})
 
 	err = goview.Render(ctx.Writer, http.StatusOK, "results/show", data)
+	if err != nil {
+		c.RenderError(ctx, err.Error())
+		ctx.Abort()
+	}
+}
+
+func (c *ResultsController) Cache(ctx *gin.Context) {
+	view.SetLayout("default")
+
+	resultIDStr := ctx.Param("id")
+	resultID, err := strconv.ParseInt(resultIDStr, 10, 0)
+	if err != nil {
+		c.renderNotFoundError(ctx)
+	}
+
+	currentUser := c.GetCurrentUser(ctx)
+	result, err := models.GetResultByID(resultID, currentUser, []string{})
+	if err != nil {
+		c.renderNotFoundError(ctx)
+	}
+
+	data := c.Data(ctx, gin.H{
+		"PageCache": template.HTML(result.PageCache),
+	})
+
+	err = goview.Render(ctx.Writer, http.StatusOK, "results/cache", data)
 	if err != nil {
 		c.RenderError(ctx, err.Error())
 		ctx.Abort()
