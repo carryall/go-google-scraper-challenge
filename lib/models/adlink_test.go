@@ -148,6 +148,40 @@ var _ = Describe("AdLink", func() {
 		})
 	})
 
+	Describe("#GroupAdLinksByPosition", func() {
+		Context("given a list of AdLink", func() {
+			It("returns a map of AdLinks group by position", func() {
+				user := FabricateUser(faker.Email(), faker.Password())
+				result := FabricateResult(user)
+				topAdLink1 := FabricateAdLinkWithParams(result, models.AdLinkPositionTop)
+				topAdLink2 := FabricateAdLinkWithParams(result, models.AdLinkPositionTop)
+				sideAdLink1 := FabricateAdLinkWithParams(result, models.AdLinkPositionSide)
+				sideAdLink2 := FabricateAdLinkWithParams(result, models.AdLinkPositionSide)
+				sideAdLink3 := FabricateAdLinkWithParams(result, models.AdLinkPositionSide)
+				bottomAdLink := FabricateAdLinkWithParams(result, models.AdLinkPositionBottom)
+				adLinks := []*models.AdLink{bottomAdLink, topAdLink1, sideAdLink3, sideAdLink2, sideAdLink1, topAdLink2}
+
+				groupedAdLinks := models.GroupAdLinksByPosition(adLinks)
+
+				Expect(groupedAdLinks[models.AdLinkPositionTop]).To(ContainElements(topAdLink1.Link, topAdLink2.Link))
+				Expect(groupedAdLinks[models.AdLinkPositionSide]).To(ContainElements(sideAdLink1.Link, sideAdLink2.Link, sideAdLink3.Link))
+				Expect(groupedAdLinks[models.AdLinkPositionBottom]).To(ContainElements(bottomAdLink.Link))
+			})
+		})
+
+		Context("given an empty list of AdLink", func() {
+			It("returns an empty map", func() {
+				emptyList := []*models.AdLink{}
+
+				groupedAdLinks := models.GroupAdLinksByPosition(emptyList)
+
+				Expect(groupedAdLinks[models.AdLinkPositionTop]).To(BeEmpty())
+				Expect(groupedAdLinks[models.AdLinkPositionSide]).To(BeEmpty())
+				Expect(groupedAdLinks[models.AdLinkPositionBottom]).To(BeEmpty())
+			})
+		})
+	})
+
 	AfterEach(func() {
 		CleanupDatabase([]string{"users", "results", "ad_links"})
 	})
