@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/models"
 	. "go-google-scraper-challenge/test"
 
@@ -68,7 +67,7 @@ var _ = Describe("ResultsController", func() {
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
-				Expect(responseBody).To(ContainSubstring(constants.ResultNotFound))
+				Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
 			})
 		})
 
@@ -80,7 +79,7 @@ var _ = Describe("ResultsController", func() {
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
-				Expect(responseBody).To(ContainSubstring(constants.ResultNotFound))
+				Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
 			})
 		})
 
@@ -94,7 +93,7 @@ var _ = Describe("ResultsController", func() {
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
-				Expect(responseBody).To(ContainSubstring(constants.ResultNotFound))
+				Expect(responseBody).To(ContainSubstring("We cannot find the result you are looking for"))
 			})
 		})
 	})

@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"go-google-scraper-challenge/constants"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/sessions"
 	"go-google-scraper-challenge/view"
@@ -45,15 +44,17 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 	resultIDStr := ctx.Param("id")
 	resultID, err := strconv.ParseInt(resultIDStr, 10, 0)
 	if err != nil {
-		c.RenderError(ctx, constants.ResultNotFound)
-		ctx.Abort()
+		c.renderNotFoundError(ctx)
+
+		return
 	}
 
 	currentUser := c.GetCurrentUser(ctx)
 	result, err := models.GetResultByID(resultID, currentUser, []string{"User", "AdLinks", "Links"})
 	if err != nil {
-		c.RenderError(ctx, constants.ResultNotFound)
-		ctx.Abort()
+		c.renderNotFoundError(ctx)
+
+		return
 	}
 
 	data := c.Data(ctx, gin.H{
@@ -67,4 +68,13 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 		c.RenderError(ctx, err.Error())
 		ctx.Abort()
 	}
+}
+
+func (c *ResultsController) renderNotFoundError(ctx *gin.Context) {
+	err := goview.Render(ctx.Writer, http.StatusOK, "results/not_found", c.Data(ctx, gin.H{}))
+	if err != nil {
+		c.RenderError(ctx, err.Error())
+	}
+
+	ctx.Abort()
 }
