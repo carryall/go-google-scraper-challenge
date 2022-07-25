@@ -59,7 +59,9 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 	}
 
 	data := c.Data(ctx, gin.H{
-		"Result": result,
+		"Result":         result,
+		"TotalLinkCount": len(result.AdLinks) + len(result.Links),
+		"GroupedAdLinks": models.GroupAdLinksByPosition(result.AdLinks),
 	})
 
 	err = goview.Render(ctx.Writer, http.StatusOK, "results/show", data)

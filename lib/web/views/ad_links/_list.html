@@ -1,4 +1,4 @@
-{{ range $position, $adLinks := .Result.AdLinks }}
+{{ range $position, $adLinks := .GroupedAdLinks }}
   <div class="card card--nested">
     <div class="card-header">
       <h3 class="card-title">{{ toTitle $position }} ({{ len $adLinks }})</h3>

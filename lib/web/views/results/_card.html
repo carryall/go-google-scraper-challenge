@@ -19,12 +19,12 @@
           Total Links
         </dt>
         <dd class="data-item__detail">
-          {{ .Result.TotalLinkCount }} links
+          {{ .TotalLinkCount }} links
         </dd>
       </div>
       <div class="data-item">
         <dt class="data-item__title">
-          Adwords links ({{ .Result.AdLinkCount }})
+          Adwords links ({{ len .Result.AdLinks }})
         </dt>
         <dd class="data-item__detail">
           {{ template "ad_links/_list" . }}
@@ -32,7 +32,7 @@
       </div>
       <div class="data-item">
         <dt class="data-item__title">
-          Non-Adwords links ({{ .Result.NonAdLinkCount }})
+          Non-Adwords links ({{ len .Result.Links }})
         </dt>
         <dd class="data-item__detail">
           {{ template "links/_card" . }}
