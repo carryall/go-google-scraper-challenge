@@ -1,7 +1,6 @@
 package webcontrollers
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -52,7 +51,6 @@ func (c *ResultsController) Show(ctx *gin.Context) {
 
 	currentUser := c.GetCurrentUser(ctx)
 	result, err := models.GetResultByID(resultID, currentUser, []string{"User", "AdLinks", "Links"})
-	log.Println("result", result)
 	if err != nil {
 		c.RenderError(ctx, err.Error())
 		ctx.Abort()
