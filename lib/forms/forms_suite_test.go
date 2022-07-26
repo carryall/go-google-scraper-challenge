@@ -1,4 +1,4 @@
-package apiforms_test
+package forms_test
 
 import (
 	"testing"
@@ -9,9 +9,9 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestAPIForms(t *testing.T) {
+func TestForms(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "API Forms Suite")
+	RunSpecs(t, "Forms Suite")
 }
 
 var _ = BeforeSuite(func() {

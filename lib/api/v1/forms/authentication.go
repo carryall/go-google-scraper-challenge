@@ -1,4 +1,4 @@
-package forms
+package apiforms
 
 import (
 	"errors"

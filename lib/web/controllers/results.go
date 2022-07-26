@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/lib/api/v1/forms"
+	"go-google-scraper-challenge/lib/forms"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/sessions"
 	"go-google-scraper-challenge/view"
