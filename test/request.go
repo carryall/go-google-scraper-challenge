@@ -42,8 +42,8 @@ func makeAPIRequest(request *http.Request, user *models.User) (*gin.Context, *ht
 	return ctx, responseRecorder
 }
 
-func MakeWebRequest(method string, url string, body io.Reader, user *models.User) *http.Response {
-	request := buildRequest(method, url, nil, body)
+func MakeWebRequest(method string, url string, header http.Header, body io.Reader, user *models.User) *http.Response {
+	request := buildRequest(method, url, header, body)
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	if user != nil {
