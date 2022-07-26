@@ -46,10 +46,7 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 
 	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
-		c.RenderError(ctx, err.Error())
-		ctx.Abort()
-
-		return
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
 	}
 
 	uploadForm := &forms.UploadForm{
@@ -60,10 +57,9 @@ func (c *ResultsController) Create(ctx *gin.Context) {
 
 	_, err = uploadForm.Save()
 	if err != nil {
-		c.RenderError(ctx, err.Error())
-		ctx.Abort()
-
-		return
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
+	} else {
+		sessions.SetFlash(ctx, sessions.FlashTypeSuccess, "Successfully uploaded")
 	}
 
 	ctx.Redirect(http.StatusFound, constants.WebRoutes["results"]["index"])
