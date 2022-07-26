@@ -109,7 +109,7 @@ func GetUserResults(userID int64, preloadRelations []string, keyword string) (re
 		db = db.Where("keyword ILIKE '%' || ? || '%'", keyword)
 	}
 
-	queryResult := db.Find(&results, query)
+	queryResult := db.Order("id DESC").Find(&results, query)
 	if queryResult.Error != nil {
 		return []*Result{}, queryResult.Error
 	}
