@@ -1,7 +1,7 @@
 package forms_test
 
 import (
-	"go-google-scraper-challenge/lib/api/v1/forms"
+	"go-google-scraper-challenge/lib/forms"
 	"go-google-scraper-challenge/lib/models"
 	. "go-google-scraper-challenge/test"
 

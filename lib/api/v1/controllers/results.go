@@ -6,8 +6,8 @@ import (
 
 	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
-	"go-google-scraper-challenge/lib/api/v1/forms"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
+	"go-google-scraper-challenge/lib/forms"
 	"go-google-scraper-challenge/lib/models"
 
 	"github.com/gin-gonic/gin"
