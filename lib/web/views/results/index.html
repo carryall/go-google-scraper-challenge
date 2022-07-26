@@ -1,5 +1,8 @@
 {{ define "content" }}
   {{ template "alert" . }}
+
+  {{ template "results/_form" . }}
+
   <h3 class="title-feature">Results ({{ len .Results }})</h3>
 
   <div class="table-wrapper">

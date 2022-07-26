@@ -15,6 +15,7 @@ func ComebineRoutes(engine *gin.Engine) {
 	router := engine.Group("/")
 	router.Static("/static", "./static")
 	router.Static("/assets/images", "./lib/web/assets/images")
+	router.Static("/files", "./files")
 
 	resultsController := webcontrollers.ResultsController{}
 	sessionsController := webcontrollers.SessionsController{}
@@ -31,6 +32,7 @@ func ComebineRoutes(engine *gin.Engine) {
 	privateRoutes.Use(EnsureAuthenticatedUser)
 	privateRoutes.GET(constants.WebRoutes["results"]["index"], resultsController.Index)
 	privateRoutes.GET(constants.WebRoutes["results"]["show"], resultsController.Show)
+	privateRoutes.POST(constants.WebRoutes["results"]["create"], resultsController.Create)
 	privateRoutes.GET(constants.WebRoutes["results"]["cache"], resultsController.Cache)
 	privateRoutes.POST(constants.WebRoutes["sessions"]["delete"], sessionsController.Delete)
 }
