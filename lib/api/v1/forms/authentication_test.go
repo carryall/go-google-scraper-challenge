@@ -1,8 +1,8 @@
-package forms_test
+package apiforms_test
 
 import (
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/lib/api/v1/forms"
+	apiforms "go-google-scraper-challenge/lib/api/v1/forms"
 	. "go-google-scraper-challenge/test"
 
 	"github.com/bxcodec/faker/v3"
@@ -17,7 +17,7 @@ var _ = Describe("API Authentication Form", func() {
 				authClient := FabricateAuthClient()
 				password := faker.Password()
 				user := FabricateUser(faker.Email(), password)
-				form := forms.AuthenticationForm{
+				form := apiforms.AuthenticationForm{
 					ClientID:     authClient.ClientID,
 					ClientSecret: authClient.ClientSecret,
 					Email:        user.Email,
@@ -39,7 +39,7 @@ var _ = Describe("API Authentication Form", func() {
 						authClient := FabricateAuthClient()
 						password := faker.Password()
 						user := FabricateUser(faker.Email(), password)
-						form := forms.AuthenticationForm{
+						form := apiforms.AuthenticationForm{
 							ClientID:     "",
 							ClientSecret: authClient.ClientSecret,
 							Email:        user.Email,
@@ -59,7 +59,7 @@ var _ = Describe("API Authentication Form", func() {
 						authClient := FabricateAuthClient()
 						password := faker.Password()
 						user := FabricateUser(faker.Email(), password)
-						form := forms.AuthenticationForm{
+						form := apiforms.AuthenticationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: "",
 							Email:        user.Email,
@@ -79,7 +79,7 @@ var _ = Describe("API Authentication Form", func() {
 						authClient := FabricateAuthClient()
 						password := faker.Password()
 						user := FabricateUser(faker.Email(), password)
-						form := forms.AuthenticationForm{
+						form := apiforms.AuthenticationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        user.Email,
@@ -100,7 +100,7 @@ var _ = Describe("API Authentication Form", func() {
 						authClient := FabricateAuthClient()
 						password := faker.Password()
 						FabricateUser(faker.Email(), password)
-						form := forms.AuthenticationForm{
+						form := apiforms.AuthenticationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        "",
@@ -120,7 +120,7 @@ var _ = Describe("API Authentication Form", func() {
 						authClient := FabricateAuthClient()
 						password := faker.Password()
 						FabricateUser(faker.Email(), password)
-						form := forms.AuthenticationForm{
+						form := apiforms.AuthenticationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        "invalid",
@@ -141,7 +141,7 @@ var _ = Describe("API Authentication Form", func() {
 					It("returns an INVALID password error", func() {
 						authClient := FabricateAuthClient()
 						user := FabricateUser(faker.Email(), faker.Password())
-						form := forms.AuthenticationForm{
+						form := apiforms.AuthenticationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        user.Email,
@@ -164,7 +164,7 @@ var _ = Describe("API Authentication Form", func() {
 			It("returns a user does not exist error", func() {
 				authClient := FabricateAuthClient()
 				user := FabricateUser(faker.Email(), faker.Password())
-				form := forms.AuthenticationForm{
+				form := apiforms.AuthenticationForm{
 					ClientID:     authClient.ClientID,
 					ClientSecret: authClient.ClientSecret,
 					Email:        user.Email,
@@ -181,7 +181,7 @@ var _ = Describe("API Authentication Form", func() {
 		Context("given email that does NOT belongs to any user", func() {
 			It("returns a user does not exist error", func() {
 				authClient := FabricateAuthClient()
-				form := forms.AuthenticationForm{
+				form := apiforms.AuthenticationForm{
 					ClientID:     authClient.ClientID,
 					ClientSecret: authClient.ClientSecret,
 					Email:        faker.Email(),

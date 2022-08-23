@@ -1,8 +1,8 @@
-package forms_test
+package apiforms_test
 
 import (
 	"go-google-scraper-challenge/constants"
-	"go-google-scraper-challenge/lib/api/v1/forms"
+	apiforms "go-google-scraper-challenge/lib/api/v1/forms"
 	"go-google-scraper-challenge/lib/models"
 	. "go-google-scraper-challenge/test"
 
@@ -16,7 +16,7 @@ var _ = Describe("API Registration Form", func() {
 		Context("given registration form with valid params", func() {
 			It("returns a user ID", func() {
 				authClient := FabricateAuthClient()
-				form := forms.RegistrationForm{
+				form := apiforms.RegistrationForm{
 					ClientID:     authClient.ClientID,
 					ClientSecret: authClient.ClientSecret,
 					Email:        faker.Email(),
@@ -40,7 +40,7 @@ var _ = Describe("API Registration Form", func() {
 
 			It("returns NO error", func() {
 				authClient := FabricateAuthClient()
-				form := forms.RegistrationForm{
+				form := apiforms.RegistrationForm{
 					ClientID:     authClient.ClientID,
 					ClientSecret: authClient.ClientSecret,
 					Email:        faker.Email(),
@@ -58,7 +58,7 @@ var _ = Describe("API Registration Form", func() {
 				Context("given NO client id", func() {
 					It("returns an INVALID client ID error", func() {
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     "",
 							ClientSecret: authClient.ClientSecret,
 							Email:        faker.Email(),
@@ -75,7 +75,7 @@ var _ = Describe("API Registration Form", func() {
 				Context("given NO client secret", func() {
 					It("returns an INVALID client ID error", func() {
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: "",
 							Email:        faker.Email(),
@@ -95,7 +95,7 @@ var _ = Describe("API Registration Form", func() {
 					It("returns a duplicate email error", func() {
 						user := FabricateUser(faker.Email(), faker.Password())
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        user.Email,
@@ -112,7 +112,7 @@ var _ = Describe("API Registration Form", func() {
 				Context("given NO email", func() {
 					It("returns an INVALID email error", func() {
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        "",
@@ -129,7 +129,7 @@ var _ = Describe("API Registration Form", func() {
 				Context("given an INVALID email", func() {
 					It("returns an INVALID email error", func() {
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        "invalid",
@@ -148,7 +148,7 @@ var _ = Describe("API Registration Form", func() {
 				Context("given NO password", func() {
 					It("returns an INVALID password error", func() {
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        faker.Email(),
@@ -165,7 +165,7 @@ var _ = Describe("API Registration Form", func() {
 				Context("given password length is less than 6", func() {
 					It("returns an INVALID password error", func() {
 						authClient := FabricateAuthClient()
-						form := forms.RegistrationForm{
+						form := apiforms.RegistrationForm{
 							ClientID:     authClient.ClientID,
 							ClientSecret: authClient.ClientSecret,
 							Email:        faker.Email(),

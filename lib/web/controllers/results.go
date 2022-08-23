@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"go-google-scraper-challenge/constants"
+	"go-google-scraper-challenge/lib/forms"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/sessions"
 	"go-google-scraper-challenge/view"
@@ -37,6 +39,30 @@ func (c *ResultsController) Index(ctx *gin.Context) {
 		c.RenderError(ctx, err.Error())
 		ctx.Abort()
 	}
+}
+
+func (c *ResultsController) Create(ctx *gin.Context) {
+	currentUser := c.GetCurrentUser(ctx)
+
+	file, fileHeader, err := ctx.Request.FormFile("file")
+	if err != nil {
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
+	}
+
+	uploadForm := &forms.UploadForm{
+		File:       file,
+		FileHeader: fileHeader,
+		User:       currentUser,
+	}
+
+	_, err = uploadForm.Save()
+	if err != nil {
+		sessions.SetFlash(ctx, sessions.FlashTypeError, err.Error())
+	} else {
+		sessions.SetFlash(ctx, sessions.FlashTypeSuccess, "Successfully uploaded")
+	}
+
+	ctx.Redirect(http.StatusFound, constants.WebRoutes["results"]["index"])
 }
 
 func (c *ResultsController) Show(ctx *gin.Context) {
