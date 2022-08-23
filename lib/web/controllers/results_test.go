@@ -179,7 +179,7 @@ var _ = Describe("ResultsController", func() {
 		})
 
 		Context("given an empty file", func() {
-			It("set an error flashes message", func() {
+			It("sets an error flashes message", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("test/fixtures/files/empty.csv")
 
@@ -193,7 +193,7 @@ var _ = Describe("ResultsController", func() {
 		})
 
 		Context("given a file with too many keywords", func() {
-			It("set an error flashes message", func() {
+			It("sets an error flashes message", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				header, body := CreateRequestInfoFormFile("test/fixtures/files/invalid.csv")
 
