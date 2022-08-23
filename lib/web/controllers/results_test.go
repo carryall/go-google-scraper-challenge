@@ -48,7 +48,7 @@ var _ = Describe("ResultsController", func() {
 				link1 := FabricateLink(result)
 				link2 := FabricateLink(result)
 
-				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d`, result.ID), nil, user)
+				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d`, result.ID), nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -65,7 +65,7 @@ var _ = Describe("ResultsController", func() {
 			It("renders not found error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 
-				response := MakeWebRequest("GET", "/results/invalid_id", nil, user)
+				response := MakeWebRequest("GET", "/results/invalid_id", nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -77,7 +77,7 @@ var _ = Describe("ResultsController", func() {
 			It("renders not found error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 
-				response := MakeWebRequest("GET", "/results/999", nil, user)
+				response := MakeWebRequest("GET", "/results/999", nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -91,7 +91,7 @@ var _ = Describe("ResultsController", func() {
 				otherUser := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(otherUser)
 
-				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d`, result.ID), nil, user)
+				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d`, result.ID), nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -106,7 +106,7 @@ var _ = Describe("ResultsController", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(user)
 
-				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d/cache`, result.ID), nil, user)
+				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d/cache`, result.ID), nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -118,7 +118,7 @@ var _ = Describe("ResultsController", func() {
 			It("renders not found error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 
-				response := MakeWebRequest("GET", "/results/invalid_id/cache", nil, user)
+				response := MakeWebRequest("GET", "/results/invalid_id/cache", nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -130,7 +130,7 @@ var _ = Describe("ResultsController", func() {
 			It("renders not found error", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
 
-				response := MakeWebRequest("GET", "/results/999/cache", nil, user)
+				response := MakeWebRequest("GET", "/results/999/cache", nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
@@ -144,7 +144,7 @@ var _ = Describe("ResultsController", func() {
 				otherUser := FabricateUser(faker.Email(), faker.Password())
 				result := FabricateResult(otherUser)
 
-				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d/cache`, result.ID), nil, user)
+				response := MakeWebRequest("GET", fmt.Sprintf(`/results/%d/cache`, result.ID), nil, nil, user)
 				responseBody := GetResponseBody(response)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
