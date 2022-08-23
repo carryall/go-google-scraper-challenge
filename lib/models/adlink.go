@@ -52,3 +52,16 @@ func GetAdLinksByResultID(resultID int64) ([]*AdLink, error) {
 
 	return adLinks, result.Error
 }
+
+func GroupAdLinksByPosition(adLinks []*AdLink) map[string][]string {
+	groupedAdLinks := map[string][]string{}
+	groupedAdLinks[AdLinkPositionTop] = []string{}
+	groupedAdLinks[AdLinkPositionSide] = []string{}
+	groupedAdLinks[AdLinkPositionBottom] = []string{}
+
+	for _, adLink := range adLinks {
+		groupedAdLinks[adLink.Position] = append(groupedAdLinks[adLink.Position], adLink.Link)
+	}
+
+	return groupedAdLinks
+}
