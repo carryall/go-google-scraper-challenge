@@ -17,7 +17,7 @@ var _ = Describe("SessionsController", func() {
 	Describe("GET /signin", func() {
 		Context("given user is not signed in", func() {
 			It("renders with status 200", func() {
-				response := MakeWebRequest("GET", "/signin", nil, nil)
+				response := MakeWebRequest("GET", "/signin", nil, nil, nil)
 
 				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
@@ -26,7 +26,7 @@ var _ = Describe("SessionsController", func() {
 		Context("given user already signed in", func() {
 			It("redirects to root path", func() {
 				user := FabricateUser(faker.Email(), faker.Password())
-				response := MakeWebRequest("GET", "/signin", nil, user)
+				response := MakeWebRequest("GET", "/signin", nil, nil, user)
 
 				currentPath := GetCurrentPath(response)
 

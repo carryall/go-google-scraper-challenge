@@ -1,4 +1,8 @@
 .results {
+  &.cache {
+    background-color: white;
+  }
+
   .card-upload,
   .card-not-found {
     @apply sm:max-w-lg;

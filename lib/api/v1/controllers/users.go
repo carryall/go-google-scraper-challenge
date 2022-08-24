@@ -7,7 +7,7 @@ import (
 
 	"go-google-scraper-challenge/errors"
 	. "go-google-scraper-challenge/helpers/api"
-	"go-google-scraper-challenge/lib/api/v1/forms"
+	apiforms "go-google-scraper-challenge/lib/api/v1/forms"
 	"go-google-scraper-challenge/lib/api/v1/serializers"
 	"go-google-scraper-challenge/lib/models"
 	"go-google-scraper-challenge/lib/services/oauth"
@@ -21,7 +21,7 @@ type UsersController struct {
 }
 
 func (c *UsersController) Register(ctx *gin.Context) {
-	registrationForm := &forms.RegistrationForm{}
+	registrationForm := &apiforms.RegistrationForm{}
 
 	err := ctx.ShouldBindWith(registrationForm, binding.Form)
 	if err != nil {

@@ -732,7 +732,7 @@ var _ = Describe("Result", func() {
 						resultIDs = append(resultIDs, r.ID)
 					}
 
-					Expect(resultIDs).To(ConsistOf(result1.ID, result2.ID))
+					Expect(resultIDs).To(Equal([]int64{result2.ID, result1.ID}))
 					Expect(resultIDs).NotTo(ConsistOf(result3.ID))
 				})
 

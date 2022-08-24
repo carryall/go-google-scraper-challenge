@@ -1,0 +1,13 @@
+<div class="card card--nested">
+  <div class="card-body card-body--list">
+    <dl class="data-list data-list--sm data-list-nonad">
+      {{ range $link := .Result.Links }}
+        <div class="data-item">
+          <dd class="data-item__detail">
+            <a href="{{ $link.Link }}" class="link-result">{{ $link.Link }}</a>
+          </dd>
+        </div>
+      {{ end }}
+    </dl>
+  </div>
+</div>

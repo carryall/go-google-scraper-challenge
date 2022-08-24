@@ -2,12 +2,24 @@ package test
 
 import (
 	"fmt"
+	"net/http"
 
 	"go-google-scraper-challenge/helpers/log"
 	"go-google-scraper-challenge/lib/sessions"
 
 	"github.com/gorilla/securecookie"
 )
+
+func GetResponseCookie(response *http.Response) map[string]interface{} {
+	encodedSession := ""
+	for _, cookie := range response.Cookies() {
+		if cookie.Name == "google_scraper_session" {
+			encodedSession = cookie.Value
+		}
+	}
+
+	return DecodeCookieString(encodedSession)
+}
 
 func DecodeCookieString(encodedString string) map[string]interface{} {
 	codecs := securecookie.CodecsFromPairs([]byte("secret"))
